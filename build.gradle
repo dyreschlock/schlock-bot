@@ -19,4 +19,5 @@ dependencies {
 
     //compile group: 'com.discord4j', name: 'discord4j-core', version: '3.1'
 
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.12.1'
 }

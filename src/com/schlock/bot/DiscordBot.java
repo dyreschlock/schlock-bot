@@ -1,5 +1,6 @@
 package com.schlock.bot;
 
+import com.schlock.bot.services.DeploymentContext;
 import com.schlock.bot.services.PokemonService;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
@@ -8,25 +9,27 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.User;
 
+import java.util.Properties;
+
 public class DiscordBot
 {
     private final static String POKEMON_COMMAND = "!pokemon";
 
-    private final String DISCORD_TOKEN;
-
     private final PokemonService pokemonService;
+    private final DeploymentContext context;
 
 
-    public DiscordBot(PokemonService pokemonService, String discordToken)
+    public DiscordBot(PokemonService pokemonService, DeploymentContext context)
     {
         this.pokemonService = pokemonService;
-
-        this.DISCORD_TOKEN = discordToken;
+        this.context = context;
     }
 
     public void startup()
     {
-        GatewayDiscordClient client = DiscordClientBuilder.create(DISCORD_TOKEN)
+        final String TOKEN = context.getDiscordToken();
+
+        GatewayDiscordClient client = DiscordClientBuilder.create(TOKEN)
                 .build()
                 .login()
                 .block();
