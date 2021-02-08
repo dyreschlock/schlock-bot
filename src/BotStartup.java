@@ -50,22 +50,21 @@ public class BotStartup
 
     private void initializeProperties() throws Exception
     {
-        InputStream stream = null;
-        try
+        InputStream stream = getClass().getClassLoader().getResourceAsStream(CONFIG_PROPERTIES);
+        if (stream != null)
         {
-            stream = getClass().getClassLoader().getResourceAsStream(CONFIG_PROPERTIES);
-            if (stream != null)
+            try
             {
                 properties.load(stream);
             }
-            else
+            finally
             {
-                throw new FileNotFoundException("Property file missing: " + CONFIG_PROPERTIES);
+                stream.close();
             }
         }
-        finally
+        else
         {
-            stream.close();
+            throw new FileNotFoundException("Property file missing: " + CONFIG_PROPERTIES);
         }
     }
 
