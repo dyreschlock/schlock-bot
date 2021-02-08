@@ -1,4 +1,4 @@
-package com.schlock.services;
+package com.schlock.bot.services;
 
 public interface PokemonService
 {

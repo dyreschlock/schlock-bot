@@ -1,6 +1,6 @@
 package com.schlock.bot;
 
-import com.schlock.services.PokemonService;
+import com.schlock.bot.services.PokemonService;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
@@ -10,6 +10,8 @@ import discord4j.core.object.entity.User;
 
 public class DiscordBot
 {
+    private final static String POKEMON_COMMAND = "!pokemon";
+
     private final String DISCORD_TOKEN;
 
     private final PokemonService pokemonService;
@@ -37,6 +39,29 @@ public class DiscordBot
                     ));
                 });
 
+        listenForPing(client);
+//        listenForPong(client);
+
+        listenForPokemon(client);
+
+        client.onDisconnect().block();
+    }
+
+
+    public void listenForPokemon(GatewayDiscordClient client)
+    {
+        client.getEventDispatcher().on(MessageCreateEvent.class)
+                .map(MessageCreateEvent::getMessage)
+                .filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
+                .filter(message -> message.getContent().toLowerCase().startsWith(POKEMON_COMMAND))
+                .flatMap(Message::getChannel)
+                .flatMap(channel -> channel.createMessage("Pong!"))
+                .subscribe();
+    }
+
+
+    public void listenForPing(GatewayDiscordClient client)
+    {
         client.getEventDispatcher().on(MessageCreateEvent.class)
                 .map(MessageCreateEvent::getMessage)
                 .filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
@@ -44,7 +69,10 @@ public class DiscordBot
                 .flatMap(Message::getChannel)
                 .flatMap(channel -> channel.createMessage("Pong!"))
                 .subscribe();
+    }
 
+    public void listenForPong(GatewayDiscordClient client)
+    {
         client.getEventDispatcher().on(MessageCreateEvent.class)
                 .map(MessageCreateEvent::getMessage)
                 .filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
@@ -52,8 +80,5 @@ public class DiscordBot
                 .flatMap(Message::getChannel)
                 .flatMap(channel -> channel.createMessage("Ping!"))
                 .subscribe();
-
-
-        client.onDisconnect().block();
     }
 }

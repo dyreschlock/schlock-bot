@@ -1,17 +1,10 @@
 import com.schlock.bot.DiscordBot;
-import com.schlock.services.PokemonService;
-import com.schlock.services.impl.PokemonServiceImpl;
-import discord4j.core.DiscordClientBuilder;
-import discord4j.core.GatewayDiscordClient;
-import discord4j.core.event.domain.lifecycle.ReadyEvent;
-import discord4j.core.event.domain.message.MessageCreateEvent;
-import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.User;
+import com.schlock.bot.services.PokemonService;
+import com.schlock.bot.services.impl.PokemonServiceImpl;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.function.Function;
 
 public class BotStartup
 {
