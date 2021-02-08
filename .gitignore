@@ -1,0 +1,11 @@
+.DS_Store
+.gradle
+.classpath
+.idea/workspace.xml
+.idea/gradle.xml
+out/
+build/
+schlock-bot.iml
+schlock-bot.ipr
+schlock-bot.iws
+src/config.properties
