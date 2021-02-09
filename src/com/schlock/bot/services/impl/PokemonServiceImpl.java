@@ -10,6 +10,7 @@ import org.jsoup.nodes.Element;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -19,6 +20,8 @@ public class PokemonServiceImpl implements PokemonService
 
     private static final String DIV_CONTENT_ID = "content";
 
+    protected static final String POKEMON_RETURN_FORMAT = "No. %s %s";
+    protected static final String POKEMON_RETURN_NULL = "What?";
 
     private final DeploymentContext context;
 
@@ -31,14 +34,61 @@ public class PokemonServiceImpl implements PokemonService
         this.context = context;
     }
 
+    /**
+     * Always returns a single pokemon, or nothing if bad syntax
+     * @return String "No. 25 Pikachu" (example)
+     */
     public String process(String in)
     {
-        initialize();
+        if (in.startsWith(POKEMON_COMMAND))
+        {
+            initialize();
 
+            Pokemon pokemon = processPokemon(in);
+            if (pokemon != null)
+            {
+                String number = Integer.toString(pokemon.getNumber());
+                String name = pokemon.getName();
 
-        return null;
+                return String.format(POKEMON_RETURN_FORMAT, number, name);
+            }
+        }
+        return POKEMON_RETURN_NULL;
     }
 
+    private Pokemon processPokemon(String in)
+    {
+        String commandText = in.substring(POKEMON_COMMAND.length());
+        commandText = commandText.trim();
+        commandText = commandText.replace(" ", "");
+
+        //if starts with -
+
+        //if ends with -
+
+        //if contains -
+
+        //if is number
+        Integer number = getNumber(commandText);
+        if(number != null)
+        {
+            return pokemonByNumber.get(number);
+        }
+        return pokemonByName.get(commandText);
+    }
+
+    private Integer getNumber(String in)
+    {
+        try
+        {
+            Integer number = Integer.parseInt(in);
+            return number;
+        }
+        catch (NumberFormatException excpetion)
+        {
+        }
+        return null;
+    }
 
 
     private void initialize()
@@ -111,7 +161,7 @@ public class PokemonServiceImpl implements PokemonService
             String name = ahref.textNodes().get(0).text();
 
             String href = ahref.attr("href");
-            String id = href.split("/pokemon/")[1];
+            String id = href.split("/pokemon/")[1].toLowerCase();
 
             Pokemon pokemon = new Pokemon();
             pokemon.setNumber(number);

@@ -5,9 +5,6 @@ apply plugin: 'war'
 
 webAppDirName = 'web'
 
-targetCompatibility = '1.8'
-sourceCompatibility = '1.8'
-
 repositories {
     mavenCentral()
 }
@@ -20,4 +17,21 @@ dependencies {
     //compile group: 'com.discord4j', name: 'discord4j-core', version: '3.1'
 
     compile group: 'org.jsoup', name: 'jsoup', version: '1.12.1'
+
+
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
+}
+
+test {
+
+    useJUnitPlatform()
+}
+
+sourceSets {
+    test {
+        java {
+            srcDirs = ['test']
+        }
+    }
 }

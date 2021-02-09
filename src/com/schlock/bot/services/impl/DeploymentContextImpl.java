@@ -6,10 +6,9 @@ import java.util.Properties;
 
 public class DeploymentContextImpl implements DeploymentContext
 {
-    private static final String DATA_LOCATION = "data.location.local";
-
     private static final String DISCORD_TOKEN = "discord.token";
 
+    private static final String DATA_DIRECTORY = "data/";
 
     private final Properties properties;
 
@@ -21,7 +20,7 @@ public class DeploymentContextImpl implements DeploymentContext
 
     public String getDataDirectory()
     {
-        return properties.getProperty(DATA_LOCATION);
+        return DATA_DIRECTORY;
     }
 
     public String getDiscordToken()
