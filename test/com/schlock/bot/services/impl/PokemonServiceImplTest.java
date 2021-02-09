@@ -98,7 +98,7 @@ class PokemonServiceImplTest
                 results.add(text);
             }
 
-            assertEquals(expected_results, results.size());
+            assertEquals(expected_results, results.size(), "Too many results.");
 
             for (int i = 1; i < data.length; i++)
             {
