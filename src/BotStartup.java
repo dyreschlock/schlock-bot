@@ -1,4 +1,6 @@
+import com.schlock.bot.Bot;
 import com.schlock.bot.DiscordBot;
+import com.schlock.bot.TwitchBot;
 import com.schlock.bot.entities.Pokemon;
 import com.schlock.bot.services.DeploymentContext;
 import com.schlock.bot.services.PokemonService;
@@ -16,7 +18,8 @@ public class BotStartup
     private DeploymentContext deploymentContext;
     private PokemonService pokemonService;
 
-    private DiscordBot dbot;
+    private Bot discordBot;
+    private Bot twitchBot;
 
 
     public BotStartup()
@@ -37,8 +40,11 @@ public class BotStartup
 
     private void startDiscordBot()
     {
-        dbot = new DiscordBot(pokemonService, deploymentContext);
-        dbot.startup();
+        discordBot = new DiscordBot(pokemonService, deploymentContext);
+        discordBot.startup();
+
+        twitchBot = new TwitchBot(pokemonService, deploymentContext);
+        twitchBot.startup();
 
         String temp = "";
     }

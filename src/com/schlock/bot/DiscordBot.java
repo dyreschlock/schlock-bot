@@ -14,23 +14,16 @@ import reactor.core.publisher.Mono;
 import java.util.HashMap;
 import java.util.Properties;
 
-public class DiscordBot
+public class DiscordBot extends AbstractBot
 {
-    private final static String POKEMON_COMMAND = "!pokemon";
-
-    private final PokemonService pokemonService;
-    private final DeploymentContext context;
-
-
     public DiscordBot(PokemonService pokemonService, DeploymentContext context)
     {
-        this.pokemonService = pokemonService;
-        this.context = context;
+        super(pokemonService, context);
     }
 
     public void startup()
     {
-        final String TOKEN = context.getDiscordToken();
+        final String TOKEN = getContext().getDiscordToken();
 
         GatewayDiscordClient client = DiscordClientBuilder.create(TOKEN)
                 .build()
@@ -60,11 +53,11 @@ public class DiscordBot
         client.getEventDispatcher().on(MessageCreateEvent.class)
                 .map(MessageCreateEvent::getMessage)
                 .filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
-                .filter(message -> message.getContent().toLowerCase().startsWith(POKEMON_COMMAND))
+                .filter(message -> message.getContent().toLowerCase().startsWith(PokemonService.POKEMON_COMMAND))
                 .subscribe(message -> {
 
                     String content = message.getContent();
-                    String response = pokemonService.process(content);
+                    String response = getPokemonService().process(content);
 
                     final MessageChannel channel = message.getChannel().block();
                     channel.createMessage(response).block();
@@ -74,7 +67,7 @@ public class DiscordBot
 
     public void listenForCommands(GatewayDiscordClient client)
     {
-        HashMap<String, String> commands = context.getListenerCommands();
+        HashMap<String, String> commands = getContext().getListenerCommands();
 
         for (String command : commands.keySet())
         {
@@ -95,9 +88,9 @@ public class DiscordBot
         client.getEventDispatcher().on(MessageCreateEvent.class)
                 .map(MessageCreateEvent::getMessage)
                 .filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
-                .filter(message -> message.getContent().equalsIgnoreCase("!ping"))
+                .filter(message -> message.getContent().equalsIgnoreCase(PING))
                 .flatMap(Message::getChannel)
-                .flatMap(channel -> channel.createMessage("Pong!"))
+                .flatMap(channel -> channel.createMessage(PONG))
                 .subscribe();
     }
 }
