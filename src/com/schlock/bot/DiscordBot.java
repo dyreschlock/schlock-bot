@@ -8,6 +8,8 @@ import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.User;
+import discord4j.core.object.entity.channel.MessageChannel;
+import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
 import java.util.Properties;
@@ -44,7 +46,6 @@ public class DiscordBot
                 });
 
         listenForPing(client);
-//        listenForPong(client);
 
         listenForPokemon(client);
 
@@ -60,9 +61,14 @@ public class DiscordBot
                 .map(MessageCreateEvent::getMessage)
                 .filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
                 .filter(message -> message.getContent().toLowerCase().startsWith(POKEMON_COMMAND))
-                .flatMap(Message::getChannel)
-                .flatMap(channel -> channel.createMessage("Pong!"))
-                .subscribe();
+                .subscribe(message -> {
+
+                    String content = message.getContent();
+                    String response = pokemonService.process(content);
+
+                    final MessageChannel channel = message.getChannel().block();
+                    channel.createMessage(response).block();
+                });
     }
 
 
@@ -92,17 +98,6 @@ public class DiscordBot
                 .filter(message -> message.getContent().equalsIgnoreCase("!ping"))
                 .flatMap(Message::getChannel)
                 .flatMap(channel -> channel.createMessage("Pong!"))
-                .subscribe();
-    }
-
-    public void listenForPong(GatewayDiscordClient client)
-    {
-        client.getEventDispatcher().on(MessageCreateEvent.class)
-                .map(MessageCreateEvent::getMessage)
-                .filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
-                .filter(message -> message.getContent().equalsIgnoreCase("!pong"))
-                .flatMap(Message::getChannel)
-                .flatMap(channel -> channel.createMessage("Ping!"))
                 .subscribe();
     }
 }
