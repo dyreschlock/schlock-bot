@@ -9,6 +9,7 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.User;
 
+import java.util.HashMap;
 import java.util.Properties;
 
 public class DiscordBot
@@ -47,6 +48,8 @@ public class DiscordBot
 
         listenForPokemon(client);
 
+        listenForCommands(client);
+
         client.onDisconnect().block();
     }
 
@@ -62,6 +65,24 @@ public class DiscordBot
                 .subscribe();
     }
 
+
+    public void listenForCommands(GatewayDiscordClient client)
+    {
+        HashMap<String, String> commands = context.getListenerCommands();
+
+        for (String command : commands.keySet())
+        {
+            String responseMessage = commands.get(command);
+
+            client.getEventDispatcher().on(MessageCreateEvent.class)
+                    .map(MessageCreateEvent::getMessage)
+                    .filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
+                    .filter(message -> message.getContent().equalsIgnoreCase(command))
+                    .flatMap(Message::getChannel)
+                    .flatMap(channel -> channel.createMessage(responseMessage))
+                    .subscribe();
+        }
+    }
 
     public void listenForPing(GatewayDiscordClient client)
     {
