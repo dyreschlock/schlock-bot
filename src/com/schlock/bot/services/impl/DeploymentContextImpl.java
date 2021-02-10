@@ -6,7 +6,12 @@ import java.util.*;
 
 public class DeploymentContextImpl implements DeploymentContext
 {
+    private static final String BOT_NAME = "bot.name";
+
     private static final String DISCORD_TOKEN = "discord.token";
+
+    private static final String TWITCH_OAUTH_TOKEN = "twitch.oauth.token";
+    private static final String TWITCH_CHANNEL = "twitch.channel";
 
     private static final String LISTEN_COMMAND_PREFIX = "listen.command.";
 
@@ -25,9 +30,29 @@ public class DeploymentContextImpl implements DeploymentContext
         return DATA_DIRECTORY;
     }
 
+    public String getBotName()
+    {
+        return properties.getProperty(BOT_NAME);
+    }
+
     public String getDiscordToken()
     {
         return properties.getProperty(DISCORD_TOKEN);
+    }
+
+    public String getTwitchOAuthToken()
+    {
+        return properties.getProperty(TWITCH_OAUTH_TOKEN);
+    }
+
+    public String getTwitchChannel()
+    {
+        String channel = properties.getProperty(TWITCH_CHANNEL);
+        if (!channel.startsWith("#"))
+        {
+            channel = "#" + channel;
+        }
+        return channel;
     }
 
     public HashMap<String, String> getListenerCommands()

@@ -28,18 +28,9 @@ public class BotStartup
 
     public void run() throws Exception
     {
-
         initializeProperties();
         initializeServices();
 
-        startDiscordBot();
-
-
-
-    }
-
-    private void startDiscordBot()
-    {
         discordBot = new DiscordBot(pokemonService, deploymentContext);
         discordBot.startup();
 
