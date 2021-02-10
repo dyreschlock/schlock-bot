@@ -10,6 +10,8 @@ public interface DeploymentContext
 
     public String getDiscordToken();
 
+    public String getTwitchBotName();
+
     public String getTwitchOAuthToken();
 
     public String getTwitchChannel();

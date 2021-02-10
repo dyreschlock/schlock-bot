@@ -10,6 +10,7 @@ public class DeploymentContextImpl implements DeploymentContext
 
     private static final String DISCORD_TOKEN = "discord.token";
 
+    private static final String TWTICH_BOT_NAME = "twitch.bot.name";
     private static final String TWITCH_OAUTH_TOKEN = "twitch.oauth.token";
     private static final String TWITCH_CHANNEL = "twitch.channel";
 
@@ -38,6 +39,11 @@ public class DeploymentContextImpl implements DeploymentContext
     public String getDiscordToken()
     {
         return properties.getProperty(DISCORD_TOKEN);
+    }
+
+    public String getTwitchBotName()
+    {
+        return properties.getProperty(TWTICH_BOT_NAME);
     }
 
     public String getTwitchOAuthToken()

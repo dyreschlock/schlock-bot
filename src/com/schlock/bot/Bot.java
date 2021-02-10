@@ -5,5 +5,5 @@ public interface Bot
     public final String PING = "!ping";
     public final String PONG = "Pong!";
 
-    public void startup();
+    public void startup() throws Exception;
 }
