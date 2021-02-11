@@ -1,7 +1,7 @@
 package com.schlock.bot;
 
 import com.schlock.bot.services.DeploymentContext;
-import com.schlock.bot.services.PokemonService;
+import com.schlock.bot.services.ListenerService;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
@@ -11,12 +11,15 @@ import discord4j.core.object.entity.User;
 import discord4j.core.object.entity.channel.MessageChannel;
 
 import java.util.HashMap;
+import java.util.Set;
+
 
 public class DiscordBot extends AbstractBot
 {
-    public DiscordBot(PokemonService pokemonService, DeploymentContext context)
+    public DiscordBot(Set<ListenerService> listeners,
+                      DeploymentContext context)
     {
-        super(pokemonService, context);
+        super(listeners, context);
     }
 
     public void startup()
@@ -38,7 +41,7 @@ public class DiscordBot extends AbstractBot
 
         listenForPing(client);
 
-        listenForPokemon(client);
+        initializeListeners(client);
 
         listenForCommands(client);
 
@@ -46,20 +49,23 @@ public class DiscordBot extends AbstractBot
     }
 
 
-    public void listenForPokemon(GatewayDiscordClient client)
+    public void initializeListeners(GatewayDiscordClient client)
     {
-        client.getEventDispatcher().on(MessageCreateEvent.class)
-                .map(MessageCreateEvent::getMessage)
-                .filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
-                .filter(message -> getPokemonService().isPokemonCommand(message.getContent()))
-                .subscribe(message -> {
+        for (ListenerService service : getListeners())
+        {
+            client.getEventDispatcher().on(MessageCreateEvent.class)
+                    .map(MessageCreateEvent::getMessage)
+                    .filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
+                    .filter(message -> service.isCommand(message.getContent()))
+                    .subscribe(message -> {
 
-                    String content = message.getContent();
-                    String response = getPokemonService().process(content);
+                        String content = message.getContent();
+                        String response = service.process(content);
 
-                    final MessageChannel channel = message.getChannel().block();
-                    channel.createMessage(response).block();
-                });
+                        final MessageChannel channel = message.getChannel().block();
+                        channel.createMessage(response).block();
+                    });
+        }
     }
 
 

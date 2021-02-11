@@ -2,21 +2,24 @@ package com.schlock.bot.twitch;
 
 import com.schlock.bot.Bot;
 import com.schlock.bot.services.DeploymentContext;
-import com.schlock.bot.services.PokemonService;
+import com.schlock.bot.services.ListenerService;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class Commands extends ListenerAdapter
 {
-    private final PokemonService pokemonService;
+    private final Set<ListenerService> listeners;
 
     private final DeploymentContext context;
 
-    public Commands(PokemonService pokemonService, DeploymentContext context)
+    public Commands(Set<ListenerService> listeners,
+                    DeploymentContext context)
     {
-        this.pokemonService = pokemonService;
+        this.listeners = listeners;
+
         this.context = context;
     }
 
@@ -30,11 +33,14 @@ public class Commands extends ListenerAdapter
             return;
         }
 
-        if(pokemonService.isPokemonCommand(message))
+        for (ListenerService service : listeners)
         {
-            String response = pokemonService.process(message);
-            event.getChannel().send().message(response);
-            return;
+            if (service.isCommand(message))
+            {
+                String response = service.process(message);
+                event.getChannel().send().message(response);
+                return;
+            }
         }
 
         HashMap<String, String> commands = context.getListenerCommands();

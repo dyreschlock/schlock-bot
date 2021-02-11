@@ -1,22 +1,28 @@
 import com.schlock.bot.Bot;
 import com.schlock.bot.DiscordBot;
 import com.schlock.bot.TwitchBot;
-import com.schlock.bot.entities.Pokemon;
+import com.schlock.bot.services.BettingService;
 import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.ListenerService;
 import com.schlock.bot.services.PokemonService;
+import com.schlock.bot.services.impl.BettingServiceImpl;
 import com.schlock.bot.services.impl.DeploymentContextImpl;
 import com.schlock.bot.services.impl.PokemonServiceImpl;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 public class BotStartup
 {
     private static final String CONFIG_PROPERTIES = "config.properties";
 
-    private DeploymentContext deploymentContext;
     private PokemonService pokemonService;
+    private BettingService bettingService;
+
+    private DeploymentContext deploymentContext;
 
     private Bot discordBot;
     private Bot twitchBot;
@@ -31,10 +37,14 @@ public class BotStartup
         initializeProperties();
         initializeServices();
 
-        discordBot = new DiscordBot(pokemonService, deploymentContext);
-        discordBot.startup();
+        Set<ListenerService> listeners = new HashSet<>();
+        listeners.add(pokemonService);
+        listeners.add(bettingService);
 
-        twitchBot = new TwitchBot(pokemonService, deploymentContext);
+//        discordBot = new DiscordBot(listeners, deploymentContext);
+//        discordBot.startup();
+
+        twitchBot = new TwitchBot(listeners, deploymentContext);
         twitchBot.startup();
 
         String temp = "";
@@ -43,6 +53,7 @@ public class BotStartup
     private void initializeServices()
     {
         pokemonService = new PokemonServiceImpl(deploymentContext);
+        bettingService = new BettingServiceImpl(pokemonService, deploymentContext);
     }
 
     private void initializeProperties() throws Exception

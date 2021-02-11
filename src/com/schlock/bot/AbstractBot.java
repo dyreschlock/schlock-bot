@@ -1,23 +1,27 @@
 package com.schlock.bot;
 
 import com.schlock.bot.services.DeploymentContext;
-import com.schlock.bot.services.PokemonService;
+import com.schlock.bot.services.ListenerService;
+
+import java.util.Set;
 
 public abstract class AbstractBot implements Bot
 {
-    private final PokemonService pokemonService;
+    private final Set<ListenerService> listeners;
+
     private final DeploymentContext context;
 
 
-    public AbstractBot(PokemonService pokemonService, DeploymentContext context)
+    public AbstractBot(Set<ListenerService> listeners,
+                       DeploymentContext context)
     {
-        this.pokemonService = pokemonService;
+        this.listeners = listeners;
         this.context = context;
     }
 
-    protected PokemonService getPokemonService()
+    protected Set<ListenerService> getListeners()
     {
-        return pokemonService;
+        return listeners;
     }
 
     protected DeploymentContext getContext()

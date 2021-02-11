@@ -11,7 +11,9 @@ import org.jsoup.nodes.Element;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class PokemonServiceImpl implements PokemonService
 {
@@ -40,7 +42,7 @@ public class PokemonServiceImpl implements PokemonService
         this.context = context;
     }
 
-    public boolean isPokemonCommand(String in)
+    public boolean isCommand(String in)
     {
         return in != null &&
                 (in.toLowerCase().startsWith(POKEMON_COMMAND) ||

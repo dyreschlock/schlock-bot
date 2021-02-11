@@ -1,13 +1,15 @@
 package com.schlock.bot;
 
 import com.schlock.bot.services.DeploymentContext;
-import com.schlock.bot.services.PokemonService;
+import com.schlock.bot.services.ListenerService;
 import com.schlock.bot.twitch.ChangeColorOnJoin;
 import com.schlock.bot.twitch.Commands;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.cap.EnableCapHandler;
 import org.pircbotx.hooks.ListenerAdapter;
+
+import java.util.Set;
 
 public class TwitchBot extends AbstractBot
 {
@@ -18,11 +20,12 @@ public class TwitchBot extends AbstractBot
     private final ListenerAdapter commands;
     private final ListenerAdapter changeColor;
 
-    public TwitchBot(PokemonService pokemonService, DeploymentContext context)
+    public TwitchBot(Set<ListenerService> listeners,
+                     DeploymentContext context)
     {
-        super(pokemonService, context);
+        super(listeners, context);
 
-        commands = new Commands(pokemonService, context);
+        commands = new Commands(listeners, context);
         changeColor = new ChangeColorOnJoin(context);
     }
 

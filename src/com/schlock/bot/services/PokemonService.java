@@ -1,8 +1,5 @@
 package com.schlock.bot.services;
 
-public interface PokemonService
+public interface PokemonService extends ListenerService
 {
-    public String process(String in);
-
-    public boolean isPokemonCommand(String in);
 }
