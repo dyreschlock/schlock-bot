@@ -23,8 +23,8 @@ class PokemonServiceImplTest
         testData.add(new String[]{"!pokemon 001", "No. 1 Bulbasaur"});
         testData.add(new String[]{"!pokemon 150", "No. 150 Mewtwo"});
         testData.add(new String[]{"!pokemon 0000000001", "No. 1 Bulbasaur"});
-        testData.add(new String[]{"!pokemon 0", PokemonServiceImpl.POKEMON_RETURN_NULL});
-        testData.add(new String[]{"!pokemon 900", PokemonServiceImpl.POKEMON_RETURN_NULL});
+        testData.add(new String[]{"!pokemon 0", "No. 1 Bulbasaur"});
+        testData.add(new String[]{"!pokemon 900", "No. 898 Calyrex"});
 
         for (String[] data : testData)
         {
@@ -78,9 +78,9 @@ class PokemonServiceImplTest
         testData.add(new String[]{"!pokemon -3", "No. 1 Bulbasaur", "No. 2 Ivysaur", "No. 3 Venusaur"});
         testData.add(new String[]{"!pokemon -2", "No. 1 Bulbasaur", "No. 2 Ivysaur"});
         testData.add(new String[]{"!pokemon -1", "No. 1 Bulbasaur"});
-        testData.add(new String[]{"!pokemon -0", PokemonServiceImpl.POKEMON_RETURN_NULL});
+        testData.add(new String[]{"!pokemon -0", "No. 1 Bulbasaur"});
 
-        testData.add(new String[]{"!pokemon 900-", PokemonServiceImpl.POKEMON_RETURN_NULL});
+        testData.add(new String[]{"!pokemon 900-", "No. 898 Calyrex"});
         testData.add(new String[]{"!pokemon 898-", "No. 898 Calyrex"});
         testData.add(new String[]{"!pokemon 897-", "No. 898 Calyrex", "No. 897 Spectrier"});
         testData.add(new String[]{"!pokemon 896-", "No. 898 Calyrex", "No. 897 Spectrier", "No. 896 Glastrier"});
