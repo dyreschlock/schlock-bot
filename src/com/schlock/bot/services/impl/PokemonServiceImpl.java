@@ -39,7 +39,7 @@ public class PokemonServiceImpl implements PokemonService
      */
     public String process(String in)
     {
-        if (in.startsWith(POKEMON_COMMAND))
+        if (in.startsWith(POKEMON_COMMAND) || in.startsWith(POKEMON_E_COMMAND))
         {
             initialize();
 

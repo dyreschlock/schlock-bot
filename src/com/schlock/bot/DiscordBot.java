@@ -51,7 +51,8 @@ public class DiscordBot extends AbstractBot
         client.getEventDispatcher().on(MessageCreateEvent.class)
                 .map(MessageCreateEvent::getMessage)
                 .filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
-                .filter(message -> message.getContent().toLowerCase().startsWith(PokemonService.POKEMON_COMMAND))
+                .filter(message -> message.getContent().toLowerCase().startsWith(PokemonService.POKEMON_COMMAND) ||
+                                    message.getContent().toLowerCase().startsWith(PokemonService.POKEMON_E_COMMAND))
                 .subscribe(message -> {
 
                     String content = message.getContent();
