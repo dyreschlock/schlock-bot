@@ -51,9 +51,6 @@ public class PokemonServiceImpl implements PokemonService
 
     private boolean hasArg(String arg, String in)
     {
-        boolean contains = in.toLowerCase().contains(" " + arg + " ");
-        boolean end = in.toLowerCase().contains(" " + arg);
-
         return in.toLowerCase().contains(" " + arg + " ") ||
                 in.toLowerCase().endsWith(" " + arg);
     }
