@@ -17,11 +17,10 @@ public class PokemonServiceImpl implements PokemonService
 
     private static final String DIV_CONTENT_ID = "content";
 
+    private static final String RANDOM = "random";
+
     protected static final String POKEMON_RETURN_FORMAT = "No. %s %s";
     protected static final String POKEMON_RETURN_NULL = "What?";
-
-    private static final Integer FIRST_POKEMON = 1;
-    private static final Integer LAST_POKEMON = 898;
 
     private final DeploymentContext context;
 
@@ -61,35 +60,37 @@ public class PokemonServiceImpl implements PokemonService
         String commandText = in.substring(POKEMON_COMMAND.length());
         commandText = cleanText(commandText);
 
-        if (commandText.startsWith("-"))
+        if (isRangeSearch(commandText))
         {
-            String pokemon = commandText.split("-")[1];
+            return getPokemonInRange(commandText);
+        }
 
-            Pokemon start = pokemonByNumber.get(FIRST_POKEMON);
-            Pokemon end = getPokemonByNameNumber(pokemon);
+        if (commandText.contains(RANDOM))
+        {
+            Pokemon start = getFirstPokemon();
+            Pokemon end = getLastPokemon();
 
             return getPokemonInRange(start, end);
         }
-        if (commandText.endsWith("-"))
-        {
-            String pokemon = commandText.split("-")[0];
 
-            Pokemon start = getPokemonByNameNumber(pokemon);
-            Pokemon end = pokemonByNumber.get(LAST_POKEMON);
-
-            return getPokemonInRange(start, end);
-        }
-        if (commandText.contains("-"))
-        {
-            String pokemonStart = commandText.split("-")[0];
-            String pokemonEnd = commandText.split("-")[1];
-
-            Pokemon start = getPokemonByNameNumber(pokemonStart);
-            Pokemon end = getPokemonByNameNumber(pokemonEnd);
-
-            return getPokemonInRange(start, end);
-        }
         return getPokemonByNameNumber(commandText);
+    }
+
+    private boolean isRangeSearch(String command)
+    {
+        return command.contains(("-"));
+    }
+
+    private Pokemon getFirstPokemon()
+    {
+        int first = 1;
+        return pokemonByNumber.get(1);
+    }
+
+    private Pokemon getLastPokemon()
+    {
+        int last = pokemonByNumber.size();
+        return pokemonByNumber.get(last);
     }
 
     private Pokemon getPokemonByNameNumber(String commandText)
@@ -99,9 +100,48 @@ public class PokemonServiceImpl implements PokemonService
         Integer number = getNumber(text);
         if(number != null)
         {
+            if (number <= 0)
+            {
+                return getFirstPokemon();
+            }
+            if (number >= pokemonByNumber.size())
+            {
+                return getLastPokemon();
+            }
+
             return pokemonByNumber.get(number);
         }
         return pokemonByName.get(text);
+    }
+
+    private Pokemon getPokemonInRange(String commandText)
+    {
+        Pokemon start = null;
+        Pokemon end = null;
+
+        if (commandText.startsWith("-"))
+        {
+            String pokemon = commandText.split("-")[1];
+
+            start = getFirstPokemon();
+            end = getPokemonByNameNumber(pokemon);
+        }
+        else if (commandText.endsWith("-"))
+        {
+            String pokemon = commandText.split("-")[0];
+
+            start = getPokemonByNameNumber(pokemon);
+            end = getLastPokemon();
+        }
+        else
+        {
+            String pokemonStart = commandText.split("-")[0];
+            String pokemonEnd = commandText.split("-")[1];
+
+            start = getPokemonByNameNumber(pokemonStart);
+            end = getPokemonByNameNumber(pokemonEnd);
+        }
+        return getPokemonInRange(start, end);
     }
 
     private Pokemon getPokemonInRange(Pokemon start, Pokemon finish)
