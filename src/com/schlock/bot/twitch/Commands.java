@@ -30,8 +30,7 @@ public class Commands extends ListenerAdapter
             return;
         }
 
-        if (message.startsWith(PokemonService.POKEMON_COMMAND) ||
-                message.startsWith(PokemonService.POKEMON_E_COMMAND))
+        if(pokemonService.isPokemonCommand(message))
         {
             String response = pokemonService.process(message);
             event.getChannel().send().message(response);

@@ -1,8 +1,10 @@
 package com.schlock.bot.services.impl;
 
 import com.schlock.bot.entities.Pokemon;
+import com.schlock.bot.entities.PokemonFormat;
 import com.schlock.bot.services.DeploymentContext;
 import com.schlock.bot.services.PokemonService;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,13 +15,18 @@ import java.util.*;
 
 public class PokemonServiceImpl implements PokemonService
 {
+    private final String POKEMON_COMMAND = "!pokemon";
+    private final String POKEMON_E_COMMAND = "!pokémon";
+
     private static final String LIST_OF_POKEMON_FILE = "pokemon.html";
+
+    private static final String ARGUMENT_TYPE = "type";
+    private static final String ARGUMENT_STATS = "basestats";
 
     private static final String DIV_CONTENT_ID = "content";
 
     private static final String RANDOM = "random";
 
-    protected static final String POKEMON_RETURN_FORMAT = "No. %s %s";
     protected static final String POKEMON_RETURN_NULL = "What?";
 
     private final DeploymentContext context;
@@ -33,23 +40,61 @@ public class PokemonServiceImpl implements PokemonService
         this.context = context;
     }
 
+    public boolean isPokemonCommand(String in)
+    {
+        return in != null &&
+                (in.toLowerCase().startsWith(POKEMON_COMMAND) ||
+                        in.toLowerCase().startsWith(POKEMON_E_COMMAND));
+    }
+
+    private boolean hasArg(String arg, String in)
+    {
+        boolean contains = in.toLowerCase().contains(" " + arg + " ");
+        boolean end = in.toLowerCase().contains(" " + arg);
+
+        return in.toLowerCase().contains(" " + arg + " ") ||
+                in.toLowerCase().endsWith(" " + arg);
+    }
+
+    private String removeArg(String arg, String in)
+    {
+        String target = " " + arg;
+        if (in.toLowerCase().endsWith(target))
+        {
+            int endpoint = in.length() - target.length();
+            return in.substring(0, endpoint);
+        }
+
+        return in.replace(target, "");
+    }
+
     /**
      * Always returns a single pokemon, or nothing if bad syntax
      * @return String "No. 25 Pikachu" (example)
      */
     public String process(String in)
     {
-        if (in.startsWith(POKEMON_COMMAND) || in.startsWith(POKEMON_E_COMMAND))
+        String commandText = in;
+        if (commandText.startsWith(POKEMON_COMMAND) || commandText.startsWith(POKEMON_E_COMMAND))
         {
             initialize();
 
-            Pokemon pokemon = processPokemon(in);
+            boolean hasTypeArg = hasArg(ARGUMENT_TYPE, commandText);
+            if (hasTypeArg)
+            {
+                commandText = removeArg(ARGUMENT_TYPE, commandText);
+            }
+
+            boolean hasStatsArg = hasArg(ARGUMENT_STATS, commandText);
+            if (hasStatsArg)
+            {
+                commandText = removeArg(ARGUMENT_STATS, commandText);
+            }
+
+            Pokemon pokemon = processPokemon(commandText);
             if (pokemon != null)
             {
-                String number = Integer.toString(pokemon.getNumber());
-                String name = pokemon.getName();
-
-                return String.format(POKEMON_RETURN_FORMAT, number, name);
+                return PokemonFormat.format(pokemon, hasTypeArg, hasStatsArg);
             }
         }
         return POKEMON_RETURN_NULL;
@@ -84,7 +129,7 @@ public class PokemonServiceImpl implements PokemonService
     private Pokemon getFirstPokemon()
     {
         int first = 1;
-        return pokemonByNumber.get(1);
+        return pokemonByNumber.get(first);
     }
 
     private Pokemon getLastPokemon()
@@ -116,8 +161,8 @@ public class PokemonServiceImpl implements PokemonService
 
     private Pokemon getPokemonInRange(String commandText)
     {
-        Pokemon start = null;
-        Pokemon end = null;
+        Pokemon start;
+        Pokemon end;
 
         if (commandText.startsWith("-"))
         {
@@ -151,8 +196,8 @@ public class PokemonServiceImpl implements PokemonService
             return null;
         }
 
-        Integer startNumber = start.getNumber();
-        Integer finishNumber = finish.getNumber();
+        int startNumber = start.getNumber();
+        int finishNumber = finish.getNumber();
         if (startNumber > finishNumber)
         {
             startNumber = finish.getNumber();
@@ -175,10 +220,9 @@ public class PokemonServiceImpl implements PokemonService
     {
         try
         {
-            Integer number = Integer.parseInt(in);
-            return number;
+            return Integer.parseInt(in);
         }
-        catch (NumberFormatException excpetion)
+        catch (NumberFormatException e)
         {
         }
         return null;
@@ -186,8 +230,7 @@ public class PokemonServiceImpl implements PokemonService
 
     private String cleanText(String text)
     {
-        String newText = text.trim().toLowerCase().replace(" ", "");
-        return newText;
+        return text.trim().toLowerCase().replace(" ", "");
     }
 
 
@@ -237,36 +280,69 @@ public class PokemonServiceImpl implements PokemonService
         Element contentElement = htmlFile.getElementById(DIV_CONTENT_ID);
         Element tbody = contentElement.child(1).child(14).child(0);
 
-        Element trElement = null;
-        for(int i = 2; i < 900; i++)
+        Element trElement;
+        for (int i = 2; i < 900; i++)
         {
             trElement = tbody.child(i);
 
             /* structure
             <tr>
-                <td> #001 </td>  (Number)
-                <td></td> (Picture)
-                <td>
+            0   <td> #001 </td>  (Number)
+            1   <td></td> (Picture)
+            2   <td>
                     <a href="/pokemon/bulbasaur">Bulbasaur</a> (ID) (Name)
                 </td>
-                <td></td> (Type)
-                <td></td> ..others
+            3   <td>
+                    <a href="/pokemon/type/grass"> ... </a> (Type 1)
+                    <a href="/pokemon/type/poison"> ... </a> (Type 2)
+                </td>
+            4   <td></td> (Abilities)
+            5   <td></td> (Base Stats x6)
+            6   <td></td>
+            7   <td></td>
+            8   <td></td>
+            9   <td></td>
+            10  <td></td>
             </tr>
              */
 
+            Pokemon pokemon = new Pokemon();
+
             String numberText = trElement.child(0).textNodes().get(0).text();
             Integer number = Integer.parseInt(cleanNumberText(numberText));
-
-            Element ahref = trElement.child(2).child(0);
-            String name = ahref.textNodes().get(0).text();
-
-            String href = ahref.attr("href");
-            String id = href.split("/pokemon/")[1].toLowerCase();
-
-            Pokemon pokemon = new Pokemon();
             pokemon.setNumber(number);
+
+            Element name_ahref = trElement.child(2).child(0);
+            String name = name_ahref.textNodes().get(0).text();
             pokemon.setName(name);
+
+            String name_href = name_ahref.attr("href");
+            String id = name_href.split("/pokemon/")[1].toLowerCase();
             pokemon.setId(id);
+
+            Element type1_ahref = trElement.child(3).child(0);
+            String type1_href = type1_ahref.attr("href");
+            String type1 = type1_href.split("/pokemon/type/")[1].toLowerCase();
+            pokemon.setType1(StringUtils.capitalize(type1));
+
+            try
+            {
+                Element type2_ahref = trElement.child(3).child(1);
+                String type2_href = type2_ahref.attr("href");
+                String type2 = type2_href.split("/pokemon/type/")[1].toLowerCase();
+                pokemon.setType2(StringUtils.capitalize(type2));
+            }
+            catch (IndexOutOfBoundsException e)
+            {
+            }
+
+            for (int e = 5; e < 11; e++)
+            {
+                String stat = trElement.child(e).textNodes().get(0).text();
+                Integer s = Integer.parseInt(stat);
+
+                pokemon.incrementBasestats(s);
+            }
 
             pokemonByNumber.put(number, pokemon);
             pokemonByName.put(id, pokemon);

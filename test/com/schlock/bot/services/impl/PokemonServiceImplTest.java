@@ -17,6 +17,16 @@ class PokemonServiceImplTest
     private PokemonServiceImpl impl;
 
     @Test
+    public void testCommandIdentifiers()
+    {
+        List<String[]> testData = new ArrayList<>();
+        testData.add(new String[]{"!pokémon 1", "No. 1 Bulbasaur"});
+        testData.add(new String[]{"!pokemon 1", "No. 1 Bulbasaur"});
+
+        assertInputEqualsOutput(testData);
+    }
+
+    @Test
     public void testPokemonNumbers()
     {
         List<String[]> testData = new ArrayList<>();
@@ -26,11 +36,7 @@ class PokemonServiceImplTest
         testData.add(new String[]{"!pokemon 0", "No. 1 Bulbasaur"});
         testData.add(new String[]{"!pokemon 900", "No. 898 Calyrex"});
 
-        for (String[] data : testData)
-        {
-            String test = impl.process(data[0]);
-            assertEquals(test, data[1]);
-        }
+        assertInputEqualsOutput(testData);
     }
 
     @Test
@@ -45,11 +51,7 @@ class PokemonServiceImplTest
         testData.add(new String[]{"!pokemon nidoran m", "No. 32 Nidoran♂"});
         testData.add(new String[]{"!pokemon nidoranm", "No. 32 Nidoran♂"});
 
-        for (String[] data : testData)
-        {
-            String test = impl.process(data[0]);
-            assertEquals(test, data[1]);
-        }
+        assertInputEqualsOutput(testData);
     }
 
     @Test
@@ -61,11 +63,7 @@ class PokemonServiceImplTest
         testData.add(new String[]{"!pokemon 1-bulbasaur", "No. 1 Bulbasaur"});
         testData.add(new String[]{"!pokemon bulbasaur-1", "No. 1 Bulbasaur"});
 
-        for (String[] data : testData)
-        {
-            String text = impl.process(data[0]);
-            assertEquals(text, data[1]);
-        }
+        assertInputEqualsOutput(testData);
     }
 
     @Test
@@ -108,6 +106,51 @@ class PokemonServiceImplTest
         }
     }
 
+
+    @Test
+    public void testType()
+    {
+        List<String[]> testData = new ArrayList<>();
+        testData.add(new String[]{"!pokemon type:null type", "No. 772 Type: Null - Normal"});
+        testData.add(new String[]{"!pokemon 1 type", "No. 1 Bulbasaur - Grass/Poison"});
+        testData.add(new String[]{"!pokemon 4 type", "No. 4 Charmander - Fire"});
+        testData.add(new String[]{"!pokemon 20 type", "No. 20 Raticate - Normal"});
+
+        assertInputEqualsOutput(testData);
+    }
+
+    @Test
+    public void testStats()
+    {
+        List<String[]> testData = new ArrayList<>();
+        testData.add(new String[]{"!pokemon 1 basestats", "No. 1 Bulbasaur - Stats: 318"});
+        testData.add(new String[]{"!pokemon 2 basestats", "No. 2 Ivysaur - Stats: 405"});
+        testData.add(new String[]{"!pokemon 3 basestats", "No. 3 Venusaur - Stats: 525"});
+
+        assertInputEqualsOutput(testData);
+    }
+
+    @Test
+    public void testTypeStats()
+    {
+        final String RESULT = "No. 1 Bulbasaur - Grass/Poison - Stats: 318";
+
+        List<String[]> testData = new ArrayList<>();
+        testData.add(new String[]{"!pokemon 1 type basestats", RESULT});
+        testData.add(new String[]{"!pokemon 1 basestats type", RESULT});
+        testData.add(new String[]{"!pokemon 1       type       basestats", RESULT});
+
+        assertInputEqualsOutput(testData);
+    }
+
+    private void assertInputEqualsOutput(List<String[]> data)
+    {
+        for (String[] d : data)
+        {
+            String test = impl.process(d[0]);
+            assertEquals(test, d[1]);
+        }
+    }
 
     @BeforeEach
     public void setup() throws Exception
