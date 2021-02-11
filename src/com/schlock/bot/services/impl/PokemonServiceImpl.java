@@ -71,9 +71,9 @@ public class PokemonServiceImpl implements PokemonService
      * Always returns a single pokemon, or nothing if bad syntax
      * @return String "No. 25 Pikachu" (example)
      */
-    public String process(String in)
+    public String process(String username, String in)
     {
-        String commandText = in;
+        String commandText = in.toLowerCase();
         if (commandText.startsWith(POKEMON_COMMAND) || commandText.startsWith(POKEMON_E_COMMAND))
         {
             initialize();

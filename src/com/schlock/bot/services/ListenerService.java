@@ -4,5 +4,5 @@ public interface ListenerService
 {
     boolean isCommand(String message);
 
-    String process(String command);
+    String process(String username, String command);
 }

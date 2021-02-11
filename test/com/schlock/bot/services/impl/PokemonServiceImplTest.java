@@ -92,7 +92,7 @@ class PokemonServiceImplTest
             int test_ten_times_for_each = expected_results * 10;
             for (int i = 0; i < test_ten_times_for_each; i++)
             {
-                String text = impl.process(data[0]);
+                String text = impl.process("", data[0]);
                 results.add(text);
             }
 
@@ -147,7 +147,7 @@ class PokemonServiceImplTest
     {
         for (String[] d : data)
         {
-            String test = impl.process(d[0]);
+            String test = impl.process("", d[0]);
             assertEquals(test, d[1]);
         }
     }

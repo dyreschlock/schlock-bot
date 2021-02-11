@@ -59,8 +59,10 @@ public class DiscordBot extends AbstractBot
                     .filter(message -> service.isCommand(message.getContent()))
                     .subscribe(message -> {
 
+                        String username = message.getAuthor().toString();
                         String content = message.getContent();
-                        String response = service.process(content);
+
+                        String response = service.process(username, content);
 
                         final MessageChannel channel = message.getChannel().block();
                         channel.createMessage(response).block();

@@ -26,6 +26,7 @@ public class Commands extends ListenerAdapter
     public void onMessage(MessageEvent event) throws Exception
     {
         String message = event.getMessage().toLowerCase();
+        String username = event.getUser().getNick();
 
         if (message.startsWith(Bot.PING))
         {
@@ -37,7 +38,7 @@ public class Commands extends ListenerAdapter
         {
             if (service.isCommand(message))
             {
-                String response = service.process(message);
+                String response = service.process(username, message);
                 event.getChannel().send().message(response);
                 return;
             }
