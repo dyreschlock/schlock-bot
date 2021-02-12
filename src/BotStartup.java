@@ -25,10 +25,6 @@ import java.util.Set;
 
 public class BotStartup
 {
-    private static final String CONFIG_PROPERTIES = "config.properties";
-
-    private SessionFactory hibernateSessionFactory;
-
     private DatabaseModule database;
 
     private PokemonService pokemonService;
@@ -46,7 +42,7 @@ public class BotStartup
 
     public void run(String contextFlag) throws Exception
     {
-        initializeProperties(contextFlag);
+        initializeDeploymentContext(contextFlag);
         initializeDatabase();
         initializeServices();
 
@@ -63,6 +59,12 @@ public class BotStartup
         String temp = "";
     }
 
+    private void initializeDeploymentContext(String contextFlag) throws Exception
+    {
+        deploymentContext = new DeploymentContextImpl(contextFlag);
+        deploymentContext.loadProperties();
+    }
+
     private void initializeDatabase() throws Exception
     {
         database = new DatabaseModule(deploymentContext);
@@ -73,28 +75,6 @@ public class BotStartup
     {
         pokemonService = new PokemonServiceImpl(deploymentContext);
         bettingService = new BettingServiceImpl(pokemonService, database, deploymentContext);
-    }
-
-    private void initializeProperties(String contextFlag) throws Exception
-    {
-        Properties properties = new Properties();
-        InputStream stream = getClass().getClassLoader().getResourceAsStream(CONFIG_PROPERTIES);
-        if (stream != null)
-        {
-            try
-            {
-                properties.load(stream);
-                deploymentContext = new DeploymentContextImpl(contextFlag, properties);
-            }
-            finally
-            {
-                stream.close();
-            }
-        }
-        else
-        {
-            throw new FileNotFoundException("Property file missing: " + CONFIG_PROPERTIES);
-        }
     }
 
 

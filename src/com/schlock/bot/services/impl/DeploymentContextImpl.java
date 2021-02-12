@@ -2,10 +2,15 @@ package com.schlock.bot.services.impl;
 
 import com.schlock.bot.services.DeploymentContext;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 public class DeploymentContextImpl implements DeploymentContext
 {
+    private static final String CONFIG_PROPERTIES = "config.properties";
+
     private static final String BOT_NAME = "bot.name";
 
     private static final String DISCORD_TOKEN = "discord.token";
@@ -20,14 +25,32 @@ public class DeploymentContextImpl implements DeploymentContext
 
     private final String context;
 
-    private final Properties properties;
+    private final Properties properties = new Properties();
 
-    public DeploymentContextImpl(String context, Properties properties)
+    public DeploymentContextImpl(String context)
     {
         this.context = context;
-        this.properties = properties;
     }
 
+    public void loadProperties() throws IOException
+    {
+        InputStream stream = getClass().getClassLoader().getResourceAsStream(CONFIG_PROPERTIES);
+        if (stream != null)
+        {
+            try
+            {
+                properties.load(stream);
+            }
+            finally
+            {
+                stream.close();
+            }
+        }
+        else
+        {
+            throw new FileNotFoundException("Property file missing: " + CONFIG_PROPERTIES);
+        }
+    }
 
     public String getDataDirectory()
     {

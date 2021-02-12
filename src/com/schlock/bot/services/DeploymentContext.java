@@ -1,11 +1,15 @@
 package com.schlock.bot.services;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public interface DeploymentContext
 {
     String LOCAL = "local";
     String HOSTED = "hosted";
+    String TEST = "test";
+
+    void loadProperties() throws IOException;
 
     String getDataDirectory();
 

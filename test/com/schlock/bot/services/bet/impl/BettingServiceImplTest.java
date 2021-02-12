@@ -22,7 +22,7 @@ class BettingServiceImplTest
     @BeforeEach
     public void setup() throws Exception
     {
-        DeploymentContext context = new DeploymentContextImpl("",null)
+        DeploymentContext context = new DeploymentContextImpl(DeploymentContext.TEST)
         {
             @Override
             public String getDiscordToken()

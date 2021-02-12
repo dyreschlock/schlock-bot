@@ -2,7 +2,6 @@ package com.schlock.bot.services.pokemon.impl;
 
 import com.schlock.bot.services.DeploymentContext;
 import com.schlock.bot.services.impl.DeploymentContextImpl;
-import com.schlock.bot.services.pokemon.impl.PokemonServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +10,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PokemonServiceImplTest
 {
@@ -156,7 +156,7 @@ class PokemonServiceImplTest
     @BeforeEach
     public void setup() throws Exception
     {
-        DeploymentContext context = new DeploymentContextImpl("", null)
+        DeploymentContext context = new DeploymentContextImpl(DeploymentContext.TEST)
         {
             @Override
             public String getDiscordToken()

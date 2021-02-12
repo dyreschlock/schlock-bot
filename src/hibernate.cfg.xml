@@ -9,7 +9,8 @@
         <property name="hibernate.connection.provider_class">com.zaxxer.hikari.hibernate.HikariConnectionProvider</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
 
-        <!-- // first: create
+        <!--
+        <property name="hbm2ddl.auto">create</property>
         <property name="hbm2ddl.auto">update</property>
         -->
         <property name="hibernate.show_sql">true</property>
