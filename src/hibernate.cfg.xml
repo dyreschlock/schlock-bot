@@ -3,8 +3,10 @@
         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
+        <!--
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.provider_class">com.jolbox.bonecp.provider.BoneCPConnectionProvider</property>
+        -->
+        <property name="hibernate.connection.provider_class">com.zaxxer.hikari.hibernate.HikariConnectionProvider</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
 
         <!-- // first: create
@@ -17,17 +19,10 @@
         <property name="hibernate.connection.characterEncoding">utf8</property>
         <property name="hibernate.connection.useUnicode">true</property>
 
-
-        <property name="bonecp.partitionCount">1</property>
-        <property name="bonecp.maxConnectionsPerPartition">1</property>
-        <property name="bonecp.minConnectionsPerPartition">1</property>
-        <property name="bonecp.acquireIncrement">1</property>
-
-        <property name="bonecp.idleMaxAge">120</property>
-        <property name="bonecp.idleConnectionTestPeriod">60</property>
-        <property name="bonecp.statementsCacheSize">50</property>
-        <property name="bonecp.releaseHelperThreads">3</property>
-
+        <property name="hibernate.hikari.minimumIdle">5</property>
+        <property name="hibernate.hikari.maximumPoolSize">10</property>
+        <property name="hibernate.hikari.idleTimeout">30000</property>
+        <property name="hibernate.hikari.dataSourceClassName">com.mysql.jdbc.jdbc2.optional.MysqlDataSource</property>
 
         <mapping class="com.schlock.bot.entities.bet.Bet" />
         <mapping class="com.schlock.bot.entities.bet.BettingUser" />

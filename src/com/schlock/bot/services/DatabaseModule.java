@@ -44,6 +44,10 @@ public class DatabaseModule
     private final static String HIBERNATE_PASSWORD = "hibernate.connection.password";
     private final static String HIBERNATE_URL = "hibernate.connection.url";
 
+    private final static String HIBERNATE_HIKARI_USERNAME = "hibernate.hikari.dataSource.user";
+    private final static String HIBERNATE_HIKARI_PASSWORD = "hibernate.hikari.dataSource.password";
+    private final static String HIBERNATE_HIKARI_URL = "hibernate.hikari.dataSource.url";
+
     public void setup() throws Exception
     {
         final String username = context.getHibernateProperty(HIBERNATE_USERNAME);
@@ -57,6 +61,10 @@ public class DatabaseModule
         configuration.getConfigurationValues().put(HIBERNATE_USERNAME, username);
         configuration.getConfigurationValues().put(HIBERNATE_PASSWORD, password);
         configuration.getConfigurationValues().put(HIBERNATE_URL, url);
+
+        configuration.getConfigurationValues().put(HIBERNATE_HIKARI_USERNAME, username);
+        configuration.getConfigurationValues().put(HIBERNATE_HIKARI_PASSWORD, password);
+        configuration.getConfigurationValues().put(HIBERNATE_HIKARI_URL, url);
 
         final StandardServiceRegistry registry = builder.configure(configuration).build();
 
