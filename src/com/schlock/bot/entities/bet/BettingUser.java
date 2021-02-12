@@ -2,17 +2,36 @@ package com.schlock.bot.entities.bet;
 
 import com.schlock.bot.entities.Persisted;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity(name = "betting_user")
 public class BettingUser extends Persisted
 {
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(name = "username")
     private String username;
 
+    @Column(name = "balance")
     private Integer balance;
 
     public BettingUser()
     {
+    }
+
+    public Long getId()
+    {
+        return id;
+    }
+
+    public void setId(Long id)
+    {
+        this.id = id;
     }
 
     public String getUsername()

@@ -1,22 +1,14 @@
 package com.schlock.bot.entities;
 
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-public class Persisted
+public abstract class Persisted
 {
-    @Id
-    private Long id;
+    public abstract Long getId();
 
+    public abstract void setId(Long id);
 
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
 
     public boolean equals(Object o)
     {
