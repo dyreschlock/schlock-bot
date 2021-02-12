@@ -117,7 +117,7 @@ public class PokemonServiceImpl implements PokemonService
             return getPokemonInRange(start, end);
         }
 
-        return getPokemonByNameNumber(commandText);
+        return getPokemonFromText(commandText);
     }
 
     private boolean isRangeSearch(String command)
@@ -137,7 +137,7 @@ public class PokemonServiceImpl implements PokemonService
         return pokemonByNumber.get(last);
     }
 
-    private Pokemon getPokemonByNameNumber(String commandText)
+    public Pokemon getPokemonFromText(String commandText)
     {
         String text = cleanText(commandText);
 
@@ -168,13 +168,13 @@ public class PokemonServiceImpl implements PokemonService
             String pokemon = commandText.split("-")[1];
 
             start = getFirstPokemon();
-            end = getPokemonByNameNumber(pokemon);
+            end = getPokemonFromText(pokemon);
         }
         else if (commandText.endsWith("-"))
         {
             String pokemon = commandText.split("-")[0];
 
-            start = getPokemonByNameNumber(pokemon);
+            start = getPokemonFromText(pokemon);
             end = getLastPokemon();
         }
         else
@@ -182,8 +182,8 @@ public class PokemonServiceImpl implements PokemonService
             String pokemonStart = commandText.split("-")[0];
             String pokemonEnd = commandText.split("-")[1];
 
-            start = getPokemonByNameNumber(pokemonStart);
-            end = getPokemonByNameNumber(pokemonEnd);
+            start = getPokemonFromText(pokemonStart);
+            end = getPokemonFromText(pokemonEnd);
         }
         return getPokemonInRange(start, end);
     }

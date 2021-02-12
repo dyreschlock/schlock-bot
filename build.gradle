@@ -21,6 +21,9 @@ dependencies {
 
     implementation 'com.github.pircbotx:pircbotx:2.2'
 
+    compile group: 'com.jolbox', name: 'bonecp', version: '0.7.1.RELEASE'
+    compile group: 'com.jolbox', name: 'bonecp-provider', version: '0.7.1.RELEASE'
+
     implementation 'org.hibernate:hibernate-agroal:5.4.28.Final'
 
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')

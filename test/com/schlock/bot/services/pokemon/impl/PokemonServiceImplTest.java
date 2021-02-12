@@ -156,7 +156,7 @@ class PokemonServiceImplTest
     @BeforeEach
     public void setup() throws Exception
     {
-        DeploymentContext context = new DeploymentContextImpl(null)
+        DeploymentContext context = new DeploymentContextImpl("", null)
         {
             @Override
             public String getDiscordToken()

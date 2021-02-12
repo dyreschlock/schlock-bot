@@ -18,10 +18,13 @@ public class DeploymentContextImpl implements DeploymentContext
 
     private static final String DATA_DIRECTORY = "data/";
 
+    private final String context;
+
     private final Properties properties;
 
-    public DeploymentContextImpl(Properties properties)
+    public DeploymentContextImpl(String context, Properties properties)
     {
+        this.context = context;
         this.properties = properties;
     }
 
@@ -77,5 +80,11 @@ public class DeploymentContextImpl implements DeploymentContext
             }
         }
         return commands;
+    }
+
+    public String getHibernateProperty(String property)
+    {
+        String hp = property + "." + context;
+        return properties.getProperty(hp);
     }
 }

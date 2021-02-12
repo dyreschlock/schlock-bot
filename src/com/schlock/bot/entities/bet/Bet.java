@@ -1,6 +1,11 @@
 package com.schlock.bot.entities.bet;
 
-public class Bet
+import com.schlock.bot.entities.Persisted;
+
+import javax.persistence.Entity;
+
+@Entity(name = "bet")
+public class Bet extends Persisted
 {
     private BettingUser user;
 

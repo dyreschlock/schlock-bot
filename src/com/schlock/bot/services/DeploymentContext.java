@@ -4,17 +4,22 @@ import java.util.HashMap;
 
 public interface DeploymentContext
 {
-    public String getDataDirectory();
+    String LOCAL = "local";
+    String HOSTED = "hosted";
 
-    public String getBotName();
+    String getDataDirectory();
 
-    public String getDiscordToken();
+    String getBotName();
 
-    public String getTwitchBotName();
+    String getDiscordToken();
 
-    public String getTwitchOAuthToken();
+    String getTwitchBotName();
 
-    public String getTwitchChannel();
+    String getTwitchOAuthToken();
 
-    public HashMap<String, String> getListenerCommands();
+    String getTwitchChannel();
+
+    HashMap<String, String> getListenerCommands();
+
+    String getHibernateProperty(String property);
 }

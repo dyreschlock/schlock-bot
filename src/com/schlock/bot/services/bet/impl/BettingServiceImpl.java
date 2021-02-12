@@ -1,7 +1,11 @@
 package com.schlock.bot.services.bet.impl;
 
+import com.schlock.bot.entities.bet.BettingUser;
+import com.schlock.bot.services.DatabaseModule;
 import com.schlock.bot.services.bet.BettingService;
 import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.database.bet.BetDAO;
+import com.schlock.bot.services.database.bet.BettingUserDAO;
 import com.schlock.bot.services.pokemon.PokemonService;
 
 public class BettingServiceImpl implements BettingService
@@ -12,11 +16,17 @@ public class BettingServiceImpl implements BettingService
 
     private final PokemonService pokemonService;
 
+    private final DatabaseModule database;
+
     private final DeploymentContext deploymentContext;
 
-    public BettingServiceImpl(PokemonService pokemonService, DeploymentContext deploymentContext)
+    public BettingServiceImpl(PokemonService pokemonService,
+                              DatabaseModule database,
+                              DeploymentContext deploymentContext)
     {
         this.pokemonService = pokemonService;
+
+        this.database = database;
 
         this.deploymentContext = deploymentContext;
     }
@@ -49,6 +59,9 @@ public class BettingServiceImpl implements BettingService
 
     private String placeBet(String username, String in)
     {
+        BettingUser user = database.get(BettingUserDAO.class).getByUsername(username);
+
+
 
         return "";
     }
