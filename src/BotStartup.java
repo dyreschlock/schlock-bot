@@ -1,13 +1,12 @@
 import com.schlock.bot.Bot;
-import com.schlock.bot.DiscordBot;
 import com.schlock.bot.TwitchBot;
-import com.schlock.bot.services.BettingService;
+import com.schlock.bot.services.bet.BettingService;
 import com.schlock.bot.services.DeploymentContext;
 import com.schlock.bot.services.ListenerService;
-import com.schlock.bot.services.PokemonService;
-import com.schlock.bot.services.impl.BettingServiceImpl;
+import com.schlock.bot.services.pokemon.PokemonService;
+import com.schlock.bot.services.bet.impl.BettingServiceImpl;
 import com.schlock.bot.services.impl.DeploymentContextImpl;
-import com.schlock.bot.services.impl.PokemonServiceImpl;
+import com.schlock.bot.services.pokemon.impl.PokemonServiceImpl;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;

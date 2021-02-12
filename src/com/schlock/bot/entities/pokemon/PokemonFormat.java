@@ -1,4 +1,4 @@
-package com.schlock.bot.entities;
+package com.schlock.bot.entities.pokemon;
 
 public class PokemonFormat
 {

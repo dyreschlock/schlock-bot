@@ -1,9 +1,9 @@
-package com.schlock.bot.services.impl;
+package com.schlock.bot.services.pokemon.impl;
 
-import com.schlock.bot.entities.Pokemon;
-import com.schlock.bot.entities.PokemonFormat;
+import com.schlock.bot.entities.pokemon.Pokemon;
+import com.schlock.bot.entities.pokemon.PokemonFormat;
 import com.schlock.bot.services.DeploymentContext;
-import com.schlock.bot.services.PokemonService;
+import com.schlock.bot.services.pokemon.PokemonService;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

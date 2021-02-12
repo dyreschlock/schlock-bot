@@ -1,7 +1,8 @@
-package com.schlock.bot.services.impl;
+package com.schlock.bot.services.pokemon.impl;
 
 import com.schlock.bot.services.DeploymentContext;
-import org.junit.jupiter.api.BeforeAll;
+import com.schlock.bot.services.impl.DeploymentContextImpl;
+import com.schlock.bot.services.pokemon.impl.PokemonServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

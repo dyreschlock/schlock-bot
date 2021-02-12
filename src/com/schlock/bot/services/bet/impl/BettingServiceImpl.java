@@ -1,13 +1,14 @@
-package com.schlock.bot.services.impl;
+package com.schlock.bot.services.bet.impl;
 
-import com.schlock.bot.services.BettingService;
+import com.schlock.bot.services.bet.BettingService;
 import com.schlock.bot.services.DeploymentContext;
-import com.schlock.bot.services.PokemonService;
+import com.schlock.bot.services.pokemon.PokemonService;
 
 public class BettingServiceImpl implements BettingService
 {
-    private final String BET_COMMAND = "!bet";
-    private final String BALANCE_COMMAND = "!balance";
+    private final String BET_COMMAND = "!bet ";
+    private final String BALANCE_COMMAND = "!balance ";
+    private final String WIN_COMMAND = "!win ";
 
     private final PokemonService pokemonService;
 
@@ -24,7 +25,8 @@ public class BettingServiceImpl implements BettingService
     {
         return in != null &&
                 (in.toLowerCase().startsWith(BET_COMMAND) ||
-                        in.toLowerCase().startsWith(BALANCE_COMMAND));
+                        in.toLowerCase().startsWith(BALANCE_COMMAND) ||
+                        in.toLowerCase().startsWith(WIN_COMMAND));
     }
 
     public String process(String username, String in)
@@ -38,16 +40,28 @@ public class BettingServiceImpl implements BettingService
         {
             return returnBalance(username, in);
         }
+        if (command.startsWith(WIN_COMMAND))
+        {
+            return roundComplete(username, in);
+        }
         return null;
     }
 
     private String placeBet(String username, String in)
     {
+
         return "";
     }
 
     private String returnBalance(String username, String in)
     {
+
+        return "";
+    }
+
+    private String roundComplete(String username, String string)
+    {
+
         return "";
     }
 }
