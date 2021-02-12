@@ -6,7 +6,7 @@ import org.pircbotx.hooks.events.JoinEvent;
 
 public class ChangeColorOnJoin extends ListenerAdapter
 {
-    private static final String SET_COLOR = "/color DodgerBlue";
+    private static final String SET_COLOR = "/color BlueViolet";
 
     private final DeploymentContext context;
 
