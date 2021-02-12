@@ -14,6 +14,7 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
+import java.io.Serializable;
 import java.util.*;
 
 public class DatabaseModule
@@ -53,6 +54,29 @@ public class DatabaseModule
         for (Persisted o : obj)
         {
             session.save(o);
+        }
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public void delete(Persisted obj)
+    {
+        delete(Arrays.asList(obj));
+    }
+
+    public void delete(List<Persisted> obj)
+    {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        for (Persisted o : obj)
+        {
+            Object instance = session.load(o.getClass(), o.getId());
+            if (instance != null)
+            {
+                session.delete(o);
+            }
         }
 
         session.getTransaction().commit();
