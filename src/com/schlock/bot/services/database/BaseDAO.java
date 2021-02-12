@@ -7,6 +7,4 @@ public interface BaseDAO<T>
     List<T> getAll();
 
     T getById(Long id);
-
-    void save(T obj);
 }

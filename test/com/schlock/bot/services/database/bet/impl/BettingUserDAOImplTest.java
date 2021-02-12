@@ -6,6 +6,8 @@ import com.schlock.bot.services.database.bet.BettingUserDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class BettingUserDAOImplTest extends DatabaseTest
 {
     private final static String USERNAME1 = "username1";
@@ -15,6 +17,7 @@ class BettingUserDAOImplTest extends DatabaseTest
     {
         BettingUser user1 = getDatabase().get(BettingUserDAO.class).getByUsername(USERNAME1);
 
+        assertEquals(user1.getUsername(), USERNAME1);
     }
 
     @BeforeEach
@@ -26,6 +29,10 @@ class BettingUserDAOImplTest extends DatabaseTest
 
     private void createTestObjects()
     {
-
+//        BettingUser user1 = new BettingUser();
+//        user1.setUsername(USERNAME1);
+//        user1.setBalance(10000);
+//
+//        getDatabase().save(user1);
     }
 }

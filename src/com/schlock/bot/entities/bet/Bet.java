@@ -4,7 +4,8 @@ import com.schlock.bot.entities.Persisted;
 
 import javax.persistence.*;
 
-@Entity(name = "bet")
+@Entity
+@Table(name = "bet")
 public class Bet extends Persisted
 {
     @Id

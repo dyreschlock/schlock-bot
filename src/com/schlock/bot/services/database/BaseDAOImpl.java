@@ -2,6 +2,7 @@ package com.schlock.bot.services.database;
 
 import org.hibernate.SessionFactory;
 
+import javax.persistence.Query;
 import java.util.List;
 
 public abstract class BaseDAOImpl<T> implements BaseDAO<T>
@@ -11,6 +12,11 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T>
     public BaseDAOImpl(SessionFactory sessionFactory)
     {
         this.sessionFactory = sessionFactory;
+    }
+
+    protected SessionFactory getSessionFactory()
+    {
+        return sessionFactory;
     }
 
     public List<T> getAll()
@@ -23,8 +29,13 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T>
         return null;
     }
 
-    public void save(T obj)
+    protected T singleResult(Query query)
     {
-
+        List<T> list = query.getResultList();
+        if (list.isEmpty())
+        {
+            return null;
+        }
+        return list.get(0);
     }
 }
