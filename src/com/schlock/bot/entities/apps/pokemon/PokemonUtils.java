@@ -1,15 +1,15 @@
 package com.schlock.bot.entities.apps.pokemon;
 
-public class PokemonFormat
+public class PokemonUtils
 {
     protected static final String POKEMON_RETURN_FORMAT = "No. %s %s";
 
-    public static String format(Pokemon pokemon)
+    public static String formatOutput(Pokemon pokemon)
     {
-        return format(pokemon, false, false);
+        return formatOutput(pokemon, false, false);
     }
 
-    public static String format(Pokemon pokemon, boolean type, boolean basestats)
+    public static String formatOutput(Pokemon pokemon, boolean type, boolean basestats)
     {
         String p = "";
 

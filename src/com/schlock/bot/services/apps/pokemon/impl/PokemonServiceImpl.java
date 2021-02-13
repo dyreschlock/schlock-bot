@@ -1,7 +1,7 @@
 package com.schlock.bot.services.apps.pokemon.impl;
 
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
-import com.schlock.bot.entities.apps.pokemon.PokemonFormat;
+import com.schlock.bot.entities.apps.pokemon.PokemonUtils;
 import com.schlock.bot.services.DeploymentContext;
 import com.schlock.bot.services.apps.pokemon.PokemonService;
 import org.apache.commons.lang3.StringUtils;
@@ -93,7 +93,7 @@ public class PokemonServiceImpl implements PokemonService
             Pokemon pokemon = processPokemon(commandText);
             if (pokemon != null)
             {
-                return PokemonFormat.format(pokemon, hasTypeArg, hasStatsArg);
+                return PokemonUtils.formatOutput(pokemon, hasTypeArg, hasStatsArg);
             }
         }
         return POKEMON_RETURN_NULL;
