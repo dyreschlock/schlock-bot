@@ -1,0 +1,17 @@
+discord.token=
+
+twitch.bot.name=
+twitch.oauth.token=
+twitch.channel=
+
+hibernate.connection.url.hosted=
+hibernate.connection.username.hosted=
+hibernate.connection.password.hosted=
+
+hibernate.connection.url.local=
+hibernate.connection.username.local=
+hibernate.connection.password.local=
+
+hibernate.connection.url.test=
+hibernate.connection.username.test=
+hibernate.connection.password.test=

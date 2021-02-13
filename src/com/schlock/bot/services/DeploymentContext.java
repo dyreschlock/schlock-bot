@@ -11,6 +11,10 @@ public interface DeploymentContext
 
     void loadProperties() throws IOException;
 
+    Integer getUserDefaultBalance();
+
+    String getCurrencyMark();
+
     String getDataDirectory();
 
     String getBotName();

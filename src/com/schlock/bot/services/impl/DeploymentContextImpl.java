@@ -10,8 +10,12 @@ import java.util.*;
 public class DeploymentContextImpl implements DeploymentContext
 {
     private static final String CONFIG_PROPERTIES = "config.properties";
+    private static final String DEPLOY_PROPERTIES = "deploy.properties";
 
     private static final String BOT_NAME = "bot.name";
+
+    private static final String USER_DEFAULT_BALANCE = "user.default.balance";
+    private static final String CURRENCY_MARK = "currency.mark";
 
     private static final String DISCORD_TOKEN = "discord.token";
 
@@ -34,7 +38,13 @@ public class DeploymentContextImpl implements DeploymentContext
 
     public void loadProperties() throws IOException
     {
-        InputStream stream = getClass().getClassLoader().getResourceAsStream(CONFIG_PROPERTIES);
+        loadProperties(CONFIG_PROPERTIES);
+        loadProperties(DEPLOY_PROPERTIES);
+    }
+
+    private void loadProperties(String resource) throws IOException
+    {
+        InputStream stream = getClass().getClassLoader().getResourceAsStream(resource);
         if (stream != null)
         {
             try
@@ -48,8 +58,19 @@ public class DeploymentContextImpl implements DeploymentContext
         }
         else
         {
-            throw new FileNotFoundException("Property file missing: " + CONFIG_PROPERTIES);
+            throw new FileNotFoundException("Property file missing: " + resource);
         }
+    }
+
+    public Integer getUserDefaultBalance()
+    {
+        String bal = properties.getProperty(USER_DEFAULT_BALANCE);
+        return Integer.parseInt(bal);
+    }
+
+    public String getCurrencyMark()
+    {
+        return properties.getProperty(CURRENCY_MARK);
     }
 
     public String getDataDirectory()

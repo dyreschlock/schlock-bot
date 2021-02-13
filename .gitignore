@@ -8,4 +8,4 @@ build/
 schlock-bot.iml
 schlock-bot.ipr
 schlock-bot.iws
-src/config.properties
+src/deploy.properties

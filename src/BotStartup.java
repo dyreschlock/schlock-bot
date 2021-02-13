@@ -3,8 +3,12 @@ import com.schlock.bot.TwitchBot;
 import com.schlock.bot.services.DatabaseModule;
 import com.schlock.bot.services.DeploymentContext;
 import com.schlock.bot.services.ListenerService;
+import com.schlock.bot.services.apps.UserService;
 import com.schlock.bot.services.apps.bet.BettingService;
 import com.schlock.bot.services.apps.bet.impl.BettingServiceImpl;
+import com.schlock.bot.services.apps.guess.GuessingService;
+import com.schlock.bot.services.apps.guess.impl.GuessingServiceImpl;
+import com.schlock.bot.services.apps.impl.UserServiceImpl;
 import com.schlock.bot.services.apps.pokemon.PokemonService;
 import com.schlock.bot.services.apps.pokemon.impl.PokemonServiceImpl;
 import com.schlock.bot.services.impl.DeploymentContextImpl;
@@ -16,8 +20,10 @@ public class BotStartup
 {
     private DatabaseModule database;
 
+    private UserService userService;
     private PokemonService pokemonService;
     private BettingService bettingService;
+    private GuessingService guessingService;
 
     private DeploymentContext deploymentContext;
 
@@ -36,8 +42,10 @@ public class BotStartup
         initializeServices();
 
         Set<ListenerService> listeners = new HashSet<>();
+        listeners.add(userService);
         listeners.add(pokemonService);
         listeners.add(bettingService);
+        listeners.add(guessingService);
 
 //        discordBot = new DiscordBot(listeners, deploymentContext);
 //        discordBot.startup();
@@ -62,8 +70,10 @@ public class BotStartup
 
     private void initializeServices()
     {
+        userService = new UserServiceImpl(database, deploymentContext);
         pokemonService = new PokemonServiceImpl(deploymentContext);
-        bettingService = new BettingServiceImpl(pokemonService, database, deploymentContext);
+        bettingService = new BettingServiceImpl(pokemonService, userService, database, deploymentContext);
+        guessingService = new GuessingServiceImpl(pokemonService, userService, database);
     }
 
 
