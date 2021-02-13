@@ -144,6 +144,50 @@ class PokemonServiceImplTest
         assertInputEqualsOutput(testData);
     }
 
+    @Test
+    public void testGenerationSuccess()
+    {
+        List<Object[]> testData = new ArrayList<>();
+        testData.add(new Object[]{"!pokemon gen1", 1, 151});
+        testData.add(new Object[]{"!pokemon gen2", 152, 250});
+        testData.add(new Object[]{"!pokemon gen3", 251, 386});
+        testData.add(new Object[]{"!pokemon gen4", 387, 493});
+        testData.add(new Object[]{"!pokemon gen5", 494, 649});
+        testData.add(new Object[]{"!pokemon gen6", 650, 721});
+        testData.add(new Object[]{"!pokemon gen7", 722, 809});
+        testData.add(new Object[]{"!pokemon gen8", 810, 898});
+
+        for (Object[] d : testData)
+        {
+            String response = impl.process("", (String) d[0]);
+            String number = response.split(" ")[1];
+
+            Integer pokemonId = Integer.parseInt(number);
+
+            Integer start = (Integer) d[1];
+            Integer end = (Integer) d[2];
+
+            assertTrue(start <= pokemonId && pokemonId <= end);
+        }
+    }
+
+    @Test
+    public void testGenerationFail()
+    {
+        List<String> testData = new ArrayList<>();
+        testData.add("!pokemon g1");
+        testData.add("!pokemon generation1");
+        testData.add("!pokemon gen9");
+        testData.add("!pokemon genX");
+
+        for (String d : testData)
+        {
+            String response = impl.process("", d);
+            assertEquals(response, PokemonServiceImpl.POKEMON_RETURN_NULL);
+        }
+    }
+
+
     private void assertInputEqualsOutput(List<String[]> data)
     {
         for (String[] d : data)

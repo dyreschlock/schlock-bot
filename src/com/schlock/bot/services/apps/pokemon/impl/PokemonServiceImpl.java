@@ -104,6 +104,12 @@ public class PokemonServiceImpl implements PokemonService
         String commandText = in.substring(POKEMON_COMMAND.length());
         commandText = cleanText(commandText);
 
+        if (isGenSearch(commandText))
+        {
+            String range = PokemonUtils.returnGenerationRange(commandText);
+            return getPokemonInRange(range);
+        }
+
         if (isRangeSearch(commandText))
         {
             return getPokemonInRange(commandText);
@@ -118,6 +124,11 @@ public class PokemonServiceImpl implements PokemonService
         }
 
         return getPokemonFromText(commandText);
+    }
+
+    private boolean isGenSearch(String command)
+    {
+        return PokemonUtils.isGenerationId(command);
     }
 
     private boolean isRangeSearch(String command)
