@@ -1,26 +1,15 @@
 import com.schlock.bot.Bot;
 import com.schlock.bot.TwitchBot;
 import com.schlock.bot.services.DatabaseModule;
-import com.schlock.bot.services.bet.BettingService;
 import com.schlock.bot.services.DeploymentContext;
 import com.schlock.bot.services.ListenerService;
-import com.schlock.bot.services.database.bet.BetDAO;
-import com.schlock.bot.services.database.bet.BettingUserDAO;
-import com.schlock.bot.services.database.bet.impl.BetDAOImpl;
-import com.schlock.bot.services.database.bet.impl.BettingUserDAOImpl;
-import com.schlock.bot.services.pokemon.PokemonService;
-import com.schlock.bot.services.bet.impl.BettingServiceImpl;
+import com.schlock.bot.services.apps.bet.BettingService;
+import com.schlock.bot.services.apps.bet.impl.BettingServiceImpl;
+import com.schlock.bot.services.apps.pokemon.PokemonService;
+import com.schlock.bot.services.apps.pokemon.impl.PokemonServiceImpl;
 import com.schlock.bot.services.impl.DeploymentContextImpl;
-import com.schlock.bot.services.pokemon.impl.PokemonServiceImpl;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.HashSet;
-import java.util.Properties;
 import java.util.Set;
 
 public class BotStartup

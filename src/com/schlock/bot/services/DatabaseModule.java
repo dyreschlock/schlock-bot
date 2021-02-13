@@ -2,19 +2,17 @@ package com.schlock.bot.services;
 
 import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.services.database.BaseDAO;
-import com.schlock.bot.services.database.bet.BetDAO;
-import com.schlock.bot.services.database.bet.BettingUserDAO;
-import com.schlock.bot.services.database.bet.impl.BetDAOImpl;
-import com.schlock.bot.services.database.bet.impl.BettingUserDAOImpl;
+import com.schlock.bot.services.database.apps.BetDAO;
+import com.schlock.bot.services.database.apps.UserDAO;
+import com.schlock.bot.services.database.apps.impl.BetDAOImpl;
+import com.schlock.bot.services.database.apps.impl.UserDAOImpl;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.cfgxml.spi.LoadedConfig;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 
-import java.io.Serializable;
 import java.util.*;
 
 public class DatabaseModule
@@ -33,7 +31,7 @@ public class DatabaseModule
     private void createDAOs()
     {
         daos.put(BetDAO.class, new BetDAOImpl(sessionFactory));
-        daos.put(BettingUserDAO.class, new BettingUserDAOImpl(sessionFactory));
+        daos.put(UserDAO.class, new UserDAOImpl(sessionFactory));
     }
 
     public <T> T get(Class<T> dao)
