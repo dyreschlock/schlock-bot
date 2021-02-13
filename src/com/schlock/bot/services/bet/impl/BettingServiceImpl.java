@@ -2,14 +2,14 @@ package com.schlock.bot.services.bet.impl;
 
 import com.schlock.bot.entities.bet.BettingUser;
 import com.schlock.bot.services.DatabaseModule;
-import com.schlock.bot.services.bet.BettingService;
 import com.schlock.bot.services.DeploymentContext;
-import com.schlock.bot.services.database.bet.BetDAO;
+import com.schlock.bot.services.bet.BettingService;
 import com.schlock.bot.services.database.bet.BettingUserDAO;
 import com.schlock.bot.services.pokemon.PokemonService;
 
 public class BettingServiceImpl implements BettingService
 {
+    private final String INSTRUCTIONS_COMMAND = "!instructions";
     private final String BET_COMMAND = "!bet ";
     private final String BALANCE_COMMAND = "!balance ";
     private final String WIN_COMMAND = "!win ";
@@ -42,6 +42,10 @@ public class BettingServiceImpl implements BettingService
     public String process(String username, String in)
     {
         String command = in.toLowerCase();
+        if (command.startsWith(INSTRUCTIONS_COMMAND))
+        {
+            return returnInstructions(username, in);
+        }
         if (command.startsWith(BET_COMMAND))
         {
             return placeBet(username, in);
@@ -57,24 +61,29 @@ public class BettingServiceImpl implements BettingService
         return null;
     }
 
+    private String returnInstructions(String username, String in)
+    {
+        return "";
+    }
+
     private String placeBet(String username, String in)
     {
         BettingUser user = database.get(BettingUserDAO.class).getByUsername(username);
 
 
 
-        return "";
+        return String.format("Someday you can bet, %s!", username);
     }
 
     private String returnBalance(String username, String in)
     {
 
-        return "";
+        return String.format("Someday you can balance, %s!", username);
     }
 
     private String roundComplete(String username, String string)
     {
 
-        return "";
+        return String.format("Someday you can win, %s!", username);
     }
 }
