@@ -13,6 +13,8 @@ public interface DeploymentContext
 
     Integer getUserDefaultBalance();
 
+    Integer getQuizCorrectPoints();
+
     String getCurrencyMark();
 
     String getDataDirectory();

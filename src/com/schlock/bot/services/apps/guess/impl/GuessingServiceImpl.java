@@ -84,7 +84,7 @@ public class GuessingServiceImpl implements GuessingService
 
     private String processWinner(String username)
     {
-        Integer points = 50;
+        Integer points = context.getQuizCorrectPoints();
         String mark = context.getCurrencyMark();
 
         User user = userService.getUser(username);
@@ -95,7 +95,7 @@ public class GuessingServiceImpl implements GuessingService
         String pokemonName = currentPokemon.getName();
         currentPokemon = null;
 
-        String message = "Congradulations, %s! %s is correct! You get %s%s";
+        String message = "Congratulations, %s! %s is correct! You get %s%s";
         return String.format(message, username, pokemonName, points.toString(), mark);
     }
 }

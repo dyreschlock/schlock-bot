@@ -17,6 +17,8 @@ public class DeploymentContextImpl implements DeploymentContext
     private static final String USER_DEFAULT_BALANCE = "user.default.balance";
     private static final String CURRENCY_MARK = "currency.mark";
 
+    private static final String QUIZ_CORRECT_POINTS = "quiz.correct.points";
+
     private static final String ONWER_USERNAME = "owner.username";
 
     private static final String DISCORD_TOKEN = "discord.token";
@@ -73,6 +75,12 @@ public class DeploymentContextImpl implements DeploymentContext
     public String getCurrencyMark()
     {
         return properties.getProperty(CURRENCY_MARK);
+    }
+
+    public Integer getQuizCorrectPoints()
+    {
+        String points = properties.getProperty(QUIZ_CORRECT_POINTS);
+        return Integer.parseInt(points);
     }
 
     public String getDataDirectory()
