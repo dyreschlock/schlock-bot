@@ -21,10 +21,15 @@ public class UserServiceImpl implements UserService
         this.context = context;
     }
 
-    public boolean isCommand(String in)
+    public boolean isAcceptRequest(String in)
     {
         return in != null &&
                 (in.toLowerCase().startsWith(BALANCE_COMMAND));
+    }
+
+    public boolean isTerminateAfterRequest()
+    {
+        return true;
     }
 
     public String process(String username, String in)
@@ -42,14 +47,20 @@ public class UserServiceImpl implements UserService
 
     private String checkBalance(String username)
     {
+        User user = getUser(username);
+
+        String balance = user.getBalance().toString();
+        return String.format(BALANCE_RETURN_FORMAT, username, balance, context.getCurrencyMark());
+    }
+
+    public User getUser(String username)
+    {
         User user = database.get(UserDAO.class).getByUsername(username);
         if (user == null)
         {
             user = createNewUser(username);
         }
-
-        String balance = user.getBalance().toString();
-        return String.format(BALANCE_RETURN_FORMAT, username, balance, context.getCurrencyMark());
+        return user;
     }
 
     private User createNewUser(String username)

@@ -42,11 +42,16 @@ public class PokemonServiceImpl implements PokemonService
         this.context = context;
     }
 
-    public boolean isCommand(String in)
+    public boolean isAcceptRequest(String in)
     {
         return in != null &&
                 (in.toLowerCase().startsWith(POKEMON_COMMAND) ||
                         in.toLowerCase().startsWith(POKEMON_E_COMMAND));
+    }
+
+    public boolean isTerminateAfterRequest()
+    {
+        return true;
     }
 
     private boolean hasArg(String arg, String in)
@@ -117,13 +122,20 @@ public class PokemonServiceImpl implements PokemonService
 
         if (commandText.contains(RANDOM))
         {
-            Pokemon start = getFirstPokemon();
-            Pokemon end = getLastPokemon();
-
-            return getPokemonInRange(start, end);
+            return getRandomPokemon();
         }
 
         return getPokemonFromText(commandText);
+    }
+
+    public Pokemon getRandomPokemon()
+    {
+        initialize();
+
+        Pokemon start = getFirstPokemon();
+        Pokemon end = getLastPokemon();
+
+        return getPokemonInRange(start, end);
     }
 
     private boolean isGenSearch(String command)

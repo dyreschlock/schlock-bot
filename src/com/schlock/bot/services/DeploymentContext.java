@@ -17,6 +17,8 @@ public interface DeploymentContext
 
     String getDataDirectory();
 
+    String getOwnerUsername();
+
     String getBotName();
 
     String getDiscordToken();

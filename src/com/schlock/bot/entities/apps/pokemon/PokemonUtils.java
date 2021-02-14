@@ -128,4 +128,19 @@ public class PokemonUtils
         }
         return null;
     }
+
+    public static String formatHint1(Pokemon pokemon)
+    {
+        String id = pokemon.getId();
+
+        String firstLetter = id.substring(0, 1).toUpperCase();
+        Integer length = id.length();
+        String type1 = pokemon.getType1();
+
+        String gen = PokemonUtils.returnGenerationId(pokemon);
+
+        String message = "Pokemon starts with the letter %s and has %s characters, %s type, %s.";
+
+        return String.format(message, firstLetter, length.toString(), type1, gen);
+    }
 }

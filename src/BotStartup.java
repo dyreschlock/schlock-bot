@@ -73,7 +73,7 @@ public class BotStartup
         userService = new UserServiceImpl(database, deploymentContext);
         pokemonService = new PokemonServiceImpl(deploymentContext);
         bettingService = new BettingServiceImpl(pokemonService, userService, database, deploymentContext);
-        guessingService = new GuessingServiceImpl(pokemonService, userService, database);
+        guessingService = new GuessingServiceImpl(pokemonService, userService, database, deploymentContext);
     }
 
 

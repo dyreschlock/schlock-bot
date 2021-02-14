@@ -17,6 +17,8 @@ public class DeploymentContextImpl implements DeploymentContext
     private static final String USER_DEFAULT_BALANCE = "user.default.balance";
     private static final String CURRENCY_MARK = "currency.mark";
 
+    private static final String ONWER_USERNAME = "owner.username";
+
     private static final String DISCORD_TOKEN = "discord.token";
 
     private static final String TWTICH_BOT_NAME = "twitch.bot.name";
@@ -76,6 +78,11 @@ public class DeploymentContextImpl implements DeploymentContext
     public String getDataDirectory()
     {
         return DATA_DIRECTORY;
+    }
+
+    public String getOwnerUsername()
+    {
+        return properties.getProperty(ONWER_USERNAME);
     }
 
     public String getBotName()

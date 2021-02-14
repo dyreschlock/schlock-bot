@@ -5,5 +5,7 @@ import com.schlock.bot.services.ListenerService;
 
 public interface PokemonService extends ListenerService
 {
+    Pokemon getRandomPokemon();
+
     Pokemon getPokemonFromText(String text);
 }

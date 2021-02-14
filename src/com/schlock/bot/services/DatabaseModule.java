@@ -51,6 +51,7 @@ public class DatabaseModule
 
         for (Persisted o : obj)
         {
+            session.delete(o);
             session.save(o);
         }
 

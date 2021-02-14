@@ -27,6 +27,11 @@ public class User extends Persisted
         this.username = username;
     }
 
+    public void incrementBalance(Integer points)
+    {
+        balance = balance + points;
+    }
+
     public Long getId()
     {
         return id;

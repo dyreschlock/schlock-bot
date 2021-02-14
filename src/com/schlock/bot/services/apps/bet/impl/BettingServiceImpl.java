@@ -34,11 +34,16 @@ public class BettingServiceImpl implements BettingService
         this.deploymentContext = deploymentContext;
     }
 
-    public boolean isCommand(String in)
+    public boolean isAcceptRequest(String in)
     {
         return in != null &&
                 (in.toLowerCase().startsWith(BET_COMMAND) ||
                         in.toLowerCase().startsWith(WIN_COMMAND));
+    }
+
+    public boolean isTerminateAfterRequest()
+    {
+        return true;
     }
 
     public String process(String username, String in)

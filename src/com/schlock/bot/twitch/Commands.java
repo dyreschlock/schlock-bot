@@ -36,11 +36,18 @@ public class Commands extends ListenerAdapter
 
         for (ListenerService service : listeners)
         {
-            if (service.isCommand(message))
+            if (service.isAcceptRequest(message))
             {
                 String response = service.process(username, message);
-                event.getChannel().send().message(response);
-                return;
+                if (response != null)
+                {
+                    event.getChannel().send().message(response);
+                }
+
+                if(service.isTerminateAfterRequest())
+                {
+                    return;
+                }
             }
         }
 
