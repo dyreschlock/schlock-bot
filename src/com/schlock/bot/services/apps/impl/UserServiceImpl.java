@@ -9,6 +9,8 @@ import com.schlock.bot.services.database.apps.UserDAO;
 public class UserServiceImpl implements UserService
 {
     private final String BALANCE_COMMAND = "!balance";
+    private final String GIVEPOINTS_COMMAND = "!givepoints %s ";
+    private final String CASHOUT_COMMAND = "!cashout ";
 
     private final DatabaseModule database;
 
@@ -21,10 +23,17 @@ public class UserServiceImpl implements UserService
         this.context = context;
     }
 
+    private String getGivePointsCommand()
+    {
+        return String.format(GIVEPOINTS_COMMAND, context.getTwitchBotName());
+    }
+
     public boolean isAcceptRequest(String in)
     {
         return in != null &&
-                (in.toLowerCase().startsWith(BALANCE_COMMAND));
+                (in.toLowerCase().startsWith(BALANCE_COMMAND) ||
+                        in.toLowerCase().startsWith(getGivePointsCommand()) ||
+                        in.toLowerCase().startsWith(CASHOUT_COMMAND));
     }
 
     public boolean isTerminateAfterRequest()
@@ -39,6 +48,14 @@ public class UserServiceImpl implements UserService
         {
             return checkBalance(username);
         }
+        if (command.startsWith(getGivePointsCommand()))
+        {
+            return addPoints(username, in);
+        }
+        if (command.startsWith(CASHOUT_COMMAND))
+        {
+            return exchangePoints(username, in);
+        }
 
         return null;
     }
@@ -51,6 +68,45 @@ public class UserServiceImpl implements UserService
 
         String balance = user.getBalance().toString();
         return String.format(BALANCE_RETURN_FORMAT, username, balance, context.getCurrencyMark());
+    }
+
+    private static final String GIVE_WRONG_MESSAGE = "Wrong format, please use '!givepoints %s 123";
+    private static final String GIVE_POINTS_ADDED_MESSAGE = "%s %s added to %s. Current balance: %s";
+
+    public String addPoints(String username, String in)
+    {
+        Integer points;
+        try
+        {
+            points = removePointsFromCommand(getGivePointsCommand(), in);
+        }
+        catch (NumberFormatException e)
+        {
+            return String.format(GIVE_WRONG_MESSAGE, context.getTwitchBotName());
+        }
+
+        User user = getUser(username);
+        user.incrementBalance(points);
+
+        database.save(user);
+
+        String message = String.format(GIVE_POINTS_ADDED_MESSAGE, points.toString(), context.getCurrencyMark(), username, user.getBalance().toString());
+        return message;
+    }
+
+    private Integer removePointsFromCommand(String command, String input) throws NumberFormatException
+    {
+        String points = input.substring(command.length());
+        points = points.trim();
+
+        return Integer.parseInt(points);
+    }
+
+    public String exchangePoints(String username, String in)
+    {
+        User user = getUser(username);
+
+        return "";
     }
 
     public User getUser(String username)
