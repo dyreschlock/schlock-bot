@@ -32,6 +32,11 @@ public class User extends Persisted
         balance = balance + points;
     }
 
+    public void decrementBalance(Integer points)
+    {
+        balance = balance - points;
+    }
+
     public Long getId()
     {
         return id;

@@ -102,11 +102,27 @@ public class UserServiceImpl implements UserService
         return Integer.parseInt(points);
     }
 
+    private static final String CASHOUT_WRONG_MESSAGE = "Wrong format, please use '!cashout 123'";
+    private static final String CASHOUT_TO_ELEMENTS_MESSAGE = "!givepoints %s %s";
+
     public String exchangePoints(String username, String in)
     {
-        User user = getUser(username);
+        Integer points;
+        try
+        {
+            points = removePointsFromCommand(CASHOUT_COMMAND, in);
+        }
+        catch (NumberFormatException e)
+        {
+            return String.format(CASHOUT_WRONG_MESSAGE);
+        }
 
-        return "";
+        User user = getUser(username);
+        user.decrementBalance(points);
+
+        database.save(user);
+
+        return String.format(CASHOUT_TO_ELEMENTS_MESSAGE, username, points.toString());
     }
 
     public User getUser(String username)
