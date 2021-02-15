@@ -72,7 +72,7 @@ public class PokemonUtils
     private static final Integer GEN8_START = 810;
     private static final Integer GEN8_END = 898;
 
-    private static final List<Object[]> generations = Arrays.asList(
+    private static final List<Object[]> GENERATIONS = Arrays.asList(
             new Object[]{GEN1, GEN1_START, GEN1_END},
             new Object[]{GEN2, GEN2_START, GEN2_END},
             new Object[]{GEN3, GEN3_START, GEN3_END},
@@ -84,9 +84,10 @@ public class PokemonUtils
     );
 
 
-    public static boolean isGenerationId(String gen)
+    public static boolean isGenerationId(String input)
     {
-        for (Object[] generation : generations)
+        String gen = input.trim();
+        for (Object[] generation : GENERATIONS)
         {
             String g = (String) generation[0];
             if (g.equalsIgnoreCase(gen))
@@ -99,7 +100,7 @@ public class PokemonUtils
 
     public static String returnGenerationRange(String gen)
     {
-        for (Object[] generation : generations)
+        for (Object[] generation : GENERATIONS)
         {
             String g = (String) generation[0];
             if (g.equalsIgnoreCase(gen))
@@ -116,7 +117,7 @@ public class PokemonUtils
     public static String returnGenerationId(Pokemon pokemon)
     {
         Integer id = pokemon.getNumber();
-        for (Object[] generation : generations)
+        for (Object[] generation : GENERATIONS)
         {
             Integer start = (Integer) generation[1];
             Integer end = (Integer) generation[2];
@@ -124,6 +125,34 @@ public class PokemonUtils
             if (start <= id && id <= end)
             {
                 return (String) generation[0];
+            }
+        }
+        return null;
+    }
+
+    public static Integer returnFirstPokemonNumberInGeneration(String input)
+    {
+        String gen = input.trim();
+        for (Object[] generation : GENERATIONS)
+        {
+            String g = (String) generation[0];
+            if (g.equalsIgnoreCase(gen))
+            {
+                return (Integer) generation[1];
+            }
+        }
+        return null;
+    }
+
+    public static Integer returnLastPokemonNumberInGeneration(String input)
+    {
+        String gen = input.trim();
+        for (Object[] generation : GENERATIONS)
+        {
+            String g = (String) generation[0];
+            if (g.equalsIgnoreCase(gen))
+            {
+                return (Integer) generation[2];
             }
         }
         return null;

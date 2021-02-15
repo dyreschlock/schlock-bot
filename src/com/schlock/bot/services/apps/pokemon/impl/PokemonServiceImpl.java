@@ -109,15 +109,15 @@ public class PokemonServiceImpl implements PokemonService
         String commandText = in.substring(POKEMON_COMMAND.length());
         commandText = cleanText(commandText);
 
+        if (isRangeSearch(commandText))
+        {
+            return getPokemonInRange(commandText);
+        }
+
         if (isGenSearch(commandText))
         {
             String range = PokemonUtils.returnGenerationRange(commandText);
             return getPokemonInRange(range);
-        }
-
-        if (isRangeSearch(commandText))
-        {
-            return getPokemonInRange(commandText);
         }
 
         if (commandText.contains(RANDOM))
@@ -191,13 +191,13 @@ public class PokemonServiceImpl implements PokemonService
             String pokemon = commandText.split("-")[1];
 
             start = getFirstPokemon();
-            end = getPokemonFromText(pokemon);
+            end = getPokemonFromTextOrLastInGen(pokemon);
         }
         else if (commandText.endsWith("-"))
         {
             String pokemon = commandText.split("-")[0];
 
-            start = getPokemonFromText(pokemon);
+            start = getPokemonFromTextOrFirstInGen(pokemon);
             end = getLastPokemon();
         }
         else
@@ -205,10 +205,30 @@ public class PokemonServiceImpl implements PokemonService
             String pokemonStart = commandText.split("-")[0];
             String pokemonEnd = commandText.split("-")[1];
 
-            start = getPokemonFromText(pokemonStart);
-            end = getPokemonFromText(pokemonEnd);
+            start = getPokemonFromTextOrFirstInGen(pokemonStart);
+            end = getPokemonFromTextOrLastInGen(pokemonEnd);
         }
         return getPokemonInRange(start, end);
+    }
+
+    private Pokemon getPokemonFromTextOrFirstInGen(String input)
+    {
+        if (isGenSearch(input))
+        {
+            Integer s = PokemonUtils.returnFirstPokemonNumberInGeneration(input);
+            return pokemonByNumber.get(s);
+        }
+        return getPokemonFromText(input);
+    }
+
+    private Pokemon getPokemonFromTextOrLastInGen(String input)
+    {
+        if (isGenSearch(input))
+        {
+            Integer e = PokemonUtils.returnLastPokemonNumberInGeneration(input);
+            return pokemonByNumber.get(e);
+        }
+        return getPokemonFromText(input);
     }
 
     private Pokemon getPokemonInRange(Pokemon start, Pokemon finish)
