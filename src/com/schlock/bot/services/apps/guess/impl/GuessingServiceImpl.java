@@ -51,15 +51,17 @@ public class GuessingServiceImpl implements GuessingService
         String command = in.toLowerCase();
         if (command.startsWith(START_COMMAND))
         {
-            if (!username.equalsIgnoreCase(context.getOwnerUsername()))
-            {
-                return NOT_ADMIN_MESSAGE;
-            }
+//            if (!username.equalsIgnoreCase(context.getOwnerUsername()))
+//            {
+//                return NOT_ADMIN_MESSAGE;
+//            }
             if (currentPokemon != null)
             {
                 return GAME_ALREADY_STARTED;
             }
-            return startGame();
+
+            String params = command.substring(START_COMMAND.length()).trim();
+            return startGame(params);
         }
 
         if (currentPokemon != null)
@@ -76,9 +78,20 @@ public class GuessingServiceImpl implements GuessingService
         return null;
     }
 
-    private String startGame()
+    private String startGame(String params)
     {
-        currentPokemon = pokemonService.getRandomPokemon();
+        if (pokemonService.isGenSearch(params))
+        {
+            currentPokemon = pokemonService.getRandomPokemonInGen(params);
+        }
+        else if (pokemonService.isRangeSearch(params))
+        {
+            currentPokemon = pokemonService.getRandomPokemonInRange(params);
+        }
+        else
+        {
+            currentPokemon = pokemonService.getRandomPokemon();
+        }
         return PokemonUtils.formatHint1(currentPokemon);
     }
 

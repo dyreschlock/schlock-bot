@@ -95,7 +95,7 @@ public class PokemonServiceImpl implements PokemonService
                 commandText = removeArg(ARGUMENT_STATS, commandText);
             }
 
-            Pokemon pokemon = processPokemon(commandText);
+            Pokemon pokemon = getPokemonFromParams(commandText);
             if (pokemon != null)
             {
                 return PokemonUtils.formatOutput(pokemon, hasTypeArg, hasStatsArg);
@@ -104,20 +104,19 @@ public class PokemonServiceImpl implements PokemonService
         return POKEMON_RETURN_NULL;
     }
 
-    private Pokemon processPokemon(String in)
+    private Pokemon getPokemonFromParams(String params)
     {
-        String commandText = in.substring(POKEMON_COMMAND.length());
+        String commandText = params.substring(POKEMON_COMMAND.length());
         commandText = cleanText(commandText);
 
         if (isRangeSearch(commandText))
         {
-            return getPokemonInRange(commandText);
+            return getRandomPokemonInRange(commandText);
         }
 
         if (isGenSearch(commandText))
         {
-            String range = PokemonUtils.returnGenerationRange(commandText);
-            return getPokemonInRange(range);
+            return getRandomPokemonInGen(commandText);
         }
 
         if (commandText.contains(RANDOM))
@@ -135,15 +134,21 @@ public class PokemonServiceImpl implements PokemonService
         Pokemon start = getFirstPokemon();
         Pokemon end = getLastPokemon();
 
-        return getPokemonInRange(start, end);
+        return getRandomPokemonInRange(start, end);
     }
 
-    private boolean isGenSearch(String command)
+    public boolean isGenSearch(String command)
     {
         return PokemonUtils.isGenerationId(command);
     }
 
-    private boolean isRangeSearch(String command)
+    public Pokemon getRandomPokemonInGen(String gen)
+    {
+        String range = PokemonUtils.returnGenerationRange(gen);
+        return getRandomPokemonInRange(range);
+    }
+
+    public boolean isRangeSearch(String command)
     {
         return command.contains(("-"));
     }
@@ -181,34 +186,36 @@ public class PokemonServiceImpl implements PokemonService
         return pokemonByName.get(text);
     }
 
-    private Pokemon getPokemonInRange(String commandText)
+    public Pokemon getRandomPokemonInRange(String rangeText)
     {
+        initialize();
+
         Pokemon start;
         Pokemon end;
 
-        if (commandText.startsWith("-"))
+        if (rangeText.startsWith("-"))
         {
-            String pokemon = commandText.split("-")[1];
+            String pokemon = rangeText.split("-")[1];
 
             start = getFirstPokemon();
             end = getPokemonFromTextOrLastInGen(pokemon);
         }
-        else if (commandText.endsWith("-"))
+        else if (rangeText.endsWith("-"))
         {
-            String pokemon = commandText.split("-")[0];
+            String pokemon = rangeText.split("-")[0];
 
             start = getPokemonFromTextOrFirstInGen(pokemon);
             end = getLastPokemon();
         }
         else
         {
-            String pokemonStart = commandText.split("-")[0];
-            String pokemonEnd = commandText.split("-")[1];
+            String pokemonStart = rangeText.split("-")[0];
+            String pokemonEnd = rangeText.split("-")[1];
 
             start = getPokemonFromTextOrFirstInGen(pokemonStart);
             end = getPokemonFromTextOrLastInGen(pokemonEnd);
         }
-        return getPokemonInRange(start, end);
+        return getRandomPokemonInRange(start, end);
     }
 
     private Pokemon getPokemonFromTextOrFirstInGen(String input)
@@ -231,7 +238,7 @@ public class PokemonServiceImpl implements PokemonService
         return getPokemonFromText(input);
     }
 
-    private Pokemon getPokemonInRange(Pokemon start, Pokemon finish)
+    private Pokemon getRandomPokemonInRange(Pokemon start, Pokemon finish)
     {
         if (start == null || finish == null)
         {

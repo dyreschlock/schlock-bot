@@ -5,7 +5,15 @@ import com.schlock.bot.services.ListenerService;
 
 public interface PokemonService extends ListenerService
 {
+    Pokemon getPokemonFromText(String text);
+
     Pokemon getRandomPokemon();
 
-    Pokemon getPokemonFromText(String text);
+    boolean isGenSearch(String params);
+
+    Pokemon getRandomPokemonInGen(String gen);
+
+    boolean isRangeSearch(String params);
+
+    Pokemon getRandomPokemonInRange(String rangeText);
 }
