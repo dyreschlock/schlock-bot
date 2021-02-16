@@ -172,6 +172,31 @@ class PokemonServiceImplTest
     }
 
     @Test
+    public void testGenerationRangeSuccess()
+    {
+        List<Object[]> testData = new ArrayList<>();
+        testData.add(new Object[]{"!pokemon gen1-", 1, 898});
+        testData.add(new Object[]{"!pokemon -gen2", 1, 250});
+        testData.add(new Object[]{"!pokemon gen2-gen3", 152, 386});
+        testData.add(new Object[]{"!pokemon -gen1", 1, 151});
+        testData.add(new Object[]{"!pokemon gen8-", 810, 898});
+        testData.add(new Object[]{"!pokemon gen1-gen8", 1, 898});
+
+        for (Object[] d : testData)
+        {
+            String response = impl.process("", (String) d[0]);
+            String number = response.split(" ")[1];
+
+            Integer pokemonId = Integer.parseInt(number);
+
+            Integer start = (Integer) d[1];
+            Integer end = (Integer) d[2];
+
+            assertTrue(start <= pokemonId && pokemonId <= end);
+        }
+    }
+
+    @Test
     public void testGenerationFail()
     {
         List<String> testData = new ArrayList<>();
