@@ -21,7 +21,7 @@ public abstract class DatabaseTest
         return database;
     }
 
-    public void databaseSetup() throws Exception
+    public void setupDatabase() throws Exception
     {
         context = new DeploymentContextImpl(DeploymentContext.TEST);
         context.loadProperties();

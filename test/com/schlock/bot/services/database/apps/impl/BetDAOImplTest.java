@@ -10,6 +10,6 @@ class BetDAOImplTest extends DatabaseTest
     @BeforeEach
     public void setup() throws Exception
     {
-        databaseSetup();
+        setupDatabase();
     }
 }

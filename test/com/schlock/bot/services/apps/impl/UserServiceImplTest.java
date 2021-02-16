@@ -48,7 +48,7 @@ class UserServiceImplTest extends DatabaseTest
     @BeforeEach
     public void setup() throws Exception
     {
-        databaseSetup();
+        setupDatabase();
         createTestObjects();
 
         impl = new UserServiceImpl(getDatabase(), getDeploymentContext());

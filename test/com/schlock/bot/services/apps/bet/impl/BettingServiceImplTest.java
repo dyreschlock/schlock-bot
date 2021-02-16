@@ -19,7 +19,7 @@ class BettingServiceImplTest extends DatabaseTest
     @BeforeEach
     public void setup() throws Exception
     {
-        databaseSetup();
+        setupDatabase();
 
         DeploymentContext context = getDeploymentContext();
         DatabaseModule database = getDatabase();

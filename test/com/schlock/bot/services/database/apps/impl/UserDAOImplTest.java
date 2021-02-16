@@ -26,7 +26,7 @@ class UserDAOImplTest extends DatabaseTest
     @BeforeEach
     public void setup() throws Exception
     {
-        databaseSetup();
+        setupDatabase();
         createTestObjects();
     }
 
