@@ -1,5 +1,6 @@
 package com.schlock.bot.services.apps.pokemon.impl;
 
+import com.schlock.bot.entities.TimeUtils;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
 import com.schlock.bot.entities.apps.pokemon.ShinyGetUtils;
@@ -9,10 +10,18 @@ import com.schlock.bot.services.apps.pokemon.PokemonService;
 import com.schlock.bot.services.apps.pokemon.ShinyInfoService;
 import com.schlock.bot.services.database.apps.ShinyGetDAO;
 
+import java.text.DecimalFormat;
+
 public class ShinyInfoServiceImpl implements ShinyInfoService
 {
+    protected static final String AVERAGE_MESSAGE = "Average time for a shiny to appear: %s";
+    protected static final String AVERAGE_CHECKS_MESSAGE = "Average checks for rare shiny: %s";
+
     private static final String MOST_RECENT_COMMAND = "!recent";
     private static final String MOST_RECENT_COMMAND2 = "!last";
+
+    private static final String AVERAGE_COMMAND = "!shinyaverage";
+    private static final String AVERAGE_CHECKS_COMMAND = "!shinychecks";
 
     private static final String SHINY_GET_COMMAND = "!shinyget ";
 
@@ -35,6 +44,8 @@ public class ShinyInfoServiceImpl implements ShinyInfoService
         return in != null &&
                 (in.toLowerCase().startsWith(MOST_RECENT_COMMAND) ||
                         in.toLowerCase().startsWith(MOST_RECENT_COMMAND2) ||
+                        in.toLowerCase().startsWith(AVERAGE_COMMAND) ||
+                        in.toLowerCase().startsWith(AVERAGE_CHECKS_COMMAND) ||
                         in.toLowerCase().startsWith(SHINY_GET_COMMAND));
     }
 
@@ -52,6 +63,20 @@ public class ShinyInfoServiceImpl implements ShinyInfoService
             Pokemon pokemon = pokemonService.getPokemonFromText(mostRecent.getPokemonId());
 
             return ShinyGetUtils.format(mostRecent, pokemon);
+        }
+
+        if (commandText.startsWith(AVERAGE_COMMAND))
+        {
+            Double averageTime = database.get(ShinyGetDAO.class).getCurrentAverageTimeToShiny();
+
+            return String.format(AVERAGE_MESSAGE, TimeUtils.formatDoubleMinutesIntoTimeString(averageTime));
+        }
+
+        if (commandText.startsWith(AVERAGE_CHECKS_COMMAND))
+        {
+            Double averageChecks = database.get(ShinyGetDAO.class).getCurrentAverageNumberOfRareChecks();
+
+            return String.format(AVERAGE_CHECKS_MESSAGE, new DecimalFormat("#0.00").format(averageChecks));
         }
 
         return NULL_RESPONSE;

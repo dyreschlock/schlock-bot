@@ -1,5 +1,6 @@
 package com.schlock.bot.services.apps.pokemon.impl;
 
+import com.schlock.bot.entities.TimeUtils;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
 import com.schlock.bot.entities.apps.pokemon.ShinyGetType;
@@ -10,11 +11,16 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.text.DecimalFormat;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ShinyInfoServiceImplTest extends DatabaseTest
 {
     private final static String USERNAME1 = "username1";
+
+    private final static Integer SHINY_MINUTES = 100;
+    private final static Integer SHINY_CHECKS = 1000;
 
     private PokemonService pokemonService;
 
@@ -34,6 +40,27 @@ class ShinyInfoServiceImplTest extends DatabaseTest
         assertEquals(expected, response);
     }
 
+    @Test
+    public void testAverage()
+    {
+        String response = impl.process(USERNAME1, "!shinyaverage");
+
+        String time = TimeUtils.formatDoubleMinutesIntoTimeString(SHINY_MINUTES.doubleValue());
+        String expected = String.format(ShinyInfoServiceImpl.AVERAGE_MESSAGE, time);
+
+        assertEquals(expected, response);
+    }
+
+    @Test
+    public void testAverageChecks()
+    {
+        String response = impl.process(USERNAME1, "!shinychecks");
+
+        String checks = new DecimalFormat("#0.00").format(SHINY_CHECKS);
+        String expected = String.format(ShinyInfoServiceImpl.AVERAGE_CHECKS_MESSAGE, checks);
+
+        assertEquals(expected, response);
+    }
 
     @BeforeEach
     public void setup() throws Exception
@@ -58,8 +85,8 @@ class ShinyInfoServiceImplTest extends DatabaseTest
         get1.setType(ShinyGetType.CATCH);
         get1.setShinyNumber(1);
         get1.setPokemonId("bulbasaur");
-        get1.setTimeInMinutes(100);
-        get1.setNumOfRareChecks(1000);
+        get1.setTimeInMinutes(SHINY_MINUTES);
+        get1.setNumOfRareChecks(SHINY_CHECKS);
 
         getDatabase().save(get1);
     }
