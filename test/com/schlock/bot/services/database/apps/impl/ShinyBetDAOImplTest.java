@@ -29,12 +29,12 @@ class ShinyBetDAOImplTest extends DatabaseTest
     @Test
     public void testGetBets()
     {
-        List<ShinyBet> bets1 = getDatabase().get(ShinyBetDAO.class).getBetsByUser(user1);
+        List<ShinyBet> bets1 = getDatabase().get(ShinyBetDAO.class).getBetsByUsername(user1.getUsername());
 
         assertEquals(bets1.size(), 2);
 
 
-        List<ShinyBet> bets2 = getDatabase().get(ShinyBetDAO.class).getBetsByUser(user2);
+        List<ShinyBet> bets2 = getDatabase().get(ShinyBetDAO.class).getBetsByUsername(user2.getUsername());
 
         assertEquals(bets2.size(), 1);
     }

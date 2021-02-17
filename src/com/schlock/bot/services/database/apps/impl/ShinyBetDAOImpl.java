@@ -17,7 +17,7 @@ public class ShinyBetDAOImpl extends BaseDAOImpl<ShinyBet> implements ShinyBetDA
         super(sessionFactory);
     }
 
-    public List<ShinyBet> getBetsByUser(User user)
+    public List<ShinyBet> getBetsByUsername(String username)
     {
         String text = " select b " +
                         "from ShinyBet b " +
@@ -28,7 +28,7 @@ public class ShinyBetDAOImpl extends BaseDAOImpl<ShinyBet> implements ShinyBetDA
         session.beginTransaction();
 
         Query query = session.createQuery(text, ShinyBet.class);
-        query.setParameter("name", user.getUsername());
+        query.setParameter("name", username);
 
         List<ShinyBet> bets = query.getResultList();
 

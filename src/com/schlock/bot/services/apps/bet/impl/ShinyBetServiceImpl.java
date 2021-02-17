@@ -1,5 +1,6 @@
 package com.schlock.bot.services.apps.bet.impl;
 
+import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
@@ -8,7 +9,9 @@ import com.schlock.bot.services.DeploymentContext;
 import com.schlock.bot.services.apps.UserService;
 import com.schlock.bot.services.apps.bet.ShinyBetService;
 import com.schlock.bot.services.apps.pokemon.PokemonService;
+import com.schlock.bot.services.database.apps.ShinyBetDAO;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,8 +21,13 @@ public class ShinyBetServiceImpl implements ShinyBetService
     protected static final String WRONG_FORMAT = "Use format to bet: !bet [pokemon] [minutes] [bet amount]";
     protected static final String BET_SUCCESS = "Bet has been made for %s: %s in %s min at %s%s";
 
-    private static final String INSTRUCTIONS_COMMAND = "!instructions";
+    protected static final String BET_CANCELED = "Bet for %s has been canceled for %s";
+    protected static final String ALL_BETS_CANCELED = "All bets have been canceled for %s";
+
     private static final String BET_COMMAND = "!bet ";
+
+    private static final String CANCEL_BET = "!cancelbet ";
+    private static final String CANCEL_ALL_BETS = "!cancelallbets";
 
     private final PokemonService pokemonService;
     private final UserService userService;
@@ -45,7 +53,8 @@ public class ShinyBetServiceImpl implements ShinyBetService
     {
         return in != null &&
                 (in.toLowerCase().startsWith(BET_COMMAND) ||
-                        in.toLowerCase().startsWith(INSTRUCTIONS_COMMAND));
+                        in.toLowerCase().startsWith(CANCEL_BET) ||
+                        in.toLowerCase().startsWith(CANCEL_ALL_BETS));
     }
 
     public boolean isTerminateAfterRequest()
@@ -61,20 +70,19 @@ public class ShinyBetServiceImpl implements ShinyBetService
     public String processSingleResults(String username, String in)
     {
         String command = in.toLowerCase();
-        if (command.startsWith(INSTRUCTIONS_COMMAND))
-        {
-            return returnInstructions(username, in);
-        }
         if (command.startsWith(BET_COMMAND))
         {
             return placeBet(username, in);
         }
+        if (command.startsWith(CANCEL_BET))
+        {
+            return cancelBet(username, in);
+        }
+        if (command.startsWith(CANCEL_ALL_BETS))
+        {
+            return cancelAllBets(username);
+        }
         return null;
-    }
-
-    private String returnInstructions(String username, String in)
-    {
-        return "Use format to bet: !bet [pokemon] [minutes] [bet amount]";
     }
 
     private String placeBet(String username, String in)
@@ -195,5 +203,25 @@ public class ShinyBetServiceImpl implements ShinyBetService
             }
         }
         return null;
+    }
+
+    private String cancelBet(String username, String in)
+    {
+
+        String pokemonName = "";
+
+        return String.format(BET_CANCELED, pokemonName, username);
+    }
+
+    private String cancelAllBets(String username)
+    {
+        List<ShinyBet> bets = database.get(ShinyBetDAO.class).getBetsByUsername(username);
+
+        List<Persisted> objects = new ArrayList<>();
+        objects.addAll(bets);
+
+        database.delete(objects);
+
+        return String.format(ALL_BETS_CANCELED, username);
     }
 }
