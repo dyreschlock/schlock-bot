@@ -6,6 +6,9 @@ import com.schlock.bot.services.DeploymentContext;
 import com.schlock.bot.services.apps.UserService;
 import com.schlock.bot.services.database.apps.UserDAO;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class UserServiceImpl implements UserService
 {
     private final String BALANCE_COMMAND = "!balance";
@@ -41,7 +44,12 @@ public class UserServiceImpl implements UserService
         return true;
     }
 
-    public String process(String username, String in)
+    public List<String> process(String username, String in)
+    {
+        return Arrays.asList(processSingleResult(username, in));
+    }
+
+    public String processSingleResult(String username, String in)
     {
         String command = in.toLowerCase();
         if (command.startsWith(BALANCE_COMMAND))

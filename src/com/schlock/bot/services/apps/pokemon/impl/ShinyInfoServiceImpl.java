@@ -11,6 +11,8 @@ import com.schlock.bot.services.apps.pokemon.ShinyInfoService;
 import com.schlock.bot.services.database.apps.ShinyGetDAO;
 
 import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.List;
 
 public class ShinyInfoServiceImpl implements ShinyInfoService
 {
@@ -54,7 +56,12 @@ public class ShinyInfoServiceImpl implements ShinyInfoService
         return true;
     }
 
-    public String process(String username, String in)
+    public List<String> process(String username, String in)
+    {
+        return Arrays.asList(processSingleResponse(username, in));
+    }
+
+    public String processSingleResponse(String username, String in)
     {
         String commandText = in.toLowerCase().trim();
         if (commandText.startsWith(MOST_RECENT_COMMAND) || commandText.startsWith(MOST_RECENT_COMMAND2))

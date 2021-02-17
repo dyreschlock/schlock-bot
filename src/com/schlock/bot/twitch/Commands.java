@@ -7,6 +7,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 public class Commands extends ListenerAdapter
@@ -38,10 +39,13 @@ public class Commands extends ListenerAdapter
         {
             if (service.isAcceptRequest(message))
             {
-                String response = service.process(username, message);
-                if (response != null)
+                List<String> responses = service.process(username, message);
+                for (String response : responses)
                 {
-                    event.getChannel().send().message(response);
+                    if (response != null)
+                    {
+                        event.getChannel().send().message(response);
+                    }
                 }
 
                 if(service.isTerminateAfterRequest())

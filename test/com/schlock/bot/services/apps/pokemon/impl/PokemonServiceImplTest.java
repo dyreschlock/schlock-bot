@@ -94,7 +94,7 @@ class PokemonServiceImplTest
             int test_ten_times_for_each = expected_results * 10;
             for (int i = 0; i < test_ten_times_for_each; i++)
             {
-                String text = impl.process("", data[0]);
+                String text = impl.processSingleResult("", data[0]);
                 results.add(text);
             }
 
@@ -160,7 +160,7 @@ class PokemonServiceImplTest
 
         for (Object[] d : testData)
         {
-            String response = impl.process("", (String) d[0]);
+            String response = impl.processSingleResult("", (String) d[0]);
             String number = response.split(" ")[1];
 
             Integer pokemonId = Integer.parseInt(number);
@@ -185,7 +185,7 @@ class PokemonServiceImplTest
 
         for (Object[] d : testData)
         {
-            String response = impl.process("", (String) d[0]);
+            String response = impl.processSingleResult("", (String) d[0]);
             String number = response.split(" ")[1];
 
             Integer pokemonId = Integer.parseInt(number);
@@ -208,7 +208,7 @@ class PokemonServiceImplTest
 
         for (String d : testData)
         {
-            String response = impl.process("", d);
+            String response = impl.processSingleResult("", d);
             assertEquals(response, ListenerService.NULL_RESPONSE);
         }
     }
@@ -218,7 +218,7 @@ class PokemonServiceImplTest
     {
         for (String[] d : data)
         {
-            String test = impl.process("", d[0]);
+            String test = impl.processSingleResult("", d[0]);
             assertEquals(test, d[1]);
         }
     }

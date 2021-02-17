@@ -47,24 +47,24 @@ class GuessingServiceImplTest extends DatabaseTest
 
 
         //start the game
-        String response = impl.process(ADMIN, "!whodat");
+        String response = impl.processSingleResult(ADMIN, "!whodat");
         String expected = PokemonUtils.formatHint1(testPokemon);
 
         assertEquals(expected, response);
 
         //try to start the game, again
-        response = impl.process(ADMIN, "!whodat");
+        response = impl.processSingleResult(ADMIN, "!whodat");
         expected = GuessingServiceImpl.GAME_ALREADY_STARTED;
 
         assertEquals(expected, response);
 
         //send a message that doesn't contain the answer
-        response = impl.process(ADMIN, "asdf");
+        response = impl.processSingleResult(ADMIN, "asdf");
 
         assertNull(response);
 
         //send a message that contains the answer
-        response = impl.process(ADMIN, TEST_POKEMON_ID);
+        response = impl.processSingleResult(ADMIN, TEST_POKEMON_ID);
         expected = String.format(GuessingServiceImpl.WINNER_MESSAGE, ADMIN, TEST_POKEMON_NAME, POINTS, MARK);
 
         assertEquals(expected, response);
@@ -77,19 +77,19 @@ class GuessingServiceImplTest extends DatabaseTest
         assertEquals(expectedBalance, currentBalance);
 
         //send a message that contains the answer, again
-        response = impl.process(ADMIN, TEST_POKEMON_ID);
+        response = impl.processSingleResult(ADMIN, TEST_POKEMON_ID);
 
         assertNull(response);
 
 
         //start a new game
-        response = impl.process(ADMIN, "!whodat");
+        response = impl.processSingleResult(ADMIN, "!whodat");
         expected = PokemonUtils.formatHint1(testPokemon);
 
         assertEquals(expected, response);
 
         //send response with answer from user
-        response = impl.process(USERNAME1, " asdf " + TEST_POKEMON_ID + " asdf ");
+        response = impl.processSingleResult(USERNAME1, " asdf " + TEST_POKEMON_ID + " asdf ");
         expected = String.format(GuessingServiceImpl.WINNER_MESSAGE, USERNAME1, TEST_POKEMON_NAME, POINTS, MARK);
 
         assertEquals(expected, response);

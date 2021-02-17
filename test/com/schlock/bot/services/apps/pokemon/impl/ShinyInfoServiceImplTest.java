@@ -32,7 +32,7 @@ class ShinyInfoServiceImplTest extends DatabaseTest
     @Test
     public void testMostRecent()
     {
-        String response = impl.process(USERNAME1, "!recent");
+        String response = impl.processSingleResponse(USERNAME1, "!recent");
 
         Pokemon pokemon = pokemonService.getPokemonFromText(get1.getPokemonId());
         String expected = ShinyGetUtils.format(get1, pokemon);
@@ -43,7 +43,7 @@ class ShinyInfoServiceImplTest extends DatabaseTest
     @Test
     public void testAverage()
     {
-        String response = impl.process(USERNAME1, "!shinyaverage");
+        String response = impl.processSingleResponse(USERNAME1, "!shinyaverage");
 
         String time = TimeUtils.formatDoubleMinutesIntoTimeString(SHINY_MINUTES.doubleValue());
         String expected = String.format(ShinyInfoServiceImpl.AVERAGE_MESSAGE, time);
@@ -54,7 +54,7 @@ class ShinyInfoServiceImplTest extends DatabaseTest
     @Test
     public void testAverageChecks()
     {
-        String response = impl.process(USERNAME1, "!shinychecks");
+        String response = impl.processSingleResponse(USERNAME1, "!shinychecks");
 
         String checks = new DecimalFormat("#0.00").format(SHINY_CHECKS);
         String expected = String.format(ShinyInfoServiceImpl.AVERAGE_CHECKS_MESSAGE, checks);

@@ -11,9 +11,7 @@ import org.jsoup.nodes.Element;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class PokemonServiceImpl implements PokemonService
 {
@@ -72,9 +70,15 @@ public class PokemonServiceImpl implements PokemonService
 
     /**
      * Always returns a single pokemon, or nothing if bad syntax
+     *
      * @return String "No. 25 Pikachu" (example)
      */
-    public String process(String username, String in)
+    public List<String> process(String username, String in)
+    {
+        return Arrays.asList(processSingleResult(username, in));
+    }
+
+    public String processSingleResult(String username, String in)
     {
         String commandText = in.toLowerCase();
         if (commandText.startsWith(POKEMON_COMMAND) || commandText.startsWith(POKEMON_E_COMMAND))

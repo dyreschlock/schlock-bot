@@ -8,6 +8,9 @@ import com.schlock.bot.services.apps.bet.ShinyBetService;
 import com.schlock.bot.services.apps.pokemon.PokemonService;
 import com.schlock.bot.services.database.apps.UserDAO;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ShinyBetServiceImpl implements ShinyBetService
 {
     private final String INSTRUCTIONS_COMMAND = "!instructions";
@@ -46,7 +49,12 @@ public class ShinyBetServiceImpl implements ShinyBetService
         return true;
     }
 
-    public String process(String username, String in)
+    public List<String> process(String username, String in)
+    {
+        return Arrays.asList(processSingleResults(username, in));
+    }
+
+    private String processSingleResults(String username, String in)
     {
         String command = in.toLowerCase();
         if (command.startsWith(INSTRUCTIONS_COMMAND))

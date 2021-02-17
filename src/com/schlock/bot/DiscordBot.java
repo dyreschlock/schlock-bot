@@ -11,6 +11,7 @@ import discord4j.core.object.entity.User;
 import discord4j.core.object.entity.channel.MessageChannel;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 
@@ -62,10 +63,13 @@ public class DiscordBot extends AbstractBot
                         String username = message.getAuthor().toString();
                         String content = message.getContent();
 
-                        String response = service.process(username, content);
+                        List<String> responses = service.process(username, content);
 
                         final MessageChannel channel = message.getChannel().block();
-                        channel.createMessage(response).block();
+                        for (String response : responses)
+                        {
+                            channel.createMessage(response).block();
+                        }
                     });
         }
     }

@@ -9,6 +9,9 @@ import com.schlock.bot.services.apps.UserService;
 import com.schlock.bot.services.apps.guess.GuessingService;
 import com.schlock.bot.services.apps.pokemon.PokemonService;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class GuessingServiceImpl implements GuessingService
 {
     private static final String START_COMMAND = "!whodat";
@@ -47,7 +50,12 @@ public class GuessingServiceImpl implements GuessingService
         return false;
     }
 
-    public String process(String username, String in)
+    public List<String> process(String username, String command)
+    {
+        return Arrays.asList(processSingleResult(username, command));
+    }
+
+    public String processSingleResult(String username, String in)
     {
         String command = in.toLowerCase();
         if (command.startsWith(START_COMMAND))
