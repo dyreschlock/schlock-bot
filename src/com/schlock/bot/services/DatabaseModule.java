@@ -2,10 +2,10 @@ package com.schlock.bot.services;
 
 import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.services.database.BaseDAO;
-import com.schlock.bot.services.database.apps.BetDAO;
+import com.schlock.bot.services.database.apps.ShinyBetDAO;
 import com.schlock.bot.services.database.apps.ShinyGetDAO;
 import com.schlock.bot.services.database.apps.UserDAO;
-import com.schlock.bot.services.database.apps.impl.BetDAOImpl;
+import com.schlock.bot.services.database.apps.impl.ShinyBetDAOImpl;
 import com.schlock.bot.services.database.apps.impl.ShinyGetDAOImpl;
 import com.schlock.bot.services.database.apps.impl.UserDAOImpl;
 import org.hibernate.Session;
@@ -32,7 +32,7 @@ public class DatabaseModule
 
     private void createDAOs()
     {
-        daos.put(BetDAO.class, new BetDAOImpl(sessionFactory));
+        daos.put(ShinyBetDAO.class, new ShinyBetDAOImpl(sessionFactory));
         daos.put(UserDAO.class, new UserDAOImpl(sessionFactory));
         daos.put(ShinyGetDAO.class, new ShinyGetDAOImpl(sessionFactory));
     }
@@ -54,8 +54,14 @@ public class DatabaseModule
 
         for (Persisted o : obj)
         {
-            session.delete(o);
-            session.save(o);
+            if (o.getId() == null)
+            {
+                session.save(o);
+            }
+            else
+            {
+                session.update(o);
+            }
         }
 
         session.getTransaction().commit();

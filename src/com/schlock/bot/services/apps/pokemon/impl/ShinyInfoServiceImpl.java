@@ -22,10 +22,8 @@ public class ShinyInfoServiceImpl implements ShinyInfoService
     private static final String MOST_RECENT_COMMAND = "!recent";
     private static final String MOST_RECENT_COMMAND2 = "!last";
 
-    private static final String AVERAGE_COMMAND = "!shinyaverage";
+    public static final String AVERAGE_COMMAND = "!shinyaverage";
     private static final String AVERAGE_CHECKS_COMMAND = "!shinychecks";
-
-    private static final String SHINY_GET_COMMAND = "!shinyget ";
 
     private final DeploymentContext context;
     private final DatabaseModule database;
@@ -47,8 +45,7 @@ public class ShinyInfoServiceImpl implements ShinyInfoService
                 (in.toLowerCase().startsWith(MOST_RECENT_COMMAND) ||
                         in.toLowerCase().startsWith(MOST_RECENT_COMMAND2) ||
                         in.toLowerCase().startsWith(AVERAGE_COMMAND) ||
-                        in.toLowerCase().startsWith(AVERAGE_CHECKS_COMMAND) ||
-                        in.toLowerCase().startsWith(SHINY_GET_COMMAND));
+                        in.toLowerCase().startsWith(AVERAGE_CHECKS_COMMAND));
     }
 
     public boolean isTerminateAfterRequest()

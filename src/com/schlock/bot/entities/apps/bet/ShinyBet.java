@@ -24,8 +24,12 @@ public class ShinyBet extends Persisted
     @Column(name = "timeMinutes")
     private Integer timeMinutes;
 
+    @Column(name = "betAmount")
+    private Integer betAmount;
+
     public ShinyBet()
     {
+
     }
 
     public Long getId()
@@ -66,5 +70,15 @@ public class ShinyBet extends Persisted
     public void setTimeMinutes(Integer timeMinutes)
     {
         this.timeMinutes = timeMinutes;
+    }
+
+    public Integer getBetAmount()
+    {
+        return betAmount;
+    }
+
+    public void setBetAmount(Integer betAmount)
+    {
+        this.betAmount = betAmount;
     }
 }
