@@ -4,13 +4,15 @@ import com.schlock.bot.services.DatabaseModule;
 import com.schlock.bot.services.DeploymentContext;
 import com.schlock.bot.services.ListenerService;
 import com.schlock.bot.services.apps.UserService;
-import com.schlock.bot.services.apps.bet.BettingService;
-import com.schlock.bot.services.apps.bet.impl.BettingServiceImpl;
+import com.schlock.bot.services.apps.bet.ShinyBetService;
+import com.schlock.bot.services.apps.bet.impl.ShinyBetServiceImpl;
 import com.schlock.bot.services.apps.guess.GuessingService;
 import com.schlock.bot.services.apps.guess.impl.GuessingServiceImpl;
 import com.schlock.bot.services.apps.impl.UserServiceImpl;
 import com.schlock.bot.services.apps.pokemon.PokemonService;
+import com.schlock.bot.services.apps.pokemon.ShinyInfoService;
 import com.schlock.bot.services.apps.pokemon.impl.PokemonServiceImpl;
+import com.schlock.bot.services.apps.pokemon.impl.ShinyInfoServiceImpl;
 import com.schlock.bot.services.impl.DeploymentContextImpl;
 
 import java.util.HashSet;
@@ -22,8 +24,10 @@ public class BotStartup
 
     private UserService userService;
     private PokemonService pokemonService;
-    private BettingService bettingService;
+
+    private ShinyBetService shinyBetService;
     private GuessingService guessingService;
+    private ShinyInfoService shinyInfoService;
 
     private DeploymentContext deploymentContext;
 
@@ -44,8 +48,9 @@ public class BotStartup
         Set<ListenerService> listeners = new HashSet<>();
         listeners.add(userService);
         listeners.add(pokemonService);
-        listeners.add(bettingService);
+        listeners.add(shinyBetService);
         listeners.add(guessingService);
+        listeners.add(shinyInfoService);
 
 //        discordBot = new DiscordBot(listeners, deploymentContext);
 //        discordBot.startup();
@@ -72,8 +77,10 @@ public class BotStartup
     {
         userService = new UserServiceImpl(database, deploymentContext);
         pokemonService = new PokemonServiceImpl(deploymentContext);
-        bettingService = new BettingServiceImpl(pokemonService, userService, database, deploymentContext);
+
+        shinyBetService = new ShinyBetServiceImpl(pokemonService, userService, database, deploymentContext);
         guessingService = new GuessingServiceImpl(pokemonService, userService, database, deploymentContext);
+        shinyInfoService = new ShinyInfoServiceImpl(pokemonService, database, deploymentContext);
     }
 
 

@@ -29,8 +29,6 @@ public class PokemonServiceImpl implements PokemonService
 
     private static final String RANDOM = "random";
 
-    protected static final String POKEMON_RETURN_NULL = "What?";
-
     private final DeploymentContext context;
 
     private Map<Integer, Pokemon> pokemonByNumber;
@@ -81,8 +79,6 @@ public class PokemonServiceImpl implements PokemonService
         String commandText = in.toLowerCase();
         if (commandText.startsWith(POKEMON_COMMAND) || commandText.startsWith(POKEMON_E_COMMAND))
         {
-            initialize();
-
             boolean hasTypeArg = hasArg(ARGUMENT_TYPE, commandText);
             if (hasTypeArg)
             {
@@ -101,7 +97,7 @@ public class PokemonServiceImpl implements PokemonService
                 return PokemonUtils.formatOutput(pokemon, hasTypeArg, hasStatsArg);
             }
         }
-        return POKEMON_RETURN_NULL;
+        return NULL_RESPONSE;
     }
 
     private Pokemon getPokemonFromParams(String params)
@@ -167,6 +163,8 @@ public class PokemonServiceImpl implements PokemonService
 
     public Pokemon getPokemonFromText(String commandText)
     {
+        initialize();
+
         String text = cleanText(commandText);
 
         Integer number = getNumber(text);

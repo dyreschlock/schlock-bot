@@ -9,9 +9,8 @@
         <property name="hibernate.connection.provider_class">com.zaxxer.hikari.hibernate.HikariConnectionProvider</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
 
-        <!--
-        <property name="hbm2ddl.auto">create</property>
         <property name="hbm2ddl.auto">update</property>
+        <!--
         -->
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
@@ -25,8 +24,9 @@
         <property name="hibernate.hikari.idleTimeout">30000</property>
         <property name="hibernate.hikari.dataSourceClassName">com.mysql.jdbc.jdbc2.optional.MysqlDataSource</property>
 
-        <mapping class="com.schlock.bot.entities.apps.bet.Bet" />
+        <mapping class="com.schlock.bot.entities.apps.bet.ShinyBet" />
         <mapping class="com.schlock.bot.entities.apps.User" />
+        <mapping class="com.schlock.bot.entities.apps.pokemon.ShinyGet" />
 
     </session-factory>
 </hibernate-configuration>

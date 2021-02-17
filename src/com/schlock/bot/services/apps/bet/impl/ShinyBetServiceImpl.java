@@ -4,11 +4,11 @@ import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.services.DatabaseModule;
 import com.schlock.bot.services.DeploymentContext;
 import com.schlock.bot.services.apps.UserService;
-import com.schlock.bot.services.apps.bet.BettingService;
+import com.schlock.bot.services.apps.bet.ShinyBetService;
 import com.schlock.bot.services.apps.pokemon.PokemonService;
 import com.schlock.bot.services.database.apps.UserDAO;
 
-public class BettingServiceImpl implements BettingService
+public class ShinyBetServiceImpl implements ShinyBetService
 {
     private final String INSTRUCTIONS_COMMAND = "!instructions";
     private final String BET_COMMAND = "!bet ";
@@ -21,10 +21,10 @@ public class BettingServiceImpl implements BettingService
 
     private final DeploymentContext deploymentContext;
 
-    public BettingServiceImpl(PokemonService pokemonService,
-                              UserService userService,
-                              DatabaseModule database,
-                              DeploymentContext deploymentContext)
+    public ShinyBetServiceImpl(PokemonService pokemonService,
+                               UserService userService,
+                               DatabaseModule database,
+                               DeploymentContext deploymentContext)
     {
         this.pokemonService = pokemonService;
         this.userService = userService;

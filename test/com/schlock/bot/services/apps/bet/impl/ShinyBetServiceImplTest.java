@@ -9,9 +9,9 @@ import com.schlock.bot.services.apps.pokemon.impl.PokemonServiceImpl;
 import com.schlock.bot.services.database.DatabaseTest;
 import org.junit.jupiter.api.BeforeEach;
 
-class BettingServiceImplTest extends DatabaseTest
+class ShinyBetServiceImplTest extends DatabaseTest
 {
-    private BettingServiceImpl impl;
+    private ShinyBetServiceImpl impl;
 
 
 
@@ -27,6 +27,6 @@ class BettingServiceImplTest extends DatabaseTest
         PokemonService pokemonService = new PokemonServiceImpl(context);
         UserService userService = new UserServiceImpl(database, context);
 
-        impl = new BettingServiceImpl(pokemonService, userService, database, context);
+        impl = new ShinyBetServiceImpl(pokemonService, userService, database, context);
     }
 }

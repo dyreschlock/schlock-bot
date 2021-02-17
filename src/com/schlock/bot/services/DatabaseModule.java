@@ -3,8 +3,10 @@ package com.schlock.bot.services;
 import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.services.database.BaseDAO;
 import com.schlock.bot.services.database.apps.BetDAO;
+import com.schlock.bot.services.database.apps.ShinyGetDAO;
 import com.schlock.bot.services.database.apps.UserDAO;
 import com.schlock.bot.services.database.apps.impl.BetDAOImpl;
+import com.schlock.bot.services.database.apps.impl.ShinyGetDAOImpl;
 import com.schlock.bot.services.database.apps.impl.UserDAOImpl;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -32,6 +34,7 @@ public class DatabaseModule
     {
         daos.put(BetDAO.class, new BetDAOImpl(sessionFactory));
         daos.put(UserDAO.class, new UserDAOImpl(sessionFactory));
+        daos.put(ShinyGetDAO.class, new ShinyGetDAOImpl(sessionFactory));
     }
 
     public <T> T get(Class<T> dao)

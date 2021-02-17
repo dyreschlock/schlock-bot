@@ -1,6 +1,7 @@
 package com.schlock.bot.services.apps.pokemon.impl;
 
 import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.ListenerService;
 import com.schlock.bot.services.impl.DeploymentContextImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,7 @@ class PokemonServiceImplTest
         List<String[]> testData = new ArrayList<>();
         testData.add(new String[]{"!pokemon bulbasaur", "No. 1 Bulbasaur"});
         testData.add(new String[]{"!pokemon mewtwo", "No. 150 Mewtwo"});
-        testData.add(new String[]{"!pokemon xxx", PokemonServiceImpl.POKEMON_RETURN_NULL});
+        testData.add(new String[]{"!pokemon xxx", ListenerService.NULL_RESPONSE});
         testData.add(new String[]{"!pokemon nidoran f", "No. 29 Nidoran♀"});
         testData.add(new String[]{"!pokemon nidoranf", "No. 29 Nidoran♀"});
         testData.add(new String[]{"!pokemon nidoran m", "No. 32 Nidoran♂"});
@@ -208,7 +209,7 @@ class PokemonServiceImplTest
         for (String d : testData)
         {
             String response = impl.process("", d);
-            assertEquals(response, PokemonServiceImpl.POKEMON_RETURN_NULL);
+            assertEquals(response, ListenerService.NULL_RESPONSE);
         }
     }
 
