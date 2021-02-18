@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface ShinyBetDAO extends BaseDAO<ShinyBet>
 {
-    List<ShinyBet> getBetsByUsername(String username);
+    List<ShinyBet> getByUsername(String username);
+
+    ShinyBet getByUsernameAndPokemon(String username, String pokemon);
 }

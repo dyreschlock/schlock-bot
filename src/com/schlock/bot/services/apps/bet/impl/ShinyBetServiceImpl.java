@@ -18,13 +18,19 @@ import java.util.List;
 public class ShinyBetServiceImpl implements ShinyBetService
 {
     protected static final String INSUFFICIENT_FUNDS = "You don't have enough %s to bet that. Current balance: %s%s";
-    protected static final String WRONG_FORMAT = "Use format to bet: !bet [pokemon] [minutes] [bet amount]";
+    protected static final String BET_WRONG_FORMAT = "Use format to bet: !bet [pokemon] [minutes] [bet amount]";
     protected static final String BET_SUCCESS = "Bet has been made for %s: %s in %s min at %s%s";
+    protected static final String BET_FORMAT = "%s has a bet for %s in %s min at %s%s";
 
     protected static final String BET_CANCELED = "Bet for %s has been canceled for %s";
     protected static final String ALL_BETS_CANCELED = "All bets have been canceled for %s";
 
+    protected static final String BET_CANCEL_WRONG_FORMAT = "User format to cancel bet: !cancelbet [pokemon]";
+    protected static final String BET_CANCEL_NO_BET = "Sorry %s, you don't have a bet for %s";
+
     private static final String BET_COMMAND = "!bet ";
+
+    private static final String SHOW_CURRENT_BETS = "!currentbets";
 
     private static final String CANCEL_BET = "!cancelbet ";
     private static final String CANCEL_ALL_BETS = "!cancelallbets";
@@ -53,6 +59,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
     {
         return in != null &&
                 (in.toLowerCase().startsWith(BET_COMMAND) ||
+                        in.toLowerCase().startsWith(SHOW_CURRENT_BETS) ||
                         in.toLowerCase().startsWith(CANCEL_BET) ||
                         in.toLowerCase().startsWith(CANCEL_ALL_BETS));
     }
@@ -64,25 +71,48 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
     public List<String> process(String username, String in)
     {
-        return Arrays.asList(processSingleResults(username, in));
+        String command = in.toLowerCase();
+        if (command.startsWith(SHOW_CURRENT_BETS))
+        {
+            return currentBets(username);
+        }
+        return Arrays.asList(processSingleResults(username, command));
     }
 
-    public String processSingleResults(String username, String in)
+    public String processSingleResults(String username, String command)
     {
-        String command = in.toLowerCase();
         if (command.startsWith(BET_COMMAND))
         {
-            return placeBet(username, in);
+            return placeBet(username, command);
         }
         if (command.startsWith(CANCEL_BET))
         {
-            return cancelBet(username, in);
+            return cancelBet(username, command);
         }
         if (command.startsWith(CANCEL_ALL_BETS))
         {
             return cancelAllBets(username);
         }
         return null;
+    }
+
+    private List<String> currentBets(String username)
+    {
+        List<ShinyBet> bets = database.get(ShinyBetDAO.class).getByUsername(username);
+
+        List<String> responses = new ArrayList<>();
+        for(ShinyBet bet : bets)
+        {
+            String response = String.format(BET_FORMAT,
+                                                username,
+                                                bet.getPokemonId(),
+                                                bet.getTimeMinutes().toString(),
+                                                bet.getBetAmount().toString(),
+                                                deploymentContext.getCurrencyMark());
+
+            responses.add(response);
+        }
+        return responses;
     }
 
     private String placeBet(String username, String in)
@@ -117,7 +147,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
             return String.format(BET_SUCCESS, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
         }
-        return WRONG_FORMAT;
+        return BET_WRONG_FORMAT;
     }
 
     private Pokemon getPokemonFromParams(String params)
@@ -207,20 +237,46 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
     private String cancelBet(String username, String in)
     {
+        String params = in.substring(CANCEL_BET.length());
 
-        String pokemonName = "";
+        Pokemon pokemon = pokemonService.getPokemonFromText(params);
+        if (pokemon != null)
+        {
+            ShinyBet bet = database.get(ShinyBetDAO.class).getByUsernameAndPokemon(username, pokemon.getId());
+            if (bet != null)
+            {
+                Integer betAmount = bet.getBetAmount();
 
-        return String.format(BET_CANCELED, pokemonName, username);
+                User user = userService.getUser(username);
+                user.incrementBalance(betAmount);
+
+                database.delete(bet);
+                database.save(user);
+
+                return String.format(BET_CANCELED, pokemon.getName(), username);
+            }
+            return String.format(BET_CANCEL_NO_BET, username, pokemon.getName());
+        }
+        return BET_CANCEL_WRONG_FORMAT;
     }
 
     private String cancelAllBets(String username)
     {
-        List<ShinyBet> bets = database.get(ShinyBetDAO.class).getBetsByUsername(username);
+        List<ShinyBet> bets = database.get(ShinyBetDAO.class).getByUsername(username);
+
+        User user = userService.getUser(username);
 
         List<Persisted> objects = new ArrayList<>();
-        objects.addAll(bets);
+        for (ShinyBet bet : bets)
+        {
+            Integer betAmount = bet.getBetAmount();
+            user.incrementBalance(betAmount);
+
+            objects.add(bet);
+        }
 
         database.delete(objects);
+        database.save(user);
 
         return String.format(ALL_BETS_CANCELED, username);
     }

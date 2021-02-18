@@ -12,11 +12,11 @@ import com.schlock.bot.services.apps.pokemon.PokemonService;
 import com.schlock.bot.services.apps.pokemon.impl.PokemonServiceImpl;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.apps.ShinyBetDAO;
+import com.schlock.bot.services.database.apps.UserDAO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -58,23 +58,71 @@ class ShinyBetServiceImplTest extends DatabaseTest
         String expected = String.format(ShinyBetServiceImpl.BET_SUCCESS, USERNAME1, pokemon.getName(), BET2_MINUTES.toString(), BET2_AMOUNT.toString(), mark);
 
         assertEquals(expected, response);
+
+        user = getDatabase().get(UserDAO.class).getByUsername(user.getUsername());
+
+        Integer newBalance = BALANCE - BET2_AMOUNT;
+
+        assertEquals(newBalance, user.getBalance());
     }
 
     @Test
     public void testCancelAllBets()
     {
-        List bets = getDatabase().get(ShinyBetDAO.class).getBetsByUsername(user.getUsername());
+        List bets = getDatabase().get(ShinyBetDAO.class).getByUsername(user.getUsername());
 
         assertEquals(1, bets.size());
+
 
         String response = impl.processSingleResults(USERNAME1, "!cancelallbets");
         String expected = String.format(ShinyBetServiceImpl.ALL_BETS_CANCELED, USERNAME1);
 
         assertEquals(expected, response);
 
-        bets = getDatabase().get(ShinyBetDAO.class).getBetsByUsername(user.getUsername());
+
+        bets = getDatabase().get(ShinyBetDAO.class).getByUsername(user.getUsername());
 
         assertEquals(0, bets.size());
+
+
+        user = getDatabase().get(UserDAO.class).getByUsername(USERNAME1);
+        Integer newBalance = BALANCE + BET1_AMOUNT;
+
+        assertEquals(newBalance, user.getBalance());
+
+
+        response = impl.processSingleResults(USERNAME1, "!cancelallbets");
+        expected = String.format(ShinyBetServiceImpl.ALL_BETS_CANCELED, USERNAME1);
+
+        assertEquals(expected, response);
+    }
+
+    @Test
+    public void testCancelBet()
+    {
+        final String CANCEL_BET1 = "!cancelbet " + BET1_POKEMON;
+        final String CANCEL_BET2 = "!cancelbet " + BET2_POKEMON;
+
+        Pokemon pokemon1 = pokemonService.getPokemonFromText(BET1_POKEMON);
+
+        String response = impl.processSingleResults(USERNAME1, CANCEL_BET1);
+        String expected = String.format(ShinyBetServiceImpl.BET_CANCELED, pokemon1.getName(), USERNAME1);
+
+        assertEquals(expected, response);
+
+
+        user = getDatabase().get(UserDAO.class).getByUsername(USERNAME1);
+        Integer newBalance = BALANCE + BET1_AMOUNT;
+
+        assertEquals(newBalance, user.getBalance());
+
+
+        Pokemon pokemon2 = pokemonService.getPokemonFromText(BET2_POKEMON);
+
+        response = impl.processSingleResults(USERNAME1, CANCEL_BET2);
+        expected = String.format(ShinyBetServiceImpl.BET_CANCEL_NO_BET, USERNAME1, pokemon2.getName());
+
+        assertEquals(expected, response);
     }
 
 
@@ -117,7 +165,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
     private void removeTestObjects()
     {
-        List<ShinyBet> bets = getDatabase().get(ShinyBetDAO.class).getBetsByUsername(user.getUsername());
+        List<ShinyBet> bets = getDatabase().get(ShinyBetDAO.class).getByUsername(user.getUsername());
 
         List<Persisted> objects = new ArrayList<>();
         objects.addAll(bets);

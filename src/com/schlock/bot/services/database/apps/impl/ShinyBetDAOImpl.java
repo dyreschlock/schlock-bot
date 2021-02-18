@@ -17,10 +17,10 @@ public class ShinyBetDAOImpl extends BaseDAOImpl<ShinyBet> implements ShinyBetDA
         super(sessionFactory);
     }
 
-    public List<ShinyBet> getBetsByUsername(String username)
+    public List<ShinyBet> getByUsername(String username)
     {
         String text = " select b " +
-                        "from ShinyBet b " +
+                        " from ShinyBet b " +
                         " join b.user u " +
                         " where u.username = :name ";
 
@@ -36,5 +36,28 @@ public class ShinyBetDAOImpl extends BaseDAOImpl<ShinyBet> implements ShinyBetDA
         session.close();
 
         return bets;
+    }
+
+    public ShinyBet getByUsernameAndPokemon(String username, String pokemonId)
+    {
+        String text = " select b " +
+                        " from ShinyBet b " +
+                        " join b.user u " +
+                        " where u.username = :name " +
+                        " and b.pokemonId = :pokemon ";
+
+        Session session = getSessionFactory().openSession();
+        session.beginTransaction();
+
+        Query query = session.createQuery(text, ShinyBet.class);
+        query.setParameter("name", username);
+        query.setParameter("pokemon", pokemonId);
+
+        ShinyBet bet = singleResult(query);
+
+        session.getTransaction().commit();
+        session.close();
+
+        return bet;
     }
 }
