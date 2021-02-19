@@ -12,7 +12,7 @@ public class ShinyGetDAOImpl extends BaseDAOImpl<ShinyGet> implements ShinyGetDA
 {
     public ShinyGetDAOImpl(SessionFactory sessionFactory)
     {
-        super(sessionFactory);
+        super(ShinyGet.class, sessionFactory);
     }
 
     public Double getCurrentAverageTimeToShiny()

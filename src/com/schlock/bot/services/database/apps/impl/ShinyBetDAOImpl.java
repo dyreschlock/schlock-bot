@@ -14,7 +14,7 @@ public class ShinyBetDAOImpl extends BaseDAOImpl<ShinyBet> implements ShinyBetDA
 {
     public ShinyBetDAOImpl(SessionFactory sessionFactory)
     {
-        super(sessionFactory);
+        super(ShinyBet.class, sessionFactory);
     }
 
     public List<ShinyBet> getByUsername(String username)

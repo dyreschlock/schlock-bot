@@ -1,6 +1,7 @@
 package com.schlock.bot.services.database.impl;
 
 import com.schlock.bot.services.database.BaseDAO;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import javax.persistence.Query;
@@ -10,8 +11,11 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T>
 {
     private final SessionFactory sessionFactory;
 
-    public BaseDAOImpl(SessionFactory sessionFactory)
+    private final Class entityClass;
+
+    public BaseDAOImpl(Class<T> entityClass,SessionFactory sessionFactory)
     {
+        this.entityClass = entityClass;
         this.sessionFactory = sessionFactory;
     }
 
@@ -22,12 +26,31 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T>
 
     public List<T> getAll()
     {
-        return null;
+        String text = String.format("from %s order by id", entityClass.getName());
+
+        Session session = getSessionFactory().openSession();
+        session.beginTransaction();
+
+        Query query = session.createQuery(text);
+        List results = query.getResultList();
+
+        session.getTransaction().commit();
+        session.close();
+
+        return results;
     }
 
     public T getById(Long id)
     {
-        return null;
+        Session session = getSessionFactory().openSession();
+        session.beginTransaction();
+
+        Object result = session.load(entityClass, id);
+
+        session.getTransaction().commit();
+        session.close();
+
+        return (T) result;
     }
 
     protected T singleResult(Query query)

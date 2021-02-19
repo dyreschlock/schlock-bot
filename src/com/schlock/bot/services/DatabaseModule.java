@@ -47,7 +47,7 @@ public class DatabaseModule
         save(Arrays.asList(obj));
     }
 
-    public void save(List<Persisted> obj)
+    public void save(Collection<Persisted> obj)
     {
         Session session = sessionFactory.openSession();
         session.beginTransaction();

@@ -12,7 +12,7 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO
 {
     public UserDAOImpl(SessionFactory sessionFactory)
     {
-        super(sessionFactory);
+        super(User.class, sessionFactory);
     }
 
     public User getByUsername(String username)

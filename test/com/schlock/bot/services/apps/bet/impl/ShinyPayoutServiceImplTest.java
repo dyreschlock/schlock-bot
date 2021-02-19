@@ -3,6 +3,8 @@ package com.schlock.bot.services.apps.bet.impl;
 import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
+import com.schlock.bot.services.DatabaseModule;
+import com.schlock.bot.services.DeploymentContext;
 import com.schlock.bot.services.database.DatabaseTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +12,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ShinyPayoutServiceImplTest extends DatabaseTest
 {
@@ -45,6 +49,17 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
     @Test
     public void testUseCase1()
     {
+        final String ADMIN = getDeploymentContext().getOwnerUsername();
+        final String GET = "!shinyget beedrill 100";
+
+        List<String> responses = impl.process(USERNAME1, GET);
+
+        assertEquals(0, responses.size());
+
+
+        responses = impl.process(ADMIN, GET);
+
+
 
     }
 
@@ -54,6 +69,11 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
     {
         setupDatabase();
         createTestObjects();
+
+        DeploymentContext context = getDeploymentContext();
+        DatabaseModule database = getDatabase();
+
+        impl = new ShinyPayoutServiceImpl(database, context);
     }
 
     private void createTestObjects()

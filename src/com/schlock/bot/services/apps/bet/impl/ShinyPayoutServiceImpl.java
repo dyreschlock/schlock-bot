@@ -1,8 +1,11 @@
 package com.schlock.bot.services.apps.bet.impl;
 
+import com.schlock.bot.entities.Persisted;
+import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.services.DatabaseModule;
 import com.schlock.bot.services.DeploymentContext;
 import com.schlock.bot.services.apps.bet.ShinyPayoutService;
+import com.schlock.bot.services.database.apps.ShinyBetDAO;
 
 import java.util.*;
 
@@ -43,7 +46,18 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
         if (username.equals(admin) &&
                 command.startsWith(SHINY_GET_COMMAND))
         {
+            Map<String, Persisted> tobeUpdated = new HashMap<>();
+            List<Persisted> tobeDeleted = new ArrayList<>();
 
+            List<ShinyBet> bets = database.get(ShinyBetDAO.class).getAll();
+
+            
+
+
+            tobeDeleted.addAll(bets);
+
+            database.save(tobeUpdated.values());
+            database.delete(tobeDeleted);
         }
         return Collections.EMPTY_LIST;
     }
