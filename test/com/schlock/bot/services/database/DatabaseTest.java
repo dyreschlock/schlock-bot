@@ -7,7 +7,6 @@ import com.schlock.bot.services.impl.DeploymentContextImpl;
 public abstract class DatabaseTest
 {
     private DeploymentContext context;
-
     private DatabaseModule database;
 
 
@@ -21,12 +20,17 @@ public abstract class DatabaseTest
         return database;
     }
 
-    public void setupDatabase() throws Exception
+    protected void setupDatabase() throws Exception
     {
-        context = new DeploymentContextImpl(DeploymentContext.TEST);
+        context = createDeploymentContext();
         context.loadProperties();
 
         database = new DatabaseModule(context);
         database.setup();
+    }
+
+    protected DeploymentContext createDeploymentContext()
+    {
+        return new DeploymentContextImpl(DeploymentContext.TEST);
     }
 }

@@ -5,7 +5,10 @@ import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.services.DatabaseModule;
 import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.apps.pokemon.PokemonService;
+import com.schlock.bot.services.apps.pokemon.impl.PokemonServiceImpl;
 import com.schlock.bot.services.database.DatabaseTest;
+import com.schlock.bot.services.impl.DeploymentContextImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ShinyPayoutServiceImplTest extends DatabaseTest
 {
+    private static final Double TEST_POKEMON_WIN_FACTOR = 2.0;
+    private static final Double TEST_TIME_WIN_FACTOR = 3.0;
+    private static final Double TEST_BOTH_WIN_FACTOR = 2.0;
+
     private static final Integer BALANCE = 10000;
 
     private static final String USERNAME1 = "username1";
@@ -50,16 +57,15 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
     public void testUseCase1()
     {
         final String ADMIN = getDeploymentContext().getOwnerUsername();
-        final String GET = "!shinyget beedrill 100";
+        final String GET = "!shinyget catch beedrill 100";
 
         List<String> responses = impl.process(USERNAME1, GET);
 
         assertEquals(0, responses.size());
 
-
         responses = impl.process(ADMIN, GET);
 
-
+        String temp = "";
 
     }
 
@@ -73,7 +79,9 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         DeploymentContext context = getDeploymentContext();
         DatabaseModule database = getDatabase();
 
-        impl = new ShinyPayoutServiceImpl(database, context);
+        PokemonService pokemonService = new PokemonServiceImpl(context);
+
+        impl = new ShinyPayoutServiceImpl(pokemonService, database, context);
     }
 
     private void createTestObjects()
@@ -114,6 +122,15 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         getDatabase().save(objects);
     }
 
+    protected DeploymentContext createDeploymentContext()
+    {
+        return new DeploymentContextImpl(DeploymentContext.TEST)
+        {
+            public Double getBetsPokemonWinFactor() { return TEST_POKEMON_WIN_FACTOR; }
+            public Double getBetsTimeWinFactor() { return TEST_TIME_WIN_FACTOR; }
+            public Double getBetsBothWinFactor() { return TEST_BOTH_WIN_FACTOR; }
+        };
+    }
 
     @AfterEach
     public void teardown()

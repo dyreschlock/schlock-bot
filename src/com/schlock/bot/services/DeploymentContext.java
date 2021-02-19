@@ -15,6 +15,12 @@ public interface DeploymentContext
 
     Integer getQuizCorrectPoints();
 
+    Double getBetsPokemonWinFactor();
+
+    Double getBetsTimeWinFactor();
+
+    Double getBetsBothWinFactor();
+
     String getCurrencyMark();
 
     String getDataDirectory();

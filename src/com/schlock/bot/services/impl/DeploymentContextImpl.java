@@ -19,6 +19,10 @@ public class DeploymentContextImpl implements DeploymentContext
 
     private static final String QUIZ_CORRECT_POINTS = "quiz.correct.points";
 
+    private static final String BETS_POKEMON_WIN_FACTOR = "";
+    private static final String BETS_TIME_WIN_FACTOR = "";
+    private static final String BETS_BOTH_WIN_FACTOR = "";
+
     private static final String ONWER_USERNAME = "owner.username";
 
     private static final String DISCORD_TOKEN = "discord.token";
@@ -81,6 +85,27 @@ public class DeploymentContextImpl implements DeploymentContext
     {
         String points = properties.getProperty(QUIZ_CORRECT_POINTS);
         return Integer.parseInt(points);
+    }
+
+    public Double getBetsPokemonWinFactor()
+    {
+        return getFloat(BETS_POKEMON_WIN_FACTOR);
+    }
+
+    public Double getBetsTimeWinFactor()
+    {
+        return getFloat(BETS_TIME_WIN_FACTOR);
+    }
+
+    public Double getBetsBothWinFactor()
+    {
+        return getFloat(BETS_BOTH_WIN_FACTOR);
+    }
+
+    private Double getFloat(final String PROPERTY)
+    {
+        String dbl = properties.getProperty(PROPERTY);
+        return Double.parseDouble(dbl);
     }
 
     public String getDataDirectory()

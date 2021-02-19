@@ -86,7 +86,7 @@ public class BotStartup
         guessingService = new GuessingServiceImpl(pokemonService, userService, database, deploymentContext);
         shinyInfoService = new ShinyInfoServiceImpl(pokemonService, database, deploymentContext);
 
-        shinyPayoutService = new ShinyPayoutServiceImpl(database, deploymentContext);
+        shinyPayoutService = new ShinyPayoutServiceImpl(pokemonService,  database, deploymentContext);
     }
 
 
