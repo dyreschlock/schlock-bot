@@ -38,7 +38,7 @@ public class PokemonServiceImpl implements PokemonService
         this.context = context;
     }
 
-    public boolean isAcceptRequest(String in)
+    public boolean isAcceptRequest(String username, String in)
     {
         return in != null &&
                 (in.toLowerCase().startsWith(POKEMON_COMMAND) ||

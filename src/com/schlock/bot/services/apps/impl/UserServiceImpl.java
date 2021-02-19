@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService
         return String.format(GIVEPOINTS_COMMAND, context.getTwitchBotName());
     }
 
-    public boolean isAcceptRequest(String in)
+    public boolean isAcceptRequest(String username, String in)
     {
         return in != null &&
                 (in.toLowerCase().startsWith(BALANCE_COMMAND) ||

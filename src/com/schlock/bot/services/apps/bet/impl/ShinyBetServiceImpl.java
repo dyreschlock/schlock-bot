@@ -67,15 +67,24 @@ public class ShinyBetServiceImpl implements ShinyBetService
         this.deploymentContext = deploymentContext;
     }
 
-    public boolean isAcceptRequest(String in)
+    public boolean isAcceptRequest(String username, String in)
     {
-        return in != null &&
-                (in.toLowerCase().startsWith(BET_COMMAND) ||
-                        in.toLowerCase().startsWith(SHOW_CURRENT_BETS) ||
-                        in.toLowerCase().startsWith(CANCEL_BET) ||
-                        in.toLowerCase().startsWith(CANCEL_ALL_BETS) ||
-                        in.toLowerCase().startsWith(OPEN_BETTING) ||
-                        in.toLowerCase().startsWith(CLOSE_BETTING));
+        if(in != null)
+        {
+            if (in.toLowerCase().startsWith(OPEN_BETTING) ||
+                    in.toLowerCase().startsWith(CLOSE_BETTING))
+            {
+                String admin = deploymentContext.getOwnerUsername();
+                return username.equals(admin);
+            }
+
+            return in != null &&
+                    (in.toLowerCase().startsWith(BET_COMMAND) ||
+                            in.toLowerCase().startsWith(SHOW_CURRENT_BETS) ||
+                            in.toLowerCase().startsWith(CANCEL_BET) ||
+                            in.toLowerCase().startsWith(CANCEL_ALL_BETS));
+        }
+        return false;
     }
 
     public boolean isTerminateAfterRequest()

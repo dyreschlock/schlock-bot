@@ -37,7 +37,7 @@ public class Commands extends ListenerAdapter
 
         for (ListenerService service : listeners)
         {
-            if (service.isAcceptRequest(message))
+            if (service.isAcceptRequest(username, message))
             {
                 List<String> responses = service.process(username, message);
                 for (String response : responses)

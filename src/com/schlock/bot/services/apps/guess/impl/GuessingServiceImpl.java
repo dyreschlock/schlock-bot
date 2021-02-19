@@ -39,7 +39,7 @@ public class GuessingServiceImpl implements GuessingService
         this.context = context;
     }
 
-    public boolean isAcceptRequest(String message)
+    public boolean isAcceptRequest(String username, String message)
     {
         return true;
     }

@@ -39,7 +39,7 @@ public class ShinyInfoServiceImpl implements ShinyInfoService
         this.context = context;
     }
 
-    public boolean isAcceptRequest(String in)
+    public boolean isAcceptRequest(String username, String in)
     {
         return in != null &&
                 (in.toLowerCase().startsWith(MOST_RECENT_COMMAND) ||

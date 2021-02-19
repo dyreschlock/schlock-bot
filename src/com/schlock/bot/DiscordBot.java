@@ -57,7 +57,7 @@ public class DiscordBot extends AbstractBot
             client.getEventDispatcher().on(MessageCreateEvent.class)
                     .map(MessageCreateEvent::getMessage)
                     .filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
-                    .filter(message -> service.isAcceptRequest(message.getContent()))
+                    .filter(message -> service.isAcceptRequest(message.getAuthor().get().getUsername(), message.getContent()))
                     .subscribe(message -> {
 
                         String username = message.getAuthor().toString();
