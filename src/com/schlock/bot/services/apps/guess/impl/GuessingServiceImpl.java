@@ -16,9 +16,9 @@ public class GuessingServiceImpl implements GuessingService
 {
     private static final String START_COMMAND = "!whodat";
 
-    public static final String NOT_ADMIN_MESSAGE = "Sorry, you are not the admin.";
-    public static final String GAME_ALREADY_STARTED = "The game has already started.";
-    public static final String WINNER_MESSAGE = "Congratulations, %s! %s is correct! You get %s%s";
+    protected static final String NOT_ADMIN_MESSAGE = "Sorry, you are not the admin.";
+    protected static final String GAME_ALREADY_STARTED = "Game has started. Current Hint: ";
+    protected static final String WINNER_MESSAGE = "Congratulations, %s! %s is correct! You get %s%s";
 
     private final PokemonService pokemonService;
     private final UserService userService;
@@ -66,7 +66,8 @@ public class GuessingServiceImpl implements GuessingService
 //            }
             if (currentPokemon != null)
             {
-                return GAME_ALREADY_STARTED;
+                String hint = PokemonUtils.formatHint1(currentPokemon);
+                return GAME_ALREADY_STARTED + hint;
             }
 
             String params = command.substring(START_COMMAND.length()).trim();

@@ -54,7 +54,7 @@ class GuessingServiceImplTest extends DatabaseTest
 
         //try to start the game, again
         response = impl.processSingleResult(ADMIN, "!whodat");
-        expected = GuessingServiceImpl.GAME_ALREADY_STARTED;
+        expected = GuessingServiceImpl.GAME_ALREADY_STARTED + expected;
 
         assertEquals(expected, response);
 
