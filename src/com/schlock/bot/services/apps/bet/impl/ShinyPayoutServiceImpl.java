@@ -18,17 +18,17 @@ import java.util.*;
 
 public class ShinyPayoutServiceImpl implements ShinyPayoutService
 {
-    private static final String NO_BETS_NO_WINNERS = "There were no bets, so there are no winners.";
+    protected static final String NO_BETS_NO_WINNERS = "There were no bets, so there are no winners.";
 
-    private static final String WINNERS_POKEMON = "Users that guessed the correct Pokemon: %s";
-    private static final String WINNERS_POKEMON_NONE = "No one guessed the correct Pokemon.";
-    private static final String WINNERS_TIME = "Users that guessed the closed time: %s";
-    private static final String WINNERS_BOTH = "Users that correctly guessed both! %s";
+    protected static final String WINNERS_POKEMON = "Users that guessed the correct Pokemon: %s";
+    protected static final String WINNERS_POKEMON_NONE = "No one guessed the correct Pokemon.";
+    protected static final String WINNERS_TIME = "Users that guessed the closed time: %s";
+    protected static final String WINNERS_BOTH = "Users that correctly guessed both! %s";
 
-    private static final String BIGGEST_WINNER = "The biggest winner was %s. Winning %s%s. New Balance: %s%s";
-    private static final String USER_UPDATE = "User %s won %s%s. New Balance: %s%s";
+    protected static final String BIGGEST_WINNER = "The biggest winner was %s. Winning %s%s. New Balance: %s%s";
+    protected static final String USER_UPDATE = "User %s won %s%s. New Balance: %s%s";
 
-    private static final String BAD_FORMAT_MESSAGE = "Bad format: !shinyget [type] [pokemon] [time] [checks]";
+    protected static final String BAD_FORMAT_MESSAGE = "Bad format: !shinyget [type] [pokemon] [time] [checks]";
 
     private static final String SHINY_GET_COMMAND = "!shinyget ";
 
@@ -144,7 +144,7 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
             }
             if (usersWinningTime.size() != 0)
             {
-                responses.add(String.format(WINNERS_TIME, StringUtils.join(usersWinningPokemon, ", ")));
+                responses.add(String.format(WINNERS_TIME, StringUtils.join(usersWinningTime, ", ")));
             }
             if (usersWinningBoth.size() != 0)
             {

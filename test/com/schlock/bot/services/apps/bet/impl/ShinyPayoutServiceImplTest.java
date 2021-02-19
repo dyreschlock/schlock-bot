@@ -3,20 +3,25 @@ package com.schlock.bot.services.apps.bet.impl;
 import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
+import com.schlock.bot.entities.apps.pokemon.ShinyGet;
 import com.schlock.bot.services.DatabaseModule;
 import com.schlock.bot.services.DeploymentContext;
 import com.schlock.bot.services.apps.pokemon.PokemonService;
 import com.schlock.bot.services.apps.pokemon.impl.PokemonServiceImpl;
 import com.schlock.bot.services.database.DatabaseTest;
+import com.schlock.bot.services.database.apps.ShinyGetDAO;
+import com.schlock.bot.services.database.apps.UserDAO;
 import com.schlock.bot.services.impl.DeploymentContextImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ShinyPayoutServiceImplTest extends DatabaseTest
 {
@@ -57,6 +62,7 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
     public void testUseCase1()
     {
         final String ADMIN = getDeploymentContext().getOwnerUsername();
+        final String MARK = getDeploymentContext().getCurrencyMark();
         final String GET = "!shinyget catch beedrill 100";
 
         List<String> responses = impl.process(USERNAME1, GET);
@@ -65,8 +71,44 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
 
         responses = impl.process(ADMIN, GET);
 
-        String temp = "";
+        assertEquals(6, responses.size());
 
+        user1 = getDatabase().get(UserDAO.class).getByUsername(user1.getUsername());
+        user2 = getDatabase().get(UserDAO.class).getByUsername(user2.getUsername());
+        user3 = getDatabase().get(UserDAO.class).getByUsername(user3.getUsername());
+
+
+        Double winningPokemon = BET1_AMOUNT.doubleValue() * TEST_POKEMON_WIN_FACTOR;
+        Double winningTime = BET1_AMOUNT.doubleValue() * TEST_TIME_WIN_FACTOR;
+        Double user1winnings = (winningPokemon + winningTime) * TEST_BOTH_WIN_FACTOR;
+
+        Double user2winnings = BET2_AMOUNT.doubleValue() * TEST_POKEMON_WIN_FACTOR;
+
+        Integer user1balance = BALANCE + user1winnings.intValue();
+        Integer user2balance = BALANCE + user2winnings.intValue();
+        Integer user3balance = BALANCE;
+
+        assertEquals(user1balance, user1.getBalance());
+        assertEquals(user2balance, user2.getBalance());
+        assertEquals(user3balance, user3.getBalance());
+
+        List<String> winnersPokemon = Arrays.asList(user2.getUsername(), user1.getUsername());
+        List<String> winnersTime = Arrays.asList(user1.getUsername());
+        List<String> winnersBoth = Arrays.asList(user1.getUsername());
+
+        String response1 = String.format(ShinyPayoutServiceImpl.WINNERS_POKEMON, StringUtils.join(winnersPokemon, ", "));
+        String response2 = String.format(ShinyPayoutServiceImpl.WINNERS_TIME, StringUtils.join(winnersTime, ", "));
+        String response3 = String.format(ShinyPayoutServiceImpl.WINNERS_BOTH, StringUtils.join(winnersBoth, ", "));
+
+        String response4 = String.format(ShinyPayoutServiceImpl.USER_UPDATE, USERNAME1, user1winnings.intValue(), MARK, user1balance, MARK);
+        String response5 = String.format(ShinyPayoutServiceImpl.USER_UPDATE, USERNAME2, user2winnings.intValue(), MARK, user2balance, MARK);
+        String response6 = String.format(ShinyPayoutServiceImpl.USER_UPDATE, USERNAME3, 0, MARK, BALANCE, MARK);
+
+        List<String> expectedResponses = Arrays.asList(response1, response2, response3, response4, response5, response6);
+        for (String expectedResponse : expectedResponses)
+        {
+            assertTrue(responses.contains(expectedResponse), expectedResponse);
+        }
     }
 
 
@@ -140,7 +182,9 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
 
     private void removeTestObjects()
     {
-        List<Persisted> objects = Arrays.asList(user1, user2, user3);
+        ShinyGet get = getDatabase().get(ShinyGetDAO.class).getMostRecent();
+
+        List<Persisted> objects = Arrays.asList(user1, user2, user3, get);
         getDatabase().delete(objects);
     }
 }
