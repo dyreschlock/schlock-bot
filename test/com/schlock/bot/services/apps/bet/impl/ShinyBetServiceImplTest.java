@@ -67,6 +67,64 @@ class ShinyBetServiceImplTest extends DatabaseTest
     }
 
     @Test
+    public void testUpdateBet()
+    {
+        List bets = getDatabase().get(ShinyBetDAO.class).getByUsername(user.getUsername());
+
+        assertEquals(1, bets.size());
+
+
+
+
+
+        bets = getDatabase().get(ShinyBetDAO.class).getByUsername(user.getUsername());
+
+        assertEquals(1, bets.size());
+    }
+
+    @Test
+    public void testCurrentBets()
+    {
+        String mark = getDeploymentContext().getCurrencyMark();
+
+        List<String> responses = impl.process(USERNAME1, "!currentbets");
+
+        assertEquals(1, responses.size());
+
+        Pokemon pokemon1 = pokemonService.getPokemonFromText(BET1_POKEMON);
+
+        String response = responses.get(0);
+        String expected1 = String.format(ShinyBetServiceImpl.BET_FORMAT,
+                                                                USERNAME1,
+                                                                pokemon1.getName(),
+                                                                BET1_MINUTES,
+                                                                BET1_AMOUNT,
+                                                                mark);
+
+        assertEquals(expected1, response);
+
+
+        String newBet = "!bet "+ BET2_POKEMON +" "+ BET2_MINUTES +" " + BET2_AMOUNT;
+        impl.processSingleResults(USERNAME1, newBet);
+
+        Pokemon pokemon2 = pokemonService.getPokemonFromText(BET2_POKEMON);
+
+        responses = impl.process(USERNAME1, "!currentbets");
+
+        assertEquals(2, responses.size());
+
+        String expected2 = String.format(ShinyBetServiceImpl.BET_FORMAT,
+                                                                USERNAME1,
+                                                                pokemon2.getName(),
+                                                                BET2_MINUTES,
+                                                                BET2_AMOUNT,
+                                                                mark);
+
+        assertTrue(responses.contains(expected1));
+        assertTrue(responses.contains(expected2));
+    }
+
+    @Test
     public void testCancelAllBets()
     {
         List bets = getDatabase().get(ShinyBetDAO.class).getByUsername(user.getUsername());

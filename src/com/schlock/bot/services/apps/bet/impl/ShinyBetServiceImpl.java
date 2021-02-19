@@ -103,9 +103,11 @@ public class ShinyBetServiceImpl implements ShinyBetService
         List<String> responses = new ArrayList<>();
         for(ShinyBet bet : bets)
         {
+            Pokemon pokemon = pokemonService.getPokemonFromText(bet.getPokemonId());
+
             String response = String.format(BET_FORMAT,
                                                 username,
-                                                bet.getPokemonId(),
+                                                pokemon.getName(),
                                                 bet.getTimeMinutes().toString(),
                                                 bet.getBetAmount().toString(),
                                                 deploymentContext.getCurrencyMark());
