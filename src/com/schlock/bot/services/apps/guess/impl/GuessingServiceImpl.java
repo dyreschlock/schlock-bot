@@ -16,7 +16,6 @@ public class GuessingServiceImpl implements GuessingService
 {
     private static final String START_COMMAND = "!whodat";
 
-    protected static final String NOT_ADMIN_MESSAGE = "Sorry, you are not the admin.";
     protected static final String GAME_ALREADY_STARTED = "Game has started. Current Hint: ";
     protected static final String WINNER_MESSAGE = "Congratulations, %s! %s is correct! You get %s%s";
 
@@ -62,7 +61,7 @@ public class GuessingServiceImpl implements GuessingService
         {
 //            if (!username.equalsIgnoreCase(context.getOwnerUsername()))
 //            {
-//                return NOT_ADMIN_MESSAGE;
+//                return NOT_ADMIN_RESPONSE;
 //            }
             if (currentPokemon != null)
             {

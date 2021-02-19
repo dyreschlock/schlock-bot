@@ -30,6 +30,10 @@ public class ShinyBetServiceImpl implements ShinyBetService
     protected static final String BET_CANCEL_WRONG_FORMAT = "User format to cancel bet: !cancelbet [pokemon]";
     protected static final String BET_CANCEL_NO_BET = "Sorry %s, you don't have a bet for %s";
 
+    protected static final String OPEN_BETTING_MESSAGE = "Shiny Bets is now open. Make a bet with !bet [pokmon] [minutes] [bet amount]";
+    protected static final String CLOSE_BETTING_MESSAGE = "Shiny Bets is now closed. Current bets cannot be changed.";
+    protected static final String BETTING_IS_CLOSED_MESSAGE = "Sorry, betting is closed. Current bets cannot be changed.";
+
     private static final String BET_COMMAND = "!bet ";
 
     private static final String SHOW_CURRENT_BETS = "!currentbets";
@@ -37,12 +41,18 @@ public class ShinyBetServiceImpl implements ShinyBetService
     private static final String CANCEL_BET = "!cancelbet ";
     private static final String CANCEL_ALL_BETS = "!cancelallbets";
 
+    private static final String OPEN_BETTING = "!openbets";
+    private static final String CLOSE_BETTING = "!closebets";
+
     private final PokemonService pokemonService;
     private final UserService userService;
 
     private final DatabaseModule database;
 
     private final DeploymentContext deploymentContext;
+
+
+    private boolean bettingCurrentOpen = false;
 
     public ShinyBetServiceImpl(PokemonService pokemonService,
                                UserService userService,
@@ -63,7 +73,9 @@ public class ShinyBetServiceImpl implements ShinyBetService
                 (in.toLowerCase().startsWith(BET_COMMAND) ||
                         in.toLowerCase().startsWith(SHOW_CURRENT_BETS) ||
                         in.toLowerCase().startsWith(CANCEL_BET) ||
-                        in.toLowerCase().startsWith(CANCEL_ALL_BETS));
+                        in.toLowerCase().startsWith(CANCEL_ALL_BETS) ||
+                        in.toLowerCase().startsWith(OPEN_BETTING) ||
+                        in.toLowerCase().startsWith(CLOSE_BETTING));
     }
 
     public boolean isTerminateAfterRequest()
@@ -83,6 +95,31 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
     public String processSingleResults(String username, String command)
     {
+        String owner = deploymentContext.getOwnerUsername();
+        if (command.startsWith(OPEN_BETTING))
+        {
+            if (!username.equals(owner))
+            {
+                return NOT_ADMIN_RESPONSE;
+            }
+            openBetting();
+            return OPEN_BETTING_MESSAGE;
+        }
+        if (command.startsWith(CLOSE_BETTING))
+        {
+            if (!username.equals(owner))
+            {
+                return NOT_ADMIN_RESPONSE;
+            }
+            closeBetting();
+            return CLOSE_BETTING_MESSAGE;
+        }
+
+        if (!bettingCurrentOpen)
+        {
+            return BETTING_IS_CLOSED_MESSAGE;
+        }
+
         if (command.startsWith(BET_COMMAND))
         {
             return placeBet(username, command);
@@ -95,7 +132,8 @@ public class ShinyBetServiceImpl implements ShinyBetService
         {
             return cancelAllBets(username);
         }
-        return null;
+
+        return NULL_RESPONSE;
     }
 
     private List<String> currentBets(String username)
@@ -308,5 +346,15 @@ public class ShinyBetServiceImpl implements ShinyBetService
         database.save(user);
 
         return String.format(ALL_BETS_CANCELED, username);
+    }
+
+    protected void openBetting()
+    {
+        bettingCurrentOpen = true;
+    }
+
+    protected void closeBetting()
+    {
+        bettingCurrentOpen = false;
     }
 }

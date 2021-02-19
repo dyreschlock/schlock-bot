@@ -6,6 +6,7 @@ import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.services.DatabaseModule;
 import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.ListenerService;
 import com.schlock.bot.services.apps.UserService;
 import com.schlock.bot.services.apps.impl.UserServiceImpl;
 import com.schlock.bot.services.apps.pokemon.PokemonService;
@@ -225,6 +226,51 @@ class ShinyBetServiceImplTest extends DatabaseTest
         assertEquals(expected, response);
     }
 
+    @Test
+    public void testOpenAndCloseBetting()
+    {
+        final String OPEN_BETS = "!openbets";
+        final String CLOSE_BETS = "!closebets";
+
+        final String ADMIN = getDeploymentContext().getOwnerUsername();
+
+        String bet = "!bet " + BET1_POKEMON + " " + BET1_MINUTES + " " + BET1_AMOUNT;
+
+        String response = impl.processSingleResults(USERNAME1, bet);
+        String not_expected = ShinyBetServiceImpl.BETTING_IS_CLOSED_MESSAGE;
+
+        assertNotEquals(not_expected, response);
+
+        response = impl.processSingleResults(USERNAME1, CLOSE_BETS);
+        String expected = ListenerService.NOT_ADMIN_RESPONSE;
+
+        assertEquals(expected, response);
+
+        response = impl.processSingleResults(ADMIN, CLOSE_BETS);
+        expected = ShinyBetServiceImpl.CLOSE_BETTING_MESSAGE;
+
+        assertEquals(expected, response);
+
+        response = impl.processSingleResults(USERNAME1, bet);
+        expected = ShinyBetServiceImpl.BETTING_IS_CLOSED_MESSAGE;
+
+        assertEquals(expected, response);
+
+        response = impl.processSingleResults(USERNAME1, OPEN_BETS);
+        expected = ListenerService.NOT_ADMIN_RESPONSE;
+
+        assertEquals(expected, response);
+
+        response = impl.processSingleResults(ADMIN, OPEN_BETS);
+        expected = ShinyBetServiceImpl.OPEN_BETTING_MESSAGE;
+
+        assertEquals(expected, response);
+
+        response = impl.processSingleResults(USERNAME1, bet);
+        not_expected = ShinyBetServiceImpl.BETTING_IS_CLOSED_MESSAGE;
+
+        assertNotEquals(not_expected, response);
+    }
 
     @BeforeEach
     public void setup() throws Exception
@@ -239,6 +285,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         UserService userService = new UserServiceImpl(database, context);
 
         impl = new ShinyBetServiceImpl(pokemonService, userService, database, context);
+        impl.openBetting();
     }
 
     private void createTestObjects()
