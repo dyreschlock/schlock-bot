@@ -18,7 +18,9 @@ import java.util.List;
 public class ShinyBetServiceImpl implements ShinyBetService
 {
     protected static final String INSUFFICIENT_FUNDS = "You don't have enough %s to bet that. Current balance: %s%s";
+    protected static final String INSUFFICIENT_FUNDS_UPDATE = "You don't have enough %s to update that bet. Current Balance %s%s, Current Bet: %s%s";
     protected static final String BET_WRONG_FORMAT = "Use format to bet: !bet [pokemon] [minutes] [bet amount]";
+    protected static final String BET_UPDATE_SUCCESS = "Bet for %s has been updated. Now: %s in %s min at %s%s";
     protected static final String BET_SUCCESS = "Bet has been made for %s: %s in %s min at %s%s";
     protected static final String BET_FORMAT = "%s has a bet for %s in %s min at %s%s";
 
@@ -128,26 +130,51 @@ public class ShinyBetServiceImpl implements ShinyBetService
         if (pokemon != null && time != null && betAmount != null)
         {
             String mark = deploymentContext.getCurrencyMark();
-
             User user = userService.getUser(username);
-            if (user.getBalance() < betAmount)
+
+            ShinyBet currentBet = database.get(ShinyBetDAO.class).getByUsernameAndPokemon(username, pokemon.getId());
+            if(currentBet != null)
             {
-                String balance = user.getBalance().toString();
+                Integer changedBalance = user.getBalance() + currentBet.getBetAmount();
+                if (changedBalance < betAmount)
+                {
+                    String balance = user.getBalance().toString();
+                    String currentBetAmount = currentBet.getBetAmount().toString();
 
-                return String.format(INSUFFICIENT_FUNDS, mark, balance, mark);
+                    return String.format(INSUFFICIENT_FUNDS_UPDATE, mark, balance, mark, currentBetAmount, mark);
+                }
+
+                user.incrementBalance(currentBet.getBetAmount());
+                user.decrementBalance(betAmount);
+
+                currentBet.setBetAmount(betAmount);
+                currentBet.setTimeMinutes(time);
+
+                database.save(Arrays.asList(currentBet, user));
+
+                return String.format(BET_UPDATE_SUCCESS, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
             }
+            else
+            {
+                if (user.getBalance() < betAmount)
+                {
+                    String balance = user.getBalance().toString();
 
-            ShinyBet newBet = new ShinyBet();
-            newBet.setUser(user);
-            newBet.setPokemonId(pokemon.getId());
-            newBet.setTimeMinutes(time);
-            newBet.setBetAmount(betAmount);
+                    return String.format(INSUFFICIENT_FUNDS, mark, balance, mark);
+                }
 
-            user.decrementBalance(betAmount);
+                ShinyBet newBet = new ShinyBet();
+                newBet.setUser(user);
+                newBet.setPokemonId(pokemon.getId());
+                newBet.setTimeMinutes(time);
+                newBet.setBetAmount(betAmount);
 
-            database.save(Arrays.asList(newBet, user));
+                user.decrementBalance(betAmount);
 
-            return String.format(BET_SUCCESS, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
+                database.save(Arrays.asList(newBet, user));
+
+                return String.format(BET_SUCCESS, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
+            }
         }
         return BET_WRONG_FORMAT;
     }

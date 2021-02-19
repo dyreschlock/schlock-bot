@@ -31,12 +31,19 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
     private static final String BET1_POKEMON = "beedrill";
     private static final Integer BET1_MINUTES = 100;
+    private static final Integer BET1_NEW_MINUTES = 50;
     private static final Integer BET1_AMOUNT = 100;
+    private static final Integer BET1_NEW_AMOUNT = 200;
+    private static final Integer BET1_NEW2_AMOUNT = BALANCE + BET1_AMOUNT;
+    private static final Integer BET1_NEW3_AMOUNT = 200000;
 
     private static final String BET2_POKEMON = "magikarp";
     private static final Integer BET2_MINUTES = 100;
     private static final Integer BET2_AMOUNT = 100;
 
+    private static final String BET3_POKEMON = "zapdos";
+    private static final Integer BET3_MINUTES = 100;
+    private static final Integer BET3_AMOUNT = 200000;
 
     private PokemonService pokemonService;
 
@@ -48,50 +55,86 @@ class ShinyBetServiceImplTest extends DatabaseTest
     @Test
     public void testNewBet()
     {
-        String newBet = "!bet "+ BET2_POKEMON +" "+ BET2_MINUTES +" " + BET2_AMOUNT;
+        final String MARK = getDeploymentContext().getCurrencyMark();
+        Pokemon pokemon2 = pokemonService.getPokemonFromText(BET2_POKEMON);
+
+
+        String newBet = "!bet " + BET2_POKEMON + " " + BET2_MINUTES + " " + BET2_AMOUNT;
 
         String response = impl.processSingleResults(USERNAME1, newBet);
-
-        String mark = getDeploymentContext().getCurrencyMark();
-        Pokemon pokemon = pokemonService.getPokemonFromText(BET2_POKEMON);
-
-        String expected = String.format(ShinyBetServiceImpl.BET_SUCCESS, USERNAME1, pokemon.getName(), BET2_MINUTES.toString(), BET2_AMOUNT.toString(), mark);
+        String expected = String.format(ShinyBetServiceImpl.BET_SUCCESS, USERNAME1, pokemon2.getName(), BET2_MINUTES.toString(), BET2_AMOUNT.toString(), MARK);
 
         assertEquals(expected, response);
 
         user = getDatabase().get(UserDAO.class).getByUsername(user.getUsername());
-
         Integer newBalance = BALANCE - BET2_AMOUNT;
 
         assertEquals(newBalance, user.getBalance());
+
+
+        newBet = "!bet " + BET3_POKEMON + " " + BET3_MINUTES + " " + BET3_AMOUNT;
+
+        response = impl.processSingleResults(USERNAME1, newBet);
+        expected = String.format(ShinyBetServiceImpl.INSUFFICIENT_FUNDS, MARK, user.getBalance().toString(), MARK);
+
+        assertEquals(expected, response);
     }
 
     @Test
     public void testUpdateBet()
     {
+        final String MARK = getDeploymentContext().getCurrencyMark();
+        Pokemon pokemon1 = pokemonService.getPokemonFromText(BET1_POKEMON);
+
         List bets = getDatabase().get(ShinyBetDAO.class).getByUsername(user.getUsername());
 
         assertEquals(1, bets.size());
 
+        String newBet = "!bet " + BET1_POKEMON + " " + BET1_NEW_MINUTES + " " + BET1_NEW_AMOUNT;
 
+        String response = impl.processSingleResults(USERNAME1, newBet);
+        String expected = String.format(ShinyBetServiceImpl.BET_UPDATE_SUCCESS, USERNAME1, pokemon1.getName(), BET1_NEW_MINUTES, BET1_NEW_AMOUNT, MARK);
 
-
+        assertEquals(expected, response);
 
         bets = getDatabase().get(ShinyBetDAO.class).getByUsername(user.getUsername());
+        assertEquals(1, bets.size());
 
+
+        newBet = "!bet " + BET1_POKEMON + " " + BET1_NEW_MINUTES + " " + BET1_NEW2_AMOUNT;
+
+        response = impl.processSingleResults(USERNAME1, newBet);
+        expected = String.format(ShinyBetServiceImpl.BET_UPDATE_SUCCESS, USERNAME1, pokemon1.getName(), BET1_NEW_MINUTES, BET1_NEW2_AMOUNT, MARK);
+
+        assertEquals(expected, response);
+
+        bets = getDatabase().get(ShinyBetDAO.class).getByUsername(user.getUsername());
+        assertEquals(1, bets.size());
+
+
+        newBet = "!bet " + BET1_POKEMON + " " + BET1_NEW_MINUTES + " " + BET1_NEW3_AMOUNT;
+
+        response = impl.processSingleResults(USERNAME1, newBet);
+        expected = String.format(ShinyBetServiceImpl.INSUFFICIENT_FUNDS_UPDATE, MARK, "0", MARK, BET1_NEW2_AMOUNT.toString(), MARK);
+
+        assertEquals(expected, response);
+
+        bets = getDatabase().get(ShinyBetDAO.class).getByUsername(user.getUsername());
         assertEquals(1, bets.size());
     }
 
     @Test
     public void testCurrentBets()
     {
-        String mark = getDeploymentContext().getCurrencyMark();
+        final String MARK = getDeploymentContext().getCurrencyMark();
+        Pokemon pokemon1 = pokemonService.getPokemonFromText(BET1_POKEMON);
+        Pokemon pokemon2 = pokemonService.getPokemonFromText(BET2_POKEMON);
+
 
         List<String> responses = impl.process(USERNAME1, "!currentbets");
 
         assertEquals(1, responses.size());
 
-        Pokemon pokemon1 = pokemonService.getPokemonFromText(BET1_POKEMON);
 
         String response = responses.get(0);
         String expected1 = String.format(ShinyBetServiceImpl.BET_FORMAT,
@@ -99,7 +142,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
                                                                 pokemon1.getName(),
                                                                 BET1_MINUTES,
                                                                 BET1_AMOUNT,
-                                                                mark);
+                                                                MARK);
 
         assertEquals(expected1, response);
 
@@ -107,7 +150,6 @@ class ShinyBetServiceImplTest extends DatabaseTest
         String newBet = "!bet "+ BET2_POKEMON +" "+ BET2_MINUTES +" " + BET2_AMOUNT;
         impl.processSingleResults(USERNAME1, newBet);
 
-        Pokemon pokemon2 = pokemonService.getPokemonFromText(BET2_POKEMON);
 
         responses = impl.process(USERNAME1, "!currentbets");
 
@@ -118,7 +160,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
                                                                 pokemon2.getName(),
                                                                 BET2_MINUTES,
                                                                 BET2_AMOUNT,
-                                                                mark);
+                                                                MARK);
 
         assertTrue(responses.contains(expected1));
         assertTrue(responses.contains(expected2));
