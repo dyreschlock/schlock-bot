@@ -2,11 +2,11 @@ package com.schlock.bot.services.apps.bet.impl;
 
 import com.schlock.bot.services.DatabaseModule;
 import com.schlock.bot.services.DeploymentContext;
-import com.schlock.bot.services.apps.bet.ShinyRegPayoutService;
+import com.schlock.bot.services.apps.bet.ShinyPayoutService;
 
 import java.util.*;
 
-public class ShinyRegPayoutServiceImpl implements ShinyRegPayoutService
+public class ShinyPayoutServiceImpl implements ShinyPayoutService
 {
     private static final String SHINY_GET_COMMAND = "!shinyget ";
 
@@ -14,8 +14,8 @@ public class ShinyRegPayoutServiceImpl implements ShinyRegPayoutService
     private final DeploymentContext context;
 
 
-    public ShinyRegPayoutServiceImpl(DatabaseModule database,
-                                     DeploymentContext context)
+    public ShinyPayoutServiceImpl(DatabaseModule database,
+                                  DeploymentContext context)
     {
         this.database = database;
         this.context = context;
@@ -40,7 +40,8 @@ public class ShinyRegPayoutServiceImpl implements ShinyRegPayoutService
         String admin = context.getOwnerUsername();
 
         String command = in.toLowerCase().trim();
-        if (command.startsWith(SHINY_GET_COMMAND))
+        if (username.equals(admin) &&
+                command.startsWith(SHINY_GET_COMMAND))
         {
 
         }

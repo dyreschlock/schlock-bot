@@ -5,9 +5,9 @@ import com.schlock.bot.services.DeploymentContext;
 import com.schlock.bot.services.ListenerService;
 import com.schlock.bot.services.apps.UserService;
 import com.schlock.bot.services.apps.bet.ShinyBetService;
-import com.schlock.bot.services.apps.bet.ShinyRegPayoutService;
+import com.schlock.bot.services.apps.bet.ShinyPayoutService;
 import com.schlock.bot.services.apps.bet.impl.ShinyBetServiceImpl;
-import com.schlock.bot.services.apps.bet.impl.ShinyRegPayoutServiceImpl;
+import com.schlock.bot.services.apps.bet.impl.ShinyPayoutServiceImpl;
 import com.schlock.bot.services.apps.guess.GuessingService;
 import com.schlock.bot.services.apps.guess.impl.GuessingServiceImpl;
 import com.schlock.bot.services.apps.impl.UserServiceImpl;
@@ -30,7 +30,7 @@ public class BotStartup
     private ShinyBetService shinyBetService;
     private GuessingService guessingService;
     private ShinyInfoService shinyInfoService;
-    private ShinyRegPayoutService shinyRegPayoutService;
+    private ShinyPayoutService shinyPayoutService;
 
     private DeploymentContext deploymentContext;
 
@@ -54,7 +54,7 @@ public class BotStartup
         listeners.add(shinyBetService);
         listeners.add(guessingService);
         listeners.add(shinyInfoService);
-        listeners.add(shinyRegPayoutService);
+        listeners.add(shinyPayoutService);
 
 //        discordBot = new DiscordBot(listeners, deploymentContext);
 //        discordBot.startup();
@@ -86,7 +86,7 @@ public class BotStartup
         guessingService = new GuessingServiceImpl(pokemonService, userService, database, deploymentContext);
         shinyInfoService = new ShinyInfoServiceImpl(pokemonService, database, deploymentContext);
 
-        shinyRegPayoutService = new ShinyRegPayoutServiceImpl(database, deploymentContext);
+        shinyPayoutService = new ShinyPayoutServiceImpl(database, deploymentContext);
     }
 
 

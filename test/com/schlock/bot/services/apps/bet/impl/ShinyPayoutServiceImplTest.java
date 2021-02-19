@@ -11,9 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class ShinyRegPayoutServiceImplTest extends DatabaseTest
+class ShinyPayoutServiceImplTest extends DatabaseTest
 {
     private static final Integer BALANCE = 10000;
 
@@ -33,7 +31,7 @@ class ShinyRegPayoutServiceImplTest extends DatabaseTest
     private static final Integer BET3_MINUTES = 110;
     private static final Integer BET3_AMOUNT = 100;
 
-    private ShinyRegPayoutServiceImpl impl;
+    private ShinyPayoutServiceImpl impl;
 
     private User user1;
     private User user2;
@@ -45,7 +43,7 @@ class ShinyRegPayoutServiceImplTest extends DatabaseTest
 
 
     @Test
-    public void testUsecase1()
+    public void testUseCase1()
     {
 
     }
