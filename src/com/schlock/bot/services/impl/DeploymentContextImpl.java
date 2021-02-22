@@ -19,9 +19,9 @@ public class DeploymentContextImpl implements DeploymentContext
 
     private static final String QUIZ_CORRECT_POINTS = "quiz.correct.points";
 
-    private static final String BETS_POKEMON_WIN_FACTOR = "";
-    private static final String BETS_TIME_WIN_FACTOR = "";
-    private static final String BETS_BOTH_WIN_FACTOR = "";
+    private static final String BETS_POKEMON_WIN_FACTOR = "bets.win.factor.pokemon";
+    private static final String BETS_TIME_WIN_FACTOR = "bets.win.factor.time";
+    private static final String BETS_BOTH_WIN_FACTOR = "bets.win.factor.both";
 
     private static final String ONWER_USERNAME = "owner.username";
 
