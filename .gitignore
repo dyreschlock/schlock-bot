@@ -9,3 +9,4 @@ schlock-bot.iml
 schlock-bot.ipr
 schlock-bot.iws
 src/deploy.properties
+web/wheel
