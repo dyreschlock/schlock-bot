@@ -2,6 +2,7 @@ package com.schlock.bot.entities.apps.bet;
 
 import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.entities.apps.User;
+import com.schlock.bot.entities.apps.pokemon.ShinyGet;
 
 import javax.persistence.*;
 
@@ -17,6 +18,11 @@ public class ShinyBet extends Persisted
     @JoinColumn(name = "user_id",
                     foreignKey = @ForeignKey(name = "USER_ID_FK"))
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "shiny",
+                    foreignKey = @ForeignKey(name = "SHINY_GET_ID_FK"))
+    private ShinyGet shiny;
 
     @Column(name = "pokemonId")
     private String pokemonId;
@@ -50,6 +56,16 @@ public class ShinyBet extends Persisted
     public void setUser(User user)
     {
         this.user = user;
+    }
+
+    public ShinyGet getShiny()
+    {
+        return shiny;
+    }
+
+    public void setShiny(ShinyGet shiny)
+    {
+        this.shiny = shiny;
     }
 
     public String getPokemonId()

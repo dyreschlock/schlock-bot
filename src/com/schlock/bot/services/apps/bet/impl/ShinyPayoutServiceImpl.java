@@ -79,7 +79,6 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
             }
 
             List<Persisted> tobeSaved = new ArrayList<>();
-            List<Persisted> tobeDeleted = new ArrayList<>();
 
             tobeSaved.add(get);
 
@@ -88,7 +87,7 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
             Set<String> usersWinningTime = new HashSet<>();
             Set<String> usersWinningBoth = new HashSet<>();
 
-            List<ShinyBet> bets = database.get(ShinyBetDAO.class).getAll();
+            List<ShinyBet> bets = database.get(ShinyBetDAO.class).getAllCurrent();
             if (bets.size() == 0)
             {
                 database.save(tobeSaved);
@@ -99,6 +98,9 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
             Integer closestRange = calculateClosestRange(get.getTimeInMinutes(), bets);
             for (ShinyBet bet : bets)
             {
+                bet.setShiny(get);
+                tobeSaved.add(bet);
+
                 boolean winningPokemon = isWinningPokemon(bet, get.getPokemonId());
                 boolean winningTime = isWinningTime(bet, get.getTimeInMinutes(), closestRange);
 
@@ -162,11 +164,7 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
                 tobeSaved.add(user);
             }
 
-
-            tobeDeleted.addAll(bets);
-
             database.save(tobeSaved);
-            database.delete(tobeDeleted);
 
             return responses;
         }

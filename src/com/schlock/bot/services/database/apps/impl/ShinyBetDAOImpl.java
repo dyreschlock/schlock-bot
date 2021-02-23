@@ -22,7 +22,8 @@ public class ShinyBetDAOImpl extends BaseDAOImpl<ShinyBet> implements ShinyBetDA
         String text = " select b " +
                         " from ShinyBet b " +
                         " join b.user u " +
-                        " where u.username = :name ";
+                        " where u.username = :name " +
+                        " and b.shiny is null ";
 
         Session session = getSessionFactory().openSession();
         session.beginTransaction();
@@ -44,7 +45,8 @@ public class ShinyBetDAOImpl extends BaseDAOImpl<ShinyBet> implements ShinyBetDA
                         " from ShinyBet b " +
                         " join b.user u " +
                         " where u.username = :name " +
-                        " and b.pokemonId = :pokemon ";
+                        " and b.pokemonId = :pokemon " +
+                        " and b.shiny is null ";
 
         Session session = getSessionFactory().openSession();
         session.beginTransaction();
@@ -59,5 +61,23 @@ public class ShinyBetDAOImpl extends BaseDAOImpl<ShinyBet> implements ShinyBetDA
         session.close();
 
         return bet;
+    }
+
+    public List<ShinyBet> getAllCurrent()
+    {
+        String text = " from ShinyBet b" +
+                        " where b.shiny is null ";
+
+        Session session = getSessionFactory().openSession();
+        session.beginTransaction();
+
+        Query query = session.createQuery(text, ShinyBet.class);
+
+        List<ShinyBet> bets = query.getResultList();
+
+        session.getTransaction().commit();
+        session.close();
+
+        return bets;
     }
 }

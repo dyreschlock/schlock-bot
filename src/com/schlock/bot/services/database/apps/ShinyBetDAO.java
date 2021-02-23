@@ -11,4 +11,6 @@ public interface ShinyBetDAO extends BaseDAO<ShinyBet>
     List<ShinyBet> getByUsername(String username);
 
     ShinyBet getByUsernameAndPokemon(String username, String pokemon);
+
+    List<ShinyBet> getAllCurrent();
 }
