@@ -1,9 +1,9 @@
 package com.schlock.bot;
 
 import com.schlock.bot.services.DeploymentContext;
-import com.schlock.bot.services.ListenerService;
-import com.schlock.bot.twitch.ChangeColorOnJoin;
-import com.schlock.bot.twitch.Commands;
+import com.schlock.bot.services.bot.ListenerService;
+import com.schlock.bot.services.bot.twitch.ChangeColorOnJoin;
+import com.schlock.bot.services.bot.twitch.Commands;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.cap.EnableCapHandler;
