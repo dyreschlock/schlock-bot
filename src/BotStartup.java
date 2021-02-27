@@ -1,7 +1,7 @@
 import com.schlock.bot.Bot;
 import com.schlock.bot.TwitchBot;
 import com.schlock.bot.services.DatabaseModule;
-import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.ListenerService;
 import com.schlock.bot.services.bot.UserService;
 import com.schlock.bot.services.bot.apps.bet.ShinyBetService;
@@ -15,7 +15,7 @@ import com.schlock.bot.services.bot.apps.pokemon.ShinyInfoService;
 import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonServiceImpl;
 import com.schlock.bot.services.bot.apps.pokemon.impl.ShinyInfoServiceImpl;
 import com.schlock.bot.services.bot.impl.UserServiceImpl;
-import com.schlock.bot.services.impl.DeploymentContextImpl;
+import com.schlock.bot.services.impl.DeploymentConfigurationImpl;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,7 +32,7 @@ public class BotStartup
     private ShinyInfoService shinyInfoService;
     private ShinyPayoutService shinyPayoutService;
 
-    private DeploymentContext deploymentContext;
+    private DeploymentConfiguration configuration;
 
     private Bot discordBot;
     private Bot twitchBot;
@@ -44,7 +44,7 @@ public class BotStartup
 
     public void run(String contextFlag) throws Exception
     {
-        initializeDeploymentContext(contextFlag);
+        initializeDeploymentConfiguration(contextFlag);
         initializeDatabase();
         initializeServices();
 
@@ -56,37 +56,37 @@ public class BotStartup
         listeners.add(shinyInfoService);
         listeners.add(shinyPayoutService);
 
-//        discordBot = new DiscordBot(listeners, deploymentContext);
+//        discordBot = new DiscordBot(listeners, configuration);
 //        discordBot.startup();
 
-        twitchBot = new TwitchBot(listeners, deploymentContext);
+        twitchBot = new TwitchBot(listeners, configuration);
         twitchBot.startup();
 
         String temp = "";
     }
 
-    private void initializeDeploymentContext(String contextFlag) throws Exception
+    private void initializeDeploymentConfiguration(String contextFlag) throws Exception
     {
-        deploymentContext = new DeploymentContextImpl(contextFlag);
-        deploymentContext.loadProperties();
+        configuration = new DeploymentConfigurationImpl(contextFlag);
+        configuration.loadProperties();
     }
 
     private void initializeDatabase() throws Exception
     {
-        database = new DatabaseModule(deploymentContext);
+        database = new DatabaseModule(configuration);
         database.setup();
     }
 
     private void initializeServices()
     {
-        userService = new UserServiceImpl(database, deploymentContext);
-        pokemonService = new PokemonServiceImpl(deploymentContext);
+        userService = new UserServiceImpl(database, configuration);
+        pokemonService = new PokemonServiceImpl(configuration);
 
-        shinyBetService = new ShinyBetServiceImpl(pokemonService, userService, database, deploymentContext);
-        guessingService = new GuessingServiceImpl(pokemonService, userService, database, deploymentContext);
-        shinyInfoService = new ShinyInfoServiceImpl(pokemonService, database, deploymentContext);
+        shinyBetService = new ShinyBetServiceImpl(pokemonService, userService, database, configuration);
+        guessingService = new GuessingServiceImpl(pokemonService, userService, database, configuration);
+        shinyInfoService = new ShinyInfoServiceImpl(pokemonService, database, configuration);
 
-        shinyPayoutService = new ShinyPayoutServiceImpl(pokemonService,  database, deploymentContext);
+        shinyPayoutService = new ShinyPayoutServiceImpl(pokemonService,  database, configuration);
     }
 
 
@@ -105,8 +105,8 @@ public class BotStartup
         }
 
         String context = args[0];
-        if (DeploymentContext.HOSTED.equals(context) ||
-                DeploymentContext.LOCAL.equals(context))
+        if (DeploymentConfiguration.HOSTED.equals(context) ||
+                DeploymentConfiguration.LOCAL.equals(context))
         {
             return context;
         }

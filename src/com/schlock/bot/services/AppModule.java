@@ -1,7 +1,7 @@
 package com.schlock.bot.services;
 
 import com.schlock.bot.services.bot.DiscordBotModule;
-import com.schlock.bot.services.impl.DeploymentContextImpl;
+import com.schlock.bot.services.impl.DeploymentConfigurationImpl;
 import com.schlock.bot.services.bot.TwitchBotModule;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.ImportModule;
@@ -15,7 +15,7 @@ public class AppModule
 {
     public static void bind(ServiceBinder binder)
     {
-        binder.bind(DeploymentContext.class, DeploymentContextImpl.class);
+        binder.bind(DeploymentConfiguration.class, DeploymentConfigurationImpl.class);
 
         String temp = "";
     }

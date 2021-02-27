@@ -1,13 +1,13 @@
 package com.schlock.bot.services.impl;
 
-import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.DeploymentConfiguration;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-public class DeploymentContextImpl implements DeploymentContext
+public class DeploymentConfigurationImpl implements DeploymentConfiguration
 {
     private static final String CONFIG_PROPERTIES = "config.properties";
     private static final String DEPLOY_PROPERTIES = "deploy.properties";
@@ -39,7 +39,7 @@ public class DeploymentContextImpl implements DeploymentContext
 
     private final Properties properties = new Properties();
 
-    public DeploymentContextImpl(String context)
+    public DeploymentConfigurationImpl(String context)
     {
         this.context = context;
     }

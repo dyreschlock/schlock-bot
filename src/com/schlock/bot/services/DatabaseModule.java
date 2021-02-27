@@ -19,15 +19,15 @@ import java.util.*;
 
 public class DatabaseModule
 {
-    private final DeploymentContext context;
+    private final DeploymentConfiguration config;
 
     private SessionFactory sessionFactory;
 
     private Map<Class, BaseDAO> daos = new HashMap<>();
 
-    public DatabaseModule(DeploymentContext context)
+    public DatabaseModule(DeploymentConfiguration config)
     {
-        this.context = context;
+        this.config = config;
     }
 
     private void createDAOs()
@@ -102,9 +102,9 @@ public class DatabaseModule
 
     public void setup() throws Exception
     {
-        final String username = context.getHibernateProperty(HIBERNATE_USERNAME);
-        final String password = context.getHibernateProperty(HIBERNATE_PASSWORD);
-        final String url = context.getHibernateProperty(HIBERNATE_URL) + "?characterEncoding=utf-8";
+        final String username = config.getHibernateProperty(HIBERNATE_USERNAME);
+        final String password = config.getHibernateProperty(HIBERNATE_PASSWORD);
+        final String url = config.getHibernateProperty(HIBERNATE_URL) + "?characterEncoding=utf-8";
 
 
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();

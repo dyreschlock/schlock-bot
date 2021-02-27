@@ -3,7 +3,7 @@ package com.schlock.bot.services;
 import java.io.IOException;
 import java.util.HashMap;
 
-public interface DeploymentContext
+public interface DeploymentConfiguration
 {
     String LOCAL = "local";
     String HOSTED = "hosted";

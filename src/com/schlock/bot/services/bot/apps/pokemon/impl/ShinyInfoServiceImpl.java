@@ -5,7 +5,7 @@ import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
 import com.schlock.bot.entities.apps.pokemon.ShinyGetUtils;
 import com.schlock.bot.services.DatabaseModule;
-import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.ShinyInfoService;
 import com.schlock.bot.services.database.apps.ShinyGetDAO;
@@ -25,18 +25,18 @@ public class ShinyInfoServiceImpl implements ShinyInfoService
     public static final String AVERAGE_COMMAND = "!shinyaverage";
     private static final String AVERAGE_CHECKS_COMMAND = "!shinychecks";
 
-    private final DeploymentContext context;
+    private final DeploymentConfiguration config;
     private final DatabaseModule database;
 
     private final PokemonService pokemonService;
 
     public ShinyInfoServiceImpl(PokemonService pokemonService,
                                 DatabaseModule database,
-                                DeploymentContext context)
+                                DeploymentConfiguration config)
     {
         this.pokemonService = pokemonService;
         this.database = database;
-        this.context = context;
+        this.config = config;
     }
 
     public boolean isAcceptRequest(String username, String in)

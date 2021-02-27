@@ -2,7 +2,7 @@ package com.schlock.bot.services.bot.apps.pokemon.impl;
 
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.PokemonUtils;
-import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -27,15 +27,15 @@ public class PokemonServiceImpl implements PokemonService
 
     private static final String RANDOM = "random";
 
-    private final DeploymentContext context;
+    private final DeploymentConfiguration config;
 
     private Map<Integer, Pokemon> pokemonByNumber;
     private Map<String, Pokemon> pokemonByName;
 
 
-    public PokemonServiceImpl(DeploymentContext context)
+    public PokemonServiceImpl(DeploymentConfiguration config)
     {
-        this.context = context;
+        this.config = config;
     }
 
     public boolean isAcceptRequest(String username, String in)
@@ -298,7 +298,7 @@ public class PokemonServiceImpl implements PokemonService
 
     private void loadPokemon()
     {
-        String fileLocation = context.getDataDirectory() + LIST_OF_POKEMON_FILE;
+        String fileLocation = config.getDataDirectory() + LIST_OF_POKEMON_FILE;
 
         Document htmlFile = null;
         try

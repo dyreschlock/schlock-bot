@@ -1,18 +1,18 @@
 package com.schlock.bot.services.database;
 
 import com.schlock.bot.services.DatabaseModule;
-import com.schlock.bot.services.DeploymentContext;
-import com.schlock.bot.services.impl.DeploymentContextImpl;
+import com.schlock.bot.services.DeploymentConfiguration;
+import com.schlock.bot.services.impl.DeploymentConfigurationImpl;
 
 public abstract class DatabaseTest
 {
-    private DeploymentContext context;
+    private DeploymentConfiguration config;
     private DatabaseModule database;
 
 
-    protected DeploymentContext getDeploymentContext()
+    protected DeploymentConfiguration getDeploymentConfiguration()
     {
-        return context;
+        return config;
     }
 
     protected DatabaseModule getDatabase()
@@ -22,15 +22,15 @@ public abstract class DatabaseTest
 
     protected void setupDatabase() throws Exception
     {
-        context = createDeploymentContext();
-        context.loadProperties();
+        config = createDeploymentConfiguration();
+        config.loadProperties();
 
-        database = new DatabaseModule(context);
+        database = new DatabaseModule(config);
         database.setup();
     }
 
-    protected DeploymentContext createDeploymentContext()
+    protected DeploymentConfiguration createDeploymentConfiguration()
     {
-        return new DeploymentContextImpl(DeploymentContext.TEST);
+        return new DeploymentConfigurationImpl(DeploymentConfiguration.TEST);
     }
 }

@@ -5,7 +5,7 @@ import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.services.DatabaseModule;
-import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.ListenerService;
 import com.schlock.bot.services.bot.UserService;
 import com.schlock.bot.services.bot.impl.UserServiceImpl;
@@ -56,7 +56,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
     @Test
     public void testNewBet()
     {
-        final String MARK = getDeploymentContext().getCurrencyMark();
+        final String MARK = getDeploymentConfiguration().getCurrencyMark();
         Pokemon pokemon2 = pokemonService.getPokemonFromText(BET2_POKEMON);
 
 
@@ -84,7 +84,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
     @Test
     public void testUpdateBet()
     {
-        final String MARK = getDeploymentContext().getCurrencyMark();
+        final String MARK = getDeploymentConfiguration().getCurrencyMark();
         Pokemon pokemon1 = pokemonService.getPokemonFromText(BET1_POKEMON);
 
         List bets = getDatabase().get(ShinyBetDAO.class).getByUsername(user.getUsername());
@@ -127,7 +127,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
     @Test
     public void testCurrentBets()
     {
-        final String MARK = getDeploymentContext().getCurrencyMark();
+        final String MARK = getDeploymentConfiguration().getCurrencyMark();
         Pokemon pokemon1 = pokemonService.getPokemonFromText(BET1_POKEMON);
         Pokemon pokemon2 = pokemonService.getPokemonFromText(BET2_POKEMON);
 
@@ -232,7 +232,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         final String OPEN_BETS = "!openbets";
         final String CLOSE_BETS = "!closebets";
 
-        final String ADMIN = getDeploymentContext().getOwnerUsername();
+        final String ADMIN = getDeploymentConfiguration().getOwnerUsername();
 
         String bet = "!bet " + BET1_POKEMON + " " + BET1_MINUTES + " " + BET1_AMOUNT;
 
@@ -278,13 +278,13 @@ class ShinyBetServiceImplTest extends DatabaseTest
         setupDatabase();
         createTestObjects();
 
-        DeploymentContext context = getDeploymentContext();
+        DeploymentConfiguration config = getDeploymentConfiguration();
         DatabaseModule database = getDatabase();
 
-        pokemonService = new PokemonServiceImpl(context);
-        UserService userService = new UserServiceImpl(database, context);
+        pokemonService = new PokemonServiceImpl(config);
+        UserService userService = new UserServiceImpl(database, config);
 
-        impl = new ShinyBetServiceImpl(pokemonService, userService, database, context);
+        impl = new ShinyBetServiceImpl(pokemonService, userService, database, config);
         impl.openBetting();
     }
 

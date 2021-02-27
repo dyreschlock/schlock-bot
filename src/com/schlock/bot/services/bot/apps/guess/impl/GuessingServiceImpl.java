@@ -4,7 +4,7 @@ import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.PokemonUtils;
 import com.schlock.bot.services.DatabaseModule;
-import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.UserService;
 import com.schlock.bot.services.bot.apps.guess.GuessingService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
@@ -23,20 +23,20 @@ public class GuessingServiceImpl implements GuessingService
     private final UserService userService;
 
     private final DatabaseModule database;
-    private final DeploymentContext context;
+    private final DeploymentConfiguration config;
 
     protected Pokemon currentPokemon;
 
     public GuessingServiceImpl(PokemonService pokemonService,
                                UserService userService,
                                DatabaseModule database,
-                               DeploymentContext context)
+                               DeploymentConfiguration config)
     {
         this.pokemonService = pokemonService;
         this.userService = userService;
 
         this.database = database;
-        this.context = context;
+        this.config = config;
     }
 
     public boolean isAcceptRequest(String username, String message)
@@ -106,8 +106,8 @@ public class GuessingServiceImpl implements GuessingService
 
     private String processWinner(String username)
     {
-        Integer points = context.getQuizCorrectPoints();
-        String mark = context.getCurrencyMark();
+        Integer points = config.getQuizCorrectPoints();
+        String mark = config.getCurrencyMark();
 
         User user = userService.getUser(username);
         user.incrementBalance(points);

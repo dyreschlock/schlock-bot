@@ -1,7 +1,7 @@
 package com.schlock.bot.services.bot.twitch;
 
 import com.schlock.bot.Bot;
-import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.ListenerService;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -14,14 +14,14 @@ public class Commands extends ListenerAdapter
 {
     private final Set<ListenerService> listeners;
 
-    private final DeploymentContext context;
+    private final DeploymentConfiguration config;
 
     public Commands(Set<ListenerService> listeners,
-                    DeploymentContext context)
+                    DeploymentConfiguration config)
     {
         this.listeners = listeners;
 
-        this.context = context;
+        this.config = config;
     }
 
     public void onMessage(MessageEvent event) throws Exception
@@ -55,7 +55,7 @@ public class Commands extends ListenerAdapter
             }
         }
 
-        HashMap<String, String> commands = context.getListenerCommands();
+        HashMap<String, String> commands = config.getListenerCommands();
         for (String command : commands.keySet())
         {
             if (message.startsWith(command))

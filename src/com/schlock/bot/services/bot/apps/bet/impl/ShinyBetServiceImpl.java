@@ -5,7 +5,7 @@ import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.services.DatabaseModule;
-import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.UserService;
 import com.schlock.bot.services.bot.apps.bet.ShinyBetService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
@@ -49,7 +49,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
     private final DatabaseModule database;
 
-    private final DeploymentContext deploymentContext;
+    private final DeploymentConfiguration config;
 
 
     private boolean bettingCurrentOpen = false;
@@ -57,14 +57,14 @@ public class ShinyBetServiceImpl implements ShinyBetService
     public ShinyBetServiceImpl(PokemonService pokemonService,
                                UserService userService,
                                DatabaseModule database,
-                               DeploymentContext deploymentContext)
+                               DeploymentConfiguration config)
     {
         this.pokemonService = pokemonService;
         this.userService = userService;
 
         this.database = database;
 
-        this.deploymentContext = deploymentContext;
+        this.config = config;
     }
 
     public boolean isAcceptRequest(String username, String in)
@@ -74,7 +74,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
             if (in.toLowerCase().startsWith(OPEN_BETTING) ||
                     in.toLowerCase().startsWith(CLOSE_BETTING))
             {
-                String admin = deploymentContext.getOwnerUsername();
+                String admin = config.getOwnerUsername();
                 return username.equals(admin);
             }
 
@@ -104,7 +104,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
     public String processSingleResults(String username, String command)
     {
-        String owner = deploymentContext.getOwnerUsername();
+        String owner = config.getOwnerUsername();
         if (command.startsWith(OPEN_BETTING))
         {
             if (!username.equals(owner))
@@ -159,7 +159,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
                                                 pokemon.getName(),
                                                 bet.getTimeMinutes().toString(),
                                                 bet.getBetAmount().toString(),
-                                                deploymentContext.getCurrencyMark());
+                                                config.getCurrencyMark());
 
             responses.add(response);
         }
@@ -176,7 +176,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
         if (pokemon != null && time != null && betAmount != null)
         {
-            String mark = deploymentContext.getCurrencyMark();
+            String mark = config.getCurrencyMark();
             User user = userService.getUser(username);
 
             ShinyBet currentBet = database.get(ShinyBetDAO.class).getByUsernameAndPokemon(username, pokemon.getId());

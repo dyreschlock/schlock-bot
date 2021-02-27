@@ -4,7 +4,7 @@ import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.PokemonUtils;
 import com.schlock.bot.services.DatabaseModule;
-import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.impl.UserServiceImpl;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonServiceImpl;
@@ -39,10 +39,10 @@ class GuessingServiceImplTest extends DatabaseTest
     @Test
     public void testUsecase()
     {
-        final String ADMIN = getDeploymentContext().getOwnerUsername();
+        final String ADMIN = getDeploymentConfiguration().getOwnerUsername();
 
-        final String MARK = getDeploymentContext().getCurrencyMark();
-        final String POINTS = getDeploymentContext().getQuizCorrectPoints().toString();
+        final String MARK = getDeploymentConfiguration().getCurrencyMark();
+        final String POINTS = getDeploymentConfiguration().getQuizCorrectPoints().toString();
 
 
         //start the game
@@ -71,7 +71,7 @@ class GuessingServiceImplTest extends DatabaseTest
         User admin = userService.getUser(ADMIN);
 
         Integer currentBalance = admin.getBalance();
-        Integer expectedBalance = getDeploymentContext().getUserDefaultBalance() + getDeploymentContext().getQuizCorrectPoints();
+        Integer expectedBalance = getDeploymentConfiguration().getUserDefaultBalance() + getDeploymentConfiguration().getQuizCorrectPoints();
 
         assertEquals(expectedBalance, currentBalance);
 
@@ -96,7 +96,7 @@ class GuessingServiceImplTest extends DatabaseTest
         testUser1 = userService.getUser(USERNAME1);
 
         currentBalance = testUser1.getBalance();
-        expectedBalance = DEFAULT_BALANCE + getDeploymentContext().getQuizCorrectPoints();
+        expectedBalance = DEFAULT_BALANCE + getDeploymentConfiguration().getQuizCorrectPoints();
 
         assertEquals(currentBalance, expectedBalance);
 
@@ -118,10 +118,10 @@ class GuessingServiceImplTest extends DatabaseTest
 
     private void setupServices()
     {
-        DeploymentContext context = getDeploymentContext();
+        DeploymentConfiguration config = getDeploymentConfiguration();
         DatabaseModule database = getDatabase();
 
-        PokemonService pokemonService = new PokemonServiceImpl(context)
+        PokemonService pokemonService = new PokemonServiceImpl(config)
         {
             public Pokemon getRandomPokemon()
             {
@@ -139,9 +139,9 @@ class GuessingServiceImplTest extends DatabaseTest
             }
         };
 
-        userService = new UserServiceImpl(database, context);
+        userService = new UserServiceImpl(database, config);
 
-        impl = new GuessingServiceImpl(pokemonService, userService, database, context);
+        impl = new GuessingServiceImpl(pokemonService, userService, database, config);
     }
 
     private void createTestObjects()
@@ -163,7 +163,7 @@ class GuessingServiceImplTest extends DatabaseTest
     {
         getDatabase().delete(testUser1);
 
-        final String ADMIN = getDeploymentContext().getOwnerUsername();
+        final String ADMIN = getDeploymentConfiguration().getOwnerUsername();
         User admin = getDatabase().get(UserDAO.class).getByUsername(ADMIN);
 
         getDatabase().delete(admin);

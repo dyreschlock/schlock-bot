@@ -1,6 +1,6 @@
 package com.schlock.bot;
 
-import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.ListenerService;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
@@ -18,14 +18,14 @@ import java.util.Set;
 public class DiscordBot extends AbstractBot
 {
     public DiscordBot(Set<ListenerService> listeners,
-                      DeploymentContext context)
+                      DeploymentConfiguration config)
     {
-        super(listeners, context);
+        super(listeners, config);
     }
 
     public void startup()
     {
-        final String TOKEN = getContext().getDiscordToken();
+        final String TOKEN = getConfig().getDiscordToken();
 
         GatewayDiscordClient client = DiscordClientBuilder.create(TOKEN)
                 .build()
@@ -77,7 +77,7 @@ public class DiscordBot extends AbstractBot
 
     public void listenForCommands(GatewayDiscordClient client)
     {
-        HashMap<String, String> commands = getContext().getListenerCommands();
+        HashMap<String, String> commands = getConfig().getListenerCommands();
 
         for (String command : commands.keySet())
         {

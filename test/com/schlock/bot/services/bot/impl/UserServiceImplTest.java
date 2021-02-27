@@ -32,7 +32,7 @@ class UserServiceImplTest extends DatabaseTest
 
         assertEquals(expected, response);
 
-        String defaultBalance = getDeploymentContext().getUserDefaultBalance().toString();
+        String defaultBalance = getDeploymentConfiguration().getUserDefaultBalance().toString();
 
         response = impl.processSingleResult(USERNAME2, "!balance");
         expected = USERNAME2 + " your balance is " + defaultBalance + getMark();
@@ -42,7 +42,7 @@ class UserServiceImplTest extends DatabaseTest
 
     private String getMark()
     {
-        return getDeploymentContext().getCurrencyMark();
+        return getDeploymentConfiguration().getCurrencyMark();
     }
 
     @BeforeEach
@@ -51,7 +51,7 @@ class UserServiceImplTest extends DatabaseTest
         setupDatabase();
         createTestObjects();
 
-        impl = new UserServiceImpl(getDatabase(), getDeploymentContext());
+        impl = new UserServiceImpl(getDatabase(), getDeploymentConfiguration());
     }
 
     @AfterEach

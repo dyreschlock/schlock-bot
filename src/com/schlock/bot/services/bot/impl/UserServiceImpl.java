@@ -2,7 +2,7 @@ package com.schlock.bot.services.bot.impl;
 
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.services.DatabaseModule;
-import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.UserService;
 import com.schlock.bot.services.database.apps.UserDAO;
 
@@ -17,18 +17,18 @@ public class UserServiceImpl implements UserService
 
     private final DatabaseModule database;
 
-    private final DeploymentContext context;
+    private final DeploymentConfiguration config;
 
     public UserServiceImpl(DatabaseModule database,
-                           DeploymentContext context)
+                           DeploymentConfiguration config)
     {
         this.database = database;
-        this.context = context;
+        this.config = config;
     }
 
     private String getGivePointsCommand()
     {
-        return String.format(GIVEPOINTS_COMMAND, context.getTwitchBotName());
+        return String.format(GIVEPOINTS_COMMAND, config.getTwitchBotName());
     }
 
     public boolean isAcceptRequest(String username, String in)
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService
         User user = getUser(username);
 
         String balance = user.getBalance().toString();
-        return String.format(BALANCE_RETURN_FORMAT, username, balance, context.getCurrencyMark());
+        return String.format(BALANCE_RETURN_FORMAT, username, balance, config.getCurrencyMark());
     }
 
     private static final String GIVE_WRONG_MESSAGE = "Wrong format, please use '!givepoints %s 123";
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService
         }
         catch (NumberFormatException e)
         {
-            return String.format(GIVE_WRONG_MESSAGE, context.getTwitchBotName());
+            return String.format(GIVE_WRONG_MESSAGE, config.getTwitchBotName());
         }
 
         User user = getUser(username);
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService
 
         database.save(user);
 
-        String message = String.format(GIVE_POINTS_ADDED_MESSAGE, points.toString(), context.getCurrencyMark(), username, user.getBalance().toString());
+        String message = String.format(GIVE_POINTS_ADDED_MESSAGE, points.toString(), config.getCurrencyMark(), username, user.getBalance().toString());
         return message;
     }
 
@@ -146,7 +146,7 @@ public class UserServiceImpl implements UserService
     private User createNewUser(String username)
     {
         User user = new User(username);
-        user.setBalance(context.getUserDefaultBalance());
+        user.setBalance(config.getUserDefaultBalance());
 
         database.save(user);
 

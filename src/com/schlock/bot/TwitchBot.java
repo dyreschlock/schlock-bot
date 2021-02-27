@@ -1,6 +1,6 @@
 package com.schlock.bot;
 
-import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.ListenerService;
 import com.schlock.bot.services.bot.twitch.ChangeColorOnJoin;
 import com.schlock.bot.services.bot.twitch.Commands;
@@ -21,19 +21,19 @@ public class TwitchBot extends AbstractBot
     private final ListenerAdapter changeColor;
 
     public TwitchBot(Set<ListenerService> listeners,
-                     DeploymentContext context)
+                     DeploymentConfiguration config)
     {
-        super(listeners, context);
+        super(listeners, config);
 
-        commands = new Commands(listeners, context);
-        changeColor = new ChangeColorOnJoin(context);
+        commands = new Commands(listeners, config);
+        changeColor = new ChangeColorOnJoin(config);
     }
 
     public void startup() throws Exception
     {
-        String botName = getContext().getTwitchBotName();
-        String oauth = getContext().getTwitchOAuthToken();
-        String channel = getContext().getTwitchChannel();
+        String botName = getConfig().getTwitchBotName();
+        String oauth = getConfig().getTwitchOAuthToken();
+        String channel = getConfig().getTwitchChannel();
 
         configuration = new Configuration.Builder()
                 .setName(botName)

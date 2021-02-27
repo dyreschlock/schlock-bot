@@ -5,13 +5,13 @@ import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
 import com.schlock.bot.services.DatabaseModule;
-import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonServiceImpl;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.apps.ShinyGetDAO;
 import com.schlock.bot.services.database.apps.UserDAO;
-import com.schlock.bot.services.impl.DeploymentContextImpl;
+import com.schlock.bot.services.impl.DeploymentConfigurationImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,8 +61,8 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
     @Test
     public void testUseCase1()
     {
-        final String ADMIN = getDeploymentContext().getOwnerUsername();
-        final String MARK = getDeploymentContext().getCurrencyMark();
+        final String ADMIN = getDeploymentConfiguration().getOwnerUsername();
+        final String MARK = getDeploymentConfiguration().getCurrencyMark();
         final String GET = "!shinyget catch beedrill 100";
 
         List<String> responses = impl.process(USERNAME1, GET);
@@ -118,12 +118,12 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         setupDatabase();
         createTestObjects();
 
-        DeploymentContext context = getDeploymentContext();
+        DeploymentConfiguration config = getDeploymentConfiguration();
         DatabaseModule database = getDatabase();
 
-        PokemonService pokemonService = new PokemonServiceImpl(context);
+        PokemonService pokemonService = new PokemonServiceImpl(config);
 
-        impl = new ShinyPayoutServiceImpl(pokemonService, database, context);
+        impl = new ShinyPayoutServiceImpl(pokemonService, database, config);
     }
 
     private void createTestObjects()
@@ -164,9 +164,9 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         getDatabase().save(objects);
     }
 
-    protected DeploymentContext createDeploymentContext()
+    protected DeploymentConfiguration createDeploymentConfiguration()
     {
-        return new DeploymentContextImpl(DeploymentContext.TEST)
+        return new DeploymentConfigurationImpl(DeploymentConfiguration.TEST)
         {
             public Double getBetsPokemonWinFactor() { return TEST_POKEMON_WIN_FACTOR; }
             public Double getBetsTimeWinFactor() { return TEST_TIME_WIN_FACTOR; }

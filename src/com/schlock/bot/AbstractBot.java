@@ -1,6 +1,6 @@
 package com.schlock.bot;
 
-import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.ListenerService;
 
 import java.util.Set;
@@ -9,14 +9,14 @@ public abstract class AbstractBot implements Bot
 {
     private final Set<ListenerService> listeners;
 
-    private final DeploymentContext context;
+    private final DeploymentConfiguration config;
 
 
     public AbstractBot(Set<ListenerService> listeners,
-                       DeploymentContext context)
+                       DeploymentConfiguration config)
     {
         this.listeners = listeners;
-        this.context = context;
+        this.config = config;
     }
 
     protected Set<ListenerService> getListeners()
@@ -24,8 +24,8 @@ public abstract class AbstractBot implements Bot
         return listeners;
     }
 
-    protected DeploymentContext getContext()
+    protected DeploymentConfiguration getConfig()
     {
-        return context;
+        return config;
     }
 }

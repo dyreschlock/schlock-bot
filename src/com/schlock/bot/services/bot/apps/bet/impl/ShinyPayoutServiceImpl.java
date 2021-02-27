@@ -7,7 +7,7 @@ import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
 import com.schlock.bot.entities.apps.pokemon.ShinyGetType;
 import com.schlock.bot.services.DatabaseModule;
-import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.bet.ShinyPayoutService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.database.apps.ShinyBetDAO;
@@ -35,22 +35,22 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
     private final PokemonService pokemonService;
 
     private final DatabaseModule database;
-    private final DeploymentContext context;
+    private final DeploymentConfiguration config;
 
 
     public ShinyPayoutServiceImpl(PokemonService pokemonService,
                                     DatabaseModule database,
-                                    DeploymentContext context)
+                                    DeploymentConfiguration config)
     {
         this.pokemonService = pokemonService;
 
         this.database = database;
-        this.context = context;
+        this.config = config;
     }
 
     public boolean isAcceptRequest(String username, String in)
     {
-        String admin = context.getOwnerUsername();
+        String admin = config.getOwnerUsername();
 
         return username.equals(admin) &&
                 in != null &&
@@ -64,8 +64,8 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
 
     public List<String> process(String username, String in)
     {
-        final String MARK = context.getCurrencyMark();
-        final String ADMIN = context.getOwnerUsername();
+        final String MARK = config.getCurrencyMark();
+        final String ADMIN = config.getOwnerUsername();
 
         String command = in.toLowerCase().trim();
         if (username.equals(ADMIN) && command.startsWith(SHINY_GET_COMMAND))
@@ -107,19 +107,19 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
                 Double winnings = 0.0;
                 if (winningPokemon)
                 {
-                    winnings += bet.getBetAmount() * context.getBetsPokemonWinFactor();
+                    winnings += bet.getBetAmount() * config.getBetsPokemonWinFactor();
 
                     usersWinningPokemon.add(bet.getUser().getUsername());
                 }
                 if (winningTime)
                 {
-                    winnings += bet.getBetAmount() * context.getBetsTimeWinFactor();
+                    winnings += bet.getBetAmount() * config.getBetsTimeWinFactor();
 
                     usersWinningTime.add(bet.getUser().getUsername());
                 }
                 if (winningPokemon && winningTime)
                 {
-                    winnings = winnings * context.getBetsBothWinFactor();
+                    winnings = winnings * config.getBetsBothWinFactor();
 
                     usersWinningBoth.add(bet.getUser().getUsername());
                 }

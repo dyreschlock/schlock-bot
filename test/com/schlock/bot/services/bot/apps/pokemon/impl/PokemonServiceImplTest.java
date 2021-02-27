@@ -1,8 +1,8 @@
 package com.schlock.bot.services.bot.apps.pokemon.impl;
 
-import com.schlock.bot.services.DeploymentContext;
+import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.ListenerService;
-import com.schlock.bot.services.impl.DeploymentContextImpl;
+import com.schlock.bot.services.impl.DeploymentConfigurationImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -226,7 +226,7 @@ class PokemonServiceImplTest
     @BeforeEach
     public void setup() throws Exception
     {
-        DeploymentContext context = new DeploymentContextImpl(DeploymentContext.TEST)
+        DeploymentConfiguration config = new DeploymentConfigurationImpl(DeploymentConfiguration.TEST)
         {
             @Override
             public String getDiscordToken()
@@ -235,6 +235,6 @@ class PokemonServiceImplTest
             }
         };
 
-        impl = new PokemonServiceImpl(context);
+        impl = new PokemonServiceImpl(config);
     }
 }

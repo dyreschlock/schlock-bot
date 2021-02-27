@@ -68,9 +68,9 @@ class ShinyInfoServiceImplTest extends DatabaseTest
         setupDatabase();
         createTestObjects();
 
-        pokemonService = new PokemonServiceImpl(getDeploymentContext());
+        pokemonService = new PokemonServiceImpl(getDeploymentConfiguration());
 
-        impl = new ShinyInfoServiceImpl(pokemonService, getDatabase(), getDeploymentContext());
+        impl = new ShinyInfoServiceImpl(pokemonService, getDatabase(), getDeploymentConfiguration());
     }
 
     @AfterEach
