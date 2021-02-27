@@ -1,7 +1,7 @@
 package com.schlock.bot.services.bot.apps.pokemon.impl;
 
 import com.schlock.bot.services.DeploymentConfiguration;
-import com.schlock.bot.services.bot.ListenerService;
+import com.schlock.bot.services.bot.apps.ListenerService;
 import com.schlock.bot.services.impl.DeploymentConfigurationImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,6 @@
 package com.schlock.bot.services.bot.impl;
 
 import com.schlock.bot.entities.apps.User;
-import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.UserService;
 import com.schlock.bot.services.database.apps.UserDAO;
@@ -15,14 +14,14 @@ public class UserServiceImpl implements UserService
     private final String GIVEPOINTS_COMMAND = "!givepoints %s ";
     private final String CASHOUT_COMMAND = "!cashout ";
 
-    private final StandaloneDatabase database;
+    private final UserDAO userDAO;
 
     private final DeploymentConfiguration config;
 
-    public UserServiceImpl(StandaloneDatabase database,
+    public UserServiceImpl(UserDAO userDAO,
                            DeploymentConfiguration config)
     {
-        this.database = database;
+        this.userDAO = userDAO;
         this.config = config;
     }
 
@@ -96,7 +95,7 @@ public class UserServiceImpl implements UserService
         User user = getUser(username);
         user.incrementBalance(points);
 
-        database.save(user);
+        userDAO.save(user);
 
         String message = String.format(GIVE_POINTS_ADDED_MESSAGE, points.toString(), config.getCurrencyMark(), username, user.getBalance().toString());
         return message;
@@ -128,14 +127,14 @@ public class UserServiceImpl implements UserService
         User user = getUser(username);
         user.decrementBalance(points);
 
-        database.save(user);
+        userDAO.save(user);
 
         return String.format(CASHOUT_TO_ELEMENTS_MESSAGE, username, points.toString());
     }
 
     public User getUser(String username)
     {
-        User user = database.get(UserDAO.class).getByUsername(username);
+        User user = userDAO.getByUsername(username);
         if (user == null)
         {
             user = createNewUser(username);
@@ -148,7 +147,7 @@ public class UserServiceImpl implements UserService
         User user = new User(username);
         user.setBalance(config.getUserDefaultBalance());
 
-        database.save(user);
+        userDAO.save(user);
 
         return user;
     }

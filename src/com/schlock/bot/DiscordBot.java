@@ -1,7 +1,7 @@
 package com.schlock.bot;
 
 import com.schlock.bot.services.DeploymentConfiguration;
-import com.schlock.bot.services.bot.ListenerService;
+import com.schlock.bot.services.bot.apps.ListenerService;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;

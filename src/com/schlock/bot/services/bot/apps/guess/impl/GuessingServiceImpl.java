@@ -3,11 +3,11 @@ package com.schlock.bot.services.bot.apps.guess.impl;
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.PokemonUtils;
-import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.UserService;
 import com.schlock.bot.services.bot.apps.guess.GuessingService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
+import com.schlock.bot.services.database.apps.UserDAO;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,20 +22,22 @@ public class GuessingServiceImpl implements GuessingService
     private final PokemonService pokemonService;
     private final UserService userService;
 
-    private final StandaloneDatabase database;
+    private final UserDAO userDAO;
+
     private final DeploymentConfiguration config;
 
     protected Pokemon currentPokemon;
 
     public GuessingServiceImpl(PokemonService pokemonService,
                                UserService userService,
-                               StandaloneDatabase database,
+                               UserDAO userDAO,
                                DeploymentConfiguration config)
     {
         this.pokemonService = pokemonService;
         this.userService = userService;
 
-        this.database = database;
+        this.userDAO = userDAO;
+
         this.config = config;
     }
 
@@ -112,7 +114,7 @@ public class GuessingServiceImpl implements GuessingService
         User user = userService.getUser(username);
         user.incrementBalance(points);
 
-        database.save(user);
+        userDAO.save(user);
 
         String pokemonName = currentPokemon.getName();
         currentPokemon = null;

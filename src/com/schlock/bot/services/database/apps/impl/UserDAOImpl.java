@@ -21,7 +21,7 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO
         Query query = session.createQuery(text);
         query.setParameter("name", username);
 
-        User user = singleResult(query);
-        return user;
+        Object user = singleResult(query);
+        return (User) user;
     }
 }

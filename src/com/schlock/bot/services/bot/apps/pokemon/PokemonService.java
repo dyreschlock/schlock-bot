@@ -1,7 +1,7 @@
 package com.schlock.bot.services.bot.apps.pokemon;
 
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
-import com.schlock.bot.services.bot.ListenerService;
+import com.schlock.bot.services.bot.apps.ListenerService;
 
 public interface PokemonService extends ListenerService
 {

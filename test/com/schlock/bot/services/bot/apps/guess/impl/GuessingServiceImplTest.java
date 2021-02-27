@@ -3,8 +3,8 @@ package com.schlock.bot.services.bot.apps.guess.impl;
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.PokemonUtils;
-import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
+import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.bot.impl.UserServiceImpl;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonServiceImpl;
@@ -139,9 +139,9 @@ class GuessingServiceImplTest extends DatabaseTest
             }
         };
 
-        userService = new UserServiceImpl(database, config);
+        userService = new UserServiceImpl(database.get(UserDAO.class), config);
 
-        impl = new GuessingServiceImpl(pokemonService, userService, database, config);
+        impl = new GuessingServiceImpl(pokemonService, userService, database.get(UserDAO.class), config);
     }
 
     private void createTestObjects()

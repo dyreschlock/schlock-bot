@@ -1,5 +1,6 @@
 package com.schlock.bot.services.database.impl;
 
+import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.services.database.BaseDAO;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -47,5 +48,42 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T>
             return null;
         }
         return list.get(0);
+    }
+
+    @Override
+    public void save(Persisted... objs)
+    {
+        for(Persisted obj : objs)
+        {
+            save(obj);
+        }
+    }
+
+    @Override
+    public void save(Persisted o)
+    {
+        if (o.getId() == null)
+        {
+            session.save(o);
+        }
+        else
+        {
+            session.update(o);
+        }
+    }
+
+    @Override
+    public void delete(Persisted... objs)
+    {
+        for(Persisted obj : objs)
+        {
+            delete(obj);
+        }
+    }
+
+    @Override
+    public void delete(Persisted o)
+    {
+        session.delete(o);
     }
 }

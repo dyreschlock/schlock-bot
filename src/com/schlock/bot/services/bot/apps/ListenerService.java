@@ -1,4 +1,4 @@
-package com.schlock.bot.services.bot;
+package com.schlock.bot.services.bot.apps;
 
 import java.util.List;
 

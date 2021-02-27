@@ -1,17 +1,16 @@
 package com.schlock.bot.services.bot.apps.bet.impl;
 
-import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
 import com.schlock.bot.entities.apps.pokemon.ShinyGetType;
-import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.bet.ShinyPayoutService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.database.apps.ShinyBetDAO;
 import com.schlock.bot.services.database.apps.ShinyGetDAO;
+import com.schlock.bot.services.database.apps.UserDAO;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -34,17 +33,25 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
 
     private final PokemonService pokemonService;
 
-    private final StandaloneDatabase database;
+    private final ShinyBetDAO shinyBetDAO;
+    private final ShinyGetDAO shinyGetDAO;
+    private final UserDAO userDAO;
+
     private final DeploymentConfiguration config;
 
 
     public ShinyPayoutServiceImpl(PokemonService pokemonService,
-                                    StandaloneDatabase database,
+                                    ShinyBetDAO shinyBetDAO,
+                                    ShinyGetDAO shinyGetDAO,
+                                    UserDAO userDAO,
                                     DeploymentConfiguration config)
     {
         this.pokemonService = pokemonService;
 
-        this.database = database;
+        this.shinyBetDAO = shinyBetDAO;
+        this.shinyGetDAO = shinyGetDAO;
+        this.userDAO = userDAO;
+
         this.config = config;
     }
 
@@ -78,20 +85,16 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
                 return Arrays.asList(BAD_FORMAT_MESSAGE);
             }
 
-            List<Persisted> tobeSaved = new ArrayList<>();
-
-            tobeSaved.add(get);
+            shinyGetDAO.save(get);
 
             Map<User, Integer> totalWinnings = new HashMap<>();
             Set<String> usersWinningPokemon = new HashSet<>();
             Set<String> usersWinningTime = new HashSet<>();
             Set<String> usersWinningBoth = new HashSet<>();
 
-            List<ShinyBet> bets = database.get(ShinyBetDAO.class).getAllCurrent();
+            List<ShinyBet> bets = shinyBetDAO.getAllCurrent();
             if (bets.size() == 0)
             {
-                database.save(tobeSaved);
-
                 return Arrays.asList(NO_BETS_NO_WINNERS);
             }
 
@@ -99,7 +102,7 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
             for (ShinyBet bet : bets)
             {
                 bet.setShiny(get);
-                tobeSaved.add(bet);
+                shinyBetDAO.save(bet);
 
                 boolean winningPokemon = isWinningPokemon(bet, get.getPokemonId());
                 boolean winningTime = isWinningTime(bet, get.getTimeInMinutes(), closestRange);
@@ -161,10 +164,8 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
 
                 responses.add(String.format(USER_UPDATE, user.getUsername(), winnings, MARK, user.getBalance(), MARK));
 
-                tobeSaved.add(user);
+                userDAO.save(user);
             }
-
-            database.save(tobeSaved);
 
             return responses;
         }
@@ -233,7 +234,7 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
                 return null;
             }
 
-            Integer shinyNumber = database.get(ShinyGetDAO.class).getCurrentShinyNumber();
+            Integer shinyNumber = shinyGetDAO.getCurrentShinyNumber();
 
             ShinyGet get = new ShinyGet();
             get.setType(type);

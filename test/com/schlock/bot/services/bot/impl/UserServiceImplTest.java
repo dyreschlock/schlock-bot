@@ -51,7 +51,7 @@ class UserServiceImplTest extends DatabaseTest
         setupDatabase();
         createTestObjects();
 
-        impl = new UserServiceImpl(getDatabase(), getDeploymentConfiguration());
+        impl = new UserServiceImpl(getDatabase().get(UserDAO.class), getDeploymentConfiguration());
     }
 
     @AfterEach

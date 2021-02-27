@@ -1,15 +1,14 @@
 package com.schlock.bot.services.bot.apps.bet.impl;
 
-import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
-import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.UserService;
 import com.schlock.bot.services.bot.apps.bet.ShinyBetService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.database.apps.ShinyBetDAO;
+import com.schlock.bot.services.database.apps.UserDAO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,7 +46,8 @@ public class ShinyBetServiceImpl implements ShinyBetService
     private final PokemonService pokemonService;
     private final UserService userService;
 
-    private final StandaloneDatabase database;
+    private final ShinyBetDAO shinyBetDAO;
+    private final UserDAO userDAO;
 
     private final DeploymentConfiguration config;
 
@@ -56,13 +56,15 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
     public ShinyBetServiceImpl(PokemonService pokemonService,
                                UserService userService,
-                               StandaloneDatabase database,
+                               ShinyBetDAO shinyBetDAO,
+                               UserDAO userDAO,
                                DeploymentConfiguration config)
     {
         this.pokemonService = pokemonService;
         this.userService = userService;
 
-        this.database = database;
+        this.shinyBetDAO = shinyBetDAO;
+        this.userDAO = userDAO;
 
         this.config = config;
     }
@@ -147,7 +149,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
     private List<String> currentBets(String username)
     {
-        List<ShinyBet> bets = database.get(ShinyBetDAO.class).getByUsername(username);
+        List<ShinyBet> bets = shinyBetDAO.getByUsername(username);
 
         List<String> responses = new ArrayList<>();
         for(ShinyBet bet : bets)
@@ -179,7 +181,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
             String mark = config.getCurrencyMark();
             User user = userService.getUser(username);
 
-            ShinyBet currentBet = database.get(ShinyBetDAO.class).getByUsernameAndPokemon(username, pokemon.getId());
+            ShinyBet currentBet = shinyBetDAO.getByUsernameAndPokemon(username, pokemon.getId());
             if(currentBet != null)
             {
                 Integer changedBalance = user.getBalance() + currentBet.getBetAmount();
@@ -197,7 +199,8 @@ public class ShinyBetServiceImpl implements ShinyBetService
                 currentBet.setBetAmount(betAmount);
                 currentBet.setTimeMinutes(time);
 
-                database.save(Arrays.asList(currentBet, user));
+                shinyBetDAO.save(currentBet);
+                userDAO.save(user);
 
                 return String.format(BET_UPDATE_SUCCESS, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
             }
@@ -218,7 +221,8 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
                 user.decrementBalance(betAmount);
 
-                database.save(Arrays.asList(newBet, user));
+                shinyBetDAO.save(newBet);
+                userDAO.save(user);
 
                 return String.format(BET_SUCCESS, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
             }
@@ -318,7 +322,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
         Pokemon pokemon = pokemonService.getPokemonFromText(params);
         if (pokemon != null)
         {
-            ShinyBet bet = database.get(ShinyBetDAO.class).getByUsernameAndPokemon(username, pokemon.getId());
+            ShinyBet bet = shinyBetDAO.getByUsernameAndPokemon(username, pokemon.getId());
             if (bet != null)
             {
                 Integer betAmount = bet.getBetAmount();
@@ -326,8 +330,8 @@ public class ShinyBetServiceImpl implements ShinyBetService
                 User user = userService.getUser(username);
                 user.incrementBalance(betAmount);
 
-                database.delete(bet);
-                database.save(user);
+                shinyBetDAO.delete(bet);
+                userDAO.save(user);
 
                 return String.format(BET_CANCELED, pokemon.getName(), username);
             }
@@ -338,21 +342,18 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
     private String cancelAllBets(String username)
     {
-        List<ShinyBet> bets = database.get(ShinyBetDAO.class).getByUsername(username);
+        List<ShinyBet> bets = shinyBetDAO.getByUsername(username);
 
         User user = userService.getUser(username);
 
-        List<Persisted> objects = new ArrayList<>();
         for (ShinyBet bet : bets)
         {
             Integer betAmount = bet.getBetAmount();
             user.incrementBalance(betAmount);
 
-            objects.add(bet);
+            shinyBetDAO.delete(bet);
         }
-
-        database.delete(objects);
-        database.save(user);
+        userDAO.save(user);
 
         return String.format(ALL_BETS_CANCELED, username);
     }

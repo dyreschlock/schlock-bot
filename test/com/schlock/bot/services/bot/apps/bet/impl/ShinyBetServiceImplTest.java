@@ -4,9 +4,9 @@ import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
-import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
-import com.schlock.bot.services.bot.ListenerService;
+import com.schlock.bot.services.StandaloneDatabase;
+import com.schlock.bot.services.bot.apps.ListenerService;
 import com.schlock.bot.services.bot.UserService;
 import com.schlock.bot.services.bot.impl.UserServiceImpl;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
@@ -281,10 +281,13 @@ class ShinyBetServiceImplTest extends DatabaseTest
         DeploymentConfiguration config = getDeploymentConfiguration();
         StandaloneDatabase database = getDatabase();
 
-        pokemonService = new PokemonServiceImpl(config);
-        UserService userService = new UserServiceImpl(database, config);
+        UserDAO userDAO = database.get(UserDAO.class);
+        ShinyBetDAO betDAO = database.get(ShinyBetDAO.class);
 
-        impl = new ShinyBetServiceImpl(pokemonService, userService, database, config);
+        pokemonService = new PokemonServiceImpl(config);
+        UserService userService = new UserServiceImpl(userDAO, config);
+
+        impl = new ShinyBetServiceImpl(pokemonService, userService, betDAO, userDAO, config);
         impl.openBetting();
     }
 

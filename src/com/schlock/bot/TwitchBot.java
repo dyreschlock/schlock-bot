@@ -1,7 +1,7 @@
 package com.schlock.bot;
 
 import com.schlock.bot.services.DeploymentConfiguration;
-import com.schlock.bot.services.bot.ListenerService;
+import com.schlock.bot.services.bot.apps.ListenerService;
 import com.schlock.bot.services.bot.twitch.ChangeColorOnJoin;
 import com.schlock.bot.services.bot.twitch.Commands;
 import org.pircbotx.Configuration;

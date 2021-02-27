@@ -7,6 +7,7 @@ import com.schlock.bot.entities.apps.pokemon.ShinyGetType;
 import com.schlock.bot.entities.apps.pokemon.ShinyGetUtils;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.database.DatabaseTest;
+import com.schlock.bot.services.database.apps.ShinyGetDAO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,7 +71,9 @@ class ShinyInfoServiceImplTest extends DatabaseTest
 
         pokemonService = new PokemonServiceImpl(getDeploymentConfiguration());
 
-        impl = new ShinyInfoServiceImpl(pokemonService, getDatabase(), getDeploymentConfiguration());
+        impl = new ShinyInfoServiceImpl(pokemonService,
+                                            getDatabase().get(ShinyGetDAO.class),
+                                            getDeploymentConfiguration());
     }
 
     @AfterEach

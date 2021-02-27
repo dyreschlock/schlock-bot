@@ -21,21 +21,14 @@ public class BotWebRunner
 
 
         Path webDirectory = new File("web").toPath();
-        Path classDirectory = new File("out/production/schlock-bot").toPath();
-
         if (!Files.exists(webDirectory))
         {
             throw new FileNotFoundException("Can't find web dir: " + webDirectory);
-        }
-        if (!Files.exists(classDirectory))
-        {
-            throw new FileNotFoundException("Can't find class dir: " + classDirectory);
         }
 
         WebAppContext context = new WebAppContext();
         context.setContextPath("/");
         context.setBaseResource(new PathResource(webDirectory.toAbsolutePath()));
-        context.setExtraClasspath(classDirectory.toAbsolutePath().toString());
 
         Server server = new Server(PORT);
         server.setHandler(context);

@@ -1,7 +1,7 @@
 package com.schlock.bot.services.database;
 
-import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
+import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.impl.DeploymentConfigurationImpl;
 
 public abstract class DatabaseTest

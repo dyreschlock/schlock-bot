@@ -1,20 +1,14 @@
 import com.schlock.bot.Bot;
 import com.schlock.bot.TwitchBot;
-import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
-import com.schlock.bot.services.bot.ListenerService;
+import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.bot.UserService;
+import com.schlock.bot.services.bot.apps.ListenerService;
 import com.schlock.bot.services.bot.apps.bet.ShinyBetService;
 import com.schlock.bot.services.bot.apps.bet.ShinyPayoutService;
-import com.schlock.bot.services.bot.apps.bet.impl.ShinyBetServiceImpl;
-import com.schlock.bot.services.bot.apps.bet.impl.ShinyPayoutServiceImpl;
 import com.schlock.bot.services.bot.apps.guess.GuessingService;
-import com.schlock.bot.services.bot.apps.guess.impl.GuessingServiceImpl;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.ShinyInfoService;
-import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonServiceImpl;
-import com.schlock.bot.services.bot.apps.pokemon.impl.ShinyInfoServiceImpl;
-import com.schlock.bot.services.bot.impl.UserServiceImpl;
 import com.schlock.bot.services.impl.DeploymentConfigurationImpl;
 
 import java.util.HashSet;
@@ -79,14 +73,14 @@ public class BotStartup
 
     private void initializeServices()
     {
-        userService = new UserServiceImpl(database, configuration);
-        pokemonService = new PokemonServiceImpl(configuration);
-
-        shinyBetService = new ShinyBetServiceImpl(pokemonService, userService, database, configuration);
-        guessingService = new GuessingServiceImpl(pokemonService, userService, database, configuration);
-        shinyInfoService = new ShinyInfoServiceImpl(pokemonService, database, configuration);
-
-        shinyPayoutService = new ShinyPayoutServiceImpl(pokemonService,  database, configuration);
+//        userService = new UserServiceImpl(database, configuration);
+//        pokemonService = new PokemonServiceImpl(configuration);
+//
+//        shinyBetService = new ShinyBetServiceImpl(pokemonService, userService, database, configuration);
+//        guessingService = new GuessingServiceImpl(pokemonService, userService, database, configuration);
+//        shinyInfoService = new ShinyInfoServiceImpl(pokemonService, database, configuration);
+//
+//        shinyPayoutService = new ShinyPayoutServiceImpl(pokemonService,  database, configuration);
     }
 
 

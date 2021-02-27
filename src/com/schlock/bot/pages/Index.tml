@@ -7,6 +7,8 @@
 
     ${date} <br/>
 
-    ${shinyNumber}
+    ${shinyNumber} <br/>
+
+    ${openBets}<br/>
 
 </html>

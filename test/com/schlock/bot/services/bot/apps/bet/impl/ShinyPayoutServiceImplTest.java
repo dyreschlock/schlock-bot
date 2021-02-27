@@ -4,11 +4,12 @@ import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
-import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
+import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonServiceImpl;
 import com.schlock.bot.services.database.DatabaseTest;
+import com.schlock.bot.services.database.apps.ShinyBetDAO;
 import com.schlock.bot.services.database.apps.ShinyGetDAO;
 import com.schlock.bot.services.database.apps.UserDAO;
 import com.schlock.bot.services.impl.DeploymentConfigurationImpl;
@@ -121,9 +122,13 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         DeploymentConfiguration config = getDeploymentConfiguration();
         StandaloneDatabase database = getDatabase();
 
+        UserDAO userDAO = database.get(UserDAO.class);
+        ShinyBetDAO betDAO = database.get(ShinyBetDAO.class);
+        ShinyGetDAO getDAO = database.get(ShinyGetDAO.class);
+
         PokemonService pokemonService = new PokemonServiceImpl(config);
 
-        impl = new ShinyPayoutServiceImpl(pokemonService, database, config);
+        impl = new ShinyPayoutServiceImpl(pokemonService, betDAO, getDAO, userDAO, config);
     }
 
     private void createTestObjects()
