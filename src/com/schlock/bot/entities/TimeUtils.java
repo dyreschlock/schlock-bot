@@ -8,7 +8,7 @@ public class TimeUtils
 
         Integer hrs = intMinutes /60;
         Integer min = intMinutes %60;
-        Integer sec = new Double((minutes - intMinutes) * 60).intValue();
+        Integer sec = Double.valueOf((minutes - intMinutes) * 60).intValue();
 
         String minutesString = addZeroIfLessThanTen(min.toString());
         String secondsString = addZeroIfLessThanTen(sec.toString());
