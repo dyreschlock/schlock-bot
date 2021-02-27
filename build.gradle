@@ -26,9 +26,6 @@ dependencies {
     compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
     runtime group: 'org.slf4j', name: 'slf4j-simple', version: slf4jVersion
 
-    ext.logbackVersion = '1.2.3'
-    runtime group: 'ch.qos.logback', name: 'logback-core', version: logbackVersion
-    compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
 
     compile group: 'com.asual.lesscss', name: 'lesscss-engine', version: '1.3.0'
     compile group: 'com.asual.lesscss', name: 'lesscss-servlet', version: '1.3.0'
