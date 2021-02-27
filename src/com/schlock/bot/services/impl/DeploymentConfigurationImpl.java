@@ -1,6 +1,7 @@
 package com.schlock.bot.services.impl;
 
 import com.schlock.bot.services.DeploymentConfiguration;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,6 +10,9 @@ import java.util.*;
 
 public class DeploymentConfigurationImpl implements DeploymentConfiguration
 {
+    private static final String LOCATION = "com.schlock.bot.deploy";
+
+
     private static final String CONFIG_PROPERTIES = "config.properties";
     private static final String DEPLOY_PROPERTIES = "deploy.properties";
 
@@ -27,7 +31,7 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
 
     private static final String DISCORD_TOKEN = "discord.token";
 
-    private static final String TWTICH_BOT_NAME = "twitch.bot.name";
+    private static final String TWITCH_BOT_NAME = "twitch.bot.name";
     private static final String TWITCH_OAUTH_TOKEN = "twitch.oauth.token";
     private static final String TWITCH_CHANNEL = "twitch.channel";
 
@@ -35,17 +39,53 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
 
     private static final String DATA_DIRECTORY = "data/";
 
-    private final String context;
+    private String context;
 
-    private final Properties properties = new Properties();
+    private Properties properties;
 
-    public DeploymentConfigurationImpl(String context)
+    public DeploymentConfigurationImpl()
+    {
+    }
+
+    protected String getContext()
+    {
+        if (context == null)
+        {
+            String location = System.getProperty(LOCATION);
+            if (location == null || location.isEmpty())
+            {
+                return LOCAL;
+            }
+            context = location;
+        }
+        return context;
+    }
+
+    private void setContext(String context)
     {
         this.context = context;
     }
 
+    private Properties getProperties()
+    {
+        if(properties == null)
+        {
+            try
+            {
+                loadProperties();
+            }
+            catch(IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        return properties;
+    }
+
     public void loadProperties() throws IOException
     {
+        properties = new Properties();
+
         loadProperties(CONFIG_PROPERTIES);
         loadProperties(DEPLOY_PROPERTIES);
     }
@@ -72,18 +112,18 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
 
     public Integer getUserDefaultBalance()
     {
-        String bal = properties.getProperty(USER_DEFAULT_BALANCE);
+        String bal = getProperties().getProperty(USER_DEFAULT_BALANCE);
         return Integer.parseInt(bal);
     }
 
     public String getCurrencyMark()
     {
-        return properties.getProperty(CURRENCY_MARK);
+        return getProperties().getProperty(CURRENCY_MARK);
     }
 
     public Integer getQuizCorrectPoints()
     {
-        String points = properties.getProperty(QUIZ_CORRECT_POINTS);
+        String points = getProperties().getProperty(QUIZ_CORRECT_POINTS);
         return Integer.parseInt(points);
     }
 
@@ -104,7 +144,7 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
 
     private Double getFloat(final String PROPERTY)
     {
-        String dbl = properties.getProperty(PROPERTY);
+        String dbl = getProperties().getProperty(PROPERTY);
         return Double.parseDouble(dbl);
     }
 
@@ -115,32 +155,32 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
 
     public String getOwnerUsername()
     {
-        return properties.getProperty(ONWER_USERNAME);
+        return getProperties().getProperty(ONWER_USERNAME);
     }
 
     public String getBotName()
     {
-        return properties.getProperty(BOT_NAME);
+        return getProperties().getProperty(BOT_NAME);
     }
 
     public String getDiscordToken()
     {
-        return properties.getProperty(DISCORD_TOKEN);
+        return getProperties().getProperty(DISCORD_TOKEN);
     }
 
     public String getTwitchBotName()
     {
-        return properties.getProperty(TWTICH_BOT_NAME);
+        return getProperties().getProperty(TWITCH_BOT_NAME);
     }
 
     public String getTwitchOAuthToken()
     {
-        return properties.getProperty(TWITCH_OAUTH_TOKEN);
+        return getProperties().getProperty(TWITCH_OAUTH_TOKEN);
     }
 
     public String getTwitchChannel()
     {
-        String channel = properties.getProperty(TWITCH_CHANNEL);
+        String channel = getProperties().getProperty(TWITCH_CHANNEL);
         if (!channel.startsWith("#"))
         {
             channel = "#" + channel;
@@ -152,13 +192,13 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
     {
         HashMap<String, String> commands = new HashMap<>();
 
-        Set<String> keys = properties.stringPropertyNames();
+        Set<String> keys = getProperties().stringPropertyNames();
         for (String key : keys)
         {
             if (key.startsWith(LISTEN_COMMAND_PREFIX))
             {
                 String command = "!" + key.substring(LISTEN_COMMAND_PREFIX.length());
-                String message = properties.getProperty(key);
+                String message = getProperties().getProperty(key);
 
                 commands.put(command, message);
             }
@@ -168,7 +208,16 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
 
     public String getHibernateProperty(String property)
     {
-        String hp = property + "." + context;
-        return properties.getProperty(hp);
+        String hp = property + "." + getContext();
+        return getProperties().getProperty(hp);
+    }
+
+
+    public static DeploymentConfiguration createDeploymentConfiguration(String context)
+    {
+        DeploymentConfigurationImpl config = new DeploymentConfigurationImpl();
+        config.setContext(context);
+
+        return config;
     }
 }

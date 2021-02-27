@@ -1,20 +1,18 @@
 package com.schlock.bot.services.database.apps.impl;
 
-import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
-import com.schlock.bot.services.database.impl.BaseDAOImpl;
 import com.schlock.bot.services.database.apps.ShinyBetDAO;
+import com.schlock.bot.services.database.impl.BaseDAOImpl;
+import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
-import javax.persistence.Query;
 import java.util.List;
 
 public class ShinyBetDAOImpl extends BaseDAOImpl<ShinyBet> implements ShinyBetDAO
 {
-    public ShinyBetDAOImpl(SessionFactory sessionFactory)
+    public ShinyBetDAOImpl(Session session)
     {
-        super(ShinyBet.class, sessionFactory);
+        super(ShinyBet.class, session);
     }
 
     public List<ShinyBet> getByUsername(String username)
@@ -25,17 +23,10 @@ public class ShinyBetDAOImpl extends BaseDAOImpl<ShinyBet> implements ShinyBetDA
                         " where u.username = :name " +
                         " and b.shiny is null ";
 
-        Session session = getSessionFactory().openSession();
-        session.beginTransaction();
-
-        Query query = session.createQuery(text, ShinyBet.class);
+        Query query = session.createQuery(text);
         query.setParameter("name", username);
 
-        List<ShinyBet> bets = query.getResultList();
-
-        session.getTransaction().commit();
-        session.close();
-
+        List<ShinyBet> bets = query.list();
         return bets;
     }
 
@@ -48,18 +39,11 @@ public class ShinyBetDAOImpl extends BaseDAOImpl<ShinyBet> implements ShinyBetDA
                         " and b.pokemonId = :pokemon " +
                         " and b.shiny is null ";
 
-        Session session = getSessionFactory().openSession();
-        session.beginTransaction();
-
-        Query query = session.createQuery(text, ShinyBet.class);
+        Query query = session.createQuery(text);
         query.setParameter("name", username);
         query.setParameter("pokemon", pokemonId);
 
         ShinyBet bet = singleResult(query);
-
-        session.getTransaction().commit();
-        session.close();
-
         return bet;
     }
 
@@ -68,16 +52,9 @@ public class ShinyBetDAOImpl extends BaseDAOImpl<ShinyBet> implements ShinyBetDA
         String text = " from ShinyBet b" +
                         " where b.shiny is null ";
 
-        Session session = getSessionFactory().openSession();
-        session.beginTransaction();
+        Query query = session.createQuery(text);
 
-        Query query = session.createQuery(text, ShinyBet.class);
-
-        List<ShinyBet> bets = query.getResultList();
-
-        session.getTransaction().commit();
-        session.close();
-
+        List<ShinyBet> bets = query.list();
         return bets;
     }
 }

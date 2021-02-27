@@ -226,9 +226,13 @@ class PokemonServiceImplTest
     @BeforeEach
     public void setup() throws Exception
     {
-        DeploymentConfiguration config = new DeploymentConfigurationImpl(DeploymentConfiguration.TEST)
+        DeploymentConfiguration config = new DeploymentConfigurationImpl()
         {
-            @Override
+            protected String getContext()
+            {
+                return DeploymentConfigurationImpl.TEST;
+            }
+
             public String getDiscordToken()
             {
                 return null;

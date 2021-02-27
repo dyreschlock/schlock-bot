@@ -1,7 +1,7 @@
 package com.schlock.bot.services.bot.impl;
 
 import com.schlock.bot.entities.apps.User;
-import com.schlock.bot.services.DatabaseModule;
+import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.UserService;
 import com.schlock.bot.services.database.apps.UserDAO;
@@ -15,11 +15,11 @@ public class UserServiceImpl implements UserService
     private final String GIVEPOINTS_COMMAND = "!givepoints %s ";
     private final String CASHOUT_COMMAND = "!cashout ";
 
-    private final DatabaseModule database;
+    private final StandaloneDatabase database;
 
     private final DeploymentConfiguration config;
 
-    public UserServiceImpl(DatabaseModule database,
+    public UserServiceImpl(StandaloneDatabase database,
                            DeploymentConfiguration config)
     {
         this.database = database;

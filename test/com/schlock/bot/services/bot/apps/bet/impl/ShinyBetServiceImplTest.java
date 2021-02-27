@@ -4,7 +4,7 @@ import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
-import com.schlock.bot.services.DatabaseModule;
+import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.ListenerService;
 import com.schlock.bot.services.bot.UserService;
@@ -279,7 +279,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         createTestObjects();
 
         DeploymentConfiguration config = getDeploymentConfiguration();
-        DatabaseModule database = getDatabase();
+        StandaloneDatabase database = getDatabase();
 
         pokemonService = new PokemonServiceImpl(config);
         UserService userService = new UserServiceImpl(database, config);

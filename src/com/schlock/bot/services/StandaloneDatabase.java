@@ -17,7 +17,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import java.util.*;
 
-public class DatabaseModule
+public class StandaloneDatabase
 {
     private final DeploymentConfiguration config;
 
@@ -25,16 +25,16 @@ public class DatabaseModule
 
     private Map<Class, BaseDAO> daos = new HashMap<>();
 
-    public DatabaseModule(DeploymentConfiguration config)
+    public StandaloneDatabase(DeploymentConfiguration config)
     {
         this.config = config;
     }
 
     private void createDAOs()
     {
-        daos.put(ShinyBetDAO.class, new ShinyBetDAOImpl(sessionFactory));
-        daos.put(UserDAO.class, new UserDAOImpl(sessionFactory));
-        daos.put(ShinyGetDAO.class, new ShinyGetDAOImpl(sessionFactory));
+//        daos.put(ShinyBetDAO.class, new ShinyBetDAOImpl(sessionFactory));
+//        daos.put(UserDAO.class, new UserDAOImpl(sessionFactory));
+//        daos.put(ShinyGetDAO.class, new ShinyGetDAOImpl(sessionFactory));
     }
 
     public <T> T get(Class<T> dao)
@@ -102,36 +102,36 @@ public class DatabaseModule
 
     public void setup() throws Exception
     {
-        final String username = config.getHibernateProperty(HIBERNATE_USERNAME);
-        final String password = config.getHibernateProperty(HIBERNATE_PASSWORD);
-        final String url = config.getHibernateProperty(HIBERNATE_URL) + "?characterEncoding=utf-8";
-
-
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
-        LoadedConfig configuration = builder.getConfigLoader().loadConfigXmlResource(StandardServiceRegistryBuilder.DEFAULT_CFG_RESOURCE_NAME);
-
-        configuration.getConfigurationValues().put(HIBERNATE_USERNAME, username);
-        configuration.getConfigurationValues().put(HIBERNATE_PASSWORD, password);
-        configuration.getConfigurationValues().put(HIBERNATE_URL, url);
-
-        configuration.getConfigurationValues().put(HIBERNATE_HIKARI_USERNAME, username);
-        configuration.getConfigurationValues().put(HIBERNATE_HIKARI_PASSWORD, password);
-        configuration.getConfigurationValues().put(HIBERNATE_HIKARI_URL, url);
-
-        final StandardServiceRegistry registry = builder.configure(configuration).build();
-
-        try
-        {
-            sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-        }
-        catch (Exception e)
-        {
-            StandardServiceRegistryBuilder.destroy(registry);
-            throw e;
-        }
-
-
-        createDAOs();
+//        final String username = config.getHibernateProperty(HIBERNATE_USERNAME);
+//        final String password = config.getHibernateProperty(HIBERNATE_PASSWORD);
+//        final String url = config.getHibernateProperty(HIBERNATE_URL) + "?characterEncoding=utf-8";
+//
+//
+//        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
+//        LoadedConfig configuration = builder.getConfigLoader().loadConfigXmlResource(StandardServiceRegistryBuilder.DEFAULT_CFG_RESOURCE_NAME);
+//
+//        configuration.getConfigurationValues().put(HIBERNATE_USERNAME, username);
+//        configuration.getConfigurationValues().put(HIBERNATE_PASSWORD, password);
+//        configuration.getConfigurationValues().put(HIBERNATE_URL, url);
+//
+//        configuration.getConfigurationValues().put(HIBERNATE_HIKARI_USERNAME, username);
+//        configuration.getConfigurationValues().put(HIBERNATE_HIKARI_PASSWORD, password);
+//        configuration.getConfigurationValues().put(HIBERNATE_HIKARI_URL, url);
+//
+//        final StandardServiceRegistry registry = builder.configure(configuration).build();
+//
+//        try
+//        {
+//            sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+//        }
+//        catch (Exception e)
+//        {
+//            StandardServiceRegistryBuilder.destroy(registry);
+//            throw e;
+//        }
+//
+//
+//        createDAOs();
     }
 
 }

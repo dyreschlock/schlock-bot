@@ -3,7 +3,7 @@ package com.schlock.bot.services.bot.apps.guess.impl;
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.PokemonUtils;
-import com.schlock.bot.services.DatabaseModule;
+import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.UserService;
 import com.schlock.bot.services.bot.apps.guess.GuessingService;
@@ -22,14 +22,14 @@ public class GuessingServiceImpl implements GuessingService
     private final PokemonService pokemonService;
     private final UserService userService;
 
-    private final DatabaseModule database;
+    private final StandaloneDatabase database;
     private final DeploymentConfiguration config;
 
     protected Pokemon currentPokemon;
 
     public GuessingServiceImpl(PokemonService pokemonService,
                                UserService userService,
-                               DatabaseModule database,
+                               StandaloneDatabase database,
                                DeploymentConfiguration config)
     {
         this.pokemonService = pokemonService;

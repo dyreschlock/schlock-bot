@@ -6,7 +6,7 @@ import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
 import com.schlock.bot.entities.apps.pokemon.ShinyGetType;
-import com.schlock.bot.services.DatabaseModule;
+import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.bet.ShinyPayoutService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
@@ -34,12 +34,12 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
 
     private final PokemonService pokemonService;
 
-    private final DatabaseModule database;
+    private final StandaloneDatabase database;
     private final DeploymentConfiguration config;
 
 
     public ShinyPayoutServiceImpl(PokemonService pokemonService,
-                                    DatabaseModule database,
+                                    StandaloneDatabase database,
                                     DeploymentConfiguration config)
     {
         this.pokemonService = pokemonService;

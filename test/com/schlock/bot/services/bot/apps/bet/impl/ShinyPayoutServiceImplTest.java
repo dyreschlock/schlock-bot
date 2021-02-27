@@ -4,7 +4,7 @@ import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
-import com.schlock.bot.services.DatabaseModule;
+import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonServiceImpl;
@@ -119,7 +119,7 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         createTestObjects();
 
         DeploymentConfiguration config = getDeploymentConfiguration();
-        DatabaseModule database = getDatabase();
+        StandaloneDatabase database = getDatabase();
 
         PokemonService pokemonService = new PokemonServiceImpl(config);
 
@@ -166,8 +166,13 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
 
     protected DeploymentConfiguration createDeploymentConfiguration()
     {
-        return new DeploymentConfigurationImpl(DeploymentConfiguration.TEST)
+        return new DeploymentConfigurationImpl()
         {
+            protected String getContext()
+            {
+                return DeploymentConfigurationImpl.TEST;
+            }
+
             public Double getBetsPokemonWinFactor() { return TEST_POKEMON_WIN_FACTOR; }
             public Double getBetsTimeWinFactor() { return TEST_TIME_WIN_FACTOR; }
             public Double getBetsBothWinFactor() { return TEST_BOTH_WIN_FACTOR; }

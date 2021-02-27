@@ -1,13 +1,13 @@
 package com.schlock.bot.services.database;
 
-import com.schlock.bot.services.DatabaseModule;
+import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.impl.DeploymentConfigurationImpl;
 
 public abstract class DatabaseTest
 {
     private DeploymentConfiguration config;
-    private DatabaseModule database;
+    private StandaloneDatabase database;
 
 
     protected DeploymentConfiguration getDeploymentConfiguration()
@@ -15,7 +15,7 @@ public abstract class DatabaseTest
         return config;
     }
 
-    protected DatabaseModule getDatabase()
+    protected StandaloneDatabase getDatabase()
     {
         return database;
     }
@@ -25,12 +25,12 @@ public abstract class DatabaseTest
         config = createDeploymentConfiguration();
         config.loadProperties();
 
-        database = new DatabaseModule(config);
+        database = new StandaloneDatabase(config);
         database.setup();
     }
 
     protected DeploymentConfiguration createDeploymentConfiguration()
     {
-        return new DeploymentConfigurationImpl(DeploymentConfiguration.TEST);
+        return DeploymentConfigurationImpl.createDeploymentConfiguration(DeploymentConfigurationImpl.TEST);
     }
 }

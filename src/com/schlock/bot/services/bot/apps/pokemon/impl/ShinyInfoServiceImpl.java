@@ -4,7 +4,7 @@ import com.schlock.bot.entities.TimeUtils;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
 import com.schlock.bot.entities.apps.pokemon.ShinyGetUtils;
-import com.schlock.bot.services.DatabaseModule;
+import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.ShinyInfoService;
@@ -26,12 +26,12 @@ public class ShinyInfoServiceImpl implements ShinyInfoService
     private static final String AVERAGE_CHECKS_COMMAND = "!shinychecks";
 
     private final DeploymentConfiguration config;
-    private final DatabaseModule database;
+    private final StandaloneDatabase database;
 
     private final PokemonService pokemonService;
 
     public ShinyInfoServiceImpl(PokemonService pokemonService,
-                                DatabaseModule database,
+                                StandaloneDatabase database,
                                 DeploymentConfiguration config)
     {
         this.pokemonService = pokemonService;

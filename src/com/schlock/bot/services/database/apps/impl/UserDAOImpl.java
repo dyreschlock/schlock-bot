@@ -1,18 +1,16 @@
 package com.schlock.bot.services.database.apps.impl;
 
 import com.schlock.bot.entities.apps.User;
-import com.schlock.bot.services.database.impl.BaseDAOImpl;
 import com.schlock.bot.services.database.apps.UserDAO;
+import com.schlock.bot.services.database.impl.BaseDAOImpl;
+import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-
-import javax.persistence.Query;
 
 public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO
 {
-    public UserDAOImpl(SessionFactory sessionFactory)
+    public UserDAOImpl(Session session)
     {
-        super(User.class, sessionFactory);
+        super(User.class, session);
     }
 
     public User getByUsername(String username)
@@ -20,17 +18,10 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO
         String text = "from User u " +
                         " where u.username = :name ";
 
-        Session session = getSessionFactory().openSession();
-        session.beginTransaction();
-
-        Query query = session.createQuery(text, User.class);
+        Query query = session.createQuery(text);
         query.setParameter("name", username);
 
         User user = singleResult(query);
-
-        session.getTransaction().commit();
-        session.close();
-
         return user;
     }
 }

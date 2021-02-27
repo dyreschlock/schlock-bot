@@ -3,7 +3,7 @@ package com.schlock.bot.services.bot.apps.guess.impl;
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.PokemonUtils;
-import com.schlock.bot.services.DatabaseModule;
+import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.impl.UserServiceImpl;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
@@ -119,7 +119,7 @@ class GuessingServiceImplTest extends DatabaseTest
     private void setupServices()
     {
         DeploymentConfiguration config = getDeploymentConfiguration();
-        DatabaseModule database = getDatabase();
+        StandaloneDatabase database = getDatabase();
 
         PokemonService pokemonService = new PokemonServiceImpl(config)
         {

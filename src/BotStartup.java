@@ -1,6 +1,6 @@
 import com.schlock.bot.Bot;
 import com.schlock.bot.TwitchBot;
-import com.schlock.bot.services.DatabaseModule;
+import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.ListenerService;
 import com.schlock.bot.services.bot.UserService;
@@ -22,7 +22,7 @@ import java.util.Set;
 
 public class BotStartup
 {
-    private DatabaseModule database;
+    private StandaloneDatabase database;
 
     private UserService userService;
     private PokemonService pokemonService;
@@ -67,13 +67,13 @@ public class BotStartup
 
     private void initializeDeploymentConfiguration(String contextFlag) throws Exception
     {
-        configuration = new DeploymentConfigurationImpl(contextFlag);
+        configuration = DeploymentConfigurationImpl.createDeploymentConfiguration(contextFlag);
         configuration.loadProperties();
     }
 
     private void initializeDatabase() throws Exception
     {
-        database = new DatabaseModule(configuration);
+        database = new StandaloneDatabase(configuration);
         database.setup();
     }
 
@@ -105,8 +105,8 @@ public class BotStartup
         }
 
         String context = args[0];
-        if (DeploymentConfiguration.HOSTED.equals(context) ||
-                DeploymentConfiguration.LOCAL.equals(context))
+        if (DeploymentConfigurationImpl.HOSTED.equals(context) ||
+                DeploymentConfigurationImpl.LOCAL.equals(context))
         {
             return context;
         }

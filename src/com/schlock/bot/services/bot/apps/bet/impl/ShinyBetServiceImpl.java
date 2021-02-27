@@ -4,7 +4,7 @@ import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
-import com.schlock.bot.services.DatabaseModule;
+import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.UserService;
 import com.schlock.bot.services.bot.apps.bet.ShinyBetService;
@@ -47,7 +47,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
     private final PokemonService pokemonService;
     private final UserService userService;
 
-    private final DatabaseModule database;
+    private final StandaloneDatabase database;
 
     private final DeploymentConfiguration config;
 
@@ -56,7 +56,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
     public ShinyBetServiceImpl(PokemonService pokemonService,
                                UserService userService,
-                               DatabaseModule database,
+                               StandaloneDatabase database,
                                DeploymentConfiguration config)
     {
         this.pokemonService = pokemonService;

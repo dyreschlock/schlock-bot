@@ -3,8 +3,10 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
 >
 
-    testing
+    testing<br />
 
-    ${date}
+    ${date} <br/>
+
+    ${shinyNumber}
 
 </html>
