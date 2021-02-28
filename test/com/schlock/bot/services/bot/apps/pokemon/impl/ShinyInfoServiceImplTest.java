@@ -8,13 +8,12 @@ import com.schlock.bot.entities.apps.pokemon.ShinyGetUtils;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.apps.ShinyGetDAO;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import com.schlock.bot.services.database.apps.impl.ShinyGetDAOImpl;
 import org.junit.jupiter.api.Test;
 
 import java.text.DecimalFormat;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ShinyInfoServiceImplTest extends DatabaseTest
 {
@@ -24,6 +23,7 @@ class ShinyInfoServiceImplTest extends DatabaseTest
     private final static Integer SHINY_CHECKS = 1000;
 
     private PokemonService pokemonService;
+    private ShinyGetDAO shinyGetDAO;
 
     private ShinyInfoServiceImpl impl;
 
@@ -63,24 +63,25 @@ class ShinyInfoServiceImplTest extends DatabaseTest
         assertEquals(expected, response);
     }
 
-    @BeforeEach
-    public void setup() throws Exception
+
+    @Override
+    protected void before() throws Exception
     {
-        setupDatabase();
+        shinyGetDAO = new ShinyGetDAOImpl(session);
+
+        pokemonService = new PokemonServiceImpl(config);
+
+        impl = new ShinyInfoServiceImpl(pokemonService, shinyGetDAO, config);
+
         createTestObjects();
-
-        pokemonService = new PokemonServiceImpl(getDeploymentConfiguration());
-
-        impl = new ShinyInfoServiceImpl(pokemonService,
-                                            getDatabase().get(ShinyGetDAO.class),
-                                            getDeploymentConfiguration());
     }
 
-    @AfterEach
-    public void tearDown()
+    @Override
+    protected void after() throws Exception
     {
         removeTestObjects();
     }
+
 
     private void createTestObjects()
     {
@@ -91,11 +92,11 @@ class ShinyInfoServiceImplTest extends DatabaseTest
         get1.setTimeInMinutes(SHINY_MINUTES);
         get1.setNumOfRareChecks(SHINY_CHECKS);
 
-        getDatabase().save(get1);
+        shinyGetDAO.save(get1);
     }
 
     private void removeTestObjects()
     {
-        getDatabase().delete(get1);
+        shinyGetDAO.delete(get1);
     }
 }

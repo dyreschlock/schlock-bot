@@ -3,8 +3,6 @@ package com.schlock.bot.services.database.apps.impl;
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.apps.UserDAO;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,25 +11,26 @@ class UserDAOImplTest extends DatabaseTest
 {
     private final static String USERNAME1 = "username1";
 
+    private UserDAO userDAO;
+
     private User testUser1;
 
     @Test
     public void testGetByUsername()
     {
-        User user1 = getDatabase().get(UserDAO.class).getByUsername(USERNAME1);
+        User user1 = userDAO.getByUsername(USERNAME1);
 
         assertEquals(user1.getUsername(), testUser1.getUsername());
     }
 
-    @BeforeEach
-    public void setup() throws Exception
+    protected void before() throws Exception
     {
-        setupDatabase();
         createTestObjects();
+
+        userDAO = new UserDAOImpl(session);
     }
 
-    @AfterEach
-    public void teardown()
+    protected void after() throws Exception
     {
         removeTestObjects();
     }
@@ -42,12 +41,11 @@ class UserDAOImplTest extends DatabaseTest
         testUser1.setUsername(USERNAME1);
         testUser1.setBalance(10000);
 
-        getDatabase().save(testUser1);
+        session.save(testUser1);
     }
 
     private void removeTestObjects()
     {
-        getDatabase().delete(testUser1);
-
+        session.delete(testUser1);
     }
 }

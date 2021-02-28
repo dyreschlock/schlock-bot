@@ -13,6 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ShinyGetDAOImplTest extends DatabaseTest
 {
+    private ShinyGetDAO shinyGetDAO;
+
     private ShinyGet get1;
     private ShinyGet get2;
     private ShinyGet get3;
@@ -27,7 +29,7 @@ class ShinyGetDAOImplTest extends DatabaseTest
     @Test
     public void testGetMostRecent()
     {
-        ShinyGet get = getDatabase().get(ShinyGetDAO.class).getMostRecent();
+        ShinyGet get = shinyGetDAO.getMostRecent();
 
         assertEquals(get3, get);
     }
@@ -35,7 +37,7 @@ class ShinyGetDAOImplTest extends DatabaseTest
     @Test
     public void testGetCurrentShinyNumber()
     {
-        Integer current = getDatabase().get(ShinyGetDAO.class).getCurrentShinyNumber();
+        Integer current = shinyGetDAO.getCurrentShinyNumber();
 
         assertEquals(4, current);
     }
@@ -43,7 +45,7 @@ class ShinyGetDAOImplTest extends DatabaseTest
     @Test
     public void testGetCurrentAverageShinyTime()
     {
-        Double average = getDatabase().get(ShinyGetDAO.class).getCurrentAverageTimeToShiny();
+        Double average = shinyGetDAO.getCurrentAverageTimeToShiny();
 
         Integer total = TIME1 + TIME2 + TIME3;
 
@@ -55,7 +57,7 @@ class ShinyGetDAOImplTest extends DatabaseTest
     @Test
     public void testGetAverageNumberOfRareShinyChecks()
     {
-        Double average = getDatabase().get(ShinyGetDAO.class).getCurrentAverageNumberOfRareChecks();
+        Double average = shinyGetDAO.getCurrentAverageNumberOfRareChecks();
 
         Integer total = CHECK1 + CHECK2;
         Double expected = total.doubleValue() /2;
@@ -63,19 +65,19 @@ class ShinyGetDAOImplTest extends DatabaseTest
         assertEquals(expected, average);
     }
 
-    @BeforeEach
-    public void setup() throws Exception
+    @Override
+    protected void before() throws Exception
     {
-        setupDatabase();
+        shinyGetDAO = new ShinyGetDAOImpl(session);
+
         createTestObjects();
     }
 
-    @AfterEach
-    public void tearDown()
+    @Override
+    protected void after() throws Exception
     {
         removeTestObjects();
     }
-
 
     private void createTestObjects()
     {
@@ -100,18 +102,11 @@ class ShinyGetDAOImplTest extends DatabaseTest
         get3.setTimeInMinutes(TIME3);
         get3.setNumOfRareChecks(null);
 
-
-        getDatabase().save(get1);
-        getDatabase().save(get2);
-        getDatabase().save(get3);
-
+        shinyGetDAO.save(get1, get2, get3);
     }
 
     private void removeTestObjects()
     {
-        getDatabase().delete(get1);
-        getDatabase().delete(get2);
-        getDatabase().delete(get3);
-
+        shinyGetDAO.delete(get1, get2, get3);
     }
 }

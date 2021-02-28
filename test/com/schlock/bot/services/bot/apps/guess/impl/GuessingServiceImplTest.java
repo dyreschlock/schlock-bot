@@ -3,15 +3,12 @@ package com.schlock.bot.services.bot.apps.guess.impl;
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.PokemonUtils;
-import com.schlock.bot.services.DeploymentConfiguration;
-import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.bot.apps.impl.UserServiceImpl;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonServiceImpl;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.apps.UserDAO;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import com.schlock.bot.services.database.apps.impl.UserDAOImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,6 +27,8 @@ class GuessingServiceImplTest extends DatabaseTest
 
     private UserServiceImpl userService;
 
+    private UserDAO userDAO;
+
     private GuessingServiceImpl impl;
 
     private User testUser1;
@@ -39,10 +38,10 @@ class GuessingServiceImplTest extends DatabaseTest
     @Test
     public void testUsecase()
     {
-        final String ADMIN = getDeploymentConfiguration().getOwnerUsername();
+        final String ADMIN = config.getOwnerUsername();
 
-        final String MARK = getDeploymentConfiguration().getCurrencyMark();
-        final String POINTS = getDeploymentConfiguration().getQuizCorrectPoints().toString();
+        final String MARK = config.getCurrencyMark();
+        final String POINTS = config.getQuizCorrectPoints().toString();
 
 
         //start the game
@@ -71,7 +70,7 @@ class GuessingServiceImplTest extends DatabaseTest
         User admin = userService.getUser(ADMIN);
 
         Integer currentBalance = admin.getBalance();
-        Integer expectedBalance = getDeploymentConfiguration().getUserDefaultBalance() + getDeploymentConfiguration().getQuizCorrectPoints();
+        Integer expectedBalance = config.getUserDefaultBalance() + config.getQuizCorrectPoints();
 
         assertEquals(expectedBalance, currentBalance);
 
@@ -96,31 +95,15 @@ class GuessingServiceImplTest extends DatabaseTest
         testUser1 = userService.getUser(USERNAME1);
 
         currentBalance = testUser1.getBalance();
-        expectedBalance = DEFAULT_BALANCE + getDeploymentConfiguration().getQuizCorrectPoints();
+        expectedBalance = DEFAULT_BALANCE + config.getQuizCorrectPoints();
 
         assertEquals(currentBalance, expectedBalance);
 
     }
 
-    @BeforeEach
-    public void setup() throws Exception
+    @Override
+    protected void before() throws Exception
     {
-        setupDatabase();
-        setupServices();
-        createTestObjects();
-    }
-
-    @AfterEach
-    public void teardown() throws Exception
-    {
-        removeTestObjects();
-    }
-
-    private void setupServices()
-    {
-        DeploymentConfiguration config = getDeploymentConfiguration();
-        StandaloneDatabase database = getDatabase();
-
         PokemonService pokemonService = new PokemonServiceImpl(config)
         {
             public Pokemon getRandomPokemon()
@@ -139,9 +122,20 @@ class GuessingServiceImplTest extends DatabaseTest
             }
         };
 
-        userService = new UserServiceImpl(database.get(UserDAO.class), config);
+        userDAO = new UserDAOImpl(session);
 
-        impl = new GuessingServiceImpl(pokemonService, userService, database.get(UserDAO.class), config);
+        userService = new UserServiceImpl(userDAO, config);
+
+        impl = new GuessingServiceImpl(pokemonService, userService, userDAO, config);
+
+
+        createTestObjects();
+    }
+
+    @Override
+    protected void after() throws Exception
+    {
+        removeTestObjects();
     }
 
     private void createTestObjects()
@@ -150,7 +144,7 @@ class GuessingServiceImplTest extends DatabaseTest
         testUser1.setUsername(USERNAME1);
         testUser1.setBalance(DEFAULT_BALANCE);
 
-        getDatabase().save(testUser1);
+        userDAO.save(testUser1);
 
         testPokemon.setName(TEST_POKEMON_NAME);
         testPokemon.setId(TEST_POKEMON_ID);
@@ -161,11 +155,8 @@ class GuessingServiceImplTest extends DatabaseTest
 
     private void removeTestObjects()
     {
-        getDatabase().delete(testUser1);
+        User admin = userDAO.getByUsername(config.getOwnerUsername());
 
-        final String ADMIN = getDeploymentConfiguration().getOwnerUsername();
-        User admin = getDatabase().get(UserDAO.class).getByUsername(ADMIN);
-
-        getDatabase().delete(admin);
+        userDAO.delete(admin, testUser1);
     }
 }

@@ -13,6 +13,7 @@ import org.apache.tapestry5.hibernate.HibernateConfigurer;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 public class DatabaseModule
 {
@@ -25,13 +26,13 @@ public class DatabaseModule
     }
 
 
-    private final static String HIBERNATE_USERNAME = "hibernate.connection.username";
-    private final static String HIBERNATE_PASSWORD = "hibernate.connection.password";
-    private final static String HIBERNATE_URL = "hibernate.connection.url";
+    protected final static String HIBERNATE_USERNAME = "hibernate.connection.username";
+    protected final static String HIBERNATE_PASSWORD = "hibernate.connection.password";
+    protected final static String HIBERNATE_URL = "hibernate.connection.url";
 
-    private final static String HIBERNATE_HIKARI_USERNAME = "hibernate.hikari.dataSource.user";
-    private final static String HIBERNATE_HIKARI_PASSWORD = "hibernate.hikari.dataSource.password";
-    private final static String HIBERNATE_HIKARI_URL = "hibernate.hikari.dataSource.url";
+    protected final static String HIBERNATE_HIKARI_USERNAME = "hibernate.hikari.dataSource.user";
+    protected final static String HIBERNATE_HIKARI_PASSWORD = "hibernate.hikari.dataSource.password";
+    protected final static String HIBERNATE_HIKARI_URL = "hibernate.hikari.dataSource.url";
 
 
     public void contributeHibernateSessionSource(OrderedConfiguration<HibernateConfigurer> configuration,
@@ -45,7 +46,7 @@ public class DatabaseModule
 
             public void configure(org.hibernate.cfg.Configuration configuration)
             {
-                configuration.configure("hibernate.cfg.xml");
+                configuration.configure(StandardServiceRegistryBuilder.DEFAULT_CFG_RESOURCE_NAME);
 
                 configuration.setProperty(HIBERNATE_USERNAME, username);
                 configuration.setProperty(HIBERNATE_PASSWORD, password);

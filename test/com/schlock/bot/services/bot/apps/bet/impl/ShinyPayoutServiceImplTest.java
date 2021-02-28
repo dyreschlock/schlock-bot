@@ -1,21 +1,20 @@
 package com.schlock.bot.services.bot.apps.bet.impl;
 
-import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
 import com.schlock.bot.services.DeploymentConfiguration;
-import com.schlock.bot.services.StandaloneDatabase;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonServiceImpl;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.apps.ShinyBetDAO;
 import com.schlock.bot.services.database.apps.ShinyGetDAO;
 import com.schlock.bot.services.database.apps.UserDAO;
+import com.schlock.bot.services.database.apps.impl.ShinyBetDAOImpl;
+import com.schlock.bot.services.database.apps.impl.ShinyGetDAOImpl;
+import com.schlock.bot.services.database.apps.impl.UserDAOImpl;
 import com.schlock.bot.services.impl.DeploymentConfigurationImpl;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -50,6 +49,9 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
 
     private ShinyPayoutServiceImpl impl;
 
+    private UserDAO userDAO;
+    private ShinyGetDAO shinyGetDAO;
+
     private User user1;
     private User user2;
     private User user3;
@@ -62,8 +64,8 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
     @Test
     public void testUseCase1()
     {
-        final String ADMIN = getDeploymentConfiguration().getOwnerUsername();
-        final String MARK = getDeploymentConfiguration().getCurrencyMark();
+        final String ADMIN = config.getOwnerUsername();
+        final String MARK = config.getCurrencyMark();
         final String GET = "!shinyget catch beedrill 100";
 
         List<String> responses = impl.process(USERNAME1, GET);
@@ -74,9 +76,9 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
 
         assertEquals(6, responses.size());
 
-        user1 = getDatabase().get(UserDAO.class).getByUsername(user1.getUsername());
-        user2 = getDatabase().get(UserDAO.class).getByUsername(user2.getUsername());
-        user3 = getDatabase().get(UserDAO.class).getByUsername(user3.getUsername());
+        user1 = userDAO.getByUsername(user1.getUsername());
+        user2 = userDAO.getByUsername(user2.getUsername());
+        user3 = userDAO.getByUsername(user3.getUsername());
 
 
         Double winningPokemon = BET1_AMOUNT.doubleValue() * TEST_POKEMON_WIN_FACTOR;
@@ -112,23 +114,26 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         }
     }
 
-
-    @BeforeEach
-    public void setup() throws Exception
+    @Override
+    protected void before() throws Exception
     {
-        setupDatabase();
-        createTestObjects();
+        userDAO = new UserDAOImpl(session);
+        shinyGetDAO = new ShinyGetDAOImpl(session);
 
-        DeploymentConfiguration config = getDeploymentConfiguration();
-        StandaloneDatabase database = getDatabase();
-
-        UserDAO userDAO = database.get(UserDAO.class);
-        ShinyBetDAO betDAO = database.get(ShinyBetDAO.class);
-        ShinyGetDAO getDAO = database.get(ShinyGetDAO.class);
+        ShinyBetDAO betDAO = new ShinyBetDAOImpl(session);
 
         PokemonService pokemonService = new PokemonServiceImpl(config);
 
-        impl = new ShinyPayoutServiceImpl(pokemonService, betDAO, getDAO, userDAO, config);
+        impl = new ShinyPayoutServiceImpl(pokemonService, betDAO, shinyGetDAO, userDAO, config);
+
+
+        createTestObjects();
+    }
+
+    @Override
+    protected void after() throws Exception
+    {
+        removeTestObjects();
     }
 
     private void createTestObjects()
@@ -164,9 +169,7 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         bet3.setTimeMinutes(BET3_MINUTES);
         bet3.setBetAmount(BET3_AMOUNT);
 
-
-        List<Persisted> objects = Arrays.asList(user1, user2, user3, bet1, bet2, bet3);
-        getDatabase().save(objects);
+        userDAO.save(user1, user2, user3, bet1, bet2, bet3);
     }
 
     protected DeploymentConfiguration createDeploymentConfiguration()
@@ -184,17 +187,10 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         };
     }
 
-    @AfterEach
-    public void teardown()
-    {
-        removeTestObjects();
-    }
-
     private void removeTestObjects()
     {
-        ShinyGet get = getDatabase().get(ShinyGetDAO.class).getMostRecent();
+        ShinyGet get1 = shinyGetDAO.getMostRecent();
 
-        List<Persisted> objects = Arrays.asList(user1, user2, user3, get);
-        getDatabase().delete(objects);
+        userDAO.delete(user1, user2, user3, bet1, bet2, bet3, get1);
     }
 }
