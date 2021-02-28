@@ -11,4 +11,6 @@
 
     ${openBets}<br/>
 
+    ${balance}
+
 </html>

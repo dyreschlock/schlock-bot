@@ -4,7 +4,7 @@ import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.PokemonUtils;
 import com.schlock.bot.services.DeploymentConfiguration;
-import com.schlock.bot.services.bot.UserService;
+import com.schlock.bot.services.bot.apps.UserService;
 import com.schlock.bot.services.bot.apps.guess.GuessingService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.database.apps.UserDAO;

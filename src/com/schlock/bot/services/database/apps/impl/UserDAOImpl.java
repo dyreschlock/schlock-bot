@@ -21,7 +21,18 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO
         Query query = session.createQuery(text);
         query.setParameter("name", username);
 
-        Object user = singleResult(query);
-        return (User) user;
+        User user = singleResult(query);
+        return user;
+    }
+
+    public User getMostRecentUser()
+    {
+        String text = " from User u " +
+                        " order by u.followDate desc ";
+
+        Query query = session.createQuery(text);
+
+        User user = singleResult(query);
+        return user;
     }
 }

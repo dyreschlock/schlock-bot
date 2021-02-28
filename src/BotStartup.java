@@ -2,7 +2,7 @@ import com.schlock.bot.Bot;
 import com.schlock.bot.TwitchBot;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.StandaloneDatabase;
-import com.schlock.bot.services.bot.UserService;
+import com.schlock.bot.services.bot.apps.UserService;
 import com.schlock.bot.services.bot.apps.ListenerService;
 import com.schlock.bot.services.bot.apps.bet.ShinyBetService;
 import com.schlock.bot.services.bot.apps.bet.ShinyPayoutService;

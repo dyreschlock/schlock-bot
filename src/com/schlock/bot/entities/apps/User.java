@@ -3,6 +3,7 @@ package com.schlock.bot.entities.apps;
 import com.schlock.bot.entities.Persisted;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "user")
@@ -17,6 +18,9 @@ public class User extends Persisted
 
     @Column(name = "balance")
     private Integer balance;
+
+    @Column(name = "follow_date")
+    private Date followDate;
 
     public User()
     {
@@ -65,5 +69,15 @@ public class User extends Persisted
     public void setBalance(Integer balance)
     {
         this.balance = balance;
+    }
+
+    public Date getFollowDate()
+    {
+        return followDate;
+    }
+
+    public void setFollowDate(Date followDate)
+    {
+        this.followDate = followDate;
     }
 }

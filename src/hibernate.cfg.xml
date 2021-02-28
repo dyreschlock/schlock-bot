@@ -27,6 +27,7 @@
         <mapping class="com.schlock.bot.entities.apps.bet.ShinyBet" />
         <mapping class="com.schlock.bot.entities.apps.User" />
         <mapping class="com.schlock.bot.entities.apps.pokemon.ShinyGet" />
+        <mapping class="com.schlock.bot.entities.apps.pokemon.ShinyDexEntry" />
 
     </session-factory>
 </hibernate-configuration>

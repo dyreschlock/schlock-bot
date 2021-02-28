@@ -5,7 +5,7 @@ import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.PokemonUtils;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.StandaloneDatabase;
-import com.schlock.bot.services.bot.impl.UserServiceImpl;
+import com.schlock.bot.services.bot.apps.impl.UserServiceImpl;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonServiceImpl;
 import com.schlock.bot.services.database.DatabaseTest;

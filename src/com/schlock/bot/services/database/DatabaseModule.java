@@ -2,9 +2,11 @@ package com.schlock.bot.services.database;
 
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.database.apps.ShinyBetDAO;
+import com.schlock.bot.services.database.apps.ShinyDexEntryDAO;
 import com.schlock.bot.services.database.apps.ShinyGetDAO;
 import com.schlock.bot.services.database.apps.UserDAO;
 import com.schlock.bot.services.database.apps.impl.ShinyBetDAOImpl;
+import com.schlock.bot.services.database.apps.impl.ShinyDexEntryDAOImpl;
 import com.schlock.bot.services.database.apps.impl.ShinyGetDAOImpl;
 import com.schlock.bot.services.database.apps.impl.UserDAOImpl;
 import org.apache.tapestry5.hibernate.HibernateConfigurer;
@@ -19,6 +21,7 @@ public class DatabaseModule
         binder.bind(UserDAO.class, UserDAOImpl.class);
         binder.bind(ShinyGetDAO.class, ShinyGetDAOImpl.class);
         binder.bind(ShinyBetDAO.class, ShinyBetDAOImpl.class);
+        binder.bind(ShinyDexEntryDAO.class, ShinyDexEntryDAOImpl.class);
     }
 
 
