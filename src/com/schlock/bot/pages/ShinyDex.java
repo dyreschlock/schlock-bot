@@ -9,6 +9,8 @@ import java.util.List;
 
 public class ShinyDex
 {
+    private static final Integer COLUMNS = 22;
+
     @Inject
     private ShinyDexEntryService dexEntryService;
 
@@ -32,7 +34,6 @@ public class ShinyDex
         List<Pokemon> entries = dexEntryService.getShinyDexEntries();
 
         final Integer MAX = 151;
-        final Integer COLUMNS = 22;
 
         html += "<tr>";
         for(Integer i = 1; i < MAX+1; i++)
