@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class BotWebRunner
+public class AppRunner
 {
     private static final Integer PORT = 8088;
 

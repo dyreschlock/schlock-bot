@@ -1,7 +1,9 @@
-package com.schlock.bot;
+package com.schlock.bot.services.bot.discord.impl;
 
+import com.schlock.bot.services.bot.AbstractBot;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.ListenerService;
+import com.schlock.bot.services.bot.discord.DiscordBot;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
@@ -15,15 +17,15 @@ import java.util.List;
 import java.util.Set;
 
 
-public class DiscordBot extends AbstractBot
+public class DiscordBotImpl extends AbstractBot implements DiscordBot
 {
-    public DiscordBot(Set<ListenerService> listeners,
-                      DeploymentConfiguration config)
+    public DiscordBotImpl(Set<ListenerService> listeners,
+                          DeploymentConfiguration config)
     {
         super(listeners, config);
     }
 
-    public void startup()
+    protected void startService()
     {
         final String TOKEN = getConfig().getDiscordToken();
 

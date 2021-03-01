@@ -1,9 +1,11 @@
-package com.schlock.bot;
+package com.schlock.bot.services.bot.twitch.impl;
 
 import com.schlock.bot.services.DeploymentConfiguration;
+import com.schlock.bot.services.bot.AbstractBot;
 import com.schlock.bot.services.bot.apps.ListenerService;
 import com.schlock.bot.services.bot.twitch.ChangeColorOnJoin;
 import com.schlock.bot.services.bot.twitch.Commands;
+import com.schlock.bot.services.bot.twitch.TwitchBot;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.cap.EnableCapHandler;
@@ -11,7 +13,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 
 import java.util.Set;
 
-public class TwitchBot extends AbstractBot
+public class TwitchBotImpl extends AbstractBot implements TwitchBot
 {
     private Configuration configuration;
 
@@ -20,8 +22,8 @@ public class TwitchBot extends AbstractBot
     private final ListenerAdapter commands;
     private final ListenerAdapter changeColor;
 
-    public TwitchBot(Set<ListenerService> listeners,
-                     DeploymentConfiguration config)
+    public TwitchBotImpl(Set<ListenerService> listeners,
+                         DeploymentConfiguration config)
     {
         super(listeners, config);
 
@@ -29,7 +31,7 @@ public class TwitchBot extends AbstractBot
         changeColor = new ChangeColorOnJoin(config);
     }
 
-    public void startup() throws Exception
+    protected void startService() throws Exception
     {
         String botName = getConfig().getTwitchBotName();
         String oauth = getConfig().getTwitchOAuthToken();
