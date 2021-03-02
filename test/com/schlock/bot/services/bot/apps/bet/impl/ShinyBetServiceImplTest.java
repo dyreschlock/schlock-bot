@@ -7,7 +7,9 @@ import com.schlock.bot.services.bot.apps.ListenerService;
 import com.schlock.bot.services.bot.apps.UserService;
 import com.schlock.bot.services.bot.apps.impl.UserServiceImpl;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
+import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
 import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonServiceImpl;
+import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonUtilsImpl;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.apps.ShinyBetDAO;
 import com.schlock.bot.services.database.apps.UserDAO;
@@ -274,7 +276,9 @@ class ShinyBetServiceImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        pokemonService = new PokemonServiceImpl(config());
+        PokemonUtils pokemonUtils = new PokemonUtilsImpl(messages());
+
+        pokemonService = new PokemonServiceImpl(pokemonUtils, config());
 
         shinyBetDAO = new ShinyBetDAOImpl(session)
         {

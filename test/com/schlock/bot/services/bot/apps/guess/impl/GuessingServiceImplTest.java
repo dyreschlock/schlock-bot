@@ -2,7 +2,8 @@ package com.schlock.bot.services.bot.apps.guess.impl;
 
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
-import com.schlock.bot.entities.apps.pokemon.PokemonUtils;
+import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
+import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonUtilsImpl;
 import com.schlock.bot.services.bot.apps.impl.UserServiceImpl;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonServiceImpl;
@@ -26,6 +27,7 @@ class GuessingServiceImplTest extends DatabaseTest
     private static final String TEST_POKEMON_TYPE2 = "Poison";
 
     private UserServiceImpl userService;
+    private PokemonUtils pokemonUtils;
 
     private UserDAO userDAO;
 
@@ -46,13 +48,13 @@ class GuessingServiceImplTest extends DatabaseTest
 
         //start the game
         String response = impl.processSingleResult(ADMIN, "!whodat");
-        String expected = PokemonUtils.formatHint1(testPokemon);
+        String expected = pokemonUtils.formatHint1(testPokemon);
 
         assertEquals(expected, response);
 
         //try to start the game, again
         response = impl.processSingleResult(ADMIN, "!whodat");
-        expected = GuessingServiceImpl.GAME_ALREADY_STARTED + expected;
+        expected = messages().format(GuessingServiceImpl.GAME_ALREADY_STARTED_KEY, expected);
 
         assertEquals(expected, response);
 
@@ -63,7 +65,7 @@ class GuessingServiceImplTest extends DatabaseTest
 
         //send a message that contains the answer
         response = impl.processSingleResult(ADMIN, TEST_POKEMON_ID);
-        expected = String.format(GuessingServiceImpl.WINNER_MESSAGE, ADMIN, TEST_POKEMON_NAME, POINTS, MARK);
+        expected = messages().format(GuessingServiceImpl.WINNER_KEY, ADMIN, TEST_POKEMON_NAME, POINTS, MARK);
 
         assertEquals(expected, response);
 
@@ -82,13 +84,13 @@ class GuessingServiceImplTest extends DatabaseTest
 
         //start a new game
         response = impl.processSingleResult(ADMIN, "!whodat");
-        expected = PokemonUtils.formatHint1(testPokemon);
+        expected = pokemonUtils.formatHint1(testPokemon);
 
         assertEquals(expected, response);
 
         //send response with answer from user
         response = impl.processSingleResult(USERNAME1, " asdf " + TEST_POKEMON_ID + " asdf ");
-        expected = String.format(GuessingServiceImpl.WINNER_MESSAGE, USERNAME1, TEST_POKEMON_NAME, POINTS, MARK);
+        expected = messages().format(GuessingServiceImpl.WINNER_KEY, USERNAME1, TEST_POKEMON_NAME, POINTS, MARK);
 
         assertEquals(expected, response);
 
@@ -104,7 +106,9 @@ class GuessingServiceImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        PokemonService pokemonService = new PokemonServiceImpl(config())
+        pokemonUtils = new PokemonUtilsImpl(messages());
+
+        PokemonService pokemonService = new PokemonServiceImpl(pokemonUtils, config())
         {
             public Pokemon getRandomPokemon()
             {
@@ -131,7 +135,7 @@ class GuessingServiceImplTest extends DatabaseTest
 
         userService = new UserServiceImpl(userDAO, config());
 
-        impl = new GuessingServiceImpl(pokemonService, userService, userDAO, config());
+        impl = new GuessingServiceImpl(pokemonService, userService, pokemonUtils, userDAO, messages(), config());
 
 
         createTestObjects();

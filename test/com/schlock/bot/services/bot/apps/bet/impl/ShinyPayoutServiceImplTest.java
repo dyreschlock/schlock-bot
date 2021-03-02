@@ -5,7 +5,9 @@ import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
+import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
 import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonServiceImpl;
+import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonUtilsImpl;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.apps.ShinyBetDAO;
 import com.schlock.bot.services.database.apps.ShinyGetDAO;
@@ -99,13 +101,13 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         List<String> winnersTime = Arrays.asList(user1.getUsername());
         List<String> winnersBoth = Arrays.asList(user1.getUsername());
 
-        String response1 = String.format(ShinyPayoutServiceImpl.WINNERS_POKEMON, StringUtils.join(winnersPokemon, ", "));
-        String response2 = String.format(ShinyPayoutServiceImpl.WINNERS_TIME, StringUtils.join(winnersTime, ", "));
-        String response3 = String.format(ShinyPayoutServiceImpl.WINNERS_BOTH, StringUtils.join(winnersBoth, ", "));
+        String response1 = messages().format(ShinyPayoutServiceImpl.WINNERS_POKEMON_KEY, StringUtils.join(winnersPokemon, ", "));
+        String response2 = messages().format(ShinyPayoutServiceImpl.WINNERS_TIME_KEY, StringUtils.join(winnersTime, ", "));
+        String response3 = messages().format(ShinyPayoutServiceImpl.WINNERS_BOTH_KEY, StringUtils.join(winnersBoth, ", "));
 
-        String response4 = String.format(ShinyPayoutServiceImpl.USER_UPDATE, USERNAME1, user1winnings.intValue(), MARK, user1balance, MARK);
-        String response5 = String.format(ShinyPayoutServiceImpl.USER_UPDATE, USERNAME2, user2winnings.intValue(), MARK, user2balance, MARK);
-        String response6 = String.format(ShinyPayoutServiceImpl.USER_UPDATE, USERNAME3, 0, MARK, BALANCE, MARK);
+        String response4 = messages().format(ShinyPayoutServiceImpl.USER_UPDATE_KEY, USERNAME1, user1winnings.intValue(), MARK, user1balance, MARK);
+        String response5 = messages().format(ShinyPayoutServiceImpl.USER_UPDATE_KEY, USERNAME2, user2winnings.intValue(), MARK, user2balance, MARK);
+        String response6 = messages().format(ShinyPayoutServiceImpl.USER_UPDATE_KEY, USERNAME3, 0, MARK, BALANCE, MARK);
 
         List<String> expectedResponses = Arrays.asList(response1, response2, response3, response4, response5, response6);
         for (String expectedResponse : expectedResponses)
@@ -137,9 +139,11 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
             }
         };
 
-        PokemonService pokemonService = new PokemonServiceImpl(config());
+        PokemonUtils pokemonUtils = new PokemonUtilsImpl(messages());
 
-        impl = new ShinyPayoutServiceImpl(pokemonService, betDAO, shinyGetDAO, userDAO, config());
+        PokemonService pokemonService = new PokemonServiceImpl(pokemonUtils, config());
+
+        impl = new ShinyPayoutServiceImpl(pokemonService, betDAO, shinyGetDAO, userDAO, messages(), config());
 
 
         createTestObjects();

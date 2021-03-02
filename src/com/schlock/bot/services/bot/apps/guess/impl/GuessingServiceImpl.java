@@ -2,12 +2,14 @@ package com.schlock.bot.services.bot.apps.guess.impl;
 
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
-import com.schlock.bot.entities.apps.pokemon.PokemonUtils;
+import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
+import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonUtilsImpl;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.UserService;
 import com.schlock.bot.services.bot.apps.guess.GuessingService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.database.apps.UserDAO;
+import org.apache.tapestry5.ioc.Messages;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,28 +18,34 @@ public class GuessingServiceImpl implements GuessingService
 {
     private static final String START_COMMAND = "!whodat";
 
-    protected static final String GAME_ALREADY_STARTED = "Game has started. Current Hint: ";
-    protected static final String WINNER_MESSAGE = "Congratulations, %s! %s is correct! You get %s%s";
+    protected static final String GAME_ALREADY_STARTED_KEY = "whodat-already-started";
+    protected static final String WINNER_KEY = "whodat-winner";
 
     private final PokemonService pokemonService;
     private final UserService userService;
+    private final PokemonUtils pokemonUtils;
 
     private final UserDAO userDAO;
 
+    private final Messages messages;
     private final DeploymentConfiguration config;
 
     protected Pokemon currentPokemon;
 
     public GuessingServiceImpl(PokemonService pokemonService,
                                UserService userService,
+                               PokemonUtils pokemonUtils,
                                UserDAO userDAO,
+                               Messages messages,
                                DeploymentConfiguration config)
     {
         this.pokemonService = pokemonService;
         this.userService = userService;
+        this.pokemonUtils = pokemonUtils;
 
         this.userDAO = userDAO;
 
+        this.messages = messages;
         this.config = config;
     }
 
@@ -67,8 +75,8 @@ public class GuessingServiceImpl implements GuessingService
 //            }
             if (currentPokemon != null)
             {
-                String hint = PokemonUtils.formatHint1(currentPokemon);
-                return GAME_ALREADY_STARTED + hint;
+                String hint = pokemonUtils.formatHint1(currentPokemon);
+                return messages.format(GAME_ALREADY_STARTED_KEY, hint);
             }
 
             String params = command.substring(START_COMMAND.length()).trim();
@@ -103,7 +111,7 @@ public class GuessingServiceImpl implements GuessingService
         {
             currentPokemon = pokemonService.getRandomPokemon();
         }
-        return PokemonUtils.formatHint1(currentPokemon);
+        return pokemonUtils.formatHint1(currentPokemon);
     }
 
     private String processWinner(String username)
@@ -121,6 +129,6 @@ public class GuessingServiceImpl implements GuessingService
         String pokemonName = currentPokemon.getName();
         currentPokemon = null;
 
-        return String.format(WINNER_MESSAGE, username, pokemonName, points.toString(), mark);
+        return messages.format(WINNER_KEY, username, pokemonName, points.toString(), mark);
     }
 }

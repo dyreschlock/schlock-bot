@@ -7,6 +7,7 @@ import com.schlock.bot.entities.apps.pokemon.ShinyGet;
 import com.schlock.bot.entities.apps.pokemon.ShinyGetType;
 import com.schlock.bot.entities.apps.pokemon.ShinyGetUtils;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
+import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.apps.ShinyGetDAO;
 import com.schlock.bot.services.database.apps.impl.ShinyGetDAOImpl;
@@ -81,7 +82,9 @@ class ShinyInfoServiceImplTest extends DatabaseTest
             }
         };
 
-        pokemonService = new PokemonServiceImpl(config());
+        PokemonUtils pokemonUtils = new PokemonUtilsImpl(messages());
+
+        pokemonService = new PokemonServiceImpl(pokemonUtils, config());
 
         impl = new ShinyInfoServiceImpl(pokemonService, shinyGetDAO, messages(), config());
 

@@ -13,8 +13,10 @@ import com.schlock.bot.services.bot.apps.guess.impl.GuessingServiceImpl;
 import com.schlock.bot.services.bot.apps.impl.ShinyDexEntryServiceImpl;
 import com.schlock.bot.services.bot.apps.impl.UserServiceImpl;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
+import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
 import com.schlock.bot.services.bot.apps.pokemon.ShinyInfoService;
 import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonServiceImpl;
+import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonUtilsImpl;
 import com.schlock.bot.services.bot.apps.pokemon.impl.ShinyInfoServiceImpl;
 import com.schlock.bot.services.bot.discord.DiscordBot;
 import com.schlock.bot.services.bot.discord.impl.DiscordBotImpl;
@@ -34,6 +36,8 @@ public class BotModule
     public static void bind(ServiceBinder binder)
     {
         binder.bind(ShinyDexEntryService.class, ShinyDexEntryServiceImpl.class);
+
+        binder.bind(PokemonUtils.class, PokemonUtilsImpl.class);
 
         //app listeners
         binder.bind(UserService.class, UserServiceImpl.class);

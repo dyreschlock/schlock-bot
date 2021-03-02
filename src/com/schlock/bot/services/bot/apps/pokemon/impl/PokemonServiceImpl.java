@@ -1,9 +1,9 @@
 package com.schlock.bot.services.bot.apps.pokemon.impl;
 
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
-import com.schlock.bot.entities.apps.pokemon.PokemonUtils;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
+import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -27,14 +27,18 @@ public class PokemonServiceImpl implements PokemonService
 
     private static final String RANDOM = "random";
 
+    private final PokemonUtils pokemonUtils;
+
     private final DeploymentConfiguration config;
 
     private Map<Integer, Pokemon> pokemonByNumber;
     private Map<String, Pokemon> pokemonByName;
 
 
-    public PokemonServiceImpl(DeploymentConfiguration config)
+    public PokemonServiceImpl(PokemonUtils pokemonUtils,
+                                DeploymentConfiguration config)
     {
+        this.pokemonUtils = pokemonUtils;
         this.config = config;
     }
 
@@ -98,7 +102,7 @@ public class PokemonServiceImpl implements PokemonService
             Pokemon pokemon = getPokemonFromParams(commandText);
             if (pokemon != null)
             {
-                return PokemonUtils.formatOutput(pokemon, hasTypeArg, hasStatsArg);
+                return pokemonUtils.formatOutput(pokemon, hasTypeArg, hasStatsArg);
             }
         }
         return NULL_RESPONSE;
@@ -139,12 +143,12 @@ public class PokemonServiceImpl implements PokemonService
 
     public boolean isGenSearch(String command)
     {
-        return PokemonUtils.isGenerationId(command);
+        return pokemonUtils.isGenerationId(command);
     }
 
     public Pokemon getRandomPokemonInGen(String gen)
     {
-        String range = PokemonUtils.returnGenerationRange(gen);
+        String range = pokemonUtils.returnGenerationRange(gen);
         return getRandomPokemonInRange(range);
     }
 
@@ -224,7 +228,7 @@ public class PokemonServiceImpl implements PokemonService
     {
         if (isGenSearch(input))
         {
-            Integer s = PokemonUtils.returnFirstPokemonNumberInGeneration(input);
+            Integer s = pokemonUtils.returnFirstPokemonNumberInGeneration(input);
             return pokemonByNumber.get(s);
         }
         return getPokemonFromText(input);
@@ -234,7 +238,7 @@ public class PokemonServiceImpl implements PokemonService
     {
         if (isGenSearch(input))
         {
-            Integer e = PokemonUtils.returnLastPokemonNumberInGeneration(input);
+            Integer e = pokemonUtils.returnLastPokemonNumberInGeneration(input);
             return pokemonByNumber.get(e);
         }
         return getPokemonFromText(input);

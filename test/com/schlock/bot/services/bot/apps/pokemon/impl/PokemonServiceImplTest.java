@@ -1,7 +1,9 @@
 package com.schlock.bot.services.bot.apps.pokemon.impl;
 
+import com.schlock.bot.AppTestCase;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.ListenerService;
+import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
 import com.schlock.bot.services.impl.DeploymentConfigurationImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class PokemonServiceImplTest
+class PokemonServiceImplTest extends AppTestCase
 {
     private PokemonServiceImpl impl;
 
@@ -239,6 +241,8 @@ class PokemonServiceImplTest
             }
         };
 
-        impl = new PokemonServiceImpl(config);
+        PokemonUtils pokemonUtils = new PokemonUtilsImpl(messages());
+
+        impl = new PokemonServiceImpl(pokemonUtils, config);
     }
 }

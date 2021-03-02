@@ -1,25 +1,37 @@
-package com.schlock.bot.entities.apps.pokemon;
+package com.schlock.bot.services.bot.apps.pokemon.impl;
+
+import com.schlock.bot.entities.apps.pokemon.Pokemon;
+import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
+import org.apache.tapestry5.ioc.Messages;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class PokemonUtils
+public class PokemonUtilsImpl implements PokemonUtils
 {
-    private static final String POKEMON_RETURN_FORMAT = "No. %s %s";
+    private final Messages messages;
 
-    public static String formatOutput(Pokemon pokemon)
+    public PokemonUtilsImpl(Messages messages)
+    {
+        this.messages = messages;
+    }
+
+    private static final String POKEMON_DETAILS_KEY = "pokemon-details";
+    private static final String POKEMON_HINT_1_KEY = "pokemon-hint-1";
+
+    public String formatOutput(Pokemon pokemon)
     {
         return formatOutput(pokemon, false, false);
     }
 
-    public static String formatOutput(Pokemon pokemon, boolean type, boolean basestats)
+    public String formatOutput(Pokemon pokemon, boolean type, boolean basestats)
     {
         String p = "";
 
         String number = Integer.toString(pokemon.getNumber());
         String name = pokemon.getName();
 
-        p = String.format(POKEMON_RETURN_FORMAT, number, name);
+        p = messages.format(POKEMON_DETAILS_KEY, number, name);
 
         if (type)
         {
@@ -84,7 +96,7 @@ public class PokemonUtils
     );
 
 
-    public static boolean isGenerationId(String input)
+    public boolean isGenerationId(String input)
     {
         String gen = input.trim();
         for (Object[] generation : GENERATIONS)
@@ -98,7 +110,7 @@ public class PokemonUtils
         return false;
     }
 
-    public static String returnGenerationRange(String gen)
+    public String returnGenerationRange(String gen)
     {
         for (Object[] generation : GENERATIONS)
         {
@@ -114,7 +126,7 @@ public class PokemonUtils
         return null;
     }
 
-    public static String returnGenerationId(Pokemon pokemon)
+    public String returnGenerationId(Pokemon pokemon)
     {
         Integer id = pokemon.getNumber();
         for (Object[] generation : GENERATIONS)
@@ -130,7 +142,7 @@ public class PokemonUtils
         return null;
     }
 
-    public static Integer returnFirstPokemonNumberInGeneration(String input)
+    public Integer returnFirstPokemonNumberInGeneration(String input)
     {
         String gen = input.trim();
         for (Object[] generation : GENERATIONS)
@@ -144,7 +156,7 @@ public class PokemonUtils
         return null;
     }
 
-    public static Integer returnLastPokemonNumberInGeneration(String input)
+    public Integer returnLastPokemonNumberInGeneration(String input)
     {
         String gen = input.trim();
         for (Object[] generation : GENERATIONS)
@@ -158,7 +170,7 @@ public class PokemonUtils
         return null;
     }
 
-    public static String formatHint1(Pokemon pokemon)
+    public String formatHint1(Pokemon pokemon)
     {
         String id = pokemon.getId();
 
@@ -166,10 +178,8 @@ public class PokemonUtils
         Integer length = id.length();
         String type1 = pokemon.getType1();
 
-        String gen = PokemonUtils.returnGenerationId(pokemon);
+        String gen = returnGenerationId(pokemon);
 
-        String message = "Pokemon starts with the letter %s and has %s characters, %s type, %s.";
-
-        return String.format(message, firstLetter, length.toString(), type1, gen);
+        return messages.format(POKEMON_HINT_1_KEY, firstLetter, length.toString(), type1, gen);
     }
 }
