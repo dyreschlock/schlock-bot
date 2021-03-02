@@ -62,7 +62,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         String newBet = "!bet " + BET2_POKEMON + " " + BET2_MINUTES + " " + BET2_AMOUNT;
 
         String response = impl.processSingleResults(USERNAME1, newBet);
-        String expected = String.format(ShinyBetServiceImpl.BET_SUCCESS, USERNAME1, pokemon2.getName(), BET2_MINUTES.toString(), BET2_AMOUNT.toString(), MARK);
+        String expected = messages().format(ShinyBetServiceImpl.BET_SUCCESS_KEY, USERNAME1, pokemon2.getName(), BET2_MINUTES.toString(), BET2_AMOUNT.toString(), MARK);
 
         assertEquals(expected, response);
 
@@ -75,7 +75,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         newBet = "!bet " + BET3_POKEMON + " " + BET3_MINUTES + " " + BET3_AMOUNT;
 
         response = impl.processSingleResults(USERNAME1, newBet);
-        expected = String.format(ShinyBetServiceImpl.INSUFFICIENT_FUNDS, MARK, user.getBalance().toString(), MARK);
+        expected = messages().format(ShinyBetServiceImpl.INSUFFICIENT_FUNDS_KEY, MARK, user.getBalance().toString(), MARK);
 
         assertEquals(expected, response);
     }
@@ -93,7 +93,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         String newBet = "!bet " + BET1_POKEMON + " " + BET1_NEW_MINUTES + " " + BET1_NEW_AMOUNT;
 
         String response = impl.processSingleResults(USERNAME1, newBet);
-        String expected = String.format(ShinyBetServiceImpl.BET_UPDATE_SUCCESS, USERNAME1, pokemon1.getName(), BET1_NEW_MINUTES, BET1_NEW_AMOUNT, MARK);
+        String expected = messages().format(ShinyBetServiceImpl.BET_UPDATE_SUCCESS_KEY, USERNAME1, pokemon1.getName(), BET1_NEW_MINUTES, BET1_NEW_AMOUNT, MARK);
 
         assertEquals(expected, response);
 
@@ -104,7 +104,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         newBet = "!bet " + BET1_POKEMON + " " + BET1_NEW_MINUTES + " " + BET1_NEW2_AMOUNT;
 
         response = impl.processSingleResults(USERNAME1, newBet);
-        expected = String.format(ShinyBetServiceImpl.BET_UPDATE_SUCCESS, USERNAME1, pokemon1.getName(), BET1_NEW_MINUTES, BET1_NEW2_AMOUNT, MARK);
+        expected = messages().format(ShinyBetServiceImpl.BET_UPDATE_SUCCESS_KEY, USERNAME1, pokemon1.getName(), BET1_NEW_MINUTES, BET1_NEW2_AMOUNT, MARK);
 
         assertEquals(expected, response);
 
@@ -115,7 +115,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         newBet = "!bet " + BET1_POKEMON + " " + BET1_NEW_MINUTES + " " + BET1_NEW3_AMOUNT;
 
         response = impl.processSingleResults(USERNAME1, newBet);
-        expected = String.format(ShinyBetServiceImpl.INSUFFICIENT_FUNDS_UPDATE, MARK, "0", MARK, BET1_NEW2_AMOUNT.toString(), MARK);
+        expected = messages().format(ShinyBetServiceImpl.UPDATE_INSUFFICIENT_FUNDS_KEY, MARK, "0", MARK, BET1_NEW2_AMOUNT.toString(), MARK);
 
         assertEquals(expected, response);
 
@@ -137,7 +137,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
 
         String response = responses.get(0);
-        String expected1 = String.format(ShinyBetServiceImpl.BET_FORMAT,
+        String expected1 = messages().format(ShinyBetServiceImpl.CURRENT_BET_KEY,
                                                                 USERNAME1,
                                                                 pokemon1.getName(),
                                                                 BET1_MINUTES,
@@ -155,7 +155,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
         assertEquals(2, responses.size());
 
-        String expected2 = String.format(ShinyBetServiceImpl.BET_FORMAT,
+        String expected2 = messages().format(ShinyBetServiceImpl.CURRENT_BET_KEY,
                                                                 USERNAME1,
                                                                 pokemon2.getName(),
                                                                 BET2_MINUTES,
@@ -175,7 +175,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
 
         String response = impl.processSingleResults(USERNAME1, "!cancelallbets");
-        String expected = String.format(ShinyBetServiceImpl.ALL_BETS_CANCELED, USERNAME1);
+        String expected = messages().format(ShinyBetServiceImpl.ALL_BETS_CANCELED_KEY, USERNAME1);
 
         assertEquals(expected, response);
 
@@ -192,7 +192,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
 
         response = impl.processSingleResults(USERNAME1, "!cancelallbets");
-        expected = String.format(ShinyBetServiceImpl.ALL_BETS_CANCELED, USERNAME1);
+        expected = messages().format(ShinyBetServiceImpl.ALL_BETS_CANCELED_KEY, USERNAME1);
 
         assertEquals(expected, response);
     }
@@ -206,7 +206,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         Pokemon pokemon1 = pokemonService.getPokemonFromText(BET1_POKEMON);
 
         String response = impl.processSingleResults(USERNAME1, CANCEL_BET1);
-        String expected = String.format(ShinyBetServiceImpl.BET_CANCELED, pokemon1.getName(), USERNAME1);
+        String expected = messages().format(ShinyBetServiceImpl.BET_CANCELED_KEY, pokemon1.getName(), USERNAME1);
 
         assertEquals(expected, response);
 
@@ -220,7 +220,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         Pokemon pokemon2 = pokemonService.getPokemonFromText(BET2_POKEMON);
 
         response = impl.processSingleResults(USERNAME1, CANCEL_BET2);
-        expected = String.format(ShinyBetServiceImpl.BET_CANCEL_NO_BET, USERNAME1, pokemon2.getName());
+        expected = messages().format(ShinyBetServiceImpl.BET_CANCEL_NO_BET_KEY, USERNAME1, pokemon2.getName());
 
         assertEquals(expected, response);
     }
@@ -236,7 +236,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         String bet = "!bet " + BET1_POKEMON + " " + BET1_MINUTES + " " + BET1_AMOUNT;
 
         String response = impl.processSingleResults(USERNAME1, bet);
-        String not_expected = ShinyBetServiceImpl.BETTING_IS_CLOSED_MESSAGE;
+        String not_expected = messages().get(ShinyBetServiceImpl.BETS_ARE_CLOSED_KEY);
 
         assertNotEquals(not_expected, response);
 
@@ -246,12 +246,12 @@ class ShinyBetServiceImplTest extends DatabaseTest
         assertEquals(expected, response);
 
         response = impl.processSingleResults(ADMIN, CLOSE_BETS);
-        expected = ShinyBetServiceImpl.CLOSE_BETTING_MESSAGE;
+        expected = messages().get(ShinyBetServiceImpl.BETS_NOW_CLOSED_KEY);
 
         assertEquals(expected, response);
 
         response = impl.processSingleResults(USERNAME1, bet);
-        expected = ShinyBetServiceImpl.BETTING_IS_CLOSED_MESSAGE;
+        expected = messages().get(ShinyBetServiceImpl.BETS_ARE_CLOSED_KEY);
 
         assertEquals(expected, response);
 
@@ -261,12 +261,12 @@ class ShinyBetServiceImplTest extends DatabaseTest
         assertEquals(expected, response);
 
         response = impl.processSingleResults(ADMIN, OPEN_BETS);
-        expected = ShinyBetServiceImpl.OPEN_BETTING_MESSAGE;
+        expected = messages().get(ShinyBetServiceImpl.BETS_NOW_OPEN_KEY);
 
         assertEquals(expected, response);
 
         response = impl.processSingleResults(USERNAME1, bet);
-        not_expected = ShinyBetServiceImpl.BETTING_IS_CLOSED_MESSAGE;
+        not_expected = messages().get(ShinyBetServiceImpl.BETS_ARE_CLOSED_KEY);
 
         assertNotEquals(not_expected, response);
     }
@@ -291,7 +291,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
         UserService userService = new UserServiceImpl(userDAO, config());
 
-        impl = new ShinyBetServiceImpl(pokemonService, userService, shinyBetDAO, userDAO, config());
+        impl = new ShinyBetServiceImpl(pokemonService, userService, shinyBetDAO, userDAO, messages(), config());
         impl.openBetting();
 
         createTestObjects();
