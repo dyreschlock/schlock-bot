@@ -243,7 +243,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         assertNotEquals(not_expected, response);
 
         response = impl.processSingleResults(USERNAME1, CLOSE_BETS);
-        String expected = ListenerService.NOT_ADMIN_RESPONSE;
+        String expected = messages().get(ListenerService.NOT_ADMIN_KEY);
 
         assertEquals(expected, response);
 
@@ -258,7 +258,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         assertEquals(expected, response);
 
         response = impl.processSingleResults(USERNAME1, OPEN_BETS);
-        expected = ListenerService.NOT_ADMIN_RESPONSE;
+        expected = messages().get(ListenerService.NOT_ADMIN_KEY);
 
         assertEquals(expected, response);
 
@@ -278,7 +278,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
     {
         PokemonUtils pokemonUtils = new PokemonUtilsImpl(messages());
 
-        pokemonService = new PokemonServiceImpl(pokemonUtils, config());
+        pokemonService = new PokemonServiceImpl(pokemonUtils, messages(), config());
 
         shinyBetDAO = new ShinyBetDAOImpl(session)
         {

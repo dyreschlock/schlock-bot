@@ -84,7 +84,7 @@ class ShinyInfoServiceImplTest extends DatabaseTest
 
         PokemonUtils pokemonUtils = new PokemonUtilsImpl(messages());
 
-        pokemonService = new PokemonServiceImpl(pokemonUtils, config());
+        pokemonService = new PokemonServiceImpl(pokemonUtils, messages(), config());
 
         impl = new ShinyInfoServiceImpl(pokemonService, shinyGetDAO, messages(), config());
 

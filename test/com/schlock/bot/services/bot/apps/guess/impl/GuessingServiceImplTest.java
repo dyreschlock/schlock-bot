@@ -108,7 +108,7 @@ class GuessingServiceImplTest extends DatabaseTest
     {
         pokemonUtils = new PokemonUtilsImpl(messages());
 
-        PokemonService pokemonService = new PokemonServiceImpl(pokemonUtils, config())
+        PokemonService pokemonService = new PokemonServiceImpl(pokemonUtils, messages(), config())
         {
             public Pokemon getRandomPokemon()
             {

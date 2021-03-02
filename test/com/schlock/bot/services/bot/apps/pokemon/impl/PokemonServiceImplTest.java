@@ -49,7 +49,7 @@ class PokemonServiceImplTest extends AppTestCase
         List<String[]> testData = new ArrayList<>();
         testData.add(new String[]{"!pokemon bulbasaur", "No. 1 Bulbasaur"});
         testData.add(new String[]{"!pokemon mewtwo", "No. 150 Mewtwo"});
-        testData.add(new String[]{"!pokemon xxx", ListenerService.NULL_RESPONSE});
+        testData.add(new String[]{"!pokemon xxx", messages().get(ListenerService.NULL_RESPONSE_KEY)});
         testData.add(new String[]{"!pokemon nidoran f", "No. 29 Nidoran♀"});
         testData.add(new String[]{"!pokemon nidoranf", "No. 29 Nidoran♀"});
         testData.add(new String[]{"!pokemon nidoran m", "No. 32 Nidoran♂"});
@@ -211,7 +211,7 @@ class PokemonServiceImplTest extends AppTestCase
         for (String d : testData)
         {
             String response = impl.processSingleResult("", d);
-            assertEquals(response, ListenerService.NULL_RESPONSE);
+            assertEquals(response, messages().get(ListenerService.NULL_RESPONSE_KEY));
         }
     }
 
@@ -243,6 +243,6 @@ class PokemonServiceImplTest extends AppTestCase
 
         PokemonUtils pokemonUtils = new PokemonUtilsImpl(messages());
 
-        impl = new PokemonServiceImpl(pokemonUtils, config);
+        impl = new PokemonServiceImpl(pokemonUtils, messages(), config);
     }
 }

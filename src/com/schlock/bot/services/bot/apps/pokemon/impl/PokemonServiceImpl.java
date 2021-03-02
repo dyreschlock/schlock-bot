@@ -5,6 +5,7 @@ import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tapestry5.ioc.Messages;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -29,6 +30,7 @@ public class PokemonServiceImpl implements PokemonService
 
     private final PokemonUtils pokemonUtils;
 
+    private final Messages messages;
     private final DeploymentConfiguration config;
 
     private Map<Integer, Pokemon> pokemonByNumber;
@@ -36,9 +38,11 @@ public class PokemonServiceImpl implements PokemonService
 
 
     public PokemonServiceImpl(PokemonUtils pokemonUtils,
+                                Messages messages,
                                 DeploymentConfiguration config)
     {
         this.pokemonUtils = pokemonUtils;
+        this.messages = messages;
         this.config = config;
     }
 
@@ -105,7 +109,7 @@ public class PokemonServiceImpl implements PokemonService
                 return pokemonUtils.formatOutput(pokemon, hasTypeArg, hasStatsArg);
             }
         }
-        return NULL_RESPONSE;
+        return messages.get(NULL_RESPONSE_KEY);
     }
 
     private Pokemon getPokemonFromParams(String params)

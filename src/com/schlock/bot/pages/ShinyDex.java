@@ -1,7 +1,7 @@
 package com.schlock.bot.pages;
 
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
-import com.schlock.bot.services.bot.apps.pokemon.ShinyDexEntryService;
+import com.schlock.bot.services.bot.apps.pokemon.ShinyDexService;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -12,7 +12,7 @@ public class ShinyDex
     private static final Integer COLUMNS = 22;
 
     @Inject
-    private ShinyDexEntryService dexEntryService;
+    private ShinyDexService dexEntryService;
 
     @Inject
     private Messages messages;

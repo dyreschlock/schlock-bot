@@ -141,7 +141,7 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
 
         PokemonUtils pokemonUtils = new PokemonUtilsImpl(messages());
 
-        PokemonService pokemonService = new PokemonServiceImpl(pokemonUtils, config());
+        PokemonService pokemonService = new PokemonServiceImpl(pokemonUtils, messages(), config());
 
         impl = new ShinyPayoutServiceImpl(pokemonService, betDAO, shinyGetDAO, userDAO, messages(), config());
 

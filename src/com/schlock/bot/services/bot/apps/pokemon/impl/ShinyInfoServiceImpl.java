@@ -87,7 +87,7 @@ public class ShinyInfoServiceImpl implements ShinyInfoService
             return messages.format(AVERAGE_CHECKS_KEY, new DecimalFormat("#0.00").format(averageChecks));
         }
 
-        return NULL_RESPONSE;
+        return messages.get(NULL_RESPONSE_KEY);
     }
 }
 

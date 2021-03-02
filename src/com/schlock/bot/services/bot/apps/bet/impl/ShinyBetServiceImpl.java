@@ -116,7 +116,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
         {
             if (!username.equals(owner))
             {
-                return NOT_ADMIN_RESPONSE;
+                return messages.get(NOT_ADMIN_KEY);
             }
             openBetting();
             return messages.get(BETS_NOW_OPEN_KEY);
@@ -125,7 +125,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
         {
             if (!username.equals(owner))
             {
-                return NOT_ADMIN_RESPONSE;
+                return messages.get(NOT_ADMIN_KEY);
             }
             closeBetting();
             return messages.get(BETS_NOW_CLOSED_KEY);
@@ -149,7 +149,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
             return cancelAllBets(username);
         }
 
-        return NULL_RESPONSE;
+        return messages.get(NULL_RESPONSE_KEY);
     }
 
     private List<String> currentBets(String username)

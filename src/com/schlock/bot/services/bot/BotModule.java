@@ -2,7 +2,7 @@ package com.schlock.bot.services.bot;
 
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.ListenerService;
-import com.schlock.bot.services.bot.apps.pokemon.ShinyDexEntryService;
+import com.schlock.bot.services.bot.apps.pokemon.ShinyDexService;
 import com.schlock.bot.services.bot.apps.UserService;
 import com.schlock.bot.services.bot.apps.bet.ShinyBetService;
 import com.schlock.bot.services.bot.apps.bet.ShinyPayoutService;
@@ -10,7 +10,7 @@ import com.schlock.bot.services.bot.apps.bet.impl.ShinyBetServiceImpl;
 import com.schlock.bot.services.bot.apps.bet.impl.ShinyPayoutServiceImpl;
 import com.schlock.bot.services.bot.apps.guess.GuessingService;
 import com.schlock.bot.services.bot.apps.guess.impl.GuessingServiceImpl;
-import com.schlock.bot.services.bot.apps.pokemon.impl.ShinyDexEntryServiceImpl;
+import com.schlock.bot.services.bot.apps.pokemon.impl.ShinyDexServiceImpl;
 import com.schlock.bot.services.bot.apps.impl.UserServiceImpl;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
@@ -34,7 +34,6 @@ public class BotModule
 {
     public static void bind(ServiceBinder binder)
     {
-        binder.bind(ShinyDexEntryService.class, ShinyDexEntryServiceImpl.class);
 
         binder.bind(PokemonUtils.class, PokemonUtilsImpl.class);
 
@@ -48,6 +47,7 @@ public class BotModule
 
         binder.bind(PokemonService.class, PokemonServiceImpl.class);
         binder.bind(ShinyInfoService.class, ShinyInfoServiceImpl.class);
+        binder.bind(ShinyDexService.class, ShinyDexServiceImpl.class);
     }
 
     @EagerLoad
@@ -57,6 +57,7 @@ public class BotModule
                                   GuessingService guessingService,
                                   PokemonService pokemonService,
                                   ShinyInfoService shinyInfoService,
+                                  ShinyDexService shinyDexService,
                                   DeploymentConfiguration config)
     {
         Set<ListenerService> listeners =
@@ -65,7 +66,8 @@ public class BotModule
                                                 shinyPayoutService,
                                                 guessingService,
                                                 pokemonService,
-                                                shinyInfoService).collect(Collectors.toSet());
+                                                shinyInfoService,
+                                                shinyDexService).collect(Collectors.toSet());
 
         TwitchBot bot = new TwitchBotImpl(listeners, config);
 
