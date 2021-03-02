@@ -1,8 +1,8 @@
-package com.schlock.bot.services.bot.apps.impl;
+package com.schlock.bot.services.bot.apps.pokemon.impl;
 
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.ShinyDexEntry;
-import com.schlock.bot.services.bot.apps.ShinyDexEntryService;
+import com.schlock.bot.services.bot.apps.pokemon.ShinyDexEntryService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.database.apps.ShinyDexEntryDAO;
 

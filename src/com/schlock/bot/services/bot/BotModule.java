@@ -2,7 +2,7 @@ package com.schlock.bot.services.bot;
 
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.ListenerService;
-import com.schlock.bot.services.bot.apps.ShinyDexEntryService;
+import com.schlock.bot.services.bot.apps.pokemon.ShinyDexEntryService;
 import com.schlock.bot.services.bot.apps.UserService;
 import com.schlock.bot.services.bot.apps.bet.ShinyBetService;
 import com.schlock.bot.services.bot.apps.bet.ShinyPayoutService;
@@ -10,7 +10,7 @@ import com.schlock.bot.services.bot.apps.bet.impl.ShinyBetServiceImpl;
 import com.schlock.bot.services.bot.apps.bet.impl.ShinyPayoutServiceImpl;
 import com.schlock.bot.services.bot.apps.guess.GuessingService;
 import com.schlock.bot.services.bot.apps.guess.impl.GuessingServiceImpl;
-import com.schlock.bot.services.bot.apps.impl.ShinyDexEntryServiceImpl;
+import com.schlock.bot.services.bot.apps.pokemon.impl.ShinyDexEntryServiceImpl;
 import com.schlock.bot.services.bot.apps.impl.UserServiceImpl;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
@@ -25,7 +25,6 @@ import com.schlock.bot.services.bot.twitch.impl.TwitchBotImpl;
 import com.schlock.bot.services.database.apps.UserDAO;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
-import org.hibernate.Session;
 
 import java.util.Set;
 import java.util.stream.Collectors;

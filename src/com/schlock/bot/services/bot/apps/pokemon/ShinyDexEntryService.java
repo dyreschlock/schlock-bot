@@ -1,4 +1,4 @@
-package com.schlock.bot.services.bot.apps;
+package com.schlock.bot.services.bot.apps.pokemon;
 
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 
