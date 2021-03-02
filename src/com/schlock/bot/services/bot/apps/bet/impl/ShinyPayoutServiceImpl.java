@@ -95,6 +95,8 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
             List<ShinyBet> bets = shinyBetDAO.getAllCurrent();
             if (bets.size() == 0)
             {
+                shinyBetDAO.commit();
+
                 return Arrays.asList(NO_BETS_NO_WINNERS);
             }
 
@@ -166,6 +168,8 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
 
                 userDAO.save(user);
             }
+
+            userDAO.commit();
 
             return responses;
         }

@@ -117,10 +117,25 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        userDAO = new UserDAOImpl(session);
-        shinyGetDAO = new ShinyGetDAOImpl(session);
+        userDAO = new UserDAOImpl(session)
+        {
+            public void commit()
+            {
+            }
+        };
+        shinyGetDAO = new ShinyGetDAOImpl(session)
+        {
+            public void commit()
+            {
+            }
+        };
 
-        ShinyBetDAO betDAO = new ShinyBetDAOImpl(session);
+        ShinyBetDAO betDAO = new ShinyBetDAOImpl(session)
+        {
+            public void commit()
+            {
+            }
+        };
 
         PokemonService pokemonService = new PokemonServiceImpl(config);
 

@@ -122,7 +122,12 @@ class GuessingServiceImplTest extends DatabaseTest
             }
         };
 
-        userDAO = new UserDAOImpl(session);
+        userDAO = new UserDAOImpl(session)
+        {
+            public void commit()
+            {
+            }
+        };
 
         userService = new UserServiceImpl(userDAO, config);
 

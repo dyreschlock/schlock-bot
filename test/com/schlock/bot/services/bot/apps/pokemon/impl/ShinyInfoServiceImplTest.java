@@ -67,7 +67,12 @@ class ShinyInfoServiceImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        shinyGetDAO = new ShinyGetDAOImpl(session);
+        shinyGetDAO = new ShinyGetDAOImpl(session)
+        {
+            public void commit()
+            {
+            }
+        };
 
         pokemonService = new PokemonServiceImpl(config);
 

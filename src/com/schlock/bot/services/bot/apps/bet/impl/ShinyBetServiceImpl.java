@@ -22,6 +22,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
     protected static final String BET_UPDATE_SUCCESS = "Bet for %s has been updated. Now: %s in %s min at %s%s";
     protected static final String BET_SUCCESS = "Bet has been made for %s: %s in %s min at %s%s";
     protected static final String BET_FORMAT = "%s has a bet for %s in %s min at %s%s";
+    protected static final String USER_NO_CURRENT_BETS = "Currently, %s doesn't have any bets.";
 
     protected static final String BET_CANCELED = "Bet for %s has been canceled for %s";
     protected static final String ALL_BETS_CANCELED = "All bets have been canceled for %s";
@@ -165,6 +166,13 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
             responses.add(response);
         }
+
+        if (bets.size() == 0)
+        {
+            String response = String.format(USER_NO_CURRENT_BETS, username);
+            responses.add(response);
+        }
+
         return responses;
     }
 
@@ -202,6 +210,8 @@ public class ShinyBetServiceImpl implements ShinyBetService
                 shinyBetDAO.save(currentBet);
                 userDAO.save(user);
 
+                userDAO.commit();
+
                 return String.format(BET_UPDATE_SUCCESS, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
             }
             else
@@ -223,6 +233,8 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
                 shinyBetDAO.save(newBet);
                 userDAO.save(user);
+
+                userDAO.commit();
 
                 return String.format(BET_SUCCESS, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
             }
@@ -333,6 +345,8 @@ public class ShinyBetServiceImpl implements ShinyBetService
                 shinyBetDAO.delete(bet);
                 userDAO.save(user);
 
+                userDAO.commit();
+
                 return String.format(BET_CANCELED, pokemon.getName(), username);
             }
             return String.format(BET_CANCEL_NO_BET, username, pokemon.getName());
@@ -354,6 +368,8 @@ public class ShinyBetServiceImpl implements ShinyBetService
             shinyBetDAO.delete(bet);
         }
         userDAO.save(user);
+
+        userDAO.commit();
 
         return String.format(ALL_BETS_CANCELED, username);
     }

@@ -17,4 +17,6 @@ public interface BaseDAO<T>
     void delete(Persisted obj);
 
     void delete(Persisted... obj);
+
+    void commit();
 }

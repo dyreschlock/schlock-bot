@@ -276,8 +276,18 @@ class ShinyBetServiceImplTest extends DatabaseTest
     {
         pokemonService = new PokemonServiceImpl(config);
 
-        shinyBetDAO = new ShinyBetDAOImpl(session);
-        userDAO = new UserDAOImpl(session);
+        shinyBetDAO = new ShinyBetDAOImpl(session)
+        {
+            public void commit()
+            {
+            }
+        };
+        userDAO = new UserDAOImpl(session)
+        {
+            public void commit()
+            {
+            }
+        };
 
         UserService userService = new UserServiceImpl(userDAO, config);
 

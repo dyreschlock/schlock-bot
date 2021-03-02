@@ -45,7 +45,12 @@ class UserServiceImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        userDAO = new UserDAOImpl(session);
+        userDAO = new UserDAOImpl(session)
+        {
+            public void commit()
+            {
+            }
+        };
 
         impl = new UserServiceImpl(userDAO, config);
 

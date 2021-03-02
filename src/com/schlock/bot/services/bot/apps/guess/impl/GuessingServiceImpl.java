@@ -116,6 +116,8 @@ public class GuessingServiceImpl implements GuessingService
 
         userDAO.save(user);
 
+        userDAO.commit();
+
         String pokemonName = currentPokemon.getName();
         currentPokemon = null;
 

@@ -98,6 +98,8 @@ public class UserServiceImpl implements UserService
 
         userDAO.save(user);
 
+        userDAO.commit();
+
         String message = String.format(GIVE_POINTS_ADDED_MESSAGE, points.toString(), config.getCurrencyMark(), username, user.getBalance().toString());
         return message;
     }
@@ -129,6 +131,8 @@ public class UserServiceImpl implements UserService
         user.decrementBalance(points);
 
         userDAO.save(user);
+
+        userDAO.commit();
 
         return String.format(CASHOUT_TO_ELEMENTS_MESSAGE, username, points.toString());
     }

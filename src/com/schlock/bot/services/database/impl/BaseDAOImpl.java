@@ -86,4 +86,10 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T>
     {
         session.delete(o);
     }
+
+    @Override
+    public void commit()
+    {
+        session.getTransaction().commit();
+    }
 }
