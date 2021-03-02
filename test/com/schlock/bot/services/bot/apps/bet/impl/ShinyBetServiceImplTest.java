@@ -293,7 +293,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
             }
         };
 
-        UserService userService = new UserServiceImpl(userDAO, config());
+        UserService userService = new UserServiceImpl(userDAO, messages(), config());
 
         impl = new ShinyBetServiceImpl(pokemonService, userService, shinyBetDAO, userDAO, messages(), config());
         impl.openBetting();

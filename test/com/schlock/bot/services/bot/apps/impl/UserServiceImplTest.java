@@ -52,7 +52,7 @@ class UserServiceImplTest extends DatabaseTest
             }
         };
 
-        impl = new UserServiceImpl(userDAO, config());
+        impl = new UserServiceImpl(userDAO, messages(), config());
 
         createTestObjects();
     }

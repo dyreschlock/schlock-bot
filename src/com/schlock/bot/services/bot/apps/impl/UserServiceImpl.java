@@ -4,6 +4,7 @@ import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.UserService;
 import com.schlock.bot.services.database.apps.UserDAO;
+import org.apache.tapestry5.ioc.Messages;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -15,14 +16,26 @@ public class UserServiceImpl implements UserService
     private final String GIVEPOINTS_COMMAND = "!givepoints %s ";
     private final String CASHOUT_COMMAND = "!cashout ";
 
+    private static final String USER_BALANCE_KEY = "user-balance";
+
+    private static final String GIVE_POINTS_ERROR_KEY = "user-give-points-error";
+    private static final String GIVE_POINTS_KEY = "user-give-points";
+
+    private static final String CASHOUT_WRONG_MESSAGE_KEY = "user-cashout-error";
+    private static final String CASHOUT_TO_ELEMENTS_MESSAGE = "!givepoints %s %s";
+
+
     private final UserDAO userDAO;
 
+    private final Messages messages;
     private final DeploymentConfiguration config;
 
     public UserServiceImpl(UserDAO userDAO,
+                           Messages messages,
                            DeploymentConfiguration config)
     {
         this.userDAO = userDAO;
+        this.messages = messages;
         this.config = config;
     }
 
@@ -68,18 +81,13 @@ public class UserServiceImpl implements UserService
         return null;
     }
 
-    private static final String BALANCE_RETURN_FORMAT = "%s your balance is %s%s";
-
     private String checkBalance(String username)
     {
         User user = getUser(username);
 
         String balance = user.getBalance().toString();
-        return String.format(BALANCE_RETURN_FORMAT, username, balance, config.getCurrencyMark());
+        return messages.format(USER_BALANCE_KEY, username, balance, config.getCurrencyMark());
     }
-
-    private static final String GIVE_WRONG_MESSAGE = "Wrong format, please use '!givepoints %s 123";
-    private static final String GIVE_POINTS_ADDED_MESSAGE = "%s %s added to %s. Current balance: %s";
 
     public String addPoints(String username, String in)
     {
@@ -90,7 +98,7 @@ public class UserServiceImpl implements UserService
         }
         catch (NumberFormatException e)
         {
-            return String.format(GIVE_WRONG_MESSAGE, config.getTwitchBotName());
+            return messages.format(GIVE_POINTS_ERROR_KEY, config.getTwitchBotName());
         }
 
         User user = getUser(username);
@@ -100,7 +108,7 @@ public class UserServiceImpl implements UserService
 
         userDAO.commit();
 
-        String message = String.format(GIVE_POINTS_ADDED_MESSAGE, points.toString(), config.getCurrencyMark(), username, user.getBalance().toString());
+        String message = messages.format(GIVE_POINTS_KEY, points.toString(), config.getCurrencyMark(), username, user.getBalance().toString());
         return message;
     }
 
@@ -112,9 +120,6 @@ public class UserServiceImpl implements UserService
         return Integer.parseInt(points);
     }
 
-    private static final String CASHOUT_WRONG_MESSAGE = "Wrong format, please use '!cashout 123'";
-    private static final String CASHOUT_TO_ELEMENTS_MESSAGE = "!givepoints %s %s";
-
     public String exchangePoints(String username, String in)
     {
         Integer points;
@@ -124,7 +129,7 @@ public class UserServiceImpl implements UserService
         }
         catch (NumberFormatException e)
         {
-            return String.format(CASHOUT_WRONG_MESSAGE);
+            return messages.get(CASHOUT_WRONG_MESSAGE_KEY);
         }
 
         User user = getUser(username);

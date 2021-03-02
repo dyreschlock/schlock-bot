@@ -133,7 +133,7 @@ class GuessingServiceImplTest extends DatabaseTest
             }
         };
 
-        userService = new UserServiceImpl(userDAO, config());
+        userService = new UserServiceImpl(userDAO, messages(), config());
 
         impl = new GuessingServiceImpl(pokemonService, userService, pokemonUtils, userDAO, messages(), config());
 
