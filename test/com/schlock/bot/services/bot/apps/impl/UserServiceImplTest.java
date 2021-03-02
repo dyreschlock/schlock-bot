@@ -29,7 +29,7 @@ class UserServiceImplTest extends DatabaseTest
 
         assertEquals(expected, response);
 
-        String defaultBalance = config.getUserDefaultBalance().toString();
+        String defaultBalance = config().getUserDefaultBalance().toString();
 
         response = impl.processSingleResult(USERNAME2, "!balance");
         expected = USERNAME2 + " your balance is " + defaultBalance + getMark();
@@ -39,7 +39,7 @@ class UserServiceImplTest extends DatabaseTest
 
     private String getMark()
     {
-        return config.getCurrencyMark();
+        return config().getCurrencyMark();
     }
 
     @Override
@@ -52,7 +52,7 @@ class UserServiceImplTest extends DatabaseTest
             }
         };
 
-        impl = new UserServiceImpl(userDAO, config);
+        impl = new UserServiceImpl(userDAO, config());
 
         createTestObjects();
     }

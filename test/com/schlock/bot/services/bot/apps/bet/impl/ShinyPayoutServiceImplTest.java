@@ -64,8 +64,8 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
     @Test
     public void testUseCase1()
     {
-        final String ADMIN = config.getOwnerUsername();
-        final String MARK = config.getCurrencyMark();
+        final String ADMIN = config().getOwnerUsername();
+        final String MARK = config().getCurrencyMark();
         final String GET = "!shinyget catch beedrill 100";
 
         List<String> responses = impl.process(USERNAME1, GET);
@@ -137,9 +137,9 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
             }
         };
 
-        PokemonService pokemonService = new PokemonServiceImpl(config);
+        PokemonService pokemonService = new PokemonServiceImpl(config());
 
-        impl = new ShinyPayoutServiceImpl(pokemonService, betDAO, shinyGetDAO, userDAO, config);
+        impl = new ShinyPayoutServiceImpl(pokemonService, betDAO, shinyGetDAO, userDAO, config());
 
 
         createTestObjects();

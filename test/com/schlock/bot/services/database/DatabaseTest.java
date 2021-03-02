@@ -1,9 +1,6 @@
 package com.schlock.bot.services.database;
 
-import com.schlock.bot.entities.apps.User;
-import com.schlock.bot.entities.apps.bet.ShinyBet;
-import com.schlock.bot.entities.apps.pokemon.ShinyDexEntry;
-import com.schlock.bot.entities.apps.pokemon.ShinyGet;
+import com.schlock.bot.AppTestCase;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.impl.DeploymentConfigurationImpl;
 import org.hibernate.Session;
@@ -13,27 +10,16 @@ import org.hibernate.cfg.Configuration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
-public abstract class DatabaseTest
+public abstract class DatabaseTest extends AppTestCase
 {
-    protected DeploymentConfiguration config;
-
     protected SessionFactory sessionFactory;
     protected Session session;
-
-
-    protected DeploymentConfiguration createDeploymentConfiguration()
-    {
-        return DeploymentConfigurationImpl.createDeploymentConfiguration(DeploymentConfigurationImpl.TEST);
-    }
 
 
     @BeforeEach
     public void abstractBefore() throws Exception
     {
-        config = createDeploymentConfiguration();
-        config.loadProperties();
-
-
+        DeploymentConfiguration config = config();
 
         final String username = config.getHibernateProperty(DatabaseModule.HIBERNATE_USERNAME);
         final String password = config.getHibernateProperty(DatabaseModule.HIBERNATE_PASSWORD);

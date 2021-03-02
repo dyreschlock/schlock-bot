@@ -1,5 +1,6 @@
 package com.schlock.bot.services.bot.apps.pokemon.impl;
 
+import com.schlock.bot.AppRunner;
 import com.schlock.bot.entities.TimeUtils;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
@@ -9,9 +10,15 @@ import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.apps.ShinyGetDAO;
 import com.schlock.bot.services.database.apps.impl.ShinyGetDAOImpl;
+import org.apache.tapestry5.PropertyOverrides;
+import org.apache.tapestry5.internal.PropertyOverridesImpl;
+import org.apache.tapestry5.ioc.Messages;
+import org.apache.tapestry5.ioc.internal.util.MessagesImpl;
 import org.junit.jupiter.api.Test;
 
 import java.text.DecimalFormat;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -47,7 +54,7 @@ class ShinyInfoServiceImplTest extends DatabaseTest
         String response = impl.processSingleResponse(USERNAME1, "!shinyaverage");
 
         String time = TimeUtils.formatDoubleMinutesIntoTimeString(SHINY_MINUTES.doubleValue());
-        String expected = String.format(ShinyInfoServiceImpl.AVERAGE_MESSAGE, time);
+        String expected = messages().format(ShinyInfoServiceImpl.AVERAGE_TIME_KEY, time);
 
         assertEquals(expected, response);
     }
@@ -58,7 +65,7 @@ class ShinyInfoServiceImplTest extends DatabaseTest
         String response = impl.processSingleResponse(USERNAME1, "!shinychecks");
 
         String checks = new DecimalFormat("#0.00").format(SHINY_CHECKS);
-        String expected = String.format(ShinyInfoServiceImpl.AVERAGE_CHECKS_MESSAGE, checks);
+        String expected = messages().format(ShinyInfoServiceImpl.AVERAGE_CHECKS_KEY, checks);
 
         assertEquals(expected, response);
     }
@@ -74,9 +81,9 @@ class ShinyInfoServiceImplTest extends DatabaseTest
             }
         };
 
-        pokemonService = new PokemonServiceImpl(config);
+        pokemonService = new PokemonServiceImpl(config());
 
-        impl = new ShinyInfoServiceImpl(pokemonService, shinyGetDAO, config);
+        impl = new ShinyInfoServiceImpl(pokemonService, shinyGetDAO, messages(), config());
 
         createTestObjects();
     }

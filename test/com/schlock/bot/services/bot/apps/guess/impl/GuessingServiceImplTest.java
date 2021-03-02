@@ -38,10 +38,10 @@ class GuessingServiceImplTest extends DatabaseTest
     @Test
     public void testUsecase()
     {
-        final String ADMIN = config.getOwnerUsername();
+        final String ADMIN = config().getOwnerUsername();
 
-        final String MARK = config.getCurrencyMark();
-        final String POINTS = config.getQuizCorrectPoints().toString();
+        final String MARK = config().getCurrencyMark();
+        final String POINTS = config().getQuizCorrectPoints().toString();
 
 
         //start the game
@@ -70,7 +70,7 @@ class GuessingServiceImplTest extends DatabaseTest
         User admin = userService.getUser(ADMIN);
 
         Integer currentBalance = admin.getBalance();
-        Integer expectedBalance = config.getUserDefaultBalance() + config.getQuizCorrectPoints();
+        Integer expectedBalance = config().getUserDefaultBalance() + config().getQuizCorrectPoints();
 
         assertEquals(expectedBalance, currentBalance);
 
@@ -95,7 +95,7 @@ class GuessingServiceImplTest extends DatabaseTest
         testUser1 = userService.getUser(USERNAME1);
 
         currentBalance = testUser1.getBalance();
-        expectedBalance = DEFAULT_BALANCE + config.getQuizCorrectPoints();
+        expectedBalance = DEFAULT_BALANCE + config().getQuizCorrectPoints();
 
         assertEquals(currentBalance, expectedBalance);
 
@@ -104,7 +104,7 @@ class GuessingServiceImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        PokemonService pokemonService = new PokemonServiceImpl(config)
+        PokemonService pokemonService = new PokemonServiceImpl(config())
         {
             public Pokemon getRandomPokemon()
             {
@@ -129,9 +129,9 @@ class GuessingServiceImplTest extends DatabaseTest
             }
         };
 
-        userService = new UserServiceImpl(userDAO, config);
+        userService = new UserServiceImpl(userDAO, config());
 
-        impl = new GuessingServiceImpl(pokemonService, userService, userDAO, config);
+        impl = new GuessingServiceImpl(pokemonService, userService, userDAO, config());
 
 
         createTestObjects();
@@ -160,7 +160,7 @@ class GuessingServiceImplTest extends DatabaseTest
 
     private void removeTestObjects()
     {
-        User admin = userDAO.getByUsername(config.getOwnerUsername());
+        User admin = userDAO.getByUsername(config().getOwnerUsername());
 
         userDAO.delete(admin, testUser1);
     }

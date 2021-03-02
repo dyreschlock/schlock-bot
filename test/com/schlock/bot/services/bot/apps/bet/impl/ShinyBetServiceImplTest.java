@@ -55,7 +55,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
     @Test
     public void testNewBet()
     {
-        final String MARK = config.getCurrencyMark();
+        final String MARK = config().getCurrencyMark();
         Pokemon pokemon2 = pokemonService.getPokemonFromText(BET2_POKEMON);
 
 
@@ -83,7 +83,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
     @Test
     public void testUpdateBet()
     {
-        final String MARK = config.getCurrencyMark();
+        final String MARK = config().getCurrencyMark();
         Pokemon pokemon1 = pokemonService.getPokemonFromText(BET1_POKEMON);
 
         List bets = shinyBetDAO.getByUsername(user.getUsername());
@@ -126,7 +126,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
     @Test
     public void testCurrentBets()
     {
-        final String MARK = config.getCurrencyMark();
+        final String MARK = config().getCurrencyMark();
         Pokemon pokemon1 = pokemonService.getPokemonFromText(BET1_POKEMON);
         Pokemon pokemon2 = pokemonService.getPokemonFromText(BET2_POKEMON);
 
@@ -231,7 +231,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         final String OPEN_BETS = "!openbets";
         final String CLOSE_BETS = "!closebets";
 
-        final String ADMIN = config.getOwnerUsername();
+        final String ADMIN = config().getOwnerUsername();
 
         String bet = "!bet " + BET1_POKEMON + " " + BET1_MINUTES + " " + BET1_AMOUNT;
 
@@ -274,7 +274,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        pokemonService = new PokemonServiceImpl(config);
+        pokemonService = new PokemonServiceImpl(config());
 
         shinyBetDAO = new ShinyBetDAOImpl(session)
         {
@@ -289,9 +289,9 @@ class ShinyBetServiceImplTest extends DatabaseTest
             }
         };
 
-        UserService userService = new UserServiceImpl(userDAO, config);
+        UserService userService = new UserServiceImpl(userDAO, config());
 
-        impl = new ShinyBetServiceImpl(pokemonService, userService, shinyBetDAO, userDAO, config);
+        impl = new ShinyBetServiceImpl(pokemonService, userService, shinyBetDAO, userDAO, config());
         impl.openBetting();
 
         createTestObjects();
