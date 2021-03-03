@@ -36,6 +36,13 @@ class AnimationServiceImplTest extends DatabaseTest
         String expected = messages().format(AnimationServiceImpl.ANIMATION_REGISTERED_KEY, USERNAME1, animation);
 
         assertEquals(expected, response);
+
+        String badcommand = "!animation " + "asdf";
+
+        response = impl.processSingleResponse(USERNAME1, badcommand);
+        expected = messages().format(AnimationServiceImpl.ANIMATION_WRONG_FORMAT_KEY, USERNAME1);
+
+        assertEquals(expected, response);
     }
 
     @Override

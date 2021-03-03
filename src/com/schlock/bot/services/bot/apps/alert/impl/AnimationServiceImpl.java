@@ -56,14 +56,18 @@ public class AnimationServiceImpl implements AnimationService
         if (commandText.startsWith(ANIMATION_COMMAND))
         {
             AlertType type = getTypeFromCommandText(in);
-            User user = userService.getUser(username);
+            if(type != null)
+            {
+                User user = userService.getUser(username);
 
-            AnimationAlert alert = AnimationAlert.create(type, user);
+                AnimationAlert alert = AnimationAlert.create(type, user);
 
-            alertDAO.save(alert);
-            alertDAO.commit();
+                alertDAO.save(alert);
+                alertDAO.commit();
 
-            return messages.format(ANIMATION_REGISTERED_KEY, username, type.name());
+                return messages.format(ANIMATION_REGISTERED_KEY, username, type.name());
+            }
+            return messages.format(ANIMATION_WRONG_FORMAT_KEY, username);
         }
         return messages.get(NULL_RESPONSE_KEY);
     }
