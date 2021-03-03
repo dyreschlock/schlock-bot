@@ -76,5 +76,26 @@
         <span id="banner" class="banner">
             A NEW FOLLOWER HAS APPEARED! USERNAME1
         </span>
+
+        <iframe src="../audio/silence.mp3" type="audio/mp3" allow="autoplay" id="audio" style="display: none"></iframe>
+
+        <audio id="monsterFrisbeeAudio" autoplay>
+            <source src="../audio/monster_frisbee.mp3" type="audio/mp3" />
+        </audio>
+
+        <button onclick="playAudio()" type="button">Play</button>
+
+
+        <script>
+
+            var x = document.getElementById("monsterFrisbeeAudio");
+
+            function playAudio()
+            {
+                x.play();
+            }
+
+        </script>
+
     </body>
 </html>
