@@ -1,6 +1,7 @@
 package com.schlock.bot.services.database.apps.impl;
 
 import com.schlock.bot.entities.apps.User;
+import com.schlock.bot.entities.apps.alert.Alert;
 import com.schlock.bot.entities.apps.alert.AlertType;
 import com.schlock.bot.entities.apps.alert.AnimationAlert;
 import com.schlock.bot.entities.apps.alert.TwitchAlert;
@@ -8,8 +9,10 @@ import com.schlock.bot.services.database.DatabaseTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AlertDAOImplTest extends DatabaseTest
 {
@@ -23,15 +26,41 @@ class AlertDAOImplTest extends DatabaseTest
     private AnimationAlert animeAlert;
 
     @Test
+    public void testByUsername()
+    {
+        List<Alert> alerts = alertDAO.getByUser(user);
+
+        assertEquals(2, alerts.size());
+
+        boolean twitchAlertOk = false;
+        boolean animationAlertOk = false;
+
+        for (Alert alert : alerts)
+        {
+            if (alert.equals(twitchAlert))
+            {
+                twitchAlertOk = true;
+            }
+            else if (alert.equals(animeAlert))
+            {
+                animationAlertOk = true;
+            }
+        }
+
+        assertTrue(twitchAlertOk);
+        assertTrue(animationAlertOk);
+    }
+
+    @Test
     public void testMostRecent()
     {
         TwitchAlert t = alertDAO.getEarliestUnfinishedTwitchAlert();
 
-        assertEquals(twitchAlert.getId(), t.getId());
+        assertEquals(twitchAlert, t);
 
         AnimationAlert a = alertDAO.getEarliestUnfinishedAnimationAlert();
 
-        assertEquals(animeAlert.getId(), a.getId());
+        assertEquals(animeAlert, a);
     }
 
     @Override

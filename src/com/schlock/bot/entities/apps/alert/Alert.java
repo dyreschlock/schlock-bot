@@ -2,7 +2,6 @@ package com.schlock.bot.entities.apps.alert;
 
 import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.entities.apps.User;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -23,7 +22,7 @@ public abstract class Alert extends Persisted
 
     @ManyToOne
     @JoinColumn(name = "user_id",
-                    foreignKey = @ForeignKey(name = "USER_ID_FK"))
+                    foreignKey = @ForeignKey(name = "ALERT_USER_ID_FK"))
     private User user;
 
     @Column(name = "requestDate")
@@ -38,12 +37,12 @@ public abstract class Alert extends Persisted
 
     public Long getId()
     {
-        return null;
+        return id;
     }
 
     public void setId(Long id)
     {
-
+        this.id = id;
     }
 
     public AlertType getType()

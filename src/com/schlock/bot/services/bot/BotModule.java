@@ -2,6 +2,8 @@ package com.schlock.bot.services.bot;
 
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.ListenerService;
+import com.schlock.bot.services.bot.apps.alert.AnimationService;
+import com.schlock.bot.services.bot.apps.alert.impl.AnimationServiceImpl;
 import com.schlock.bot.services.bot.apps.pokemon.ShinyDexService;
 import com.schlock.bot.services.bot.apps.UserService;
 import com.schlock.bot.services.bot.apps.bet.ShinyBetService;
@@ -48,6 +50,8 @@ public class BotModule
         binder.bind(PokemonService.class, PokemonServiceImpl.class);
         binder.bind(ShinyInfoService.class, ShinyInfoServiceImpl.class);
         binder.bind(ShinyDexService.class, ShinyDexServiceImpl.class);
+
+        binder.bind(AnimationService.class, AnimationServiceImpl.class);
     }
 
     @EagerLoad
@@ -58,6 +62,7 @@ public class BotModule
                                   PokemonService pokemonService,
                                   ShinyInfoService shinyInfoService,
                                   ShinyDexService shinyDexService,
+                                  AnimationService animationService,
                                   DeploymentConfiguration config)
     {
         Set<ListenerService> listeners =
@@ -67,7 +72,8 @@ public class BotModule
                                                 guessingService,
                                                 pokemonService,
                                                 shinyInfoService,
-                                                shinyDexService).collect(Collectors.toSet());
+                                                shinyDexService,
+                                                animationService).collect(Collectors.toSet());
 
         TwitchBot bot = new TwitchBotImpl(listeners, config);
 
