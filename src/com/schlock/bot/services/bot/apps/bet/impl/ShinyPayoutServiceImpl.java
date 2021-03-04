@@ -6,6 +6,8 @@ import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
 import com.schlock.bot.entities.apps.pokemon.ShinyGetType;
 import com.schlock.bot.services.DeploymentConfiguration;
+import com.schlock.bot.services.bot.apps.AbstractListenerService;
+import com.schlock.bot.services.bot.apps.ListenerResponse;
 import com.schlock.bot.services.bot.apps.bet.ShinyPayoutService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.database.apps.ShinyBetDAO;
@@ -16,7 +18,7 @@ import org.apache.tapestry5.ioc.Messages;
 
 import java.util.*;
 
-public class ShinyPayoutServiceImpl implements ShinyPayoutService
+public class ShinyPayoutServiceImpl extends AbstractListenerService implements ShinyPayoutService
 {
     protected static final String NO_BETS_NO_WINNERS_KEY = "no-bets-no-winners";
 
@@ -38,7 +40,6 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
     private final ShinyGetDAO shinyGetDAO;
     private final UserDAO userDAO;
 
-    private final Messages messages;
     private final DeploymentConfiguration config;
 
 
@@ -49,13 +50,14 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
                                     Messages messages,
                                     DeploymentConfiguration config)
     {
+        super(messages);
+
         this.pokemonService = pokemonService;
 
         this.shinyBetDAO = shinyBetDAO;
         this.shinyGetDAO = shinyGetDAO;
         this.userDAO = userDAO;
 
-        this.messages = messages;
         this.config = config;
     }
 
@@ -73,20 +75,21 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
         return true;
     }
 
-    public List<String> process(String username, String in)
+    public ListenerResponse process(String username, String in)
     {
         final String MARK = config.getCurrencyMark();
         final String ADMIN = config.getOwnerUsername();
 
-        String command = in.toLowerCase().trim();
-        if (username.equals(ADMIN) && command.startsWith(SHINY_GET_COMMAND))
+        if (!username.equals(ADMIN)) return ListenerResponse.empty();
+
+        if (in.toLowerCase().trim().startsWith(SHINY_GET_COMMAND))
         {
             String params = in.substring(SHINY_GET_COMMAND.length()).trim();
 
             ShinyGet get = createShinyGetFromParams(params);;
             if(get == null)
             {
-                return Arrays.asList(messages.get(BAD_FORMAT_MESSAGE_KEY));
+                return singleResponseByKey(BAD_FORMAT_MESSAGE_KEY);
             }
 
             shinyGetDAO.save(get);
@@ -101,7 +104,7 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
             {
                 shinyBetDAO.commit();
 
-                return Arrays.asList(messages.get(NO_BETS_NO_WINNERS_KEY));
+                return singleResponseByKey(NO_BETS_NO_WINNERS_KEY);
             }
 
             Integer closestRange = calculateClosestRange(get.getTimeInMinutes(), bets);
@@ -144,22 +147,22 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
                 }
             }
 
-            List<String> responses = new ArrayList<>();
+            ListenerResponse response = ListenerResponse.respondRelayToDiscord();
             if (usersWinningPokemon.size() != 0)
             {
-                responses.add(messages.format(WINNERS_POKEMON_KEY, StringUtils.join(usersWinningPokemon, ", ")));
+                response.addMessage(messages.format(WINNERS_POKEMON_KEY, StringUtils.join(usersWinningPokemon, ", ")));
             }
             else
             {
-                responses.add(messages.get(WINNERS_POKEMON_NONE_KEY));
+                response.addMessage(messages.get(WINNERS_POKEMON_NONE_KEY));
             }
             if (usersWinningTime.size() != 0)
             {
-                responses.add(messages.format(WINNERS_TIME_KEY, StringUtils.join(usersWinningTime, ", ")));
+                response.addMessage(messages.format(WINNERS_TIME_KEY, StringUtils.join(usersWinningTime, ", ")));
             }
             if (usersWinningBoth.size() != 0)
             {
-                responses.add(messages.format(WINNERS_BOTH_KEY, StringUtils.join(usersWinningBoth, ", ")));
+                response.addMessage(messages.format(WINNERS_BOTH_KEY, StringUtils.join(usersWinningBoth, ", ")));
             }
 
 
@@ -168,16 +171,16 @@ public class ShinyPayoutServiceImpl implements ShinyPayoutService
                 Integer winnings = totalWinnings.get(user);
                 user.incrementBalance(winnings);
 
-                responses.add(messages.format(USER_UPDATE_KEY, user.getUsername(), winnings, MARK, user.getBalance(), MARK));
+                response.addMessage(messages.format(USER_UPDATE_KEY, user.getUsername(), winnings, MARK, user.getBalance(), MARK));
 
                 userDAO.save(user);
             }
 
             userDAO.commit();
 
-            return responses;
+            return response;
         }
-        return Collections.EMPTY_LIST;
+        return nullResponse();
     }
 
     protected Integer calculateClosestRange(final Integer ACTUAL, List<ShinyBet> bets)

@@ -70,11 +70,11 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         final String MARK = config().getCurrencyMark();
         final String GET = "!shinyget catch beedrill 100";
 
-        List<String> responses = impl.process(USERNAME1, GET);
+        List<String> responses = impl.process(USERNAME1, GET).getMessages();
 
         assertEquals(0, responses.size());
 
-        responses = impl.process(ADMIN, GET);
+        responses = impl.process(ADMIN, GET).getMessages();
 
         assertEquals(6, responses.size());
 

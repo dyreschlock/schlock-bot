@@ -24,14 +24,14 @@ class UserServiceImplTest extends DatabaseTest
     @Test
     public void checkBalance()
     {
-        String response = impl.processSingleResult(USERNAME1, "!balance");
+        String response = impl.process(USERNAME1, "!balance").getFirstMessage();
         String expected = USERNAME1 + " your balance is " + USER1_BALANCE.toString() + getMark();
 
         assertEquals(expected, response);
 
         String defaultBalance = config().getUserDefaultBalance().toString();
 
-        response = impl.processSingleResult(USERNAME2, "!balance");
+        response = impl.process(USERNAME2, "!balance").getFirstMessage();
         expected = USERNAME2 + " your balance is " + defaultBalance + getMark();
 
         assertEquals(expected, response);

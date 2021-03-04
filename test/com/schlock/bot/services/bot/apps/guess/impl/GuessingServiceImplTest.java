@@ -2,11 +2,11 @@ package com.schlock.bot.services.bot.apps.guess.impl;
 
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
-import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
-import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonUtilsImpl;
 import com.schlock.bot.services.bot.apps.impl.UserServiceImpl;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
+import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
 import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonServiceImpl;
+import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonUtilsImpl;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.apps.UserDAO;
 import com.schlock.bot.services.database.apps.impl.UserDAOImpl;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 class GuessingServiceImplTest extends DatabaseTest
 {
-    private final static String USERNAME1 = "username1";
+    private final static String USERNAME1 = "username2";
     private final static Integer DEFAULT_BALANCE = 10000;
 
     private static final String TEST_POKEMON_NAME = "Bulbasaur";
@@ -47,24 +47,24 @@ class GuessingServiceImplTest extends DatabaseTest
 
 
         //start the game
-        String response = impl.processSingleResult(ADMIN, "!whodat");
+        String response = impl.process(ADMIN, "!whodat").getFirstMessage();
         String expected = pokemonUtils.formatHint1(testPokemon);
 
         assertEquals(expected, response);
 
         //try to start the game, again
-        response = impl.processSingleResult(ADMIN, "!whodat");
+        response = impl.process(ADMIN, "!whodat").getFirstMessage();
         expected = messages().format(GuessingServiceImpl.GAME_ALREADY_STARTED_KEY, expected);
 
         assertEquals(expected, response);
 
         //send a message that doesn't contain the answer
-        response = impl.processSingleResult(ADMIN, "asdf");
+        response = impl.process(ADMIN, "asdf").getFirstMessage();
 
         assertNull(response);
 
         //send a message that contains the answer
-        response = impl.processSingleResult(ADMIN, TEST_POKEMON_ID);
+        response = impl.process(ADMIN, TEST_POKEMON_ID).getFirstMessage();
         expected = messages().format(GuessingServiceImpl.WINNER_KEY, ADMIN, TEST_POKEMON_NAME, POINTS, MARK);
 
         assertEquals(expected, response);
@@ -77,19 +77,19 @@ class GuessingServiceImplTest extends DatabaseTest
         assertEquals(expectedBalance, currentBalance);
 
         //send a message that contains the answer, again
-        response = impl.processSingleResult(ADMIN, TEST_POKEMON_ID);
+        response = impl.process(ADMIN, TEST_POKEMON_ID).getFirstMessage();
 
         assertNull(response);
 
 
         //start a new game
-        response = impl.processSingleResult(ADMIN, "!whodat");
+        response = impl.process(ADMIN, "!whodat").getFirstMessage();
         expected = pokemonUtils.formatHint1(testPokemon);
 
         assertEquals(expected, response);
 
         //send response with answer from user
-        response = impl.processSingleResult(USERNAME1, " asdf " + TEST_POKEMON_ID + " asdf ");
+        response = impl.process(USERNAME1, " asdf " + TEST_POKEMON_ID + " asdf ").getFirstMessage();
         expected = messages().format(GuessingServiceImpl.WINNER_KEY, USERNAME1, TEST_POKEMON_NAME, POINTS, MARK);
 
         assertEquals(expected, response);
@@ -165,7 +165,6 @@ class GuessingServiceImplTest extends DatabaseTest
     private void removeTestObjects()
     {
         User admin = userDAO.getByUsername(config().getOwnerUsername());
-
         userDAO.delete(admin, testUser1);
     }
 }

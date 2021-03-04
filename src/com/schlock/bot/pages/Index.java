@@ -1,6 +1,7 @@
 package com.schlock.bot.pages;
 
 import com.schlock.bot.services.DeploymentConfiguration;
+import com.schlock.bot.services.bot.apps.ListenerResponse;
 import com.schlock.bot.services.bot.apps.UserService;
 import com.schlock.bot.services.bot.apps.bet.ShinyBetService;
 import com.schlock.bot.services.database.apps.ShinyGetDAO;
@@ -39,9 +40,9 @@ public class Index
         String command = "!openbets";
         String owner = configuration.getOwnerUsername();
 
-        List<String> results = shinyBetService.process(owner, command);
+        ListenerResponse response = shinyBetService.process(owner, command);
 
-        return results.get(0);
+        return response.getFirstMessage();
     }
 
     @CommitAfter
@@ -50,9 +51,9 @@ public class Index
         String command = "!balance";
         String username = "asdfasdf";
 
-        List<String> results = userService.process(username, command);
+        ListenerResponse response = userService.process(username, command);
 
-        return results.get(0);
+        return response.getFirstMessage();
     }
 
 }

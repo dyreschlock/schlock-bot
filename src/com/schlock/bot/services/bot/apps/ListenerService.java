@@ -11,5 +11,5 @@ public interface ListenerService
 
     boolean isTerminateAfterRequest();
 
-    List<String> process(String username, String command);
+    ListenerResponse process(String username, String command);
 }

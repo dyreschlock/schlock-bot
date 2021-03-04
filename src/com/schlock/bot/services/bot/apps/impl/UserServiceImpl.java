@@ -2,15 +2,15 @@ package com.schlock.bot.services.bot.apps.impl;
 
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.services.DeploymentConfiguration;
+import com.schlock.bot.services.bot.apps.AbstractListenerService;
+import com.schlock.bot.services.bot.apps.ListenerResponse;
 import com.schlock.bot.services.bot.apps.UserService;
 import com.schlock.bot.services.database.apps.UserDAO;
 import org.apache.tapestry5.ioc.Messages;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
-public class UserServiceImpl implements UserService
+public class UserServiceImpl extends AbstractListenerService implements UserService
 {
     private final String BALANCE_COMMAND = "!balance";
     private final String GIVEPOINTS_COMMAND = "!givepoints %s ";
@@ -27,15 +27,15 @@ public class UserServiceImpl implements UserService
 
     private final UserDAO userDAO;
 
-    private final Messages messages;
     private final DeploymentConfiguration config;
 
     public UserServiceImpl(UserDAO userDAO,
                            Messages messages,
                            DeploymentConfiguration config)
     {
+        super(messages);
+
         this.userDAO = userDAO;
-        this.messages = messages;
         this.config = config;
     }
 
@@ -57,12 +57,7 @@ public class UserServiceImpl implements UserService
         return true;
     }
 
-    public List<String> process(String username, String in)
-    {
-        return Arrays.asList(processSingleResult(username, in));
-    }
-
-    public String processSingleResult(String username, String in)
+    public ListenerResponse process(String username, String in)
     {
         String command = in.toLowerCase();
         if (command.startsWith(BALANCE_COMMAND))
@@ -81,15 +76,16 @@ public class UserServiceImpl implements UserService
         return null;
     }
 
-    private String checkBalance(String username)
+    private ListenerResponse checkBalance(String username)
     {
         User user = getUser(username);
 
         String balance = user.getBalance().toString();
-        return messages.format(USER_BALANCE_KEY, username, balance, config.getCurrencyMark());
+
+        return singleResponseFormat(USER_BALANCE_KEY, username, balance, config.getCurrencyMark());
     }
 
-    public String addPoints(String username, String in)
+    public ListenerResponse addPoints(String username, String in)
     {
         Integer points;
         try
@@ -98,18 +94,16 @@ public class UserServiceImpl implements UserService
         }
         catch (NumberFormatException e)
         {
-            return messages.format(GIVE_POINTS_ERROR_KEY, config.getTwitchBotName());
+            return singleResponseFormat(GIVE_POINTS_ERROR_KEY, config.getTwitchBotName());
         }
 
         User user = getUser(username);
         user.incrementBalance(points);
 
         userDAO.save(user);
-
         userDAO.commit();
 
-        String message = messages.format(GIVE_POINTS_KEY, points.toString(), config.getCurrencyMark(), username, user.getBalance().toString());
-        return message;
+        return singleResponseFormat(GIVE_POINTS_KEY, points.toString(), config.getCurrencyMark(), username, user.getBalance().toString());
     }
 
     private Integer removePointsFromCommand(String command, String input) throws NumberFormatException
@@ -120,7 +114,7 @@ public class UserServiceImpl implements UserService
         return Integer.parseInt(points);
     }
 
-    public String exchangePoints(String username, String in)
+    public ListenerResponse exchangePoints(String username, String in)
     {
         Integer points;
         try
@@ -129,17 +123,17 @@ public class UserServiceImpl implements UserService
         }
         catch (NumberFormatException e)
         {
-            return messages.get(CASHOUT_WRONG_MESSAGE_KEY);
+            String response = messages.get(CASHOUT_WRONG_MESSAGE_KEY);
+            return ListenerResponse.respondOnce().addMessage(response);
         }
 
         User user = getUser(username);
         user.decrementBalance(points);
 
         userDAO.save(user);
-
         userDAO.commit();
 
-        return String.format(CASHOUT_TO_ELEMENTS_MESSAGE, username, points.toString());
+        return singleResponseFormat(CASHOUT_TO_ELEMENTS_MESSAGE, username, points.toString());
     }
 
     public User getUser(String username)

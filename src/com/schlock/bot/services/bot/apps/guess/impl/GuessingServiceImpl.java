@@ -2,19 +2,17 @@ package com.schlock.bot.services.bot.apps.guess.impl;
 
 import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
-import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
-import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonUtilsImpl;
 import com.schlock.bot.services.DeploymentConfiguration;
+import com.schlock.bot.services.bot.apps.AbstractListenerService;
+import com.schlock.bot.services.bot.apps.ListenerResponse;
 import com.schlock.bot.services.bot.apps.UserService;
 import com.schlock.bot.services.bot.apps.guess.GuessingService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
+import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
 import com.schlock.bot.services.database.apps.UserDAO;
 import org.apache.tapestry5.ioc.Messages;
 
-import java.util.Arrays;
-import java.util.List;
-
-public class GuessingServiceImpl implements GuessingService
+public class GuessingServiceImpl extends AbstractListenerService implements GuessingService
 {
     private static final String START_COMMAND = "!whodat";
 
@@ -27,7 +25,6 @@ public class GuessingServiceImpl implements GuessingService
 
     private final UserDAO userDAO;
 
-    private final Messages messages;
     private final DeploymentConfiguration config;
 
     protected Pokemon currentPokemon;
@@ -39,13 +36,14 @@ public class GuessingServiceImpl implements GuessingService
                                Messages messages,
                                DeploymentConfiguration config)
     {
+        super(messages);
+
         this.pokemonService = pokemonService;
         this.userService = userService;
         this.pokemonUtils = pokemonUtils;
 
         this.userDAO = userDAO;
 
-        this.messages = messages;
         this.config = config;
     }
 
@@ -59,27 +57,20 @@ public class GuessingServiceImpl implements GuessingService
         return false;
     }
 
-    public List<String> process(String username, String command)
-    {
-        return Arrays.asList(processSingleResult(username, command));
-    }
-
-    public String processSingleResult(String username, String in)
+    public ListenerResponse process(String username, String in)
     {
         String command = in.toLowerCase();
         if (command.startsWith(START_COMMAND))
         {
-//            if (!username.equalsIgnoreCase(context.getOwnerUsername()))
-//            {
-//                return NOT_ADMIN_RESPONSE;
-//            }
             if (currentPokemon != null)
             {
                 String hint = pokemonUtils.formatHint1(currentPokemon);
-                return messages.format(GAME_ALREADY_STARTED_KEY, hint);
+
+                return singleResponseFormat(GAME_ALREADY_STARTED_KEY, hint);
             }
 
             String params = command.substring(START_COMMAND.length()).trim();
+
             return startGame(params);
         }
 
@@ -92,12 +83,11 @@ public class GuessingServiceImpl implements GuessingService
             {
                 return processWinner(username);
             }
-
         }
-        return null;
+        return ListenerResponse.empty();
     }
 
-    private String startGame(String params)
+    private ListenerResponse startGame(String params)
     {
         if (pokemonService.isGenSearch(params))
         {
@@ -111,10 +101,11 @@ public class GuessingServiceImpl implements GuessingService
         {
             currentPokemon = pokemonService.getRandomPokemon();
         }
-        return pokemonUtils.formatHint1(currentPokemon);
+        String response = pokemonUtils.formatHint1(currentPokemon);
+        return ListenerResponse.respondOnce().addMessage(response);
     }
 
-    private String processWinner(String username)
+    private ListenerResponse processWinner(String username)
     {
         Integer points = config.getQuizCorrectPoints();
         String mark = config.getCurrencyMark();
@@ -129,6 +120,6 @@ public class GuessingServiceImpl implements GuessingService
         String pokemonName = currentPokemon.getName();
         currentPokemon = null;
 
-        return messages.format(WINNER_KEY, username, pokemonName, points.toString(), mark);
+        return singleResponseFormat(WINNER_KEY, username, pokemonName, points.toString(), mark);
     }
 }

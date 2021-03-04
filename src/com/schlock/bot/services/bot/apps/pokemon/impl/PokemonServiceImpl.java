@@ -2,6 +2,8 @@ package com.schlock.bot.services.bot.apps.pokemon.impl;
 
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.services.DeploymentConfiguration;
+import com.schlock.bot.services.bot.apps.AbstractListenerService;
+import com.schlock.bot.services.bot.apps.ListenerResponse;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -12,9 +14,11 @@ import org.jsoup.nodes.Element;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
-public class PokemonServiceImpl implements PokemonService
+public class PokemonServiceImpl extends AbstractListenerService implements PokemonService
 {
     private final String POKEMON_COMMAND = "!pokemon";
     private final String POKEMON_E_COMMAND = "!pokémon";
@@ -30,7 +34,6 @@ public class PokemonServiceImpl implements PokemonService
 
     private final PokemonUtils pokemonUtils;
 
-    private final Messages messages;
     private final DeploymentConfiguration config;
 
     private Map<Integer, Pokemon> pokemonByNumber;
@@ -41,8 +44,9 @@ public class PokemonServiceImpl implements PokemonService
                                 Messages messages,
                                 DeploymentConfiguration config)
     {
+        super(messages);
+
         this.pokemonUtils = pokemonUtils;
-        this.messages = messages;
         this.config = config;
     }
 
@@ -81,12 +85,7 @@ public class PokemonServiceImpl implements PokemonService
      *
      * @return String "No. 25 Pikachu" (example)
      */
-    public List<String> process(String username, String in)
-    {
-        return Arrays.asList(processSingleResult(username, in));
-    }
-
-    public String processSingleResult(String username, String in)
+    public ListenerResponse process(String username, String in)
     {
         String commandText = in.toLowerCase();
         if (commandText.startsWith(POKEMON_COMMAND) || commandText.startsWith(POKEMON_E_COMMAND))
@@ -106,10 +105,11 @@ public class PokemonServiceImpl implements PokemonService
             Pokemon pokemon = getPokemonFromParams(commandText);
             if (pokemon != null)
             {
-                return pokemonUtils.formatOutput(pokemon, hasTypeArg, hasStatsArg);
+                String response = pokemonUtils.formatOutput(pokemon, hasTypeArg, hasStatsArg);
+                return ListenerResponse.respondOnce().addMessage(response);
             }
         }
-        return messages.get(NULL_RESPONSE_KEY);
+        return nullResponse();
     }
 
     private Pokemon getPokemonFromParams(String params)

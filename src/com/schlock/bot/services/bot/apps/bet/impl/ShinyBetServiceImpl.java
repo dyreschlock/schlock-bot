@@ -4,6 +4,8 @@ import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.services.DeploymentConfiguration;
+import com.schlock.bot.services.bot.apps.AbstractListenerService;
+import com.schlock.bot.services.bot.apps.ListenerResponse;
 import com.schlock.bot.services.bot.apps.UserService;
 import com.schlock.bot.services.bot.apps.bet.ShinyBetService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
@@ -15,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ShinyBetServiceImpl implements ShinyBetService
+public class ShinyBetServiceImpl extends AbstractListenerService implements ShinyBetService
 {
     protected static final String INSUFFICIENT_FUNDS_KEY = "bet-insufficient-funds";
     protected static final String UPDATE_INSUFFICIENT_FUNDS_KEY = "bet-update-insufficient-funds";
@@ -64,6 +66,8 @@ public class ShinyBetServiceImpl implements ShinyBetService
                                Messages messages,
                                DeploymentConfiguration config)
     {
+        super(messages);
+
         this.pokemonService = pokemonService;
         this.userService = userService;
 
@@ -99,41 +103,38 @@ public class ShinyBetServiceImpl implements ShinyBetService
         return true;
     }
 
-    public List<String> process(String username, String in)
+    public ListenerResponse process(String username, String in)
     {
         String command = in.toLowerCase();
         if (command.startsWith(SHOW_CURRENT_BETS))
         {
             return currentBets(username);
         }
-        return Arrays.asList(processSingleResults(username, command));
-    }
 
-    public String processSingleResults(String username, String command)
-    {
         String owner = config.getOwnerUsername();
         if (command.startsWith(OPEN_BETTING))
         {
             if (!username.equals(owner))
             {
-                return messages.get(NOT_ADMIN_KEY);
+                return singleResponseByKey(NOT_ADMIN_KEY);
             }
             openBetting();
-            return messages.get(BETS_NOW_OPEN_KEY);
+
+            return singleResponseByKey(BETS_NOW_OPEN_KEY);
         }
         if (command.startsWith(CLOSE_BETTING))
         {
             if (!username.equals(owner))
             {
-                return messages.get(NOT_ADMIN_KEY);
+                return singleResponseByKey(NOT_ADMIN_KEY);
             }
             closeBetting();
-            return messages.get(BETS_NOW_CLOSED_KEY);
+            return singleResponseByKey(BETS_NOW_CLOSED_KEY);
         }
 
         if (!bettingCurrentOpen)
         {
-            return messages.get(BETS_ARE_CLOSED_KEY);
+            return singleResponseByKey(BETS_ARE_CLOSED_KEY);
         }
 
         if (command.startsWith(BET_COMMAND))
@@ -149,14 +150,14 @@ public class ShinyBetServiceImpl implements ShinyBetService
             return cancelAllBets(username);
         }
 
-        return messages.get(NULL_RESPONSE_KEY);
+        return nullResponse();
     }
 
-    private List<String> currentBets(String username)
+    private ListenerResponse currentBets(String username)
     {
         List<ShinyBet> bets = shinyBetDAO.getByUsername(username);
 
-        List<String> responses = new ArrayList<>();
+        ListenerResponse responses = ListenerResponse.respondOnce();
         for(ShinyBet bet : bets)
         {
             Pokemon pokemon = pokemonService.getPokemonFromText(bet.getPokemonId());
@@ -168,19 +169,19 @@ public class ShinyBetServiceImpl implements ShinyBetService
                                                 bet.getBetAmount().toString(),
                                                 config.getCurrencyMark());
 
-            responses.add(response);
+            responses.addMessage(response);
         }
 
         if (bets.size() == 0)
         {
             String response = messages.format(NO_CURRENT_BETS_KEY, username);
-            responses.add(response);
+            responses.addMessage(response);
         }
 
         return responses;
     }
 
-    private String placeBet(String username, String in)
+    private ListenerResponse placeBet(String username, String in)
     {
         String params = in.substring(BET_COMMAND.length());
 
@@ -202,7 +203,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
                     String balance = user.getBalance().toString();
                     String currentBetAmount = currentBet.getBetAmount().toString();
 
-                    return messages.format(UPDATE_INSUFFICIENT_FUNDS_KEY, mark, balance, mark, currentBetAmount, mark);
+                    return singleResponseFormat(UPDATE_INSUFFICIENT_FUNDS_KEY, mark, balance, mark, currentBetAmount, mark);
                 }
 
                 user.incrementBalance(currentBet.getBetAmount());
@@ -216,7 +217,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
                 userDAO.commit();
 
-                return messages.format(BET_UPDATE_SUCCESS_KEY, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
+                return singleResponseFormat(BET_UPDATE_SUCCESS_KEY, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
             }
             else
             {
@@ -224,7 +225,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
                 {
                     String balance = user.getBalance().toString();
 
-                    return messages.format(INSUFFICIENT_FUNDS_KEY, mark, balance, mark);
+                    return singleResponseFormat(INSUFFICIENT_FUNDS_KEY, mark, balance, mark);
                 }
 
                 ShinyBet newBet = new ShinyBet();
@@ -240,10 +241,10 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
                 userDAO.commit();
 
-                return messages.format(BET_SUCCESS_KEY, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
+                return singleResponseFormat(BET_SUCCESS_KEY, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
             }
         }
-        return messages.get(BET_WRONG_FORMAT_KEY);
+        return singleResponseByKey(BET_WRONG_FORMAT_KEY);
     }
 
     private Pokemon getPokemonFromParams(String params)
@@ -331,7 +332,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
         return null;
     }
 
-    private String cancelBet(String username, String in)
+    private ListenerResponse cancelBet(String username, String in)
     {
         String params = in.substring(CANCEL_BET.length());
 
@@ -351,14 +352,14 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
                 userDAO.commit();
 
-                return messages.format(BET_CANCELED_KEY, pokemon.getName(), username);
+                return singleResponseFormat(BET_CANCELED_KEY, pokemon.getName(), username);
             }
-            return messages.format(BET_CANCEL_NO_BET_KEY, username, pokemon.getName());
+            return singleResponseFormat(BET_CANCEL_NO_BET_KEY, username, pokemon.getName());
         }
-        return messages.get(BET_CANCEL_WRONG_FORMAT_KEY);
+        return singleResponseByKey(BET_CANCEL_WRONG_FORMAT_KEY);
     }
 
-    private String cancelAllBets(String username)
+    private ListenerResponse cancelAllBets(String username)
     {
         List<ShinyBet> bets = shinyBetDAO.getByUsername(username);
 
@@ -375,7 +376,7 @@ public class ShinyBetServiceImpl implements ShinyBetService
 
         userDAO.commit();
 
-        return messages.format(ALL_BETS_CANCELED_KEY, username);
+        return singleResponseFormat(ALL_BETS_CANCELED_KEY, username);
     }
 
     protected void openBetting()

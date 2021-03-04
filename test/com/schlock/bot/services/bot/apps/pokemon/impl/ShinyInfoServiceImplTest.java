@@ -1,6 +1,5 @@
 package com.schlock.bot.services.bot.apps.pokemon.impl;
 
-import com.schlock.bot.AppRunner;
 import com.schlock.bot.entities.TimeUtils;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
@@ -11,15 +10,9 @@ import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.apps.ShinyGetDAO;
 import com.schlock.bot.services.database.apps.impl.ShinyGetDAOImpl;
-import org.apache.tapestry5.PropertyOverrides;
-import org.apache.tapestry5.internal.PropertyOverridesImpl;
-import org.apache.tapestry5.ioc.Messages;
-import org.apache.tapestry5.ioc.internal.util.MessagesImpl;
 import org.junit.jupiter.api.Test;
 
 import java.text.DecimalFormat;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -41,7 +34,7 @@ class ShinyInfoServiceImplTest extends DatabaseTest
     @Test
     public void testMostRecent()
     {
-        String response = impl.processSingleResponse(USERNAME1, "!recent");
+        String response = impl.process(USERNAME1, "!recent").getFirstMessage();
 
         Pokemon pokemon = pokemonService.getPokemonFromText(get1.getPokemonId());
         String expected = ShinyGetUtils.format(get1, pokemon);
@@ -52,7 +45,7 @@ class ShinyInfoServiceImplTest extends DatabaseTest
     @Test
     public void testAverage()
     {
-        String response = impl.processSingleResponse(USERNAME1, "!shinyaverage");
+        String response = impl.process(USERNAME1, "!shinyaverage").getFirstMessage();
 
         String time = TimeUtils.formatDoubleMinutesIntoTimeString(SHINY_MINUTES.doubleValue());
         String expected = messages().format(ShinyInfoServiceImpl.AVERAGE_TIME_KEY, time);
@@ -63,7 +56,7 @@ class ShinyInfoServiceImplTest extends DatabaseTest
     @Test
     public void testAverageChecks()
     {
-        String response = impl.processSingleResponse(USERNAME1, "!shinychecks");
+        String response = impl.process(USERNAME1, "!shinychecks").getFirstMessage();
 
         String checks = new DecimalFormat("#0.00").format(SHINY_CHECKS);
         String expected = messages().format(ShinyInfoServiceImpl.AVERAGE_CHECKS_KEY, checks);

@@ -5,16 +5,16 @@ import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
 import com.schlock.bot.entities.apps.pokemon.ShinyGetUtils;
 import com.schlock.bot.services.DeploymentConfiguration;
+import com.schlock.bot.services.bot.apps.AbstractListenerService;
+import com.schlock.bot.services.bot.apps.ListenerResponse;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.ShinyInfoService;
 import com.schlock.bot.services.database.apps.ShinyGetDAO;
 import org.apache.tapestry5.ioc.Messages;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.List;
 
-public class ShinyInfoServiceImpl implements ShinyInfoService
+public class ShinyInfoServiceImpl extends AbstractListenerService implements ShinyInfoService
 {
     protected static final String AVERAGE_TIME_KEY = "shiny-average-time";
     protected static final String AVERAGE_CHECKS_KEY = "shiny-average-checks";
@@ -29,7 +29,6 @@ public class ShinyInfoServiceImpl implements ShinyInfoService
 
     private final PokemonService pokemonService;
 
-    private final Messages messages;
     private final DeploymentConfiguration config;
 
     public ShinyInfoServiceImpl(PokemonService pokemonService,
@@ -37,9 +36,10 @@ public class ShinyInfoServiceImpl implements ShinyInfoService
                                 Messages messages,
                                 DeploymentConfiguration config)
     {
+        super(messages);
+
         this.pokemonService = pokemonService;
         this.shinyGetDAO = shinyGetDAO;
-        this.messages = messages;
         this.config = config;
     }
 
@@ -57,12 +57,7 @@ public class ShinyInfoServiceImpl implements ShinyInfoService
         return true;
     }
 
-    public List<String> process(String username, String in)
-    {
-        return Arrays.asList(processSingleResponse(username, in));
-    }
-
-    public String processSingleResponse(String username, String in)
+    public ListenerResponse process(String username, String in)
     {
         String commandText = in.toLowerCase().trim();
         if (commandText.startsWith(MOST_RECENT_COMMAND) || commandText.startsWith(MOST_RECENT_COMMAND2))
@@ -70,24 +65,25 @@ public class ShinyInfoServiceImpl implements ShinyInfoService
             ShinyGet mostRecent = shinyGetDAO.getMostRecent();
             Pokemon pokemon = pokemonService.getPokemonFromText(mostRecent.getPokemonId());
 
-            return ShinyGetUtils.format(mostRecent, pokemon);
+            String response = ShinyGetUtils.format(mostRecent, pokemon);
+            return ListenerResponse.respondOnce().addMessage(response);
         }
 
         if (commandText.startsWith(AVERAGE_COMMAND))
         {
             Double averageTime = shinyGetDAO.getCurrentAverageTimeToShiny();
 
-            return messages.format(AVERAGE_TIME_KEY, TimeUtils.formatDoubleMinutesIntoTimeString(averageTime));
+            return singleResponseFormat(AVERAGE_TIME_KEY, TimeUtils.formatDoubleMinutesIntoTimeString(averageTime));
         }
 
         if (commandText.startsWith(AVERAGE_CHECKS_COMMAND))
         {
             Double averageChecks = shinyGetDAO.getCurrentAverageNumberOfRareChecks();
 
-            return messages.format(AVERAGE_CHECKS_KEY, new DecimalFormat("#0.00").format(averageChecks));
+            return singleResponseFormat(AVERAGE_CHECKS_KEY, new DecimalFormat("#0.00").format(averageChecks));
         }
 
-        return messages.get(NULL_RESPONSE_KEY);
+        return nullResponse();
     }
 }
 

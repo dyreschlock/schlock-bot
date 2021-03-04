@@ -2,6 +2,7 @@ package com.schlock.bot.services.bot.twitch;
 
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.Bot;
+import com.schlock.bot.services.bot.apps.ListenerResponse;
 import com.schlock.bot.services.bot.apps.ListenerService;
 import com.schlock.bot.services.bot.discord.DiscordBot;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -45,12 +46,17 @@ public class Commands extends ListenerAdapter
         {
             if (service.isAcceptRequest(username, message))
             {
-                List<String> responses = service.process(username, message);
-                for (String response : responses)
+                ListenerResponse responses = service.process(username, message);
+                for (String response : responses.getMessages())
                 {
                     if (response != null)
                     {
                         event.getChannel().send().message(response);
+
+                        if (responses.isRelayToDiscord())
+                        {
+                            discordBot.relayMessage(response);
+                        }
                     }
                 }
 

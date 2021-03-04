@@ -32,14 +32,14 @@ class AnimationServiceImplTest extends DatabaseTest
         String animation = AlertType.MONSTER_FRISBEE.toString();
         String command = "!animation " + animation;
 
-        String response = impl.processSingleResponse(USERNAME1, command);
+        String response = impl.process(USERNAME1, command).getFirstMessage();
         String expected = messages().format(AnimationServiceImpl.ANIMATION_REGISTERED_KEY, USERNAME1, animation);
 
         assertEquals(expected, response);
 
         String badcommand = "!animation " + "asdf";
 
-        response = impl.processSingleResponse(USERNAME1, badcommand);
+        response = impl.process(USERNAME1, badcommand).getFirstMessage();
         expected = messages().format(AnimationServiceImpl.ANIMATION_WRONG_FORMAT_KEY, USERNAME1);
 
         assertEquals(expected, response);

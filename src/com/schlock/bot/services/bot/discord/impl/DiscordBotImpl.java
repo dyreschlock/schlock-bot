@@ -2,6 +2,7 @@ package com.schlock.bot.services.bot.discord.impl;
 
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.AbstractBot;
+import com.schlock.bot.services.bot.apps.ListenerResponse;
 import com.schlock.bot.services.bot.apps.ListenerService;
 import com.schlock.bot.services.bot.discord.DiscordBot;
 import net.dv8tion.jda.api.JDA;
@@ -73,8 +74,8 @@ public class DiscordBotImpl extends AbstractBot implements DiscordBot
                 {
                     if (service.isAcceptRequest(username, message))
                     {
-                        List<String> responses = service.process(username, message);
-                        for(String response : responses)
+                        ListenerResponse responses = service.process(username, message);
+                        for(String response : responses.getMessages())
                         {
                             if(response != null)
                             {
