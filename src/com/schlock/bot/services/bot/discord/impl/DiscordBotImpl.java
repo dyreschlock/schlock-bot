@@ -1,108 +1,113 @@
 package com.schlock.bot.services.bot.discord.impl;
 
-import com.schlock.bot.services.bot.AbstractBot;
 import com.schlock.bot.services.DeploymentConfiguration;
+import com.schlock.bot.services.bot.AbstractBot;
 import com.schlock.bot.services.bot.apps.ListenerService;
 import com.schlock.bot.services.bot.discord.DiscordBot;
-import discord4j.core.DiscordClientBuilder;
-import discord4j.core.GatewayDiscordClient;
-import discord4j.core.event.domain.lifecycle.ReadyEvent;
-import discord4j.core.event.domain.message.MessageCreateEvent;
-import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.User;
-import discord4j.core.object.entity.channel.MessageChannel;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
 
 public class DiscordBotImpl extends AbstractBot implements DiscordBot
 {
+    private JDA discordJDA;
+
     public DiscordBotImpl(Set<ListenerService> listeners,
                           DeploymentConfiguration config)
     {
         super(listeners, config);
     }
 
-    protected void startService()
+    protected void startService() throws Exception
     {
         final String TOKEN = getConfig().getDiscordToken();
 
-        GatewayDiscordClient client = DiscordClientBuilder.create(TOKEN)
-                .build()
-                .login()
-                .block();
-
-        client.getEventDispatcher().on(ReadyEvent.class)
-                .subscribe(event -> {
-                    final User self = event.getSelf();
-                    System.out.println(String.format(
-                            "Logged in as %s#%s", self.getUsername(), self.getDiscriminator()
-                    ));
-                });
-
-        listenForPing(client);
-
-        initializeListeners(client);
-
-        listenForCommands(client);
-
-        client.onDisconnect().block();
+        discordJDA = JDABuilder.createDefault(TOKEN).build();
+        discordJDA.addEventListener(pingListener());
+        discordJDA.addEventListener(createServiceListener());
     }
 
-
-    public void initializeListeners(GatewayDiscordClient client)
+    private ListenerAdapter pingListener()
     {
-        for (ListenerService service : getListeners())
+        final String BOT_CHANNEL = getConfig().getDiscordRelayChannel();
+
+        return new ListenerAdapter()
         {
-            client.getEventDispatcher().on(MessageCreateEvent.class)
-                    .map(MessageCreateEvent::getMessage)
-                    .filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
-                    .filter(message -> service.isAcceptRequest(message.getAuthor().get().getUsername(), message.getContent()))
-                    .subscribe(message -> {
+            @Override
+            public void onMessageReceived(@NotNull MessageReceivedEvent event)
+            {
+                if(!event.getChannel().getName().equalsIgnoreCase(BOT_CHANNEL)) return;
+                if(event.getAuthor().isBot()) return;
 
-                        String username = message.getAuthor().toString();
-                        String content = message.getContent();
+                if (event.getMessage().getContentRaw().trim().equalsIgnoreCase(PING))
+                {
+                    getBotChannel().sendMessage(PONG).queue();
+                }
+            }
+        };
+    }
 
-                        List<String> responses = service.process(username, content);
+    private ListenerAdapter createServiceListener()
+    {
+        final String BOT_CHANNEL = getConfig().getDiscordRelayChannel();
 
-                        final MessageChannel channel = message.getChannel().block();
-                        for (String response : responses)
+        return new ListenerAdapter()
+        {
+            @Override
+            public void onMessageReceived(@NotNull MessageReceivedEvent event)
+            {
+                if(!event.getChannel().getName().equalsIgnoreCase(BOT_CHANNEL)) return;
+                if(event.getAuthor().isBot()) return;
+
+                final String message = event.getMessage().getContentRaw();
+                final String username = event.getAuthor().getName();
+
+                for (ListenerService service : getListeners())
+                {
+                    if (service.isAcceptRequest(username, message))
+                    {
+                        List<String> responses = service.process(username, message);
+                        for(String response : responses)
                         {
-                            channel.createMessage(response).block();
+                            if(response != null)
+                            {
+                                getBotChannel().sendMessage(response).queue();
+                            }
                         }
-                    });
-        }
+                    }
+
+                    if (service.isTerminateAfterRequest())
+                    {
+                        return;
+                    }
+                }
+            }
+        };
     }
 
-
-    public void listenForCommands(GatewayDiscordClient client)
+    private TextChannel getBotChannel()
     {
-        HashMap<String, String> commands = getConfig().getListenerCommands();
+        final String BOT_CHANNEL = getConfig().getDiscordRelayChannel();
+        return discordJDA.getTextChannelsByName(BOT_CHANNEL, true).get(0);
+    }
 
-        for (String command : commands.keySet())
+    public void relayMessages(List<String> messages)
+    {
+        for (String m : messages)
         {
-            String responseMessage = commands.get(command);
-
-            client.getEventDispatcher().on(MessageCreateEvent.class)
-                    .map(MessageCreateEvent::getMessage)
-                    .filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
-                    .filter(message -> message.getContent().equalsIgnoreCase(command))
-                    .flatMap(Message::getChannel)
-                    .flatMap(channel -> channel.createMessage(responseMessage))
-                    .subscribe();
+            relayMessage(m);
         }
     }
 
-    public void listenForPing(GatewayDiscordClient client)
+    public void relayMessage(String message)
     {
-        client.getEventDispatcher().on(MessageCreateEvent.class)
-                .map(MessageCreateEvent::getMessage)
-                .filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
-                .filter(message -> message.getContent().equalsIgnoreCase(PING))
-                .flatMap(Message::getChannel)
-                .flatMap(channel -> channel.createMessage(PONG))
-                .subscribe();
+        getBotChannel().sendMessage(PONG).queue();
     }
 }

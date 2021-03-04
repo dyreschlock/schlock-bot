@@ -31,6 +31,8 @@ public interface DeploymentConfiguration
 
     String getDiscordToken();
 
+    String getDiscordRelayChannel();
+
     String getTwitchBotName();
 
     String getTwitchOAuthToken();

@@ -63,6 +63,7 @@ public class BotModule
                                   ShinyInfoService shinyInfoService,
                                   ShinyDexService shinyDexService,
                                   AnimationService animationService,
+                                  DiscordBot discordBot,
                                   DeploymentConfiguration config)
     {
         Set<ListenerService> listeners =
@@ -75,7 +76,7 @@ public class BotModule
                                                 shinyDexService,
                                                 animationService).collect(Collectors.toSet());
 
-        TwitchBot bot = new TwitchBotImpl(listeners, config);
+        TwitchBot bot = new TwitchBotImpl(listeners, discordBot, config);
 
         Thread twitchBotThread = new Thread()
         {
@@ -96,22 +97,16 @@ public class BotModule
         return bot;
     }
 
-    public static DiscordBot build(UserService userService,
-                                   ShinyBetService shinyBetService,
-                                   ShinyPayoutService shinyPayoutService,
-                                   GuessingService guessingService,
-                                   PokemonService pokemonService,
+    @EagerLoad
+    public static DiscordBot build(PokemonService pokemonService,
                                    ShinyInfoService shinyInfoService,
-                                   UserDAO userDAO,
+                                   ShinyDexService shinyDexService,
                                    DeploymentConfiguration config)
     {
         Set<ListenerService> listeners =
-                                    Stream.of(userService,
-                                            shinyBetService,
-                                            shinyPayoutService,
-                                            guessingService,
-                                            pokemonService,
-                                            shinyInfoService).collect(Collectors.toSet());
+                                    Stream.of(pokemonService,
+                                            shinyInfoService,
+                                            shinyDexService).collect(Collectors.toSet());
 
         DiscordBot bot = new DiscordBotImpl(listeners, config);
 

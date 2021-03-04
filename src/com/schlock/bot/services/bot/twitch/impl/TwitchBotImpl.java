@@ -3,6 +3,7 @@ package com.schlock.bot.services.bot.twitch.impl;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.AbstractBot;
 import com.schlock.bot.services.bot.apps.ListenerService;
+import com.schlock.bot.services.bot.discord.DiscordBot;
 import com.schlock.bot.services.bot.twitch.ChangeColorOnJoin;
 import com.schlock.bot.services.bot.twitch.Commands;
 import com.schlock.bot.services.bot.twitch.TwitchBot;
@@ -22,12 +23,17 @@ public class TwitchBotImpl extends AbstractBot implements TwitchBot
     private final ListenerAdapter commands;
     private final ListenerAdapter changeColor;
 
+    private final DiscordBot discordBot;
+
     public TwitchBotImpl(Set<ListenerService> listeners,
+                         DiscordBot discordBot,
                          DeploymentConfiguration config)
     {
         super(listeners, config);
 
-        commands = new Commands(listeners, config);
+        this.discordBot = discordBot;
+
+        commands = new Commands(listeners, discordBot, config);
         changeColor = new ChangeColorOnJoin(config);
     }
 

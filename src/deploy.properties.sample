@@ -1,6 +1,7 @@
 owner.username=
 
 discord.token=
+discord.relay.channel=
 
 twitch.bot.name=
 twitch.oauth.token=

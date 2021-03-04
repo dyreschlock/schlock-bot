@@ -30,6 +30,7 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
     private static final String ONWER_USERNAME = "owner.username";
 
     private static final String DISCORD_TOKEN = "discord.token";
+    private static final String DISCORD_RELAY_CHANNEL = "discord.relay.channel";
 
     private static final String TWITCH_BOT_NAME = "twitch.bot.name";
     private static final String TWITCH_OAUTH_TOKEN = "twitch.oauth.token";
@@ -166,6 +167,11 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
     public String getDiscordToken()
     {
         return getProperties().getProperty(DISCORD_TOKEN);
+    }
+
+    public String getDiscordRelayChannel()
+    {
+        return getProperties().getProperty(DISCORD_RELAY_CHANNEL);
     }
 
     public String getTwitchBotName()

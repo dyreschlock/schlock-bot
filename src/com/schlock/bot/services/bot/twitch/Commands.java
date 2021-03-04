@@ -3,6 +3,7 @@ package com.schlock.bot.services.bot.twitch;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.Bot;
 import com.schlock.bot.services.bot.apps.ListenerService;
+import com.schlock.bot.services.bot.discord.DiscordBot;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 
@@ -14,13 +15,16 @@ public class Commands extends ListenerAdapter
 {
     private final Set<ListenerService> listeners;
 
+    private final DiscordBot discordBot;
     private final DeploymentConfiguration config;
 
     public Commands(Set<ListenerService> listeners,
+                    DiscordBot discordBot,
                     DeploymentConfiguration config)
     {
         this.listeners = listeners;
 
+        this.discordBot = discordBot;
         this.config = config;
     }
 
@@ -32,6 +36,8 @@ public class Commands extends ListenerAdapter
         if (message.startsWith(Bot.PING))
         {
             event.getChannel().send().message(Bot.PONG);
+            discordBot.relayMessage(Bot.PONG);
+
             return;
         }
 
