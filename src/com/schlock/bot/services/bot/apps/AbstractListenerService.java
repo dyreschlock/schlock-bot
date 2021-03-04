@@ -14,18 +14,18 @@ public abstract class AbstractListenerService implements ListenerService
     protected ListenerResponse singleResponseByKey(String messageKey)
     {
         String response = messages.get(messageKey);
-        return ListenerResponse.respondOnce().addMessage(response);
+        return ListenerResponse.relaySingle().addMessage(response);
     }
 
     protected ListenerResponse singleResponseFormat(String messageKey, Object... args)
     {
         String response = messages.format(messageKey, args);
-        return ListenerResponse.respondOnce().addMessage(response);
+        return ListenerResponse.relaySingle().addMessage(response);
     }
 
     protected ListenerResponse nullResponse()
     {
         String response = messages.get(NULL_RESPONSE_KEY);
-        return ListenerResponse.respondOnce().addMessage(response);
+        return ListenerResponse.relaySingle().addMessage(response);
     }
 }

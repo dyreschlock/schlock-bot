@@ -5,13 +5,13 @@ import java.util.List;
 
 public class ListenerResponse
 {
-    private boolean relayToDiscord;
+    private boolean relayAll;
 
     private List<String> messages = new ArrayList<>();
 
-    private ListenerResponse(boolean relayToDiscord)
+    private ListenerResponse(boolean relayAll)
     {
-        this.relayToDiscord = relayToDiscord;
+        this.relayAll = relayAll;
     }
 
     public ListenerResponse addMessage(String message)
@@ -21,9 +21,9 @@ public class ListenerResponse
         return this;
     }
 
-    public boolean isRelayToDiscord()
+    public boolean isRelayAll()
     {
-        return relayToDiscord;
+        return relayAll;
     }
 
     public List<String> getMessages()
@@ -40,17 +40,17 @@ public class ListenerResponse
         return messages.get(0);
     }
 
-    public static ListenerResponse respondRelayToDiscord()
+    public static ListenerResponse relayAll()
     {
         return new ListenerResponse(true);
     }
 
-    public static ListenerResponse respondOnce()
+    public static ListenerResponse relaySingle()
     {
         return new ListenerResponse(false);
     }
 
-    public static ListenerResponse empty()
+    public static ListenerResponse relayNothing()
     {
         return new ListenerResponse(false);
     }

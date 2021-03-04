@@ -80,7 +80,7 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
         final String MARK = config.getCurrencyMark();
         final String ADMIN = config.getOwnerUsername();
 
-        if (!username.equals(ADMIN)) return ListenerResponse.empty();
+        if (!username.equals(ADMIN)) return ListenerResponse.relayNothing();
 
         if (in.toLowerCase().trim().startsWith(SHINY_GET_COMMAND))
         {
@@ -147,7 +147,7 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
                 }
             }
 
-            ListenerResponse response = ListenerResponse.respondRelayToDiscord();
+            ListenerResponse response = ListenerResponse.relayAll();
             if (usersWinningPokemon.size() != 0)
             {
                 response.addMessage(messages.format(WINNERS_POKEMON_KEY, StringUtils.join(usersWinningPokemon, ", ")));

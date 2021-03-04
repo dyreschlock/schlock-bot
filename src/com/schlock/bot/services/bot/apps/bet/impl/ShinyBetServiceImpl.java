@@ -13,8 +13,6 @@ import com.schlock.bot.services.database.apps.ShinyBetDAO;
 import com.schlock.bot.services.database.apps.UserDAO;
 import org.apache.tapestry5.ioc.Messages;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ShinyBetServiceImpl extends AbstractListenerService implements ShinyBetService
@@ -157,7 +155,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
     {
         List<ShinyBet> bets = shinyBetDAO.getByUsername(username);
 
-        ListenerResponse responses = ListenerResponse.respondOnce();
+        ListenerResponse responses = ListenerResponse.relaySingle();
         for(ShinyBet bet : bets)
         {
             Pokemon pokemon = pokemonService.getPokemonFromText(bet.getPokemonId());

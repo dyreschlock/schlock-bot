@@ -124,7 +124,7 @@ public class UserServiceImpl extends AbstractListenerService implements UserServ
         catch (NumberFormatException e)
         {
             String response = messages.get(CASHOUT_WRONG_MESSAGE_KEY);
-            return ListenerResponse.respondOnce().addMessage(response);
+            return ListenerResponse.relaySingle().addMessage(response);
         }
 
         User user = getUser(username);

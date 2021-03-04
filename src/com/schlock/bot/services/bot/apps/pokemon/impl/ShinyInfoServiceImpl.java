@@ -66,7 +66,7 @@ public class ShinyInfoServiceImpl extends AbstractListenerService implements Shi
             Pokemon pokemon = pokemonService.getPokemonFromText(mostRecent.getPokemonId());
 
             String response = ShinyGetUtils.format(mostRecent, pokemon);
-            return ListenerResponse.respondOnce().addMessage(response);
+            return ListenerResponse.relaySingle().addMessage(response);
         }
 
         if (commandText.startsWith(AVERAGE_COMMAND))

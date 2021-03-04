@@ -84,7 +84,7 @@ public class GuessingServiceImpl extends AbstractListenerService implements Gues
                 return processWinner(username);
             }
         }
-        return ListenerResponse.empty();
+        return ListenerResponse.relayNothing();
     }
 
     private ListenerResponse startGame(String params)
@@ -102,7 +102,7 @@ public class GuessingServiceImpl extends AbstractListenerService implements Gues
             currentPokemon = pokemonService.getRandomPokemon();
         }
         String response = pokemonUtils.formatHint1(currentPokemon);
-        return ListenerResponse.respondOnce().addMessage(response);
+        return ListenerResponse.relaySingle().addMessage(response);
     }
 
     private ListenerResponse processWinner(String username)

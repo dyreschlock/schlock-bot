@@ -9,7 +9,6 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 public class Commands extends ListenerAdapter
@@ -49,11 +48,11 @@ public class Commands extends ListenerAdapter
                 ListenerResponse responses = service.process(username, message);
                 for (String response : responses.getMessages())
                 {
-                    if (response != null)
+                    if (response != null && !response.isEmpty())
                     {
                         event.getChannel().send().message(response);
 
-                        if (responses.isRelayToDiscord())
+                        if (responses.isRelayAll())
                         {
                             discordBot.relayMessage(response);
                         }

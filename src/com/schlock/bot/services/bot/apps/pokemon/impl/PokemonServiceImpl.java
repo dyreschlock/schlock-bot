@@ -106,7 +106,7 @@ public class PokemonServiceImpl extends AbstractListenerService implements Pokem
             if (pokemon != null)
             {
                 String response = pokemonUtils.formatOutput(pokemon, hasTypeArg, hasStatsArg);
-                return ListenerResponse.respondOnce().addMessage(response);
+                return ListenerResponse.relaySingle().addMessage(response);
             }
         }
         return nullResponse();
