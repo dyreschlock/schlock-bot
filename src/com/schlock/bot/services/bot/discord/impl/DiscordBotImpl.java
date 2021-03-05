@@ -82,11 +82,11 @@ public class DiscordBotImpl extends AbstractBot implements DiscordBot
                                 getBotChannel().sendMessage(response).queue();
                             }
                         }
-                    }
 
-                    if (service.isTerminateAfterRequest())
-                    {
-                        return;
+                        if (service.isTerminateAfterRequest())
+                        {
+                            return;
+                        }
                     }
                 }
             }
