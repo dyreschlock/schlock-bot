@@ -1,5 +1,6 @@
 package com.schlock.bot.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -42,4 +43,6 @@ public interface DeploymentConfiguration
     HashMap<String, String> getListenerCommands();
 
     String getHibernateProperty(String property);
+
+    String getReadmeFileContents();
 }

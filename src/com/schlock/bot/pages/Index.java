@@ -1,59 +1,21 @@
 package com.schlock.bot.pages;
 
 import com.schlock.bot.services.DeploymentConfiguration;
-import com.schlock.bot.services.bot.apps.ListenerResponse;
-import com.schlock.bot.services.bot.apps.UserService;
-import com.schlock.bot.services.bot.apps.bet.ShinyBetService;
-import com.schlock.bot.services.database.apps.ShinyGetDAO;
-import org.apache.tapestry5.hibernate.annotations.CommitAfter;
-
-import javax.inject.Inject;
-import java.util.Date;
-import java.util.List;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 public class Index
 {
     @Inject
-    private ShinyGetDAO shinyGetDAO;
+    private DeploymentConfiguration config;
 
-    @Inject
-    private ShinyBetService shinyBetService;
 
-    @Inject
-    private UserService userService;
-
-    @Inject
-    private DeploymentConfiguration configuration;
-
-    public String getShinyNumber()
+    public String getTitle()
     {
-        return shinyGetDAO.getCurrentShinyNumber().toString();
+        return config.getBotName();
     }
 
-    public String getDate()
+    public String getSourceMD()
     {
-        return new Date().toString();
+        return config.getReadmeFileContents();
     }
-
-    public String getOpenBets()
-    {
-        String command = "!openbets";
-        String owner = configuration.getOwnerUsername();
-
-        ListenerResponse response = shinyBetService.process(owner, command);
-
-        return response.getFirstMessage();
-    }
-
-    @CommitAfter
-    public String getBalance()
-    {
-        String command = "!balance";
-        String username = "asdfasdf";
-
-        ListenerResponse response = userService.process(username, command);
-
-        return response.getFirstMessage();
-    }
-
 }

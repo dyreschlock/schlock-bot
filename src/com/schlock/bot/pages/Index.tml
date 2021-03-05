@@ -1,16 +1,59 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html t:type="layout" title="'Testing'"
+<!DOCTYPE html>
+<html lang="en"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
 >
+<head>
+    <meta charset="UTF-8"/>
+    <title>${title}</title>
+    <style>
 
-    testing<br />
+        #sourceMD
+        {
+            display: none;
+        }
 
-    ${date} <br/>
+        #outputHTML
+        {
+            width: 720px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-    ${shinyNumber} <br/>
+        body
+        {
+            font-family: arial;
+            line-height: 1.7;
+        }
 
-    ${openBets}<br/>
+        ul
+        {
+            margin-bottom: 15px;
+        }
 
-    ${balance}
+        h1, h2, h3, h4, h5
+        {
+            font-weight: bold;
+        }
 
+
+    </style>
+    <script src="lib/showdown.js" />
+    <script>
+
+        function run()
+        {
+            var text = document.getElementById('sourceMD').value;
+            var html = new showdown.Converter().makeHtml(text);
+
+            document.getElementById('outputHTML').innerHTML = html;
+        }
+
+    </script>
+</head>
+<body onload="run()">
+
+    <textarea id="sourceMD">${sourceMD}</textarea>
+
+    <div id="outputHTML"></div>
+</body>
 </html>

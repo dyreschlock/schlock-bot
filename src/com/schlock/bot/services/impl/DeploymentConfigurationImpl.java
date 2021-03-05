@@ -3,15 +3,20 @@ package com.schlock.bot.services.impl;
 import com.schlock.bot.services.DeploymentConfiguration;
 import org.apache.commons.lang.StringUtils;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 public class DeploymentConfigurationImpl implements DeploymentConfiguration
 {
     private static final String LOCATION = "com.schlock.bot.deploy";
 
+
+    private static final String README_FILE = "readme.md";
 
     private static final String CONFIG_PROPERTIES = "config.properties";
     private static final String DEPLOY_PROPERTIES = "deploy.properties";
@@ -225,5 +230,19 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
         config.setContext(context);
 
         return config;
+    }
+
+    public String getReadmeFileContents()
+    {
+        Path readme = Path.of(README_FILE);
+        try
+        {
+            return Files.readString(readme);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 }
