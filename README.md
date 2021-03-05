@@ -1,4 +1,4 @@
-#Schlock Bort
+# Schlock Bort
 
 Hi there.  Recently I've been streaming on Twitch, so I decided to write my own bot to do various things. This bot does 3 things: connects to Twitch, connects to Discord, and hosts webpages to be used as OBS overlays.
 
@@ -6,7 +6,7 @@ Hi there.  Recently I've been streaming on Twitch, so I decided to write my own 
 * Follow me on Twitter, too: http://twiter.com/dyreschlock
 * Join the Discord here: https://discord.gg/7GZ7xdR5yK
 
-##Twitch Commands
+## Twitch Commands
 
 The following are commands that should work on Twitter.
 
@@ -45,13 +45,13 @@ Betting information, details, and payouts are relayed into Discord.
 * **!pokemon [range]** -- return a random pokemon from a range. (ie 1-23, bulbasaur-rayquaza, whatevs)
 
 
-##Animations and Sound Effects
+## Animations and Sound Effects
 
 Spend some of your points to play animations or sound effects on my stream.
 
 * coming soon
 
-##Discord Commands
+## Discord Commands
 
 The following are commands are that should work on Discord.
 
