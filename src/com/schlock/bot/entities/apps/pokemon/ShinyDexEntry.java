@@ -1,10 +1,12 @@
 package com.schlock.bot.entities.apps.pokemon;
 
+import com.schlock.bot.entities.Persisted;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "dex_entry")
-public class ShinyDexEntry
+public class ShinyDexEntry extends Persisted
 {
     @Id
     @GeneratedValue

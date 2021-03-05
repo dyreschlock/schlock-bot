@@ -39,7 +39,6 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
         List<ShinyDexEntry> entries = dexEntryDAO.getAll();
 
         List<Pokemon> pokemon = new ArrayList<>();
-
         for (ShinyDexEntry entry : entries)
         {
             Pokemon p = pokemonService.getPokemonFromText(entry.getPokemon());

@@ -24,19 +24,14 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T>
         String text = String.format("from %s order by id", entityClass.getName());
 
         Query query = session.createQuery(text);
+
         List results = query.list();
-
-        session.getTransaction().commit();
-
         return results;
     }
 
     public T getById(Long id)
     {
         Object result = session.load(entityClass, id);
-
-        session.getTransaction().commit();
-
         return (T) result;
     }
 
