@@ -19,9 +19,8 @@ public class ShinyDex
 
     public String getShinyDexMessage()
     {
-//        List<Pokemon> entries = dexEntryService.getShinyDexEntries();
-
-        Integer dexCount = 71;//entries.size();
+        List<Pokemon> entries = dexEntryService.getShinyDexEntries();
+        Integer dexCount = entries.size();
 
         String message = messages.format("shiny-dex", dexCount.toString());
         return message;
