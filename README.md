@@ -10,11 +10,14 @@ Hi there.  Recently I've been streaming on Twitch, so I decided to write my own 
 
 The following are commands that should work on Twitter.
 
+Shiny Information
+
 * **!last** (or) **!recent** -- returns the most recent shiny
 * **!shinyaverage** -- returns my average time for any shiny to appear
 * **!shinychecks** -- return my average number of checks for a rare shiny
 * **!shinydex** -- returns the current count of pokemon in my shiny dex
 
+Points management
 
 * **!balance** -- current point total in Schlock Bot
 * **!cashout [points]** -- takes your points in Schlock Bot and moves them to Stream Elements
@@ -23,7 +26,7 @@ The following are commands that should work on Twitter.
 
 **Shiny Bets!** - You can bet points on which shiny pokemon will show up in my game next, and in how many minutes. If you guess the pokemon correctly, you'll double your bet. If you guess the closest number of minutes, you'll triple your bet. And if you get both, you'll triple your winnings.  Betting is opened and closed by the admin.
 
-Betting information, details, and payouts are relayed into Discord.
+Betting information, details, and payouts are relayed to both Twitch and Discord.
 
 * **!bet [pokemon] [minutes] [points]** -- make a shiny bet. Bet points that the next shiny will be [pokemon] and it'll appear in [minutes].
 * **!cancelbet [pokemon]** -- cancel a single bet on a specific pokemon.
@@ -31,7 +34,7 @@ Betting information, details, and payouts are relayed into Discord.
 * **!currentbets** -- view all of your current bets
 
 
-**Who's that Pokemon?** - Guess on a random pokemon for 20 points
+**Who's that Pokemon?** - Guess on a random pokemon for 20 points. The Bot will listen to all messages and when any text matches the current pokemon, points will be awarded.
 
 * **!whodat** -- Starts the game with a random pokemon from all generations.
 * **!whodat [gen]** -- Starts the game with a random pokemon a particular generation.
