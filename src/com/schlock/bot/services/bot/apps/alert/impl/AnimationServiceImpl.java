@@ -56,9 +56,9 @@ public class AnimationServiceImpl extends AbstractListenerService implements Ani
                 alertDAO.save(alert);
                 alertDAO.commit();
 
-                return singleResponseFormat(ANIMATION_REGISTERED_KEY, username, type.name());
+                return formatSingleResponse(ANIMATION_REGISTERED_KEY, username, type.name());
             }
-            return singleResponseFormat(ANIMATION_WRONG_FORMAT_KEY, username);
+            return formatSingleResponse(ANIMATION_WRONG_FORMAT_KEY, username);
         }
         return nullResponse();
     }

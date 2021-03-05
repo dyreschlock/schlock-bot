@@ -89,7 +89,7 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
             ShinyGet get = createShinyGetFromParams(params);;
             if(get == null)
             {
-                return singleResponseByKey(BAD_FORMAT_MESSAGE_KEY);
+                return formatSingleResponse(BAD_FORMAT_MESSAGE_KEY);
             }
 
             shinyGetDAO.save(get);
@@ -104,7 +104,7 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
             {
                 shinyBetDAO.commit();
 
-                return singleResponseByKey(NO_BETS_NO_WINNERS_KEY);
+                return formatSingleResponse(NO_BETS_NO_WINNERS_KEY);
             }
 
             Integer closestRange = calculateClosestRange(get.getTimeInMinutes(), bets);

@@ -71,7 +71,7 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
 
             Integer count = entries.size();
 
-            return singleResponseFormat(CURRENT_SHINY_DEX_KEY, count.toString());
+            return formatSingleResponse(CURRENT_SHINY_DEX_KEY, count.toString());
         }
         return nullResponse();
     }

@@ -73,14 +73,14 @@ public class ShinyInfoServiceImpl extends AbstractListenerService implements Shi
         {
             Double averageTime = shinyGetDAO.getCurrentAverageTimeToShiny();
 
-            return singleResponseFormat(AVERAGE_TIME_KEY, TimeUtils.formatDoubleMinutesIntoTimeString(averageTime));
+            return formatSingleResponse(AVERAGE_TIME_KEY, TimeUtils.formatDoubleMinutesIntoTimeString(averageTime));
         }
 
         if (commandText.startsWith(AVERAGE_CHECKS_COMMAND))
         {
             Double averageChecks = shinyGetDAO.getCurrentAverageNumberOfRareChecks();
 
-            return singleResponseFormat(AVERAGE_CHECKS_KEY, new DecimalFormat("#0.00").format(averageChecks));
+            return formatSingleResponse(AVERAGE_CHECKS_KEY, new DecimalFormat("#0.00").format(averageChecks));
         }
 
         return nullResponse();

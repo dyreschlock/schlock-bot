@@ -66,7 +66,7 @@ public class GuessingServiceImpl extends AbstractListenerService implements Gues
             {
                 String hint = pokemonUtils.formatHint1(currentPokemon);
 
-                return singleResponseFormat(GAME_ALREADY_STARTED_KEY, hint);
+                return formatSingleResponse(GAME_ALREADY_STARTED_KEY, hint);
             }
 
             String params = command.substring(START_COMMAND.length()).trim();
@@ -120,6 +120,6 @@ public class GuessingServiceImpl extends AbstractListenerService implements Gues
         String pokemonName = currentPokemon.getName();
         currentPokemon = null;
 
-        return singleResponseFormat(WINNER_KEY, username, pokemonName, points.toString(), mark);
+        return formatSingleResponse(WINNER_KEY, username, pokemonName, points.toString(), mark);
     }
 }

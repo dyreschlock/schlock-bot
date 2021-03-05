@@ -82,7 +82,7 @@ public class UserServiceImpl extends AbstractListenerService implements UserServ
 
         String balance = user.getBalance().toString();
 
-        return singleResponseFormat(USER_BALANCE_KEY, username, balance, config.getCurrencyMark());
+        return formatSingleResponse(USER_BALANCE_KEY, username, balance, config.getCurrencyMark());
     }
 
     public ListenerResponse addPoints(String username, String in)
@@ -94,7 +94,7 @@ public class UserServiceImpl extends AbstractListenerService implements UserServ
         }
         catch (NumberFormatException e)
         {
-            return singleResponseFormat(GIVE_POINTS_ERROR_KEY, config.getTwitchBotName());
+            return formatSingleResponse(GIVE_POINTS_ERROR_KEY, config.getTwitchBotName());
         }
 
         User user = getUser(username);
@@ -103,7 +103,7 @@ public class UserServiceImpl extends AbstractListenerService implements UserServ
         userDAO.save(user);
         userDAO.commit();
 
-        return singleResponseFormat(GIVE_POINTS_KEY, points.toString(), config.getCurrencyMark(), username, user.getBalance().toString());
+        return formatSingleResponse(GIVE_POINTS_KEY, points.toString(), config.getCurrencyMark(), username, user.getBalance().toString());
     }
 
     private Integer removePointsFromCommand(String command, String input) throws NumberFormatException
@@ -133,7 +133,7 @@ public class UserServiceImpl extends AbstractListenerService implements UserServ
         userDAO.save(user);
         userDAO.commit();
 
-        return singleResponseFormat(CASHOUT_TO_ELEMENTS_MESSAGE, username, points.toString());
+        return formatSingleResponse(CASHOUT_TO_ELEMENTS_MESSAGE, username, points.toString());
     }
 
     public User getUser(String username)
