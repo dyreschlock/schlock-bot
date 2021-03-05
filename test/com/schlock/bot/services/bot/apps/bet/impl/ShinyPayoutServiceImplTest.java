@@ -4,6 +4,7 @@ import com.schlock.bot.entities.apps.User;
 import com.schlock.bot.entities.apps.bet.ShinyBet;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
 import com.schlock.bot.services.DeploymentConfiguration;
+import com.schlock.bot.services.bot.apps.ListenerResponse;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
 import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonServiceImpl;
@@ -22,8 +23,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ShinyPayoutServiceImplTest extends DatabaseTest
 {
@@ -70,12 +70,16 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         final String MARK = config().getCurrencyMark();
         final String GET = "!shinyget catch beedrill 100";
 
-        List<String> responses = impl.process(USERNAME1, GET).getMessages();
+        ListenerResponse resp = impl.process(USERNAME1, GET);
+        List<String> responses = resp.getMessages();
 
+        assertFalse(resp.isRelayAll());
         assertEquals(0, responses.size());
 
-        responses = impl.process(ADMIN, GET).getMessages();
+        resp = impl.process(ADMIN, GET);
+        responses = resp.getMessages();
 
+        assertTrue(resp.isRelayAll());
         assertEquals(6, responses.size());
 
         user1 = userDAO.getByUsername(user1.getUsername());
