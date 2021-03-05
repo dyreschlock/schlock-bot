@@ -361,6 +361,11 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
     {
         List<ShinyBet> bets = shinyBetDAO.getByUsername(username);
 
+        if(bets.size() == 0)
+        {
+            return formatSingleResponse(NO_CURRENT_BETS_KEY, username);
+        }
+
         User user = userService.getUser(username);
 
         for (ShinyBet bet : bets)
@@ -371,7 +376,6 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
             shinyBetDAO.delete(bet);
         }
         userDAO.save(user);
-
         userDAO.commit();
 
         return formatAllResponse(ALL_BETS_CANCELED_KEY, username);
