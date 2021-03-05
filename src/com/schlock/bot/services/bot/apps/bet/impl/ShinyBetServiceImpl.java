@@ -114,25 +114,25 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
         {
             if (!username.equals(owner))
             {
-                return singleResponseByKey(NOT_ADMIN_KEY);
+                return formatSingleResponse(NOT_ADMIN_KEY);
             }
             openBetting();
 
-            return singleResponseByKey(BETS_NOW_OPEN_KEY);
+            return formatAllResponse(BETS_NOW_OPEN_KEY);
         }
         if (command.startsWith(CLOSE_BETTING))
         {
             if (!username.equals(owner))
             {
-                return singleResponseByKey(NOT_ADMIN_KEY);
+                return formatSingleResponse(NOT_ADMIN_KEY);
             }
             closeBetting();
-            return singleResponseByKey(BETS_NOW_CLOSED_KEY);
+            return formatAllResponse(BETS_NOW_CLOSED_KEY);
         }
 
         if (!bettingCurrentOpen)
         {
-            return singleResponseByKey(BETS_ARE_CLOSED_KEY);
+            return formatSingleResponse(BETS_ARE_CLOSED_KEY);
         }
 
         if (command.startsWith(BET_COMMAND))
@@ -201,7 +201,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
                     String balance = user.getBalance().toString();
                     String currentBetAmount = currentBet.getBetAmount().toString();
 
-                    return singleResponseFormat(UPDATE_INSUFFICIENT_FUNDS_KEY, mark, balance, mark, currentBetAmount, mark);
+                    return formatSingleResponse(UPDATE_INSUFFICIENT_FUNDS_KEY, mark, balance, mark, currentBetAmount, mark);
                 }
 
                 user.incrementBalance(currentBet.getBetAmount());
@@ -215,7 +215,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
                 userDAO.commit();
 
-                return singleResponseFormat(BET_UPDATE_SUCCESS_KEY, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
+                return formatAllResponse(BET_UPDATE_SUCCESS_KEY, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
             }
             else
             {
@@ -223,7 +223,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
                 {
                     String balance = user.getBalance().toString();
 
-                    return singleResponseFormat(INSUFFICIENT_FUNDS_KEY, mark, balance, mark);
+                    return formatSingleResponse(INSUFFICIENT_FUNDS_KEY, mark, balance, mark);
                 }
 
                 ShinyBet newBet = new ShinyBet();
@@ -239,10 +239,10 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
                 userDAO.commit();
 
-                return singleResponseFormat(BET_SUCCESS_KEY, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
+                return formatAllResponse(BET_SUCCESS_KEY, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
             }
         }
-        return singleResponseByKey(BET_WRONG_FORMAT_KEY);
+        return formatSingleResponse(BET_WRONG_FORMAT_KEY);
     }
 
     private Pokemon getPokemonFromParams(String params)
@@ -350,11 +350,11 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
                 userDAO.commit();
 
-                return singleResponseFormat(BET_CANCELED_KEY, pokemon.getName(), username);
+                return formatAllResponse(BET_CANCELED_KEY, pokemon.getName(), username);
             }
-            return singleResponseFormat(BET_CANCEL_NO_BET_KEY, username, pokemon.getName());
+            return formatSingleResponse(BET_CANCEL_NO_BET_KEY, username, pokemon.getName());
         }
-        return singleResponseByKey(BET_CANCEL_WRONG_FORMAT_KEY);
+        return formatSingleResponse(BET_CANCEL_WRONG_FORMAT_KEY);
     }
 
     private ListenerResponse cancelAllBets(String username)
@@ -374,7 +374,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
         userDAO.commit();
 
-        return singleResponseFormat(ALL_BETS_CANCELED_KEY, username);
+        return formatAllResponse(ALL_BETS_CANCELED_KEY, username);
     }
 
     protected void openBetting()
