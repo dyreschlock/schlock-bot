@@ -8,7 +8,7 @@ Hi there.  Recently I've been streaming on Twitch, so I decided to write my own 
 
 ## Twitch Commands
 
-The following are commands that should work on Twitter.
+The following are commands that should work in Twitch.
 
 **Points management** - Manage that points you current have in Schlock Bot.
 
