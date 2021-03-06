@@ -109,6 +109,6 @@ public class DiscordBotImpl extends AbstractBot implements DiscordBot
 
     public void relayMessage(String message)
     {
-        getBotChannel().sendMessage(PONG).queue();
+        getBotChannel().sendMessage(message).queue();
     }
 }
