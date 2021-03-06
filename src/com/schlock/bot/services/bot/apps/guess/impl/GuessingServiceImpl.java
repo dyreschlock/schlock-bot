@@ -76,8 +76,8 @@ public class GuessingServiceImpl extends AbstractListenerService implements Gues
 
         if (currentPokemon != null)
         {
-            String text = command.replaceAll(" ", "");
-            String id = currentPokemon.getId();
+            String text = command.toLowerCase().replaceAll(" ", "");
+            String id = currentPokemon.getId().toLowerCase();
 
             if (text.contains(id))
             {
