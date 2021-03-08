@@ -1,4 +1,4 @@
-package com.schlock.bot.pages;
+package com.schlock.bot.pages.pokemon;
 
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.services.bot.apps.pokemon.ShinyDexService;
@@ -55,7 +55,7 @@ public class ShinyDex
                 imgClass = "show";
             }
 
-            html += "<td><img class=\"p" + imgClass + "\" src=\"img/pokemon/" + number + ".png\"/></td>";
+            html += "<td><img class=\"p" + imgClass + "\" src=\"../img/pokemon/" + number + ".png\"/></td>";
             if (i % COLUMNS == 0)
             {
                 html += "</tr><tr>";
