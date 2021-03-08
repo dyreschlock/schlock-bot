@@ -17,6 +17,16 @@
                 /*text-shadow: 0 0 2px black;*/
             }
 
+            div.obs_window
+            {
+                width: 1280px;
+                height: 720px;
+
+                text-align: center;
+
+                padding-top: 100px;
+            }
+
             .banner span
             {
                 animation: rainbow 1s infinite;
@@ -54,8 +64,12 @@
 </head>
 <body>
 
-    <span id="banner" class="banner">
-        <t:outputraw value="twitchAlertHTML" />
-    </span>
+    <div class="obs_window">
+
+        <span id="banner" class="banner">
+            <t:outputraw value="twitchAlertHTML" />
+        </span>
+
+    </div>
 </body>
 </html>
