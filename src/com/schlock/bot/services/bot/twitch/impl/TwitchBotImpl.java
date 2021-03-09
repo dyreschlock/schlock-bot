@@ -2,7 +2,7 @@ package com.schlock.bot.services.bot.twitch.impl;
 
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.AbstractBot;
-import com.schlock.bot.services.bot.apps.ListenerService;
+import com.schlock.bot.services.commands.ListenerService;
 import com.schlock.bot.services.bot.discord.DiscordBot;
 import com.schlock.bot.services.bot.twitch.ChangeColorOnJoin;
 import com.schlock.bot.services.bot.twitch.Commands;

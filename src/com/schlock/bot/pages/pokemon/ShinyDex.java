@@ -1,7 +1,7 @@
 package com.schlock.bot.pages.pokemon;
 
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
-import com.schlock.bot.services.bot.apps.pokemon.ShinyDexService;
+import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 

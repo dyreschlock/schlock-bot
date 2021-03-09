@@ -2,8 +2,8 @@ package com.schlock.bot.services.bot.discord.impl;
 
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.AbstractBot;
-import com.schlock.bot.services.bot.apps.ListenerResponse;
-import com.schlock.bot.services.bot.apps.ListenerService;
+import com.schlock.bot.services.commands.ListenerResponse;
+import com.schlock.bot.services.commands.ListenerService;
 import com.schlock.bot.services.bot.discord.DiscordBot;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;

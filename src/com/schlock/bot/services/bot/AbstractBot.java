@@ -1,7 +1,7 @@
 package com.schlock.bot.services.bot;
 
 import com.schlock.bot.services.DeploymentConfiguration;
-import com.schlock.bot.services.bot.apps.ListenerService;
+import com.schlock.bot.services.commands.ListenerService;
 
 import java.util.Set;
 

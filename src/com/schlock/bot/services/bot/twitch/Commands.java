@@ -2,8 +2,8 @@ package com.schlock.bot.services.bot.twitch;
 
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.Bot;
-import com.schlock.bot.services.bot.apps.ListenerResponse;
-import com.schlock.bot.services.bot.apps.ListenerService;
+import com.schlock.bot.services.commands.ListenerResponse;
+import com.schlock.bot.services.commands.ListenerService;
 import com.schlock.bot.services.bot.discord.DiscordBot;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;

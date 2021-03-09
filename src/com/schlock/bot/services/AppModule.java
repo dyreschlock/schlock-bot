@@ -1,7 +1,9 @@
 package com.schlock.bot.services;
 
 import com.schlock.bot.services.bot.BotModule;
+import com.schlock.bot.services.commands.ListenerModule;
 import com.schlock.bot.services.database.DatabaseModule;
+import com.schlock.bot.services.entities.ManagementModule;
 import com.schlock.bot.services.impl.DeploymentConfigurationImpl;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
@@ -10,8 +12,10 @@ import org.apache.tapestry5.ioc.annotations.ImportModule;
 import java.io.IOException;
 
 @ImportModule({
-        DatabaseModule.class,
-        BotModule.class
+        BotModule.class,
+        ListenerModule.class,
+        ManagementModule.class,
+        DatabaseModule.class
 })
 public class AppModule
 {

@@ -1,32 +1,19 @@
 package com.schlock.bot.services.bot;
 
 import com.schlock.bot.services.DeploymentConfiguration;
-import com.schlock.bot.services.bot.apps.ListenerService;
-import com.schlock.bot.services.bot.apps.alert.AnimationService;
-import com.schlock.bot.services.bot.apps.alert.impl.AnimationServiceImpl;
-import com.schlock.bot.services.bot.apps.bet.ShinyGetFormatter;
-import com.schlock.bot.services.bot.apps.bet.impl.ShinyGetFormatterImpl;
-import com.schlock.bot.services.bot.apps.pokemon.ShinyDexService;
-import com.schlock.bot.services.bot.apps.UserService;
-import com.schlock.bot.services.bot.apps.bet.ShinyBetService;
-import com.schlock.bot.services.bot.apps.bet.ShinyPayoutService;
-import com.schlock.bot.services.bot.apps.bet.impl.ShinyBetServiceImpl;
-import com.schlock.bot.services.bot.apps.bet.impl.ShinyPayoutServiceImpl;
-import com.schlock.bot.services.bot.apps.guess.GuessingService;
-import com.schlock.bot.services.bot.apps.guess.impl.GuessingServiceImpl;
-import com.schlock.bot.services.bot.apps.pokemon.impl.ShinyDexServiceImpl;
-import com.schlock.bot.services.bot.apps.impl.UserServiceImpl;
-import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
-import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
-import com.schlock.bot.services.bot.apps.pokemon.ShinyInfoService;
-import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonServiceImpl;
-import com.schlock.bot.services.bot.apps.pokemon.impl.PokemonUtilsImpl;
-import com.schlock.bot.services.bot.apps.pokemon.impl.ShinyInfoServiceImpl;
 import com.schlock.bot.services.bot.discord.DiscordBot;
 import com.schlock.bot.services.bot.discord.impl.DiscordBotImpl;
 import com.schlock.bot.services.bot.twitch.TwitchBot;
 import com.schlock.bot.services.bot.twitch.impl.TwitchBotImpl;
-import com.schlock.bot.services.database.apps.UserDAO;
+import com.schlock.bot.services.commands.ListenerService;
+import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
+import com.schlock.bot.services.commands.pokemon.shiny.ShinyInfoService;
+import com.schlock.bot.services.commands.base.AnimationService;
+import com.schlock.bot.services.commands.base.UserPointsService;
+import com.schlock.bot.services.commands.pokemon.bet.ShinyBetService;
+import com.schlock.bot.services.commands.pokemon.bet.ShinyPayoutService;
+import com.schlock.bot.services.commands.pokemon.whodat.PokemonGuessingService;
+import com.schlock.bot.services.commands.pokemon.whodat.PokemonInfoService;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
 
@@ -38,31 +25,14 @@ public class BotModule
 {
     public static void bind(ServiceBinder binder)
     {
-
-        binder.bind(PokemonUtils.class, PokemonUtilsImpl.class);
-        binder.bind(ShinyGetFormatter.class, ShinyGetFormatterImpl.class);
-
-        //app listeners
-        binder.bind(UserService.class, UserServiceImpl.class);
-
-        binder.bind(ShinyBetService.class, ShinyBetServiceImpl.class);
-        binder.bind(ShinyPayoutService.class, ShinyPayoutServiceImpl.class);
-
-        binder.bind(GuessingService.class, GuessingServiceImpl.class);
-
-        binder.bind(PokemonService.class, PokemonServiceImpl.class);
-        binder.bind(ShinyInfoService.class, ShinyInfoServiceImpl.class);
-        binder.bind(ShinyDexService.class, ShinyDexServiceImpl.class);
-
-        binder.bind(AnimationService.class, AnimationServiceImpl.class);
     }
 
     @EagerLoad
-    public static TwitchBot build(UserService userService,
+    public static TwitchBot build(UserPointsService userPointsService,
                                   ShinyBetService shinyBetService,
                                   ShinyPayoutService shinyPayoutService,
-                                  GuessingService guessingService,
-                                  PokemonService pokemonService,
+                                  PokemonGuessingService guessingService,
+                                  PokemonInfoService pokemonInfoService,
                                   ShinyInfoService shinyInfoService,
                                   ShinyDexService shinyDexService,
                                   AnimationService animationService,
@@ -70,11 +40,11 @@ public class BotModule
                                   DeploymentConfiguration config)
     {
         Set<ListenerService> listeners =
-                                    Stream.of(userService,
+                                    Stream.of(userPointsService,
                                                 shinyBetService,
                                                 shinyPayoutService,
                                                 guessingService,
-                                                pokemonService,
+                                                pokemonInfoService,
                                                 shinyInfoService,
                                                 shinyDexService,
                                                 animationService).collect(Collectors.toSet());
@@ -101,13 +71,13 @@ public class BotModule
     }
 
     @EagerLoad
-    public static DiscordBot build(PokemonService pokemonService,
+    public static DiscordBot build(PokemonInfoService pokemonInfoService,
                                    ShinyInfoService shinyInfoService,
                                    ShinyDexService shinyDexService,
                                    DeploymentConfiguration config)
     {
         Set<ListenerService> listeners =
-                                    Stream.of(pokemonService,
+                                    Stream.of(pokemonInfoService,
                                             shinyInfoService,
                                             shinyDexService).collect(Collectors.toSet());
 
