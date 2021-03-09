@@ -8,6 +8,7 @@ import com.schlock.bot.services.commands.ListenerService;
 import com.schlock.bot.services.commands.pokemon.bet.impl.ShinyBetServiceImpl;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;
+import com.schlock.bot.services.entities.pokemon.ShinyBetFormatter;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonManagementImpl;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonUtilsImpl;
 import com.schlock.bot.services.database.DatabaseTest;
@@ -17,6 +18,7 @@ import com.schlock.bot.services.database.apps.impl.ShinyBetDAOImpl;
 import com.schlock.bot.services.database.apps.impl.UserDAOImpl;
 import com.schlock.bot.services.entities.base.UserManagement;
 import com.schlock.bot.services.entities.base.impl.UserManagementImpl;
+import com.schlock.bot.services.entities.pokemon.impl.ShinyBetFormatterImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -333,7 +335,9 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
         UserManagement userManagement = new UserManagementImpl(userDAO, config());
 
-        impl = new ShinyBetServiceImpl(pokemonManagement, userManagement, shinyBetDAO, userDAO, messages(), config());
+        ShinyBetFormatter betFormatter = new ShinyBetFormatterImpl(pokemonManagement, messages(), config());
+
+        impl = new ShinyBetServiceImpl(pokemonManagement, userManagement, betFormatter, shinyBetDAO, userDAO, messages(), config());
         impl.openBetting();
 
         createTestObjects();

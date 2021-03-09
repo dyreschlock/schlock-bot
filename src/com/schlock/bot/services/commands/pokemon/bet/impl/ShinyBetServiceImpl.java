@@ -11,6 +11,7 @@ import com.schlock.bot.services.database.apps.ShinyBetDAO;
 import com.schlock.bot.services.database.apps.UserDAO;
 import com.schlock.bot.services.entities.base.UserManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
+import com.schlock.bot.services.entities.pokemon.ShinyBetFormatter;
 import org.apache.tapestry5.ioc.Messages;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
     protected static final String BET_UPDATE_SUCCESS_KEY = "bet-update-success";
     protected static final String BET_SUCCESS_KEY = "bet-success";
     protected static final String CURRENT_BET_KEY = "current-bet";
-    protected static final String NO_CURRENT_BETS_KEY = "no-current-bets";
+    protected static final String NO_CURRENT_BETS_KEY = "user-no-current-bets";
 
     protected static final String BET_CANCELED_KEY = "bet-canceled";
     protected static final String ALL_BETS_CANCELED_KEY = "all-bets-canceled";
@@ -48,10 +49,11 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
     private final PokemonManagement pokemonManagement;
     private final UserManagement userManagement;
 
+    private final ShinyBetFormatter shinyBetFormatter;
+
     private final ShinyBetDAO shinyBetDAO;
     private final UserDAO userDAO;
 
-    private final Messages messages;
     private final DeploymentConfiguration config;
 
 
@@ -59,6 +61,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
     public ShinyBetServiceImpl(PokemonManagement pokemonManagement,
                                UserManagement userManagement,
+                               ShinyBetFormatter shinyBetFormatter,
                                ShinyBetDAO shinyBetDAO,
                                UserDAO userDAO,
                                Messages messages,
@@ -69,10 +72,11 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
         this.pokemonManagement = pokemonManagement;
         this.userManagement = userManagement;
 
+        this.shinyBetFormatter = shinyBetFormatter;
+
         this.shinyBetDAO = shinyBetDAO;
         this.userDAO = userDAO;
 
-        this.messages = messages;
         this.config = config;
     }
 
@@ -154,29 +158,13 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
     private ListenerResponse currentBets(String username)
     {
         List<ShinyBet> bets = shinyBetDAO.getByUsername(username);
-
-        ListenerResponse responses = ListenerResponse.relaySingle();
-        for(ShinyBet bet : bets)
-        {
-            Pokemon pokemon = pokemonManagement.getPokemonFromText(bet.getPokemonId());
-
-            String response = messages.format(CURRENT_BET_KEY,
-                                                username,
-                                                pokemon.getName(),
-                                                bet.getTimeMinutes().toString(),
-                                                bet.getBetAmount().toString(),
-                                                config.getCurrencyMark());
-
-            responses.addMessage(response);
-        }
-
         if (bets.size() == 0)
         {
-            String response = messages.format(NO_CURRENT_BETS_KEY, username);
-            responses.addMessage(response);
+            return formatSingleResponse(NO_CURRENT_BETS_KEY, username);
         }
 
-        return responses;
+        ListenerResponse responses = ListenerResponse.relaySingle();
+        return shinyBetFormatter.formatAllBets(responses, bets);
     }
 
     private ListenerResponse placeBet(String username, String in)

@@ -4,8 +4,10 @@ import com.schlock.bot.services.commands.base.AnimationService;
 import com.schlock.bot.services.commands.base.UserPointsService;
 import com.schlock.bot.services.commands.base.impl.AnimationServiceImpl;
 import com.schlock.bot.services.commands.base.impl.UserPointsServiceImpl;
+import com.schlock.bot.services.commands.pokemon.bet.ShinyBetInfoService;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetService;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyPayoutService;
+import com.schlock.bot.services.commands.pokemon.bet.impl.ShinyBetInfoServiceImpl;
 import com.schlock.bot.services.commands.pokemon.bet.impl.ShinyBetServiceImpl;
 import com.schlock.bot.services.commands.pokemon.bet.impl.ShinyPayoutServiceImpl;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
@@ -28,6 +30,7 @@ public class ListenerModule
 
         //pokemon
         binder.bind(ShinyBetService.class, ShinyBetServiceImpl.class);
+        binder.bind(ShinyBetInfoService.class, ShinyBetInfoServiceImpl.class);
         binder.bind(ShinyPayoutService.class, ShinyPayoutServiceImpl.class);
 
         binder.bind(ShinyDexService.class, ShinyDexServiceImpl.class);

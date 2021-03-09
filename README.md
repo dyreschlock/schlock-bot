@@ -65,6 +65,10 @@ The following commands should work in Discord when the bot is running, but only 
 * **!shinychecks** -- return my average number of checks for a rare shiny
 * **!shinydex** -- returns the current count of pokemon in my shiny dex
 
+**Shiny Bets** - Get information on current bets
+
+* **!allcurrentbets** -- returns a list of all current bets with their Twitch username
+
 **Pokemon Information** - Return information from a pokemon, or a random pokemon
 
 * **!pokemon [number of name]** -- return details of a specific pokemon
