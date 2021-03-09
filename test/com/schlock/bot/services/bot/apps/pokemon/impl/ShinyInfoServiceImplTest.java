@@ -4,7 +4,8 @@ import com.schlock.bot.entities.TimeUtils;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
 import com.schlock.bot.entities.apps.pokemon.ShinyGetType;
-import com.schlock.bot.entities.apps.pokemon.ShinyGetUtils;
+import com.schlock.bot.services.bot.apps.bet.ShinyGetFormatter;
+import com.schlock.bot.services.bot.apps.bet.impl.ShinyGetFormatterImpl;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonUtils;
 import com.schlock.bot.services.database.DatabaseTest;
@@ -24,6 +25,7 @@ class ShinyInfoServiceImplTest extends DatabaseTest
     private final static Integer SHINY_CHECKS = 1000;
 
     private PokemonService pokemonService;
+    private ShinyGetFormatter shinyFormatter;
     private ShinyGetDAO shinyGetDAO;
 
     private ShinyInfoServiceImpl impl;
@@ -36,8 +38,7 @@ class ShinyInfoServiceImplTest extends DatabaseTest
     {
         String response = impl.process(USERNAME1, "!recent").getFirstMessage();
 
-        Pokemon pokemon = pokemonService.getPokemonFromText(get1.getPokemonId());
-        String expected = ShinyGetUtils.format(get1, pokemon);
+        String expected = shinyFormatter.formatMostRecent(get1);
 
         assertEquals(expected, response);
     }
@@ -79,7 +80,9 @@ class ShinyInfoServiceImplTest extends DatabaseTest
 
         pokemonService = new PokemonServiceImpl(pokemonUtils, messages(), config());
 
-        impl = new ShinyInfoServiceImpl(pokemonService, shinyGetDAO, messages(), config());
+        shinyFormatter = new ShinyGetFormatterImpl(pokemonService, messages());
+
+        impl = new ShinyInfoServiceImpl(pokemonService, shinyFormatter, shinyGetDAO, messages(), config());
 
         createTestObjects();
     }

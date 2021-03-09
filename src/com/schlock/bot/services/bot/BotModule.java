@@ -4,6 +4,8 @@ import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.ListenerService;
 import com.schlock.bot.services.bot.apps.alert.AnimationService;
 import com.schlock.bot.services.bot.apps.alert.impl.AnimationServiceImpl;
+import com.schlock.bot.services.bot.apps.bet.ShinyGetFormatter;
+import com.schlock.bot.services.bot.apps.bet.impl.ShinyGetFormatterImpl;
 import com.schlock.bot.services.bot.apps.pokemon.ShinyDexService;
 import com.schlock.bot.services.bot.apps.UserService;
 import com.schlock.bot.services.bot.apps.bet.ShinyBetService;
@@ -38,6 +40,7 @@ public class BotModule
     {
 
         binder.bind(PokemonUtils.class, PokemonUtilsImpl.class);
+        binder.bind(ShinyGetFormatter.class, ShinyGetFormatterImpl.class);
 
         //app listeners
         binder.bind(UserService.class, UserServiceImpl.class);

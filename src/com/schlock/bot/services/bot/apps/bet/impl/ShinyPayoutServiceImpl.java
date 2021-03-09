@@ -8,6 +8,7 @@ import com.schlock.bot.entities.apps.pokemon.ShinyGetType;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.AbstractListenerService;
 import com.schlock.bot.services.bot.apps.ListenerResponse;
+import com.schlock.bot.services.bot.apps.bet.ShinyGetFormatter;
 import com.schlock.bot.services.bot.apps.bet.ShinyPayoutService;
 import com.schlock.bot.services.bot.apps.pokemon.PokemonService;
 import com.schlock.bot.services.database.apps.ShinyBetDAO;
@@ -35,6 +36,7 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
     private static final String SHINY_GET_COMMAND = "!shinyget ";
 
     private final PokemonService pokemonService;
+    private final ShinyGetFormatter shinyFormatter;
 
     private final ShinyBetDAO shinyBetDAO;
     private final ShinyGetDAO shinyGetDAO;
@@ -44,6 +46,7 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
 
 
     public ShinyPayoutServiceImpl(PokemonService pokemonService,
+                                    ShinyGetFormatter shinyFormatter,
                                     ShinyBetDAO shinyBetDAO,
                                     ShinyGetDAO shinyGetDAO,
                                     UserDAO userDAO,
@@ -53,6 +56,7 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
         super(messages);
 
         this.pokemonService = pokemonService;
+        this.shinyFormatter = shinyFormatter;
 
         this.shinyBetDAO = shinyBetDAO;
         this.shinyGetDAO = shinyGetDAO;
@@ -94,18 +98,21 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
 
             shinyGetDAO.save(get);
 
-            Map<User, Integer> totalWinnings = new HashMap<>();
-            Set<String> usersWinningPokemon = new HashSet<>();
-            Set<String> usersWinningTime = new HashSet<>();
-            Set<String> usersWinningBoth = new HashSet<>();
+            ListenerResponse response = ListenerResponse.relayAll();
+            response.addMessage(shinyFormatter.formatNewlyCaught(get));
 
             List<ShinyBet> bets = shinyBetDAO.getAllCurrent();
             if (bets.size() == 0)
             {
                 shinyBetDAO.commit();
 
-                return formatSingleResponse(NO_BETS_NO_WINNERS_KEY);
+                return response.addMessage(messages.get(NO_BETS_NO_WINNERS_KEY));
             }
+
+            Map<User, Integer> totalWinnings = new HashMap<>();
+            Set<String> usersWinningPokemon = new HashSet<>();
+            Set<String> usersWinningTime = new HashSet<>();
+            Set<String> usersWinningBoth = new HashSet<>();
 
             Integer closestRange = calculateClosestRange(get.getTimeInMinutes(), bets);
             for (ShinyBet bet : bets)
@@ -147,7 +154,6 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
                 }
             }
 
-            ListenerResponse response = ListenerResponse.relayAll();
             if (usersWinningPokemon.size() != 0)
             {
                 response.addMessage(messages.format(WINNERS_POKEMON_KEY, StringUtils.join(usersWinningPokemon, ", ")));

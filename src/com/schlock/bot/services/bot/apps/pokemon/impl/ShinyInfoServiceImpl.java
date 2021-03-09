@@ -3,7 +3,8 @@ package com.schlock.bot.services.bot.apps.pokemon.impl;
 import com.schlock.bot.entities.TimeUtils;
 import com.schlock.bot.entities.apps.pokemon.Pokemon;
 import com.schlock.bot.entities.apps.pokemon.ShinyGet;
-import com.schlock.bot.entities.apps.pokemon.ShinyGetUtils;
+import com.schlock.bot.services.bot.apps.bet.ShinyGetFormatter;
+import com.schlock.bot.services.bot.apps.bet.impl.ShinyGetFormatterImpl;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.apps.AbstractListenerService;
 import com.schlock.bot.services.bot.apps.ListenerResponse;
@@ -25,13 +26,15 @@ public class ShinyInfoServiceImpl extends AbstractListenerService implements Shi
     public static final String AVERAGE_COMMAND = "!shinyaverage";
     private static final String AVERAGE_CHECKS_COMMAND = "!shinychecks";
 
-    private final ShinyGetDAO shinyGetDAO;
-
     private final PokemonService pokemonService;
+    private final ShinyGetFormatter shinyFormatter;
+
+    private final ShinyGetDAO shinyGetDAO;
 
     private final DeploymentConfiguration config;
 
     public ShinyInfoServiceImpl(PokemonService pokemonService,
+                                ShinyGetFormatter shinyFormatter,
                                 ShinyGetDAO shinyGetDAO,
                                 Messages messages,
                                 DeploymentConfiguration config)
@@ -39,6 +42,7 @@ public class ShinyInfoServiceImpl extends AbstractListenerService implements Shi
         super(messages);
 
         this.pokemonService = pokemonService;
+        this.shinyFormatter = shinyFormatter;
         this.shinyGetDAO = shinyGetDAO;
         this.config = config;
     }
@@ -63,9 +67,8 @@ public class ShinyInfoServiceImpl extends AbstractListenerService implements Shi
         if (commandText.startsWith(MOST_RECENT_COMMAND) || commandText.startsWith(MOST_RECENT_COMMAND2))
         {
             ShinyGet mostRecent = shinyGetDAO.getMostRecent();
-            Pokemon pokemon = pokemonService.getPokemonFromText(mostRecent.getPokemonId());
 
-            String response = ShinyGetUtils.format(mostRecent, pokemon);
+            String response = shinyFormatter.formatMostRecent(mostRecent);
             return ListenerResponse.relaySingle().addMessage(response);
         }
 
