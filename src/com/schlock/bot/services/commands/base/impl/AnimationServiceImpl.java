@@ -1,12 +1,12 @@
 package com.schlock.bot.services.commands.base.impl;
 
-import com.schlock.bot.entities.apps.User;
-import com.schlock.bot.entities.apps.alert.AlertType;
-import com.schlock.bot.entities.apps.alert.AnimationAlert;
+import com.schlock.bot.entities.base.User;
+import com.schlock.bot.entities.base.alert.AlertType;
+import com.schlock.bot.entities.base.alert.AnimationAlert;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.base.AnimationService;
-import com.schlock.bot.services.database.apps.AlertDAO;
+import com.schlock.bot.services.database.base.AlertDAO;
 import com.schlock.bot.services.entities.base.UserManagement;
 import org.apache.tapestry5.ioc.Messages;
 

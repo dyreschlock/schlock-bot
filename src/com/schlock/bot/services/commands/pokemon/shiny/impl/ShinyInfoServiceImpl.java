@@ -1,12 +1,12 @@
 package com.schlock.bot.services.commands.pokemon.shiny.impl;
 
 import com.schlock.bot.entities.TimeUtils;
-import com.schlock.bot.entities.apps.pokemon.ShinyGet;
+import com.schlock.bot.entities.pokemon.ShinyGet;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyInfoService;
-import com.schlock.bot.services.database.apps.ShinyGetDAO;
+import com.schlock.bot.services.database.pokemon.ShinyGetDAO;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.ShinyGetFormatter;
 import org.apache.tapestry5.ioc.Messages;

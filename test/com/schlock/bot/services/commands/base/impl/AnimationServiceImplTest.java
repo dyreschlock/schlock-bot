@@ -1,14 +1,13 @@
 package com.schlock.bot.services.commands.base.impl;
 
-import com.schlock.bot.entities.apps.User;
-import com.schlock.bot.entities.apps.alert.Alert;
-import com.schlock.bot.entities.apps.alert.AlertType;
-import com.schlock.bot.services.commands.base.impl.AnimationServiceImpl;
+import com.schlock.bot.entities.base.User;
+import com.schlock.bot.entities.base.alert.Alert;
+import com.schlock.bot.entities.base.alert.AlertType;
 import com.schlock.bot.services.database.DatabaseTest;
-import com.schlock.bot.services.database.apps.AlertDAO;
-import com.schlock.bot.services.database.apps.UserDAO;
-import com.schlock.bot.services.database.apps.impl.AlertDAOImpl;
-import com.schlock.bot.services.database.apps.impl.UserDAOImpl;
+import com.schlock.bot.services.database.base.AlertDAO;
+import com.schlock.bot.services.database.base.UserDAO;
+import com.schlock.bot.services.database.base.impl.AlertDAOImpl;
+import com.schlock.bot.services.database.base.impl.UserDAOImpl;
 import com.schlock.bot.services.entities.base.UserManagement;
 import com.schlock.bot.services.entities.base.impl.UserManagementImpl;
 import org.junit.jupiter.api.Test;

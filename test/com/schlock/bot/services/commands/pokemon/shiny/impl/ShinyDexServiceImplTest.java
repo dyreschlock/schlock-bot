@@ -1,15 +1,14 @@
 package com.schlock.bot.services.commands.pokemon.shiny.impl;
 
-import com.schlock.bot.entities.apps.pokemon.ShinyDexEntry;
-import com.schlock.bot.services.commands.pokemon.shiny.impl.ShinyDexServiceImpl;
+import com.schlock.bot.entities.pokemon.ShinyDexEntry;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonManagementImpl;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonUtilsImpl;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;
 import com.schlock.bot.services.database.DatabaseTest;
-import com.schlock.bot.services.database.apps.ShinyDexEntryDAO;
-import com.schlock.bot.services.database.apps.impl.ShinyDexEntryDAOImpl;
+import com.schlock.bot.services.database.pokemon.ShinyDexEntryDAO;
+import com.schlock.bot.services.database.pokemon.impl.ShinyDexEntryDAOImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

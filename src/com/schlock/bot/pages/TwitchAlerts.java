@@ -1,6 +1,6 @@
 package com.schlock.bot.pages;
 
-import com.schlock.bot.services.database.apps.UserDAO;
+import com.schlock.bot.services.database.base.UserDAO;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 

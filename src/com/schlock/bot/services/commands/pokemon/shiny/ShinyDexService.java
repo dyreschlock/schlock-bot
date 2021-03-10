@@ -1,6 +1,6 @@
 package com.schlock.bot.services.commands.pokemon.shiny;
 
-import com.schlock.bot.entities.apps.pokemon.Pokemon;
+import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.services.commands.ListenerService;
 
 import java.util.List;

@@ -1,11 +1,11 @@
 package com.schlock.bot.services.commands.pokemon.shiny.impl;
 
-import com.schlock.bot.entities.apps.pokemon.Pokemon;
-import com.schlock.bot.entities.apps.pokemon.ShinyDexEntry;
+import com.schlock.bot.entities.pokemon.Pokemon;
+import com.schlock.bot.entities.pokemon.ShinyDexEntry;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
-import com.schlock.bot.services.database.apps.ShinyDexEntryDAO;
+import com.schlock.bot.services.database.pokemon.ShinyDexEntryDAO;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import org.apache.tapestry5.ioc.Messages;
 

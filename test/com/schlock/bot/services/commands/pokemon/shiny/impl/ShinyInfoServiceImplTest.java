@@ -1,9 +1,8 @@
 package com.schlock.bot.services.commands.pokemon.shiny.impl;
 
 import com.schlock.bot.entities.TimeUtils;
-import com.schlock.bot.entities.apps.pokemon.ShinyGet;
-import com.schlock.bot.entities.apps.pokemon.ShinyGetType;
-import com.schlock.bot.services.commands.pokemon.shiny.impl.ShinyInfoServiceImpl;
+import com.schlock.bot.entities.pokemon.ShinyGet;
+import com.schlock.bot.entities.pokemon.ShinyGetType;
 import com.schlock.bot.services.entities.pokemon.ShinyGetFormatter;
 import com.schlock.bot.services.entities.pokemon.impl.ShinyGetFormatterImpl;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
@@ -11,8 +10,8 @@ import com.schlock.bot.services.entities.pokemon.PokemonUtils;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonManagementImpl;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonUtilsImpl;
 import com.schlock.bot.services.database.DatabaseTest;
-import com.schlock.bot.services.database.apps.ShinyGetDAO;
-import com.schlock.bot.services.database.apps.impl.ShinyGetDAOImpl;
+import com.schlock.bot.services.database.pokemon.ShinyGetDAO;
+import com.schlock.bot.services.database.pokemon.impl.ShinyGetDAOImpl;
 import org.junit.jupiter.api.Test;
 
 import java.text.DecimalFormat;

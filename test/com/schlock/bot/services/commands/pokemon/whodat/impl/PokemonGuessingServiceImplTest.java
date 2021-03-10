@@ -1,15 +1,14 @@
 package com.schlock.bot.services.commands.pokemon.whodat.impl;
 
-import com.schlock.bot.entities.apps.User;
-import com.schlock.bot.entities.apps.pokemon.Pokemon;
-import com.schlock.bot.services.commands.pokemon.whodat.impl.PokemonGuessingServiceImpl;
+import com.schlock.bot.entities.base.User;
+import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonManagementImpl;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonUtilsImpl;
 import com.schlock.bot.services.database.DatabaseTest;
-import com.schlock.bot.services.database.apps.UserDAO;
-import com.schlock.bot.services.database.apps.impl.UserDAOImpl;
+import com.schlock.bot.services.database.base.UserDAO;
+import com.schlock.bot.services.database.base.impl.UserDAOImpl;
 import com.schlock.bot.services.entities.base.UserManagement;
 import com.schlock.bot.services.entities.base.impl.UserManagementImpl;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package com.schlock.bot.services.entities.pokemon;
 
-import com.schlock.bot.entities.apps.pokemon.ShinyGet;
+import com.schlock.bot.entities.pokemon.ShinyGet;
 
 public interface ShinyGetFormatter
 {

@@ -1,8 +1,8 @@
 package com.schlock.bot.services.entities.base.impl;
 
-import com.schlock.bot.entities.apps.User;
+import com.schlock.bot.entities.base.User;
 import com.schlock.bot.services.DeploymentConfiguration;
-import com.schlock.bot.services.database.apps.UserDAO;
+import com.schlock.bot.services.database.base.UserDAO;
 import com.schlock.bot.services.entities.base.UserManagement;
 
 import java.util.Date;

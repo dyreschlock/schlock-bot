@@ -1,8 +1,12 @@
 package com.schlock.bot.services.database;
 
 import com.schlock.bot.services.DeploymentConfiguration;
-import com.schlock.bot.services.database.apps.*;
-import com.schlock.bot.services.database.apps.impl.*;
+import com.schlock.bot.services.database.pokemon.*;
+import com.schlock.bot.services.database.pokemon.impl.*;
+import com.schlock.bot.services.database.base.AlertDAO;
+import com.schlock.bot.services.database.base.UserDAO;
+import com.schlock.bot.services.database.base.impl.AlertDAOImpl;
+import com.schlock.bot.services.database.base.impl.UserDAOImpl;
 import org.apache.tapestry5.hibernate.HibernateConfigurer;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;

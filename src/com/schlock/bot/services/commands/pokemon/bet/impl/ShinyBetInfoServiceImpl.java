@@ -1,10 +1,10 @@
 package com.schlock.bot.services.commands.pokemon.bet.impl;
 
-import com.schlock.bot.entities.apps.bet.ShinyBet;
+import com.schlock.bot.entities.pokemon.ShinyBet;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetInfoService;
-import com.schlock.bot.services.database.apps.ShinyBetDAO;
+import com.schlock.bot.services.database.pokemon.ShinyBetDAO;
 import com.schlock.bot.services.entities.pokemon.ShinyBetFormatter;
 import org.apache.tapestry5.ioc.Messages;
 

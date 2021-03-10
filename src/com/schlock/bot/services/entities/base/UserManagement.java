@@ -1,6 +1,6 @@
 package com.schlock.bot.services.entities.base;
 
-import com.schlock.bot.entities.apps.User;
+import com.schlock.bot.entities.base.User;
 
 public interface UserManagement
 {

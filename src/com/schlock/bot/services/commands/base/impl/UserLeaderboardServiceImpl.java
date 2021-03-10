@@ -1,11 +1,11 @@
 package com.schlock.bot.services.commands.base.impl;
 
-import com.schlock.bot.entities.apps.User;
+import com.schlock.bot.entities.base.User;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.base.UserLeaderboardService;
-import com.schlock.bot.services.database.apps.UserDAO;
+import com.schlock.bot.services.database.base.UserDAO;
 import org.apache.tapestry5.ioc.Messages;
 
 import java.util.List;

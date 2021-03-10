@@ -24,14 +24,14 @@
         <property name="hibernate.hikari.idleTimeout">30000</property>
         <property name="hibernate.hikari.dataSourceClassName">com.mysql.jdbc.jdbc2.optional.MysqlDataSource</property>
 
-        <mapping class="com.schlock.bot.entities.apps.bet.ShinyBet" />
-        <mapping class="com.schlock.bot.entities.apps.User" />
-        <mapping class="com.schlock.bot.entities.apps.pokemon.ShinyGet" />
-        <mapping class="com.schlock.bot.entities.apps.pokemon.ShinyDexEntry" />
+        <mapping class="com.schlock.bot.entities.pokemon.ShinyBet" />
+        <mapping class="com.schlock.bot.entities.base.User" />
+        <mapping class="com.schlock.bot.entities.pokemon.ShinyGet" />
+        <mapping class="com.schlock.bot.entities.pokemon.ShinyDexEntry" />
 
-        <mapping class="com.schlock.bot.entities.apps.alert.Alert" />
-        <mapping class="com.schlock.bot.entities.apps.alert.TwitchAlert" />
-        <mapping class="com.schlock.bot.entities.apps.alert.AnimationAlert" />
+        <mapping class="com.schlock.bot.entities.base.alert.Alert" />
+        <mapping class="com.schlock.bot.entities.base.alert.TwitchAlert" />
+        <mapping class="com.schlock.bot.entities.base.alert.AnimationAlert" />
 
     </session-factory>
 </hibernate-configuration>

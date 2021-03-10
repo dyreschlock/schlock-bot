@@ -1,6 +1,6 @@
 package com.schlock.bot.services.entities.pokemon.impl;
 
-import com.schlock.bot.entities.apps.pokemon.Pokemon;
+import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;

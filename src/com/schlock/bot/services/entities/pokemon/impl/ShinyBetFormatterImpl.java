@@ -1,8 +1,8 @@
 package com.schlock.bot.services.entities.pokemon.impl;
 
-import com.schlock.bot.entities.apps.User;
-import com.schlock.bot.entities.apps.bet.ShinyBet;
-import com.schlock.bot.entities.apps.pokemon.Pokemon;
+import com.schlock.bot.entities.base.User;
+import com.schlock.bot.entities.pokemon.ShinyBet;
+import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;

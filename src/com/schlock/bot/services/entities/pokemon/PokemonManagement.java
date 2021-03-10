@@ -1,6 +1,6 @@
 package com.schlock.bot.services.entities.pokemon;
 
-import com.schlock.bot.entities.apps.pokemon.Pokemon;
+import com.schlock.bot.entities.pokemon.Pokemon;
 
 public interface PokemonManagement
 {
