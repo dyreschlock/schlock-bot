@@ -6,6 +6,8 @@ import com.schlock.bot.services.database.impl.BaseDAOImpl;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import java.util.List;
+
 public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO
 {
     public UserDAOImpl(Session session)
@@ -34,5 +36,16 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO
 
         User user = singleResult(query);
         return user;
+    }
+
+    public List<User> getOrderByPoints(int count)
+    {
+        String text = "from User u " +
+                        " order by u.balance desc ";
+
+        Query query = session.createQuery(text);
+        query.setMaxResults(count);
+
+        return query.list();
     }
 }

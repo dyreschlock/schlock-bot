@@ -1,8 +1,10 @@
 package com.schlock.bot.services.commands;
 
 import com.schlock.bot.services.commands.base.AnimationService;
+import com.schlock.bot.services.commands.base.UserLeaderboardService;
 import com.schlock.bot.services.commands.base.UserPointsService;
 import com.schlock.bot.services.commands.base.impl.AnimationServiceImpl;
+import com.schlock.bot.services.commands.base.impl.UserLeaderboardServiceImpl;
 import com.schlock.bot.services.commands.base.impl.UserPointsServiceImpl;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetInfoService;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetService;
@@ -27,6 +29,7 @@ public class ListenerModule
         //base
         binder.bind(UserPointsService.class, UserPointsServiceImpl.class);
         binder.bind(AnimationService.class, AnimationServiceImpl.class);
+        binder.bind(UserLeaderboardService.class, UserLeaderboardServiceImpl.class);
 
         //pokemon
         binder.bind(ShinyBetService.class, ShinyBetServiceImpl.class);

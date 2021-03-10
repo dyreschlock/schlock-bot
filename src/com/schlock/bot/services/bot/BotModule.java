@@ -6,6 +6,7 @@ import com.schlock.bot.services.bot.discord.impl.DiscordBotImpl;
 import com.schlock.bot.services.bot.twitch.TwitchBot;
 import com.schlock.bot.services.bot.twitch.impl.TwitchBotImpl;
 import com.schlock.bot.services.commands.ListenerService;
+import com.schlock.bot.services.commands.base.UserLeaderboardService;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetInfoService;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyInfoService;
@@ -72,14 +73,16 @@ public class BotModule
     }
 
     @EagerLoad
-    public static DiscordBot build(PokemonInfoService pokemonInfoService,
+    public static DiscordBot build(UserLeaderboardService leaderboardService,
+                                   PokemonInfoService pokemonInfoService,
                                    ShinyBetInfoService shinyBetInfoService,
                                    ShinyInfoService shinyInfoService,
                                    ShinyDexService shinyDexService,
                                    DeploymentConfiguration config)
     {
         Set<ListenerService> listeners =
-                                    Stream.of(pokemonInfoService,
+                                    Stream.of(leaderboardService,
+                                            pokemonInfoService,
                                             shinyBetInfoService,
                                             shinyInfoService,
                                             shinyDexService).collect(Collectors.toSet());

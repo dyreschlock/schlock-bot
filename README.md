@@ -58,6 +58,10 @@ Spend some of your points to play animations or sound effects on my stream.
 
 The following commands should work in Discord when the bot is running, but only in the #bot-chat-relay channel.
 
+**Points Information** - Get information on Schlock Bot users
+
+* **!leaderboard** -- Get the current top 10 ranked users by point balance.
+
 **Shiny Information** - Get information on my shiny progress in Let's Go Eevee.
 
 * **!last** (or) **!recent** -- returns the most recent shiny
