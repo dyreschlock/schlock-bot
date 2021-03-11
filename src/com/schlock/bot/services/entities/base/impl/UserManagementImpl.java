@@ -26,18 +26,19 @@ public class UserManagementImpl implements UserManagement
         User user = userDAO.getByUsername(username);
         if (user == null)
         {
-            user = createNewUser(username);
+            user = createNewDefaultUser(username);
+
+            userDAO.save(user);
         }
         return user;
     }
 
-    private User createNewUser(String username)
+    public User createNewDefaultUser(String username)
     {
         User user = new User(username);
         user.setBalance(config.getUserDefaultBalance());
         user.setFollowDate(new Date());
-
-        userDAO.save(user);
+        user.setPointsDoubler(1);
 
         return user;
     }

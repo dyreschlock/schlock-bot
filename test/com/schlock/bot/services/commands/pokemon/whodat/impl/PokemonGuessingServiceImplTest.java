@@ -101,7 +101,6 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
         expectedBalance = DEFAULT_BALANCE + config().getQuizCorrectPoints();
 
         assertEquals(currentBalance, expectedBalance);
-
     }
 
     @Override
@@ -150,8 +149,7 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
 
     private void createTestObjects()
     {
-        testUser1 = new User();
-        testUser1.setUsername(USERNAME1);
+        testUser1 = userManagement.createNewDefaultUser(USERNAME1);
         testUser1.setBalance(DEFAULT_BALANCE);
 
         userDAO.save(testUser1);

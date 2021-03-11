@@ -5,6 +5,8 @@ import com.schlock.bot.entities.pokemon.ShinyBet;
 import com.schlock.bot.entities.pokemon.ShinyGet;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.ListenerResponse;
+import com.schlock.bot.services.entities.base.UserManagement;
+import com.schlock.bot.services.entities.base.impl.UserManagementImpl;
 import com.schlock.bot.services.entities.pokemon.ShinyGetFormatter;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;
@@ -52,6 +54,7 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
     private static final Integer BET3_AMOUNT = 100;
 
     private ShinyGetFormatter shinyFormatter;
+    private UserManagement userManagement;
 
     private ShinyPayoutServiceImpl impl;
 
@@ -151,6 +154,8 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
             }
         };
 
+        userManagement = new UserManagementImpl(userDAO, config());
+
         PokemonUtils pokemonUtils = new PokemonUtilsImpl(messages());
 
         PokemonManagement pokemonManagement = new PokemonManagementImpl(pokemonUtils, config());
@@ -171,16 +176,13 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
 
     private void createTestObjects()
     {
-        user1 = new User();
-        user1.setUsername(USERNAME1);
+        user1 = userManagement.createNewDefaultUser(USERNAME1);
         user1.setBalance(BALANCE);
 
-        user2 = new User();
-        user2.setUsername(USERNAME2);
+        user2 = userManagement.createNewDefaultUser(USERNAME2);
         user2.setBalance(BALANCE);
 
-        user3 = new User();
-        user3.setUsername(USERNAME3);
+        user3 = userManagement.createNewDefaultUser(USERNAME3);
         user3.setBalance(BALANCE);
 
 

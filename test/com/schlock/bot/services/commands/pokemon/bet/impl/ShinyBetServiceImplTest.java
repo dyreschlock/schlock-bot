@@ -48,6 +48,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
     private static final Integer BET3_AMOUNT = 200000;
 
     private PokemonManagement pokemonManagement;
+    private UserManagement userManagement;
 
     private ShinyBetDAO shinyBetDAO;
     private UserDAO userDAO;
@@ -332,7 +333,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
             }
         };
 
-        UserManagement userManagement = new UserManagementImpl(userDAO, config());
+        userManagement = new UserManagementImpl(userDAO, config());
 
         ShinyBetFormatter betFormatter = new ShinyBetFormatterImpl(pokemonManagement, messages(), config());
 
@@ -350,8 +351,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
     private void createTestObjects()
     {
-        user = new User();
-        user.setUsername(USERNAME1);
+        user = userManagement.createNewDefaultUser(USERNAME1);
         user.setBalance(BALANCE);
 
         ShinyBet bet = new ShinyBet();

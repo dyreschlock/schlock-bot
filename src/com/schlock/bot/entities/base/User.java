@@ -22,6 +22,9 @@ public class User extends Persisted
     @Column(name = "follow_date")
     private Date followDate;
 
+    @Column(name = "doubler")
+    private Integer pointsDoubler;
+
     public User()
     {
     }
@@ -33,7 +36,8 @@ public class User extends Persisted
 
     public void incrementBalance(Integer points)
     {
-        balance = balance + points;
+        Double newPoints = Math.pow(points, pointsDoubler);
+        balance = balance + newPoints.intValue();
     }
 
     public void decrementBalance(Integer points)
@@ -79,5 +83,15 @@ public class User extends Persisted
     public void setFollowDate(Date followDate)
     {
         this.followDate = followDate;
+    }
+
+    public Integer getPointsDoubler()
+    {
+        return pointsDoubler;
+    }
+
+    public void setPointsDoubler(Integer pointsDoubler)
+    {
+        this.pointsDoubler = pointsDoubler;
     }
 }
