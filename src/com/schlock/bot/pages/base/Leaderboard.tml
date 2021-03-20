@@ -17,14 +17,14 @@
         {
             font-family: impact;
             font-style: italic;
-            font-size: 20pt;
+            font-size: 24pt;
 
             color: #fff;
 
-            background: -webkit-linear-gradient(#fff, #ff0);
+            background: -webkit-linear-gradient(#f52789, #6d00c0);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            -webkit-text-stroke: 1px #444;
+            //-webkit-text-stroke: 1px #444;
         }
 
     </style>

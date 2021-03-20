@@ -22,7 +22,7 @@ public class Leaderboard
         String html = "";
         for (String message : response.getMessages())
         {
-            html += "<span>" + message + "</span><br />";
+            html += "<span>" + message + "&nbsp;</span><br />";
         }
         return html;
     }
