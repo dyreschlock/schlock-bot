@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Go Shiny Dex</title>
+    <style>
+
+            body
+            {
+                line-height: normal;
+            }
+
+            img
+            {
+                width: 57px;
+
+                filter: brightness(0%);
+                display: none;
+            }
+
+
+            img.have
+            {
+                display: block;
+            }
+
+            img.shiny_go, img.shiny_home
+            {
+                filter: brightness(100%);
+            }
+
+            div.dex
+            {
+                background-color: rgba(0, 0, 0, 0.75);
+
+                text-align: right;
+
+                padding-bottom: 10px;
+            }
+
+            table.dex
+            {
+                margin: auto;
+                padding-bottom: 10px;
+            }
+
+            table.dex td
+            {
+                min-width: 57px;
+            }
+
+            .header
+            {
+            }
+
+        </style>
+
+</head>
+<body>
+<div class="dex">
+    <div id="header" class="header">
+        Nothing yet.
+    </div>
+    <t:outputraw value="tableHTML" />
+</div>
+</body>
+</html>

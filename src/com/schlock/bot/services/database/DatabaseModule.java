@@ -22,16 +22,18 @@ public class DatabaseModule
         binder.bind(ShinyGetDAO.class, ShinyGetDAOImpl.class);
         binder.bind(ShinyBetDAO.class, ShinyBetDAOImpl.class);
         binder.bind(ShinyDexEntryDAO.class, ShinyDexEntryDAOImpl.class);
+        binder.bind(GuessingStreakDAO.class, GuessingStreakDAOImpl.class);
+        binder.bind(PokemonGoDexEntryDAO.class, PokemonGoDexEntryDAOImpl.class);
     }
 
 
-    protected final static String HIBERNATE_USERNAME = "hibernate.connection.username";
-    protected final static String HIBERNATE_PASSWORD = "hibernate.connection.password";
-    protected final static String HIBERNATE_URL = "hibernate.connection.url";
+    public final static String HIBERNATE_USERNAME = "hibernate.connection.username";
+    public final static String HIBERNATE_PASSWORD = "hibernate.connection.password";
+    public final static String HIBERNATE_URL = "hibernate.connection.url";
 
-    protected final static String HIBERNATE_HIKARI_USERNAME = "hibernate.hikari.dataSource.user";
-    protected final static String HIBERNATE_HIKARI_PASSWORD = "hibernate.hikari.dataSource.password";
-    protected final static String HIBERNATE_HIKARI_URL = "hibernate.hikari.dataSource.url";
+    public final static String HIBERNATE_HIKARI_USERNAME = "hibernate.hikari.dataSource.user";
+    public final static String HIBERNATE_HIKARI_PASSWORD = "hibernate.hikari.dataSource.password";
+    public final static String HIBERNATE_HIKARI_URL = "hibernate.hikari.dataSource.url";
 
 
     public void contributeHibernateSessionSource(OrderedConfiguration<HibernateConfigurer> configuration,

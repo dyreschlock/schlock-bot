@@ -28,6 +28,8 @@
         <mapping class="com.schlock.bot.entities.base.User" />
         <mapping class="com.schlock.bot.entities.pokemon.ShinyGet" />
         <mapping class="com.schlock.bot.entities.pokemon.ShinyDexEntry" />
+        <mapping class="com.schlock.bot.entities.pokemon.GuessingStreak" />
+        <mapping class="com.schlock.bot.entities.pokemon.PokemonGoDexEntry" />
 
         <mapping class="com.schlock.bot.entities.base.alert.Alert" />
         <mapping class="com.schlock.bot.entities.base.alert.TwitchAlert" />
