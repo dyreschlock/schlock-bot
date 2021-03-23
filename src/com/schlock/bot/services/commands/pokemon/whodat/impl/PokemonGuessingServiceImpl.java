@@ -122,9 +122,9 @@ public class PokemonGuessingServiceImpl extends AbstractListenerService implemen
         Integer points = config.getQuizCorrectPoints();
         User user = userManagement.getUser(username);
 
-        points = user.modifyPointsWithDoubler(points);
-        if (user.getPointsDoubler() > 1)
+        if (user.hasDoubler())
         {
+            points = user.modifyPointsWithDoubler(points);
             doublerMsg = " " + messages.format(DOUBLER_BONUS, user.getPointsDoubler().toString());
         }
 

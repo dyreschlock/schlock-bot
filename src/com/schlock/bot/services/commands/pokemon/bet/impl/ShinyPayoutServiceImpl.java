@@ -179,10 +179,10 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
                 String doublerMsg = "";
                 Integer winnings = totalWinnings.get(user);
 
-                if (user.getPointsDoubler() > 1)
+                if (user.hasDoubler())
                 {
-                    doublerMsg = " " + messages.format(DOUBLER_BONUS, user.getPointsDoubler());
                     winnings = user.modifyPointsWithDoubler(winnings);
+                    doublerMsg = " " + messages.format(DOUBLER_BONUS, user.getPointsDoubler());
                 }
 
                 user.incrementBalance(winnings);

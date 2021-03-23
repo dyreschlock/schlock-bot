@@ -39,6 +39,11 @@ public class User extends Persisted
         this.balance += points;
     }
 
+    public boolean hasDoubler()
+    {
+        return this.pointsDoubler > 1;
+    }
+
     public Integer modifyPointsWithDoubler(Integer points)
     {
         //this is probably too much
