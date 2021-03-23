@@ -30,7 +30,9 @@ public class ShinyGetFormatterImpl implements ShinyGetFormatter
         String timeMinutes = get.getTimeInMinutes().toString();
         String shinyNumber = get.getShinyNumber().toString();
 
-        return messages.format(SHINY_CAUGHT_KEY, pokemonName, timeMinutes, shinyNumber);
+        String verb = messages.get(get.getType().name().toLowerCase());
+
+        return messages.format(SHINY_CAUGHT_KEY, pokemonName, verb, timeMinutes, shinyNumber);
     }
 
     public String formatMostRecent(ShinyGet get)
