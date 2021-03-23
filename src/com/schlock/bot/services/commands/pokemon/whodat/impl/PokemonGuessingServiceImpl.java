@@ -1,12 +1,14 @@
 package com.schlock.bot.services.commands.pokemon.whodat.impl;
 
 import com.schlock.bot.entities.base.User;
+import com.schlock.bot.entities.pokemon.GuessingStreak;
 import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.whodat.PokemonGuessingService;
 import com.schlock.bot.services.database.base.UserDAO;
+import com.schlock.bot.services.database.pokemon.GuessingStreakDAO;
 import com.schlock.bot.services.entities.base.UserManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;
@@ -19,10 +21,14 @@ public class PokemonGuessingServiceImpl extends AbstractListenerService implemen
     protected static final String GAME_ALREADY_STARTED_KEY = "whodat-already-started";
     protected static final String WINNER_KEY = "whodat-winner";
 
+    protected static final String DOUBLER_BONUS = "doubler-bonus";
+    protected static final String STREAK_BONUS = "streak-bonus";
+
     private final PokemonManagement pokemonManagement;
     private final UserManagement userManagement;
     private final PokemonUtils pokemonUtils;
 
+    private final GuessingStreakDAO streakDAO;
     private final UserDAO userDAO;
 
     private final DeploymentConfiguration config;
@@ -32,6 +38,7 @@ public class PokemonGuessingServiceImpl extends AbstractListenerService implemen
     public PokemonGuessingServiceImpl(PokemonManagement pokemonManagement,
                                       UserManagement userManagement,
                                       PokemonUtils pokemonUtils,
+                                      GuessingStreakDAO streakDAO,
                                       UserDAO userDAO,
                                       Messages messages,
                                       DeploymentConfiguration config)
@@ -42,6 +49,7 @@ public class PokemonGuessingServiceImpl extends AbstractListenerService implemen
         this.userManagement = userManagement;
         this.pokemonUtils = pokemonUtils;
 
+        this.streakDAO = streakDAO;
         this.userDAO = userDAO;
 
         this.config = config;
@@ -107,18 +115,52 @@ public class PokemonGuessingServiceImpl extends AbstractListenerService implemen
 
     private ListenerResponse processWinner(String username)
     {
-        Integer points = config.getQuizCorrectPoints();
         String mark = config.getCurrencyMark();
+        String doublerMsg = "";
+        String streakMsg = "";
 
+        Integer points = config.getQuizCorrectPoints();
         User user = userManagement.getUser(username);
+
+        points = user.modifyPointsWithDoubler(points);
+        if (user.getPointsDoubler() > 1)
+        {
+            doublerMsg = " " + messages.format(DOUBLER_BONUS, user.getPointsDoubler().toString());
+        }
+
+        GuessingStreak streak = getCurrentStreak();
+        if (user.equals(streak.getUser()))
+        {
+            streak.incrementStreak();
+
+            points = points * streak.getStreakNumber();
+
+            streakMsg = " " + messages.format(STREAK_BONUS, streak.getStreakNumber().toString());
+        }
+        else
+        {
+            streak.setNewUser(user);
+        }
+
         user.incrementBalance(points);
 
-        userDAO.save(user);
+        userDAO.save(user, streak);
         userDAO.commit();
 
         String pokemonName = currentPokemon.getName();
         currentPokemon = null;
 
-        return formatSingleResponse(WINNER_KEY, username, pokemonName, points.toString(), mark);
+        String response = messages.format(WINNER_KEY, username, pokemonName, points.toString(), mark) + doublerMsg + streakMsg;
+        return ListenerResponse.relaySingle().addMessage(response);
+    }
+
+    private GuessingStreak getCurrentStreak()
+    {
+        GuessingStreak streak = streakDAO.get();
+        if(streak == null)
+        {
+            streak = new GuessingStreak();
+        }
+        return streak;
     }
 }

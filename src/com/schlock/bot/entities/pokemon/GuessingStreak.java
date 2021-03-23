@@ -25,6 +25,17 @@ public class GuessingStreak extends Persisted
     {
     }
 
+    public void incrementStreak()
+    {
+        this.streakNumber++;
+    }
+
+    public void setNewUser(User user)
+    {
+        this.user = user;
+        this.streakNumber = 1;
+    }
+
     public Long getId()
     {
         return id;

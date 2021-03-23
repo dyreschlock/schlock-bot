@@ -36,8 +36,14 @@ public class User extends Persisted
 
     public void incrementBalance(Integer points)
     {
+        this.balance += points;
+    }
+
+    public Integer modifyPointsWithDoubler(Integer points)
+    {
+        //this is probably too much
         Double newPoints = Math.pow(points, pointsDoubler);
-        balance = balance + newPoints.intValue();
+        return newPoints.intValue();
     }
 
     public void decrementBalance(Integer points)

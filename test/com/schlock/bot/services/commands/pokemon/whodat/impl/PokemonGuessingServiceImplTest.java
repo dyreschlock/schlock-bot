@@ -1,7 +1,10 @@
 package com.schlock.bot.services.commands.pokemon.whodat.impl;
 
 import com.schlock.bot.entities.base.User;
+import com.schlock.bot.entities.pokemon.GuessingStreak;
 import com.schlock.bot.entities.pokemon.Pokemon;
+import com.schlock.bot.services.database.pokemon.GuessingStreakDAO;
+import com.schlock.bot.services.database.pokemon.impl.GuessingStreakDAOImpl;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonManagementImpl;
@@ -34,6 +37,8 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
 
     private PokemonGuessingServiceImpl impl;
 
+    private GuessingStreak streak;
+
     private User testUser1;
 
     private Pokemon testPokemon = new Pokemon();
@@ -45,6 +50,7 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
 
         final String MARK = config().getCurrencyMark();
         final String POINTS = config().getQuizCorrectPoints().toString();
+        final String DOUBLE_POINTS = Integer.valueOf(config().getQuizCorrectPoints() *2).toString();
 
 
         //start the game
@@ -101,6 +107,20 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
         expectedBalance = DEFAULT_BALANCE + config().getQuizCorrectPoints();
 
         assertEquals(currentBalance, expectedBalance);
+
+
+        //start another new game
+        response = impl.process(ADMIN, "!whodat").getFirstMessage();
+        expected = pokemonUtils.formatHint1(testPokemon);
+
+        assertEquals(expected, response);
+
+        //send response with answer for the same user
+        response = impl.process(USERNAME1, " asdf " + TEST_POKEMON_ID + " asdf ").getFirstMessage();
+        expected = messages().format(PokemonGuessingServiceImpl.WINNER_KEY, USERNAME1, TEST_POKEMON_NAME, DOUBLE_POINTS, MARK);
+        expected += " " + messages().format(PokemonGuessingServiceImpl.STREAK_BONUS, 2);
+
+        assertEquals(expected, response);
     }
 
     @Override
@@ -126,6 +146,13 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
             }
         };
 
+        GuessingStreakDAO streakDAO = new GuessingStreakDAOImpl(session)
+        {
+            public void commit()
+            {
+            }
+        };
+
         userDAO = new UserDAOImpl(session)
         {
             public void commit()
@@ -135,7 +162,7 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
 
         userManagement = new UserManagementImpl(userDAO, config());
 
-        impl = new PokemonGuessingServiceImpl(pokemonManagement, userManagement, pokemonUtils, userDAO, messages(), config());
+        impl = new PokemonGuessingServiceImpl(pokemonManagement, userManagement, pokemonUtils, streakDAO, userDAO, messages(), config());
 
 
         createTestObjects();
@@ -149,10 +176,12 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
 
     private void createTestObjects()
     {
+        streak = new GuessingStreak();
+
         testUser1 = userManagement.createNewDefaultUser(USERNAME1);
         testUser1.setBalance(DEFAULT_BALANCE);
 
-        userDAO.save(testUser1);
+        userDAO.save(streak, testUser1);
 
         testPokemon.setName(TEST_POKEMON_NAME);
         testPokemon.setId(TEST_POKEMON_ID);
@@ -164,6 +193,6 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
     private void removeTestObjects()
     {
         User admin = userDAO.getByUsername(config().getOwnerUsername());
-        userDAO.delete(admin, testUser1);
+        userDAO.delete(streak, admin, testUser1);
     }
 }
