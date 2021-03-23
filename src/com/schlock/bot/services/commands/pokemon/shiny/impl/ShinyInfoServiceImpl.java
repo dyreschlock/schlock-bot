@@ -59,7 +59,7 @@ public class ShinyInfoServiceImpl extends AbstractListenerService implements Shi
         return true;
     }
 
-    public ListenerResponse process(String username, String in)
+    protected ListenerResponse processRequest(String username, String in)
     {
         String commandText = in.toLowerCase().trim();
         if (commandText.startsWith(MOST_RECENT_COMMAND) || commandText.startsWith(MOST_RECENT_COMMAND2))

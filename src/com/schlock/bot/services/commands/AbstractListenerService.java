@@ -11,6 +11,13 @@ public abstract class AbstractListenerService implements ListenerService
         this.messages = messages;
     }
 
+    public final synchronized ListenerResponse process(String username, String command)
+    {
+        return processRequest(username, command);
+    }
+
+    protected abstract ListenerResponse processRequest(String username, String command);
+
     protected ListenerResponse formatSingleResponse(String messageKey, Object... args)
     {
         String response = messages.get(messageKey);

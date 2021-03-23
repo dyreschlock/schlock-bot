@@ -105,7 +105,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
         return true;
     }
 
-    public ListenerResponse process(String username, String in)
+    protected ListenerResponse processRequest(String username, String in)
     {
         String command = in.toLowerCase();
         if (command.startsWith(SHOW_CURRENT_BETS))

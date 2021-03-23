@@ -61,7 +61,7 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
         return true;
     }
 
-    public ListenerResponse process(String username, String in)
+    protected ListenerResponse processRequest(String username, String in)
     {
         String commandText = in.toLowerCase().trim();
         if (commandText.startsWith(SHINY_DEX_COMMAND))

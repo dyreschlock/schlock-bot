@@ -43,7 +43,7 @@ public class UserLeaderboardServiceImpl extends AbstractListenerService implemen
         return true;
     }
 
-    public ListenerResponse process(String username, String command)
+    protected ListenerResponse processRequest(String username, String command)
     {
         ListenerResponse response = ListenerResponse.relaySingle();
 

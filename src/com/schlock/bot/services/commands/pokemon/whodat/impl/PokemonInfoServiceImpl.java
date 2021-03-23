@@ -48,7 +48,7 @@ public class PokemonInfoServiceImpl extends AbstractListenerService implements P
      *
      * @return String "No. 25 Pikachu" (example)
      */
-    public ListenerResponse process(String username, String in)
+    protected ListenerResponse processRequest(String username, String in)
     {
         String commandText = in.toLowerCase();
         if (commandText.startsWith(POKEMON_COMMAND) || commandText.startsWith(POKEMON_E_COMMAND))

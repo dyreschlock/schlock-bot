@@ -59,7 +59,7 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
         return true;
     }
 
-    public ListenerResponse process(String username, String in)
+    protected ListenerResponse processRequest(String username, String in)
     {
         String command = in.toLowerCase();
         if (command.startsWith(BALANCE_COMMAND))

@@ -81,7 +81,7 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
         return true;
     }
 
-    public ListenerResponse process(String username, String in)
+    protected ListenerResponse processRequest(String username, String in)
     {
         final String MARK = config.getCurrencyMark();
         final String ADMIN = config.getOwnerUsername();

@@ -42,7 +42,7 @@ public class ShinyBetInfoServiceImpl extends AbstractListenerService implements 
         return true;
     }
 
-    public ListenerResponse process(String username, String command)
+    protected ListenerResponse processRequest(String username, String command)
     {
         List<ShinyBet> currentBets = shinyBetDAO.getAllCurrent();
         if (currentBets.size() == 0)

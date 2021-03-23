@@ -41,7 +41,7 @@ public class AnimationServiceImpl extends AbstractListenerService implements Ani
         return true;
     }
 
-    public ListenerResponse process(String username, String in)
+    protected ListenerResponse processRequest(String username, String in)
     {
         String commandText = in.toLowerCase().trim();
         if (commandText.startsWith(ANIMATION_COMMAND))

@@ -65,7 +65,7 @@ public class PokemonGuessingServiceImpl extends AbstractListenerService implemen
         return false;
     }
 
-    public ListenerResponse process(String username, String in)
+    protected ListenerResponse processRequest(String username, String in)
     {
         String command = in.toLowerCase();
         if (command.startsWith(START_COMMAND))
