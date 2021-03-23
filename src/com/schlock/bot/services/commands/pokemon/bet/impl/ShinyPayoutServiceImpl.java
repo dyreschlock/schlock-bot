@@ -33,6 +33,8 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
 
     protected static final String BAD_FORMAT_MESSAGE_KEY = "get-wrong-format";
 
+    protected static final String DOUBLER_BONUS = "doubler-bonus";
+
     private static final String SHINY_GET_COMMAND = "!shinyget ";
 
     private final PokemonManagement pokemonManagement;
@@ -174,10 +176,18 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
 
             for (User user : totalWinnings.keySet())
             {
+                String doublerMsg = "";
                 Integer winnings = totalWinnings.get(user);
+
+                if (user.getPointsDoubler() > 1)
+                {
+                    doublerMsg = " " + messages.format(DOUBLER_BONUS, user.getPointsDoubler());
+                    winnings = user.modifyPointsWithDoubler(winnings);
+                }
+
                 user.incrementBalance(winnings);
 
-                response.addMessage(messages.format(USER_UPDATE_KEY, user.getUsername(), winnings, MARK, user.getBalance(), MARK));
+                response.addMessage(messages.format(USER_UPDATE_KEY, user.getUsername(), winnings, MARK, user.getBalance(), MARK) + doublerMsg);
 
                 userDAO.save(user);
             }
