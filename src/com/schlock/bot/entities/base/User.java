@@ -47,7 +47,8 @@ public class User extends Persisted
     public Integer modifyPointsWithDoubler(Integer points)
     {
         //this is probably too much
-        Double newPoints = Math.pow(points, pointsDoubler);
+
+        Integer newPoints = points * pointsDoubler;
         return newPoints.intValue();
     }
 
