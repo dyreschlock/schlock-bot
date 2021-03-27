@@ -13,10 +13,8 @@ public class GuessingStreak extends Persisted
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id",
-            foreignKey = @ForeignKey(name = "GUESS_USER_ID_FK"))
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(name = "streakNumber")
     private Integer streakNumber;
@@ -32,7 +30,7 @@ public class GuessingStreak extends Persisted
 
     public void setNewUser(User user)
     {
-        this.user = user;
+        this.userId = user.getId();
         this.streakNumber = 1;
     }
 
@@ -46,14 +44,14 @@ public class GuessingStreak extends Persisted
         this.id = id;
     }
 
-    public User getUser()
+    public Long getUserId()
     {
-        return user;
+        return userId;
     }
 
-    public void setUser(User user)
+    public void setUserId(Long userId)
     {
-        this.user = user;
+        this.userId = userId;
     }
 
     public Integer getStreakNumber()

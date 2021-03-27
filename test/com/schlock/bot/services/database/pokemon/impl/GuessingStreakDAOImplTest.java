@@ -40,10 +40,13 @@ class GuessingStreakDAOImplTest extends DatabaseTest
         testUser = new User(USERNAME);
 
         streak = new GuessingStreak();
-        streak.setUser(testUser);
         streak.setStreakNumber(1);
 
-        daoImpl.save(testUser, streak);
+        daoImpl.save(testUser);
+
+        streak.setUserId(testUser.getId());
+
+        daoImpl.save(streak);
     }
 
     private void removeTestObjects()

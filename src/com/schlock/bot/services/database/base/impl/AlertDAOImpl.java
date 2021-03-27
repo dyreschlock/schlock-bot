@@ -21,9 +21,9 @@ public class AlertDAOImpl extends AbstractBaseDAO<Alert> implements AlertDAO
     public List<Alert> getByUser(User user)
     {
         String text = " select a " +
-                        " from Alert a " +
-                        " join a.user u " +
-                        " where u.username = :name ";
+                        " from Alert a, User u " +
+                        " where u.username = :name " +
+                        " and u.id = a.userId ";
 
         Query query = session.createQuery(text);
         query.setParameter("name", user.getUsername());

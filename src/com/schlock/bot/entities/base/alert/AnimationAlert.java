@@ -13,7 +13,7 @@ public class AnimationAlert extends Alert
         AnimationAlert alert = new AnimationAlert();
         alert.setRequestDate(new Date());
         alert.setType(type);
-        alert.setUser(user);
+        alert.setUserId(user.getId());
 
         return alert;
     }

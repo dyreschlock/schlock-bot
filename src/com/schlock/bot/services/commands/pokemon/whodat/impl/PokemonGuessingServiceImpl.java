@@ -129,7 +129,7 @@ public class PokemonGuessingServiceImpl extends AbstractListenerService implemen
         }
 
         GuessingStreak streak = getCurrentStreak();
-        if (user.equals(streak.getUser()))
+        if (user.getId().equals(streak.getUserId()))
         {
             streak.incrementStreak();
 

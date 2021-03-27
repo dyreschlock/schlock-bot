@@ -1,7 +1,6 @@
 package com.schlock.bot.entities.base.alert;
 
 import com.schlock.bot.entities.Persisted;
-import com.schlock.bot.entities.base.User;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,10 +19,8 @@ public abstract class Alert extends Persisted
     @Enumerated(EnumType.STRING)
     private AlertType type;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id",
-                    foreignKey = @ForeignKey(name = "ALERT_USER_ID_FK"))
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(name = "requestDate")
     private Date requestDate;
@@ -55,14 +52,14 @@ public abstract class Alert extends Persisted
         this.type = type;
     }
 
-    public User getUser()
+    public Long getUserId()
     {
-        return user;
+        return userId;
     }
 
-    public void setUser(User user)
+    public void setUserId(Long userId)
     {
-        this.user = user;
+        this.userId = userId;
     }
 
     public Date getRequestDate()

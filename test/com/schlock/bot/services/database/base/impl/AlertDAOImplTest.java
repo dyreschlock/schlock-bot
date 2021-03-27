@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AlertDAOImplTest extends DatabaseTest
 {
-    private static final String USERNAME = "username1";
+    private static final String USERNAME = "username_alert";
 
     private AlertDAOImpl alertDAO;
 
@@ -82,20 +82,21 @@ class AlertDAOImplTest extends DatabaseTest
         user = new User();
         user.setUsername(USERNAME);
 
+        alertDAO.save(user);
 
         twitchAlert = new TwitchAlert();
-        twitchAlert.setUser(user);
+        twitchAlert.setUserId(user.getId());
         twitchAlert.setRequestDate(new Date());
         twitchAlert.setType(AlertType.FOLLOWER);
 
 
         animeAlert = new AnimationAlert();
-        animeAlert.setUser(user);
+        animeAlert.setUserId(user.getId());
         animeAlert.setRequestDate(new Date());
         animeAlert.setType(AlertType.MONSTER_FRISBEE);
 
 
-        alertDAO.save(user, twitchAlert, animeAlert);
+        alertDAO.save(twitchAlert, animeAlert);
     }
 
     public void removeTestObjects()
