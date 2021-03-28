@@ -5,6 +5,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>User Leaderboard</title>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Poppins" />
     <style>
 
         #leaderboard
@@ -15,16 +17,17 @@
 
         #leaderboard span
         {
-            font-family: impact;
+            font-family: 'Poppins';
             font-style: italic;
             font-size: 24pt;
+            font-weight: 950;
 
-            color: #fff;
+            //color: #fff;
 
-            background: -webkit-linear-gradient(#f52789, #6d00c0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            //-webkit-text-stroke: 1px #444;
+            //background: -webkit-linear-gradient(#f52789, #6d00c0);
+            //-webkit-background-clip: text;
+            //-webkit-text-fill-color: transparent;
+            -webkit-text-stroke: 1px #f52789;
         }
 
     </style>
