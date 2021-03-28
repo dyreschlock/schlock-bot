@@ -5,20 +5,16 @@ import com.schlock.bot.entities.pokemon.ShinyBet;
 import com.schlock.bot.entities.pokemon.ShinyGet;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.ListenerResponse;
+import com.schlock.bot.services.database.DatabaseTest;
+import com.schlock.bot.services.database.base.UserDAO;
+import com.schlock.bot.services.database.pokemon.ShinyGetDAO;
 import com.schlock.bot.services.entities.base.UserManagement;
 import com.schlock.bot.services.entities.base.impl.UserManagementImpl;
-import com.schlock.bot.services.entities.pokemon.ShinyGetFormatter;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;
+import com.schlock.bot.services.entities.pokemon.ShinyGetFormatter;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonManagementImpl;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonUtilsImpl;
-import com.schlock.bot.services.database.DatabaseTest;
-import com.schlock.bot.services.database.pokemon.ShinyBetDAO;
-import com.schlock.bot.services.database.pokemon.ShinyGetDAO;
-import com.schlock.bot.services.database.base.UserDAO;
-import com.schlock.bot.services.database.pokemon.impl.ShinyBetDAOImpl;
-import com.schlock.bot.services.database.pokemon.impl.ShinyGetDAOImpl;
-import com.schlock.bot.services.database.base.impl.UserDAOImpl;
 import com.schlock.bot.services.entities.pokemon.impl.ShinyGetFormatterImpl;
 import com.schlock.bot.services.impl.DeploymentConfigurationImpl;
 import org.apache.commons.lang3.StringUtils;
@@ -58,9 +54,6 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
 
     private ShinyPayoutServiceImpl impl;
 
-    private UserDAO userDAO;
-    private ShinyGetDAO shinyGetDAO;
-
     private User user1;
     private User user2;
     private User user3;
@@ -89,9 +82,9 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         assertTrue(resp.isRelayAll());
         assertEquals(7, responses.size());
 
-        user1 = userDAO.getByUsername(user1.getUsername());
-        user2 = userDAO.getByUsername(user2.getUsername());
-        user3 = userDAO.getByUsername(user3.getUsername());
+        user1 = database.get(UserDAO.class).getByUsername(user1.getUsername());
+        user2 = database.get(UserDAO.class).getByUsername(user2.getUsername());
+        user3 = database.get(UserDAO.class).getByUsername(user3.getUsername());
 
 
         Double winningPokemon = BET1_AMOUNT.doubleValue() * TEST_POKEMON_WIN_FACTOR;
@@ -112,7 +105,7 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         List<String> winnersTime = Arrays.asList(user1.getUsername());
         List<String> winnersBoth = Arrays.asList(user1.getUsername());
 
-        ShinyGet mostRecent = shinyGetDAO.getMostRecent();
+        ShinyGet mostRecent = database.get(ShinyGetDAO.class).getMostRecent();
 
         String response1 = shinyFormatter.formatNewlyCaught(mostRecent);
 
@@ -134,27 +127,7 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        userDAO = new UserDAOImpl(session)
-        {
-            public void commit()
-            {
-            }
-        };
-        shinyGetDAO = new ShinyGetDAOImpl(session)
-        {
-            public void commit()
-            {
-            }
-        };
-
-        ShinyBetDAO betDAO = new ShinyBetDAOImpl(session)
-        {
-            public void commit()
-            {
-            }
-        };
-
-        userManagement = new UserManagementImpl(userDAO, config());
+        userManagement = new UserManagementImpl(database, config());
 
         PokemonUtils pokemonUtils = new PokemonUtilsImpl(messages());
 
@@ -162,7 +135,7 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
 
         shinyFormatter = new ShinyGetFormatterImpl(pokemonManagement, messages());
 
-        impl = new ShinyPayoutServiceImpl(pokemonManagement, shinyFormatter, betDAO, shinyGetDAO, userDAO, messages(), config());
+        impl = new ShinyPayoutServiceImpl(pokemonManagement, shinyFormatter, database, messages(), config());
 
 
         createTestObjects();
@@ -204,7 +177,7 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         bet3.setTimeMinutes(BET3_MINUTES);
         bet3.setBetAmount(BET3_AMOUNT);
 
-        userDAO.save(user1, user2, user3, bet1, bet2, bet3);
+        database.save(user1, user2, user3, bet1, bet2, bet3);
     }
 
     protected DeploymentConfiguration createDeploymentConfiguration()
@@ -224,8 +197,8 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
 
     private void removeTestObjects()
     {
-        ShinyGet get1 = shinyGetDAO.getMostRecent();
+        ShinyGet get1 = database.get(ShinyGetDAO.class).getMostRecent();
 
-        userDAO.delete(user1, user2, user3, bet1, bet2, bet3, get1);
+        database.delete(user1, user2, user3, bet1, bet2, bet3, get1);
     }
 }

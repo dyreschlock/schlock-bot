@@ -8,14 +8,15 @@ import com.schlock.bot.services.database.base.AlertDAO;
 import com.schlock.bot.services.database.AbstractBaseDAO;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import java.util.List;
 
 public class AlertDAOImpl extends AbstractBaseDAO<Alert> implements AlertDAO
 {
-    public AlertDAOImpl(Session session)
+    public AlertDAOImpl(SessionFactory sessionFactory)
     {
-        super(Alert.class, session);
+        super(Alert.class, sessionFactory);
     }
 
     public List<Alert> getByUser(User user)
@@ -25,10 +26,17 @@ public class AlertDAOImpl extends AbstractBaseDAO<Alert> implements AlertDAO
                         " where u.username = :name " +
                         " and u.id = a.userId ";
 
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
         Query query = session.createQuery(text);
         query.setParameter("name", user.getUsername());
 
         List<Alert> alerts = query.list();
+
+        session.getTransaction().commit();
+        session.close();
+
         return alerts;
     }
 
@@ -50,9 +58,16 @@ public class AlertDAOImpl extends AbstractBaseDAO<Alert> implements AlertDAO
                         " where a.finishDate is null " +
                         " order by a.requestDate asc ";
 
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
         Query query = session.createQuery(text);
 
         Alert alert = singleResult(query);
+
+        session.getTransaction().commit();
+        session.close();
+
         return alert;
     }
 }

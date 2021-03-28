@@ -6,6 +6,7 @@ import com.schlock.bot.entities.base.alert.AlertType;
 import com.schlock.bot.entities.base.alert.AnimationAlert;
 import com.schlock.bot.entities.base.alert.TwitchAlert;
 import com.schlock.bot.services.database.DatabaseTest;
+import com.schlock.bot.services.database.base.AlertDAO;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
@@ -18,7 +19,7 @@ class AlertDAOImplTest extends DatabaseTest
 {
     private static final String USERNAME = "username_alert";
 
-    private AlertDAOImpl alertDAO;
+    private AlertDAO alertDAO;
 
     private User user;
 
@@ -66,7 +67,7 @@ class AlertDAOImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        alertDAO = new AlertDAOImpl(session);
+        alertDAO = database.get(AlertDAO.class);
 
         createTestObjects();
     }
@@ -82,7 +83,7 @@ class AlertDAOImplTest extends DatabaseTest
         user = new User();
         user.setUsername(USERNAME);
 
-        alertDAO.save(user);
+        database.save(user);
 
         twitchAlert = new TwitchAlert();
         twitchAlert.setUserId(user.getId());
@@ -96,11 +97,11 @@ class AlertDAOImplTest extends DatabaseTest
         animeAlert.setType(AlertType.MONSTER_FRISBEE);
 
 
-        alertDAO.save(twitchAlert, animeAlert);
+        database.save(twitchAlert, animeAlert);
     }
 
     public void removeTestObjects()
     {
-        alertDAO.delete(twitchAlert, animeAlert, user);
+        database.delete(twitchAlert, animeAlert, user);
     }
 }

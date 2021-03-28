@@ -5,14 +5,15 @@ import com.schlock.bot.services.database.base.UserDAO;
 import com.schlock.bot.services.database.AbstractBaseDAO;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import java.util.List;
 
 public class UserDAOImpl extends AbstractBaseDAO<User> implements UserDAO
 {
-    public UserDAOImpl(Session session)
+    public UserDAOImpl(SessionFactory sessionFactory)
     {
-        super(User.class, session);
+        super(User.class, sessionFactory);
     }
 
     public User getByUsername(String username)
@@ -20,10 +21,17 @@ public class UserDAOImpl extends AbstractBaseDAO<User> implements UserDAO
         String text = "from User u " +
                         " where u.username = :name ";
 
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
         Query query = session.createQuery(text);
         query.setParameter("name", username);
 
         User user = singleResult(query);
+
+        session.getTransaction().commit();
+        session.close();
+
         return user;
     }
 
@@ -32,9 +40,16 @@ public class UserDAOImpl extends AbstractBaseDAO<User> implements UserDAO
         String text = " from User u " +
                         " order by u.followDate desc ";
 
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
         Query query = session.createQuery(text);
 
         User user = singleResult(query);
+
+        session.getTransaction().commit();
+        session.close();
+
         return user;
     }
 
@@ -43,9 +58,17 @@ public class UserDAOImpl extends AbstractBaseDAO<User> implements UserDAO
         String text = "from User u " +
                         " order by u.balance desc ";
 
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
         Query query = session.createQuery(text);
         query.setMaxResults(count);
 
-        return query.list();
+        List<User> users = query.list();
+
+        session.getTransaction().commit();
+        session.close();
+
+        return users;
     }
 }

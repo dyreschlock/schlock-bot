@@ -5,9 +5,6 @@ import com.schlock.bot.entities.base.alert.Alert;
 import com.schlock.bot.entities.base.alert.AlertType;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.base.AlertDAO;
-import com.schlock.bot.services.database.base.UserDAO;
-import com.schlock.bot.services.database.base.impl.AlertDAOImpl;
-import com.schlock.bot.services.database.base.impl.UserDAOImpl;
 import com.schlock.bot.services.entities.base.UserManagement;
 import com.schlock.bot.services.entities.base.impl.UserManagementImpl;
 import org.junit.jupiter.api.Test;
@@ -18,9 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AnimationServiceImplTest extends DatabaseTest
 {
-    private static final String USERNAME1 = "username1";
-
-    private AlertDAO alertDAO;
+    private static final String USERNAME1 = "username1_animation";
 
     private AnimationServiceImpl impl;
 
@@ -48,23 +43,9 @@ class AnimationServiceImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        UserDAO userDAO = new UserDAOImpl(session)
-        {
-            public void commit()
-            {
-            }
-        };
+        UserManagement userManagement = new UserManagementImpl(database, config());
 
-        UserManagement userManagement = new UserManagementImpl(userDAO, config());
-
-        alertDAO = new AlertDAOImpl(session)
-        {
-            public void commit()
-            {
-            }
-        };
-
-        impl = new AnimationServiceImpl(userManagement, alertDAO, messages());
+        impl = new AnimationServiceImpl(userManagement, database, messages());
 
         createTestObjects();
     }
@@ -74,7 +55,7 @@ class AnimationServiceImplTest extends DatabaseTest
         user = new User();
         user.setUsername(USERNAME1);
 
-        alertDAO.save(user);
+        database.save(user);
     }
 
     @Override
@@ -85,12 +66,11 @@ class AnimationServiceImplTest extends DatabaseTest
 
     private void removeTestObjects()
     {
-        List<Alert> alerts = alertDAO.getByUser(user);
-
+        List<Alert> alerts = database.get(AlertDAO.class).getByUser(user);
         for(Alert alert : alerts)
         {
-            alertDAO.delete(alert);
+            database.delete(alert);
         }
-        alertDAO.delete(user);
+        database.delete(user);
     }
 }

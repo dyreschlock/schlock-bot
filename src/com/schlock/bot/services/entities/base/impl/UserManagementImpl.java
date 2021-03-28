@@ -2,6 +2,7 @@ package com.schlock.bot.services.entities.base.impl;
 
 import com.schlock.bot.entities.base.User;
 import com.schlock.bot.services.DeploymentConfiguration;
+import com.schlock.bot.services.database.adhoc.DatabaseManager;
 import com.schlock.bot.services.database.base.UserDAO;
 import com.schlock.bot.services.entities.base.UserManagement;
 
@@ -9,26 +10,26 @@ import java.util.Date;
 
 public class UserManagementImpl implements UserManagement
 {
-    private final UserDAO userDAO;
+    private final DatabaseManager database;
 
     private final DeploymentConfiguration config;
 
-    public UserManagementImpl(UserDAO userDAO,
+    public UserManagementImpl(DatabaseManager database,
                               DeploymentConfiguration config)
     {
-        this.userDAO = userDAO;
+        this.database = database;
 
         this.config = config;
     }
 
     public User getUser(String username)
     {
-        User user = userDAO.getByUsername(username);
+        User user = database.get(UserDAO.class).getByUsername(username);
         if (user == null)
         {
             user = createNewDefaultUser(username);
 
-            userDAO.save(user);
+            database.save(user);
         }
         return user;
     }

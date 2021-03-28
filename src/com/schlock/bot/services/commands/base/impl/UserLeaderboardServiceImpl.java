@@ -5,6 +5,7 @@ import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.base.UserLeaderboardService;
+import com.schlock.bot.services.database.adhoc.DatabaseManager;
 import com.schlock.bot.services.database.base.UserDAO;
 import org.apache.tapestry5.ioc.Messages;
 
@@ -18,17 +19,17 @@ public class UserLeaderboardServiceImpl extends AbstractListenerService implemen
 
     protected static final String LEADERBOARD = "!leaderboard";
 
-    private final UserDAO userDAO;
+    private final DatabaseManager database;
 
     private final DeploymentConfiguration config;
 
-    public UserLeaderboardServiceImpl(UserDAO userDAO,
+    public UserLeaderboardServiceImpl(DatabaseManager database,
                                       Messages messages,
                                       DeploymentConfiguration config)
     {
         super(messages);
 
-        this.userDAO = userDAO;
+        this.database = database;
         this.config = config;
     }
 
@@ -47,7 +48,7 @@ public class UserLeaderboardServiceImpl extends AbstractListenerService implemen
     {
         ListenerResponse response = ListenerResponse.relaySingle();
 
-        List<User> users = userDAO.getOrderByPoints(RETURN_COUNT);
+        List<User> users = database.get(UserDAO.class).getOrderByPoints(RETURN_COUNT);
         for(int i = 0; i < users.size(); i++)
         {
             int number = i+ 1;

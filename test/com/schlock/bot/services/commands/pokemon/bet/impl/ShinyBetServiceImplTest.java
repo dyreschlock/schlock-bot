@@ -1,22 +1,20 @@
 package com.schlock.bot.services.commands.pokemon.bet.impl;
 
 import com.schlock.bot.entities.base.User;
-import com.schlock.bot.entities.pokemon.ShinyBet;
 import com.schlock.bot.entities.pokemon.Pokemon;
+import com.schlock.bot.entities.pokemon.ShinyBet;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.ListenerService;
+import com.schlock.bot.services.database.DatabaseTest;
+import com.schlock.bot.services.database.base.UserDAO;
+import com.schlock.bot.services.database.pokemon.ShinyBetDAO;
+import com.schlock.bot.services.entities.base.UserManagement;
+import com.schlock.bot.services.entities.base.impl.UserManagementImpl;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;
 import com.schlock.bot.services.entities.pokemon.ShinyBetFormatter;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonManagementImpl;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonUtilsImpl;
-import com.schlock.bot.services.database.DatabaseTest;
-import com.schlock.bot.services.database.pokemon.ShinyBetDAO;
-import com.schlock.bot.services.database.base.UserDAO;
-import com.schlock.bot.services.database.pokemon.impl.ShinyBetDAOImpl;
-import com.schlock.bot.services.database.base.impl.UserDAOImpl;
-import com.schlock.bot.services.entities.base.UserManagement;
-import com.schlock.bot.services.entities.base.impl.UserManagementImpl;
 import com.schlock.bot.services.entities.pokemon.impl.ShinyBetFormatterImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -50,9 +48,6 @@ class ShinyBetServiceImplTest extends DatabaseTest
     private PokemonManagement pokemonManagement;
     private UserManagement userManagement;
 
-    private ShinyBetDAO shinyBetDAO;
-    private UserDAO userDAO;
-
     private ShinyBetServiceImpl impl;
 
     private User user;
@@ -74,7 +69,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         assertTrue(resp.isRelayAll());
         assertEquals(expected, response);
 
-        user = userDAO.getByUsername(user.getUsername());
+        user = database.get(UserDAO.class).getByUsername(user.getUsername());
         Integer newBalance = BALANCE - BET2_AMOUNT;
 
         assertEquals(newBalance, user.getBalance());
@@ -96,7 +91,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         final String MARK = config().getCurrencyMark();
         Pokemon pokemon1 = pokemonManagement.getPokemonFromText(BET1_POKEMON);
 
-        List bets = shinyBetDAO.getByUsername(user.getUsername());
+        List bets = database.get(ShinyBetDAO.class).getByUsername(user.getUsername());
 
         assertEquals(1, bets.size());
 
@@ -109,7 +104,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         assertTrue(resp.isRelayAll());
         assertEquals(expected, response);
 
-        bets = shinyBetDAO.getByUsername(user.getUsername());
+        bets = database.get(ShinyBetDAO.class).getByUsername(user.getUsername());
         assertEquals(1, bets.size());
 
 
@@ -122,7 +117,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         assertTrue(resp.isRelayAll());
         assertEquals(expected, response);
 
-        bets = shinyBetDAO.getByUsername(user.getUsername());
+        bets = database.get(ShinyBetDAO.class).getByUsername(user.getUsername());
         assertEquals(1, bets.size());
 
 
@@ -135,7 +130,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         assertFalse(resp.isRelayAll());
         assertEquals(expected, response);
 
-        bets = shinyBetDAO.getByUsername(user.getUsername());
+        bets = database.get(ShinyBetDAO.class).getByUsername(user.getUsername());
         assertEquals(1, bets.size());
     }
 
@@ -189,7 +184,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
     @Test
     public void testCancelAllBets()
     {
-        List bets = shinyBetDAO.getByUsername(user.getUsername());
+        List bets = database.get(ShinyBetDAO.class).getByUsername(user.getUsername());
 
         assertEquals(1, bets.size());
 
@@ -202,12 +197,12 @@ class ShinyBetServiceImplTest extends DatabaseTest
         assertEquals(expected, response);
 
 
-        bets = shinyBetDAO.getByUsername(user.getUsername());
+        bets = database.get(ShinyBetDAO.class).getByUsername(user.getUsername());
 
         assertEquals(0, bets.size());
 
 
-        user = userDAO.getByUsername(USERNAME1);
+        user = database.get(UserDAO.class).getByUsername(USERNAME1);
         Integer newBalance = BALANCE + BET1_AMOUNT;
 
         assertEquals(newBalance, user.getBalance());
@@ -237,7 +232,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         assertEquals(expected, response);
 
 
-        user = userDAO.getByUsername(USERNAME1);
+        user = database.get(UserDAO.class).getByUsername(USERNAME1);
         Integer newBalance = BALANCE + BET1_AMOUNT;
 
         assertEquals(newBalance, user.getBalance());
@@ -320,24 +315,11 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
         pokemonManagement = new PokemonManagementImpl(pokemonUtils, config());
 
-        shinyBetDAO = new ShinyBetDAOImpl(session)
-        {
-            public void commit()
-            {
-            }
-        };
-        userDAO = new UserDAOImpl(session)
-        {
-            public void commit()
-            {
-            }
-        };
-
-        userManagement = new UserManagementImpl(userDAO, config());
+        userManagement = new UserManagementImpl(database, config());
 
         ShinyBetFormatter betFormatter = new ShinyBetFormatterImpl(pokemonManagement, messages(), config());
 
-        impl = new ShinyBetServiceImpl(pokemonManagement, userManagement, betFormatter, shinyBetDAO, userDAO, messages(), config());
+        impl = new ShinyBetServiceImpl(pokemonManagement, userManagement, betFormatter, database, messages(), config());
         impl.openBetting();
 
         createTestObjects();
@@ -360,7 +342,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         bet.setTimeMinutes(BET1_MINUTES);
         bet.setBetAmount(BET1_AMOUNT);
 
-        userDAO.save(user, bet);
+        database.save(user, bet);
     }
 
     @AfterEach
@@ -371,12 +353,12 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
     private void removeTestObjects()
     {
-        List<ShinyBet> bets = shinyBetDAO.getByUsername(user.getUsername());
+        List<ShinyBet> bets = database.get(ShinyBetDAO.class).getByUsername(user.getUsername());
 
         for(ShinyBet bet : bets)
         {
-            shinyBetDAO.delete(bet);
+            database.delete(bet);
         }
-        userDAO.delete(user);
+        database.delete(user);
     }
 }

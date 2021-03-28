@@ -17,8 +17,6 @@ class ShinyDexServiceImplTest extends DatabaseTest
 {
     private static final String USERNAME1 = "username1";
 
-    private ShinyDexEntryDAO dexEntryDAO;
-
     private ShinyDexServiceImpl impl;
 
 
@@ -40,17 +38,10 @@ class ShinyDexServiceImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        dexEntryDAO = new ShinyDexEntryDAOImpl(session)
-        {
-            public void commit()
-            {
-            }
-        };
-
         PokemonUtils pokemonUtils = new PokemonUtilsImpl(messages());
         PokemonManagement pokemonManagement = new PokemonManagementImpl(pokemonUtils, config());
 
-        impl = new ShinyDexServiceImpl(pokemonManagement, dexEntryDAO, messages());
+        impl = new ShinyDexServiceImpl(pokemonManagement, database, messages());
 
         createTestObjects();
     }
@@ -69,11 +60,11 @@ class ShinyDexServiceImplTest extends DatabaseTest
         entry2 = new ShinyDexEntry();
         entry2.setPokemon("ivysaur");
 
-        dexEntryDAO.save(entry1, entry2);
+        database.save(entry1, entry2);
     }
 
     private void removeTestObjects()
     {
-        dexEntryDAO.delete(entry1, entry2);
+        database.delete(entry1, entry2);
     }
 }

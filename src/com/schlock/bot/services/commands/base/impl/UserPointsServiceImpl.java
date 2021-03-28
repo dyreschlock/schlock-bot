@@ -5,7 +5,7 @@ import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.base.UserPointsService;
-import com.schlock.bot.services.database.base.UserDAO;
+import com.schlock.bot.services.database.adhoc.DatabaseManager;
 import com.schlock.bot.services.entities.base.UserManagement;
 import org.apache.tapestry5.ioc.Messages;
 
@@ -25,19 +25,19 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
 
 
     private final UserManagement userManagement;
-    private final UserDAO userDAO;
+    private final DatabaseManager database;
 
     private final DeploymentConfiguration config;
 
     public UserPointsServiceImpl(UserManagement userManagement,
-                                 UserDAO userDAO,
+                                 DatabaseManager database,
                                  Messages messages,
                                  DeploymentConfiguration config)
     {
         super(messages);
 
         this.userManagement = userManagement;
-        this.userDAO = userDAO;
+        this.database = database;
         this.config = config;
     }
 
@@ -102,8 +102,7 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
         User user = userManagement.getUser(username);
         user.incrementBalance(points);
 
-        userDAO.save(user);
-        userDAO.commit();
+        database.save(user);
 
         return formatSingleResponse(GIVE_POINTS_KEY, points.toString(), config.getCurrencyMark(), username, user.getBalance().toString());
     }
@@ -132,8 +131,7 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
         User user = userManagement.getUser(username);
         user.decrementBalance(points);
 
-        userDAO.save(user);
-        userDAO.commit();
+        database.save(user);
 
         return formatSingleResponse(CASHOUT_TO_ELEMENTS_MESSAGE, username, points.toString());
     }

@@ -1,6 +1,7 @@
 package com.schlock.bot.pages.pokemon;
 
 import com.schlock.bot.entities.pokemon.PokemonGoDexEntry;
+import com.schlock.bot.services.database.adhoc.DatabaseManager;
 import com.schlock.bot.services.database.pokemon.PokemonGoDexEntryDAO;
 import org.apache.commons.codec.binary.Base64;
 
@@ -15,13 +16,13 @@ public class GoShinyDex
     private static final Integer COLUMNS = 30;
 
     @Inject
-    private PokemonGoDexEntryDAO entryDAO;
+    private DatabaseManager database;
 
     public String getTableHTML()
     {
         String html = "<table class=\"dex\">";
 
-        List<PokemonGoDexEntry> entries = entryDAO.getInPokemonOrder();
+        List<PokemonGoDexEntry> entries = database.get(PokemonGoDexEntryDAO.class).getInPokemonOrder();
 
         html += "<tr>";
 

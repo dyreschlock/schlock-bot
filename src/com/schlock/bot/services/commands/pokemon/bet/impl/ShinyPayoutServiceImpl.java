@@ -1,17 +1,17 @@
 package com.schlock.bot.services.commands.pokemon.bet.impl;
 
 import com.schlock.bot.entities.base.User;
-import com.schlock.bot.entities.pokemon.ShinyBet;
 import com.schlock.bot.entities.pokemon.Pokemon;
+import com.schlock.bot.entities.pokemon.ShinyBet;
 import com.schlock.bot.entities.pokemon.ShinyGet;
 import com.schlock.bot.entities.pokemon.ShinyGetType;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyPayoutService;
+import com.schlock.bot.services.database.adhoc.DatabaseManager;
 import com.schlock.bot.services.database.pokemon.ShinyBetDAO;
 import com.schlock.bot.services.database.pokemon.ShinyGetDAO;
-import com.schlock.bot.services.database.base.UserDAO;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.ShinyGetFormatter;
 import org.apache.commons.lang3.StringUtils;
@@ -40,18 +40,14 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
     private final PokemonManagement pokemonManagement;
     private final ShinyGetFormatter shinyFormatter;
 
-    private final ShinyBetDAO shinyBetDAO;
-    private final ShinyGetDAO shinyGetDAO;
-    private final UserDAO userDAO;
+    private final DatabaseManager database;
 
     private final DeploymentConfiguration config;
 
 
     public ShinyPayoutServiceImpl(PokemonManagement pokemonManagement,
                                   ShinyGetFormatter shinyFormatter,
-                                  ShinyBetDAO shinyBetDAO,
-                                  ShinyGetDAO shinyGetDAO,
-                                  UserDAO userDAO,
+                                  DatabaseManager database,
                                   Messages messages,
                                   DeploymentConfiguration config)
     {
@@ -60,9 +56,7 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
         this.pokemonManagement = pokemonManagement;
         this.shinyFormatter = shinyFormatter;
 
-        this.shinyBetDAO = shinyBetDAO;
-        this.shinyGetDAO = shinyGetDAO;
-        this.userDAO = userDAO;
+        this.database = database;
 
         this.config = config;
     }
@@ -98,16 +92,14 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
                 return formatSingleResponse(BAD_FORMAT_MESSAGE_KEY);
             }
 
-            shinyGetDAO.save(get);
+            database.save(get);
 
             ListenerResponse response = ListenerResponse.relayAll();
             response.addMessage(shinyFormatter.formatNewlyCaught(get));
 
-            List<ShinyBet> bets = shinyBetDAO.getAllCurrent();
+            List<ShinyBet> bets = database.get(ShinyBetDAO.class).getAllCurrent();
             if (bets.size() == 0)
             {
-                shinyBetDAO.commit();
-
                 return response.addMessage(messages.get(NO_BETS_NO_WINNERS_KEY));
             }
 
@@ -120,7 +112,7 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
             for (ShinyBet bet : bets)
             {
                 bet.setShiny(get);
-                shinyBetDAO.save(bet);
+                database.save(bet);
 
                 boolean winningPokemon = isWinningPokemon(bet, get.getPokemonId());
                 boolean winningTime = isWinningTime(bet, get.getTimeInMinutes(), closestRange);
@@ -189,10 +181,8 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
 
                 response.addMessage(messages.format(USER_UPDATE_KEY, user.getUsername(), winnings, MARK, user.getBalance(), MARK) + doublerMsg);
 
-                userDAO.save(user);
+                database.save(user);
             }
-
-            userDAO.commit();
 
             return response;
         }
@@ -261,7 +251,7 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
                 return null;
             }
 
-            Integer shinyNumber = shinyGetDAO.getCurrentShinyNumber();
+            Integer shinyNumber = database.get(ShinyGetDAO.class).getCurrentShinyNumber();
 
             ShinyGet get = new ShinyGet();
             get.setType(type);

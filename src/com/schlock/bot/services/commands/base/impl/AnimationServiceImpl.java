@@ -6,7 +6,7 @@ import com.schlock.bot.entities.base.alert.AnimationAlert;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.base.AnimationService;
-import com.schlock.bot.services.database.base.AlertDAO;
+import com.schlock.bot.services.database.adhoc.DatabaseManager;
 import com.schlock.bot.services.entities.base.UserManagement;
 import org.apache.tapestry5.ioc.Messages;
 
@@ -18,16 +18,16 @@ public class AnimationServiceImpl extends AbstractListenerService implements Ani
     private final String ANIMATION_COMMAND = "!animation ";
 
     private final UserManagement userManagement;
-    private final AlertDAO alertDAO;
+    private final DatabaseManager database;
 
     public AnimationServiceImpl(UserManagement userManagement,
-                                AlertDAO alertDAO,
+                                DatabaseManager database,
                                 Messages messages)
     {
         super(messages);
 
         this.userManagement = userManagement;
-        this.alertDAO = alertDAO;
+        this.database = database;
     }
 
     public boolean isAcceptRequest(String username, String message)
@@ -53,8 +53,7 @@ public class AnimationServiceImpl extends AbstractListenerService implements Ani
 
                 AnimationAlert alert = AnimationAlert.create(type, user);
 
-                alertDAO.save(alert);
-                alertDAO.commit();
+                database.save(alert);
 
                 return formatSingleResponse(ANIMATION_REGISTERED_KEY, username, type.name());
             }

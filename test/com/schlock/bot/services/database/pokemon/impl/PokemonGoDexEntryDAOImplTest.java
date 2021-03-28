@@ -2,10 +2,12 @@ package com.schlock.bot.services.database.pokemon.impl;
 
 import com.schlock.bot.entities.pokemon.PokemonGoDexEntry;
 import com.schlock.bot.services.database.DatabaseTest;
+import com.schlock.bot.services.database.pokemon.PokemonGoDexEntryDAO;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PokemonGoDexEntryDAOImplTest extends DatabaseTest
 {
@@ -13,7 +15,7 @@ class PokemonGoDexEntryDAOImplTest extends DatabaseTest
     private static final String NAME2 = "IVYSAUR";
     private static final String NAME3 = "VENUSAUR";
 
-    private PokemonGoDexEntryDAOImpl daoImpl;
+    private PokemonGoDexEntryDAO entryDao;
 
     private PokemonGoDexEntry entry1;
     private PokemonGoDexEntry entry2;
@@ -22,7 +24,7 @@ class PokemonGoDexEntryDAOImplTest extends DatabaseTest
     @Test
     public void testGetInOrder()
     {
-        List<PokemonGoDexEntry> entries = daoImpl.getInPokemonOrder();
+        List<PokemonGoDexEntry> entries = entryDao.getInPokemonOrder();
 
         assertEquals(3, entries.size());
 
@@ -34,7 +36,7 @@ class PokemonGoDexEntryDAOImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        daoImpl = new PokemonGoDexEntryDAOImpl(session);
+        entryDao = database.get(PokemonGoDexEntryDAO.class);
 
         createTestObjects();
     }
@@ -68,11 +70,11 @@ class PokemonGoDexEntryDAOImplTest extends DatabaseTest
         entry3.setShinyGo(true);
         entry3.setShinyHome(true);
 
-        daoImpl.save(entry1, entry2, entry3);
+        database.save(entry1, entry2, entry3);
     }
 
     public void removeTestObjects()
     {
-        daoImpl.delete(entry1, entry2, entry3);
+        database.delete(entry1, entry2, entry3);
     }
 }

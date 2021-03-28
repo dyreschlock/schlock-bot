@@ -7,7 +7,7 @@ import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.whodat.PokemonGuessingService;
-import com.schlock.bot.services.database.base.UserDAO;
+import com.schlock.bot.services.database.adhoc.DatabaseManager;
 import com.schlock.bot.services.database.pokemon.GuessingStreakDAO;
 import com.schlock.bot.services.entities.base.UserManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
@@ -28,8 +28,7 @@ public class PokemonGuessingServiceImpl extends AbstractListenerService implemen
     private final UserManagement userManagement;
     private final PokemonUtils pokemonUtils;
 
-    private final GuessingStreakDAO streakDAO;
-    private final UserDAO userDAO;
+    private final DatabaseManager database;
 
     private final DeploymentConfiguration config;
 
@@ -38,8 +37,7 @@ public class PokemonGuessingServiceImpl extends AbstractListenerService implemen
     public PokemonGuessingServiceImpl(PokemonManagement pokemonManagement,
                                       UserManagement userManagement,
                                       PokemonUtils pokemonUtils,
-                                      GuessingStreakDAO streakDAO,
-                                      UserDAO userDAO,
+                                      DatabaseManager database,
                                       Messages messages,
                                       DeploymentConfiguration config)
     {
@@ -49,8 +47,7 @@ public class PokemonGuessingServiceImpl extends AbstractListenerService implemen
         this.userManagement = userManagement;
         this.pokemonUtils = pokemonUtils;
 
-        this.streakDAO = streakDAO;
-        this.userDAO = userDAO;
+        this.database = database;
 
         this.config = config;
     }
@@ -144,8 +141,7 @@ public class PokemonGuessingServiceImpl extends AbstractListenerService implemen
 
         user.incrementBalance(points);
 
-        userDAO.save(user, streak);
-        userDAO.commit();
+        database.save(user, streak);
 
         String pokemonName = currentPokemon.getName();
         currentPokemon = null;
@@ -156,7 +152,7 @@ public class PokemonGuessingServiceImpl extends AbstractListenerService implemen
 
     private GuessingStreak getCurrentStreak()
     {
-        GuessingStreak streak = streakDAO.get();
+        GuessingStreak streak = database.get(GuessingStreakDAO.class).get();
         if(streak == null)
         {
             streak = new GuessingStreak();

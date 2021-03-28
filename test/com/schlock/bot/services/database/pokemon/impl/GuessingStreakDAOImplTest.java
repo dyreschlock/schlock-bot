@@ -3,14 +3,16 @@ package com.schlock.bot.services.database.pokemon.impl;
 import com.schlock.bot.entities.base.User;
 import com.schlock.bot.entities.pokemon.GuessingStreak;
 import com.schlock.bot.services.database.DatabaseTest;
+import com.schlock.bot.services.database.pokemon.GuessingStreakDAO;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GuessingStreakDAOImplTest extends DatabaseTest
 {
     private static final String USERNAME = "username_guess";
 
-    private GuessingStreakDAOImpl daoImpl;
+    private GuessingStreakDAO streakDao;
 
     private GuessingStreak streak;
     private User testUser;
@@ -18,14 +20,14 @@ class GuessingStreakDAOImplTest extends DatabaseTest
     @Test
     public void testGetMethod()
     {
-        GuessingStreak s = daoImpl.get();
+        GuessingStreak s = streakDao.get();
 
         assertEquals(streak, s);
     }
 
     protected void before() throws Exception
     {
-        daoImpl = new GuessingStreakDAOImpl(session);
+        streakDao = database.get(GuessingStreakDAO.class);
 
         createTestObjects();
     }
@@ -42,15 +44,15 @@ class GuessingStreakDAOImplTest extends DatabaseTest
         streak = new GuessingStreak();
         streak.setStreakNumber(1);
 
-        daoImpl.save(testUser);
+        database.save(testUser);
 
         streak.setUserId(testUser.getId());
 
-        daoImpl.save(streak);
+        database.save(streak);
     }
 
     private void removeTestObjects()
     {
-        daoImpl.delete(testUser, streak);
+        database.delete(testUser, streak);
     }
 }

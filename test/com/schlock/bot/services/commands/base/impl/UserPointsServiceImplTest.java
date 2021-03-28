@@ -3,7 +3,6 @@ package com.schlock.bot.services.commands.base.impl;
 import com.schlock.bot.entities.base.User;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.base.UserDAO;
-import com.schlock.bot.services.database.base.impl.UserDAOImpl;
 import com.schlock.bot.services.entities.base.UserManagement;
 import com.schlock.bot.services.entities.base.impl.UserManagementImpl;
 import org.junit.jupiter.api.Test;
@@ -16,8 +15,6 @@ class UserPointsServiceImplTest extends DatabaseTest
     private final static Integer USER1_BALANCE = 5000;
 
     private final static String USERNAME2 = "useranme2_points";
-
-    private UserDAO userDAO;
 
     private UserPointsServiceImpl impl;
 
@@ -47,16 +44,9 @@ class UserPointsServiceImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        userDAO = new UserDAOImpl(session)
-        {
-            public void commit()
-            {
-            }
-        };
+        UserManagement userManagement = new UserManagementImpl(database, config());
 
-        UserManagement userManagement = new UserManagementImpl(userDAO, config());
-
-        impl = new UserPointsServiceImpl(userManagement, userDAO, messages(), config());
+        impl = new UserPointsServiceImpl(userManagement, database, messages(), config());
 
         createTestObjects();
     }
@@ -73,13 +63,13 @@ class UserPointsServiceImplTest extends DatabaseTest
         testUser1.setUsername(USERNAME1);
         testUser1.setBalance(USER1_BALANCE);
 
-        userDAO.save(testUser1);
+        database.save(testUser1);
     }
 
     private void removeTestObjects()
     {
-        User user2 = userDAO.getByUsername(USERNAME2);
+        User user2 = database.get(UserDAO.class).getByUsername(USERNAME2);
 
-        userDAO.delete(testUser1, user2);
+        database.delete(testUser1, user2);
     }
 }

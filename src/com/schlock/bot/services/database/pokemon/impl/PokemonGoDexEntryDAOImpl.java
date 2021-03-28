@@ -5,14 +5,15 @@ import com.schlock.bot.services.database.AbstractBaseDAO;
 import com.schlock.bot.services.database.pokemon.PokemonGoDexEntryDAO;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import java.util.List;
 
 public class PokemonGoDexEntryDAOImpl extends AbstractBaseDAO<PokemonGoDexEntry> implements PokemonGoDexEntryDAO
 {
-    public PokemonGoDexEntryDAOImpl(Session session)
+    public PokemonGoDexEntryDAOImpl(SessionFactory sessionFactory)
     {
-        super(PokemonGoDexEntry.class, session);
+        super(PokemonGoDexEntry.class, sessionFactory);
     }
 
     public List<PokemonGoDexEntry> getInPokemonOrder()
@@ -20,7 +21,15 @@ public class PokemonGoDexEntryDAOImpl extends AbstractBaseDAO<PokemonGoDexEntry>
         String text = " from PokemonGoDexEntry e " +
                         "order by e.pokemonNumber asc ";
 
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
         Query query = session.createQuery(text);
-        return query.list();
+        List<PokemonGoDexEntry> entries = query.list();
+
+        session.getTransaction().commit();
+        session.close();
+
+        return entries;
     }
 }

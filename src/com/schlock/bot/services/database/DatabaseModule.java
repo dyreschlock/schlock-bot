@@ -1,12 +1,8 @@
 package com.schlock.bot.services.database;
 
 import com.schlock.bot.services.DeploymentConfiguration;
-import com.schlock.bot.services.database.pokemon.*;
-import com.schlock.bot.services.database.pokemon.impl.*;
-import com.schlock.bot.services.database.base.AlertDAO;
-import com.schlock.bot.services.database.base.UserDAO;
-import com.schlock.bot.services.database.base.impl.AlertDAOImpl;
-import com.schlock.bot.services.database.base.impl.UserDAOImpl;
+import com.schlock.bot.services.database.adhoc.DatabaseManager;
+import com.schlock.bot.services.database.adhoc.impl.DatabaseManagerImpl;
 import org.apache.tapestry5.hibernate.HibernateConfigurer;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
@@ -17,13 +13,7 @@ public class DatabaseModule
 {
     public static void bind(ServiceBinder binder)
     {
-        binder.bind(AlertDAO.class, AlertDAOImpl.class);
-        binder.bind(UserDAO.class, UserDAOImpl.class);
-        binder.bind(ShinyGetDAO.class, ShinyGetDAOImpl.class);
-        binder.bind(ShinyBetDAO.class, ShinyBetDAOImpl.class);
-        binder.bind(ShinyDexEntryDAO.class, ShinyDexEntryDAOImpl.class);
-        binder.bind(GuessingStreakDAO.class, GuessingStreakDAOImpl.class);
-        binder.bind(PokemonGoDexEntryDAO.class, PokemonGoDexEntryDAOImpl.class);
+        binder.bind(DatabaseManager.class, DatabaseManagerImpl.class);
     }
 
 

@@ -78,7 +78,7 @@ class ShinyBetDAOImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        shinyBetDAO = new ShinyBetDAOImpl(session);
+        shinyBetDAO = database.get(ShinyBetDAO.class);
 
         createTestObjects();
     }
@@ -112,11 +112,11 @@ class ShinyBetDAOImplTest extends DatabaseTest
         bet3.setPokemonId(BET3_POKEMON);
         bet3.setBetAmount(BET3_AMOUNT);
 
-        shinyBetDAO.save(bet1, bet2, bet3, user1, user2);
+        database.save(bet1, bet2, bet3, user1, user2);
     }
 
     public void removetTestObjects()
     {
-        shinyBetDAO.delete(bet1, bet2, bet3, user1, user2);
+        database.delete(bet1, bet2, bet3, user1, user2);
     }
 }

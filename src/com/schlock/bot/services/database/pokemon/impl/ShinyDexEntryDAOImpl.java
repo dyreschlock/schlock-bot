@@ -1,14 +1,14 @@
 package com.schlock.bot.services.database.pokemon.impl;
 
 import com.schlock.bot.entities.pokemon.ShinyDexEntry;
-import com.schlock.bot.services.database.pokemon.ShinyDexEntryDAO;
 import com.schlock.bot.services.database.AbstractBaseDAO;
-import org.hibernate.Session;
+import com.schlock.bot.services.database.pokemon.ShinyDexEntryDAO;
+import org.hibernate.SessionFactory;
 
 public class ShinyDexEntryDAOImpl extends AbstractBaseDAO<ShinyDexEntry> implements ShinyDexEntryDAO
 {
-    public  ShinyDexEntryDAOImpl(Session session)
+    public  ShinyDexEntryDAOImpl(SessionFactory sessionFactory)
     {
-        super(ShinyDexEntry.class, session);
+        super(ShinyDexEntry.class, sessionFactory);
     }
 }

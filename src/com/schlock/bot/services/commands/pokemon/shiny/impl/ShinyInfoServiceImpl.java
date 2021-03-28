@@ -6,6 +6,7 @@ import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyInfoService;
+import com.schlock.bot.services.database.adhoc.DatabaseManager;
 import com.schlock.bot.services.database.pokemon.ShinyGetDAO;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.ShinyGetFormatter;
@@ -27,13 +28,13 @@ public class ShinyInfoServiceImpl extends AbstractListenerService implements Shi
     private final PokemonManagement pokemonManagement;
     private final ShinyGetFormatter shinyFormatter;
 
-    private final ShinyGetDAO shinyGetDAO;
+    private final DatabaseManager database;
 
     private final DeploymentConfiguration config;
 
     public ShinyInfoServiceImpl(PokemonManagement pokemonManagement,
                                 ShinyGetFormatter shinyFormatter,
-                                ShinyGetDAO shinyGetDAO,
+                                DatabaseManager database,
                                 Messages messages,
                                 DeploymentConfiguration config)
     {
@@ -41,7 +42,7 @@ public class ShinyInfoServiceImpl extends AbstractListenerService implements Shi
 
         this.pokemonManagement = pokemonManagement;
         this.shinyFormatter = shinyFormatter;
-        this.shinyGetDAO = shinyGetDAO;
+        this.database = database;
         this.config = config;
     }
 
@@ -64,7 +65,7 @@ public class ShinyInfoServiceImpl extends AbstractListenerService implements Shi
         String commandText = in.toLowerCase().trim();
         if (commandText.startsWith(MOST_RECENT_COMMAND) || commandText.startsWith(MOST_RECENT_COMMAND2))
         {
-            ShinyGet mostRecent = shinyGetDAO.getMostRecent();
+            ShinyGet mostRecent = database.get(ShinyGetDAO.class).getMostRecent();
 
             String response = shinyFormatter.formatMostRecent(mostRecent);
             return ListenerResponse.relaySingle().addMessage(response);
@@ -72,14 +73,14 @@ public class ShinyInfoServiceImpl extends AbstractListenerService implements Shi
 
         if (commandText.startsWith(AVERAGE_COMMAND))
         {
-            Double averageTime = shinyGetDAO.getCurrentAverageTimeToShiny();
+            Double averageTime = database.get(ShinyGetDAO.class).getCurrentAverageTimeToShiny();
 
             return formatSingleResponse(AVERAGE_TIME_KEY, TimeUtils.formatDoubleMinutesIntoTimeString(averageTime));
         }
 
         if (commandText.startsWith(AVERAGE_CHECKS_COMMAND))
         {
-            Double averageChecks = shinyGetDAO.getCurrentAverageNumberOfRareChecks();
+            Double averageChecks = database.get(ShinyGetDAO.class).getCurrentAverageNumberOfRareChecks();
 
             return formatSingleResponse(AVERAGE_CHECKS_KEY, new DecimalFormat("#0.00").format(averageChecks));
         }

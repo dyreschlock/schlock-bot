@@ -3,17 +3,14 @@ package com.schlock.bot.services.commands.pokemon.whodat.impl;
 import com.schlock.bot.entities.base.User;
 import com.schlock.bot.entities.pokemon.GuessingStreak;
 import com.schlock.bot.entities.pokemon.Pokemon;
-import com.schlock.bot.services.database.pokemon.GuessingStreakDAO;
-import com.schlock.bot.services.database.pokemon.impl.GuessingStreakDAOImpl;
+import com.schlock.bot.services.database.DatabaseTest;
+import com.schlock.bot.services.database.base.UserDAO;
+import com.schlock.bot.services.entities.base.UserManagement;
+import com.schlock.bot.services.entities.base.impl.UserManagementImpl;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonManagementImpl;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonUtilsImpl;
-import com.schlock.bot.services.database.DatabaseTest;
-import com.schlock.bot.services.database.base.UserDAO;
-import com.schlock.bot.services.database.base.impl.UserDAOImpl;
-import com.schlock.bot.services.entities.base.UserManagement;
-import com.schlock.bot.services.entities.base.impl.UserManagementImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,8 +29,6 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
 
     private UserManagement userManagement;
     private PokemonUtils pokemonUtils;
-
-    private UserDAO userDAO;
 
     private PokemonGuessingServiceImpl impl;
 
@@ -146,23 +141,9 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
             }
         };
 
-        GuessingStreakDAO streakDAO = new GuessingStreakDAOImpl(session)
-        {
-            public void commit()
-            {
-            }
-        };
+        userManagement = new UserManagementImpl(database, config());
 
-        userDAO = new UserDAOImpl(session)
-        {
-            public void commit()
-            {
-            }
-        };
-
-        userManagement = new UserManagementImpl(userDAO, config());
-
-        impl = new PokemonGuessingServiceImpl(pokemonManagement, userManagement, pokemonUtils, streakDAO, userDAO, messages(), config());
+        impl = new PokemonGuessingServiceImpl(pokemonManagement, userManagement, pokemonUtils, database, messages(), config());
 
 
         createTestObjects();
@@ -181,7 +162,7 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
         testUser1 = userManagement.createNewDefaultUser(USERNAME1);
         testUser1.setBalance(DEFAULT_BALANCE);
 
-        userDAO.save(streak, testUser1);
+        database.save(streak, testUser1);
 
         testPokemon.setName(TEST_POKEMON_NAME);
         testPokemon.setId(TEST_POKEMON_ID);
@@ -192,7 +173,7 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
 
     private void removeTestObjects()
     {
-        User admin = userDAO.getByUsername(config().getOwnerUsername());
-        userDAO.delete(streak, admin, testUser1);
+        User admin = database.get(UserDAO.class).getByUsername(config().getOwnerUsername());
+        database.delete(streak, admin, testUser1);
     }
 }

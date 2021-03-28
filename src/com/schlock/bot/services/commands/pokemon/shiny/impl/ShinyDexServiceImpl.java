@@ -5,6 +5,7 @@ import com.schlock.bot.entities.pokemon.ShinyDexEntry;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
+import com.schlock.bot.services.database.adhoc.DatabaseManager;
 import com.schlock.bot.services.database.pokemon.ShinyDexEntryDAO;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import org.apache.tapestry5.ioc.Messages;
@@ -20,23 +21,23 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
 
     private final PokemonManagement pokemonManagement;
 
-    private final ShinyDexEntryDAO dexEntryDAO;
+    private DatabaseManager database;
 
     public ShinyDexServiceImpl(PokemonManagement pokemonManagement,
-                               ShinyDexEntryDAO dexEntryDAO,
+                               DatabaseManager database,
                                Messages messages)
     {
         super(messages);
 
         this.pokemonManagement = pokemonManagement;
 
-        this.dexEntryDAO = dexEntryDAO;
+        this.database = database;
     }
 
     @Override
     public List<Pokemon> getShinyDexEntries()
     {
-        List<ShinyDexEntry> entries = dexEntryDAO.getAll();
+        List<ShinyDexEntry> entries = database.get(ShinyDexEntryDAO.class).getAll();
 
         List<Pokemon> pokemon = new ArrayList<>();
         for (ShinyDexEntry entry : entries)
@@ -66,7 +67,7 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
         String commandText = in.toLowerCase().trim();
         if (commandText.startsWith(SHINY_DEX_COMMAND))
         {
-            List<ShinyDexEntry> entries = dexEntryDAO.getAll();
+            List<ShinyDexEntry> entries = database.get(ShinyDexEntryDAO.class).getAll();
 
             Integer count = entries.size();
 
