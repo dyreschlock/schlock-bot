@@ -4,9 +4,9 @@ import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.AbstractBot;
 import com.schlock.bot.services.commands.ListenerService;
 import com.schlock.bot.services.bot.discord.DiscordBot;
-import com.schlock.bot.services.bot.twitch.ChangeColorOnJoin;
-import com.schlock.bot.services.bot.twitch.Commands;
-import com.schlock.bot.services.bot.twitch.TwitchBot;
+import com.schlock.bot.services.bot.twitch.chat.ChangeColorOnJoin;
+import com.schlock.bot.services.bot.twitch.chat.Commands;
+import com.schlock.bot.services.bot.twitch.TwitchChatBot;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.cap.EnableCapHandler;
@@ -14,7 +14,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 
 import java.util.Set;
 
-public class TwitchBotImpl extends AbstractBot implements TwitchBot
+public class TwitchChatBotImpl extends AbstractBot implements TwitchChatBot
 {
     private Configuration configuration;
 
@@ -23,15 +23,11 @@ public class TwitchBotImpl extends AbstractBot implements TwitchBot
     private final ListenerAdapter commands;
     private final ListenerAdapter changeColor;
 
-    private final DiscordBot discordBot;
-
-    public TwitchBotImpl(Set<ListenerService> listeners,
-                         DiscordBot discordBot,
-                         DeploymentConfiguration config)
+    public TwitchChatBotImpl(Set<ListenerService> listeners,
+                             DiscordBot discordBot,
+                             DeploymentConfiguration config)
     {
         super(listeners, config);
-
-        this.discordBot = discordBot;
 
         commands = new Commands(listeners, discordBot, config);
         changeColor = new ChangeColorOnJoin(config);
@@ -60,5 +56,12 @@ public class TwitchBotImpl extends AbstractBot implements TwitchBot
 
         bot = new PircBotX(configuration);
         bot.startBot();
+    }
+
+    public void relayMessage(String message)
+    {
+        final String CHANNEL = getConfig().getTwitchChannel();
+
+        bot.sendIRC().message(CHANNEL, message);
     }
 }

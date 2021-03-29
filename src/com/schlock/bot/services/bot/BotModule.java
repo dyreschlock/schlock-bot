@@ -3,8 +3,10 @@ package com.schlock.bot.services.bot;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.discord.DiscordBot;
 import com.schlock.bot.services.bot.discord.impl.DiscordBotImpl;
-import com.schlock.bot.services.bot.twitch.TwitchBot;
-import com.schlock.bot.services.bot.twitch.impl.TwitchBotImpl;
+import com.schlock.bot.services.bot.twitch.TwitchChatBot;
+import com.schlock.bot.services.bot.twitch.TwitchEventBot;
+import com.schlock.bot.services.bot.twitch.impl.TwitchChatBotImpl;
+import com.schlock.bot.services.bot.twitch.impl.TwitchEventBotImpl;
 import com.schlock.bot.services.commands.ListenerService;
 import com.schlock.bot.services.commands.base.UserLeaderboardService;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetInfoService;
@@ -19,6 +21,7 @@ import com.schlock.bot.services.commands.pokemon.whodat.PokemonInfoService;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -30,16 +33,16 @@ public class BotModule
     }
 
     @EagerLoad
-    public static TwitchBot build(UserPointsService userPointsService,
-                                  ShinyBetService shinyBetService,
-                                  ShinyPayoutService shinyPayoutService,
-                                  PokemonGuessingService guessingService,
-                                  PokemonInfoService pokemonInfoService,
-                                  ShinyInfoService shinyInfoService,
-                                  ShinyDexService shinyDexService,
-                                  AnimationService animationService,
-                                  DiscordBot discordBot,
-                                  DeploymentConfiguration config)
+    public static TwitchChatBot build(UserPointsService userPointsService,
+                                      ShinyBetService shinyBetService,
+                                      ShinyPayoutService shinyPayoutService,
+                                      PokemonGuessingService guessingService,
+                                      PokemonInfoService pokemonInfoService,
+                                      ShinyInfoService shinyInfoService,
+                                      ShinyDexService shinyDexService,
+                                      AnimationService animationService,
+                                      DiscordBot discordBot,
+                                      DeploymentConfiguration config)
     {
         Set<ListenerService> listeners =
                                     Stream.of(userPointsService,
@@ -51,9 +54,9 @@ public class BotModule
                                                 shinyDexService,
                                                 animationService).collect(Collectors.toSet());
 
-        TwitchBot bot = new TwitchBotImpl(listeners, discordBot, config);
+        TwitchChatBot bot = new TwitchChatBotImpl(listeners, discordBot, config);
 
-        Thread twitchBotThread = new Thread()
+        Thread twitchChatBotThread = new Thread()
         {
             public void run()
             {
@@ -67,7 +70,35 @@ public class BotModule
                 }
             }
         };
-        twitchBotThread.start();
+        twitchChatBotThread.start();
+
+        return bot;
+    }
+
+    @EagerLoad
+    public static TwitchEventBot build(TwitchChatBot twitchBot,
+                                        DeploymentConfiguration config)
+    {
+        Set<ListenerService> listeners = new HashSet<>();
+
+        TwitchEventBot bot = new TwitchEventBotImpl(listeners, twitchBot, config);
+
+        Thread twitchEventBotThread = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    bot.startup();
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        };
+        //twitchEventBotThread.start();
 
         return bot;
     }
@@ -78,6 +109,7 @@ public class BotModule
                                    ShinyBetInfoService shinyBetInfoService,
                                    ShinyInfoService shinyInfoService,
                                    ShinyDexService shinyDexService,
+                                   TwitchChatBot twitchBot,
                                    DeploymentConfiguration config)
     {
         Set<ListenerService> listeners =
@@ -87,7 +119,7 @@ public class BotModule
                                             shinyInfoService,
                                             shinyDexService).collect(Collectors.toSet());
 
-        DiscordBot bot = new DiscordBotImpl(listeners, config);
+        DiscordBot bot = new DiscordBotImpl(listeners, twitchBot, config);
 
         Thread discordBotThread = new Thread()
         {

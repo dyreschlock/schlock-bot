@@ -1,4 +1,4 @@
-package com.schlock.bot.services.bot.twitch;
+package com.schlock.bot.services.bot.twitch.chat;
 
 import com.schlock.bot.services.DeploymentConfiguration;
 import org.pircbotx.hooks.ListenerAdapter;

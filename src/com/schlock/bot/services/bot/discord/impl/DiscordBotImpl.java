@@ -2,6 +2,7 @@ package com.schlock.bot.services.bot.discord.impl;
 
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.bot.AbstractBot;
+import com.schlock.bot.services.bot.twitch.TwitchChatBot;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.ListenerService;
 import com.schlock.bot.services.bot.discord.DiscordBot;
@@ -18,12 +19,17 @@ import java.util.Set;
 
 public class DiscordBotImpl extends AbstractBot implements DiscordBot
 {
+    private final TwitchChatBot twitchBot;
+
     private JDA discordJDA;
 
     public DiscordBotImpl(Set<ListenerService> listeners,
+                          TwitchChatBot twitchBot,
                           DeploymentConfiguration config)
     {
         super(listeners, config);
+
+        this.twitchBot = twitchBot;
     }
 
     protected void startService() throws Exception
@@ -50,6 +56,8 @@ public class DiscordBotImpl extends AbstractBot implements DiscordBot
                 if (event.getMessage().getContentRaw().trim().equalsIgnoreCase(PING))
                 {
                     getBotChannel().sendMessage(PONG).queue();
+
+                    twitchBot.relayMessage(PONG);
                 }
             }
         };
