@@ -1,6 +1,5 @@
 package com.schlock.bot.services;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -36,7 +35,9 @@ public interface DeploymentConfiguration
 
     String getTwitchBotName();
 
-    String getTwitchOAuthToken();
+    String getTwitchOAuthIrcToken();
+
+    String getTwitchOAuthWebsocketClientId();
 
     String getTwitchChannel();
 

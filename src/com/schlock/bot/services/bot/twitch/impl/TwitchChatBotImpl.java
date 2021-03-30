@@ -36,7 +36,7 @@ public class TwitchChatBotImpl extends AbstractBot implements TwitchChatBot
     protected void startService() throws Exception
     {
         String botName = getConfig().getTwitchBotName();
-        String oauth = getConfig().getTwitchOAuthToken();
+        String oauth = getConfig().getTwitchOAuthIrcToken();
         String channel = getConfig().getTwitchChannel();
 
         configuration = new Configuration.Builder()

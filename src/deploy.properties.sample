@@ -4,7 +4,8 @@ discord.token=
 discord.relay.channel=
 
 twitch.bot.name=
-twitch.oauth.token=
+twitch.oauth.irc-token=
+twitch.oauth.websocket-client-id=
 twitch.channel=
 
 hibernate.connection.url.hosted=

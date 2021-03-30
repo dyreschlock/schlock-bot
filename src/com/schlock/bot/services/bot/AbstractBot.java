@@ -26,8 +26,8 @@ public abstract class AbstractBot implements Bot
     {
         if (!isStarted)
         {
-            startService();
             isStarted = true;
+            startService();
         }
     }
 

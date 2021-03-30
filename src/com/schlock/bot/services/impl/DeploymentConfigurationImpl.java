@@ -1,15 +1,15 @@
 package com.schlock.bot.services.impl;
 
 import com.schlock.bot.services.DeploymentConfiguration;
-import org.apache.commons.lang.StringUtils;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Properties;
+import java.util.Set;
 
 public class DeploymentConfigurationImpl implements DeploymentConfiguration
 {
@@ -38,7 +38,8 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
     private static final String DISCORD_RELAY_CHANNEL = "discord.relay.channel";
 
     private static final String TWITCH_BOT_NAME = "twitch.bot.name";
-    private static final String TWITCH_OAUTH_TOKEN = "twitch.oauth.token";
+    private static final String TWITCH_OAUTH_IRC_TOKEN = "twitch.oauth.irc-token";
+    private static final String TWITCH_OAUTH_CLIENT_ID = "twitch.oauth.websocket-client-id";
     private static final String TWITCH_CHANNEL = "twitch.channel";
 
     private static final String LISTEN_COMMAND_PREFIX = "listen.command.";
@@ -184,9 +185,14 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
         return getProperties().getProperty(TWITCH_BOT_NAME);
     }
 
-    public String getTwitchOAuthToken()
+    public String getTwitchOAuthIrcToken()
     {
-        return getProperties().getProperty(TWITCH_OAUTH_TOKEN);
+        return getProperties().getProperty(TWITCH_OAUTH_IRC_TOKEN);
+    }
+
+    public String getTwitchOAuthWebsocketClientId()
+    {
+        return getProperties().getProperty(TWITCH_OAUTH_CLIENT_ID);
     }
 
     public String getTwitchChannel()
