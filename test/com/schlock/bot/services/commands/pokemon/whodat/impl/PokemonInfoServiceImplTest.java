@@ -1,15 +1,12 @@
 package com.schlock.bot.services.commands.pokemon.whodat.impl;
 
 import com.schlock.bot.AppTestCase;
-import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.ListenerService;
 import com.schlock.bot.services.commands.pokemon.whodat.PokemonInfoService;
-import com.schlock.bot.services.commands.pokemon.whodat.impl.PokemonInfoServiceImpl;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonManagementImpl;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonUtilsImpl;
-import com.schlock.bot.services.impl.DeploymentConfigurationImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -233,22 +230,9 @@ class PokemonInfoServiceImplTest extends AppTestCase
     @BeforeEach
     public void setup() throws Exception
     {
-        DeploymentConfiguration config = new DeploymentConfigurationImpl()
-        {
-            protected String getContext()
-            {
-                return DeploymentConfigurationImpl.TEST;
-            }
-
-            public String getDiscordToken()
-            {
-                return null;
-            }
-        };
-
         PokemonUtils pokemonUtils = new PokemonUtilsImpl(messages());
 
-        PokemonManagement management = new PokemonManagementImpl(pokemonUtils, config);
+        PokemonManagement management = new PokemonManagementImpl(pokemonUtils, config());
 
         impl = new PokemonInfoServiceImpl(pokemonUtils, management, messages());
     }
