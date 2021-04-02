@@ -44,4 +44,33 @@ public class UserManagementImpl implements UserManagement
 
         return user;
     }
+
+    public Long getUserPrestigeValue(User user)
+    {
+        Long baseVal = config.getUserPrestigeBaseValue();
+
+        Double factor = Math.pow(2, user.getPrestige().doubleValue());
+
+        Long value = baseVal * factor.longValue();
+        return value;
+    }
+
+    public boolean prestigeUser(User user)
+    {
+        Long prestigeValue = getUserPrestigeValue(user);
+        if (user.getBalance() < prestigeValue)
+        {
+            return false;
+        }
+
+        int prestige = user.getPrestige();
+        prestige++;
+
+        user.setBalance(config.getUserDefaultBalance());
+        user.setPrestige(prestige);
+
+        database.save(user);
+
+        return true;
+    }
 }

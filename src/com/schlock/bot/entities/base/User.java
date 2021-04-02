@@ -9,6 +9,8 @@ import java.util.Date;
 @Table(name = "user")
 public class User extends Persisted
 {
+    private static final String PRESTIGE_STAR = "★";
+
     @Id
     @GeneratedValue
     private Long id;
@@ -59,6 +61,17 @@ public class User extends Persisted
     {
         balance = balance - points;
     }
+
+    public String getPrestigeLevel()
+    {
+        String stars = "";
+        for(int i = 0; i < prestige; i++)
+        {
+            stars += PRESTIGE_STAR;
+        }
+        return stars;
+    }
+
 
     public Long getId()
     {

@@ -13,6 +13,8 @@ public interface DeploymentConfiguration
 
     Long getUserDefaultBalance();
 
+    Long getUserPrestigeBaseValue();
+
     Integer getQuizCorrectPoints();
 
     Double getBetsPokemonWinFactor();

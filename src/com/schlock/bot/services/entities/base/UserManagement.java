@@ -7,4 +7,8 @@ public interface UserManagement
     User getUser(String username);
 
     User createNewDefaultUser(String username);
+
+    Long getUserPrestigeValue(User user);
+
+    boolean prestigeUser(User user);
 }

@@ -11,14 +11,21 @@ import org.apache.tapestry5.ioc.Messages;
 
 public class UserPointsServiceImpl extends AbstractListenerService implements UserPointsService
 {
-    private final String BALANCE_COMMAND = "!balance";
-    private final String GIVEPOINTS_COMMAND = "!givepoints %s ";
-    private final String CASHOUT_COMMAND = "!cashout ";
+    private static final String BALANCE_COMMAND = "!balance";
+    private static final String GIVEPOINTS_COMMAND = "!givepoints %s ";
+    private static final String CASHOUT_COMMAND = "!cashout ";
+    private static final String PRESTIGE_COMMAND = "!prestige";
+
+    private static final String YES_PARAM = "yes";
 
     private static final String USER_BALANCE_KEY = "user-balance";
 
     private static final String GIVE_POINTS_ERROR_KEY = "user-give-points-error";
     private static final String GIVE_POINTS_KEY = "user-give-points";
+
+    private static final String PRESTIGE_CONFIRM_KEY = "prestige-confirm";
+    private static final String PRESTIGE_SUCCESS_KEY = "prestige-success";
+    private static final String PRESTIGE_NOT_ENOUGH_POINTS_KEY = "prestige-not-enough-points";
 
     private static final String CASHOUT_WRONG_MESSAGE_KEY = "user-cashout-error";
     private static final String CASHOUT_TO_ELEMENTS_MESSAGE = "!givepoints %s %s";
@@ -51,7 +58,8 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
         return in != null &&
                 (in.toLowerCase().startsWith(BALANCE_COMMAND) ||
                         in.toLowerCase().startsWith(getGivePointsCommand()) ||
-                        in.toLowerCase().startsWith(CASHOUT_COMMAND));
+                        in.toLowerCase().startsWith(CASHOUT_COMMAND) ||
+                        in.toLowerCase().startsWith(PRESTIGE_COMMAND));
     }
 
     public boolean isTerminateAfterRequest()
@@ -65,6 +73,10 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
         if (command.startsWith(BALANCE_COMMAND))
         {
             return checkBalance(username);
+        }
+        if (command.startsWith(PRESTIGE_COMMAND))
+        {
+            return prestigeUser(username, in);
         }
 //        if (command.startsWith(getGivePointsCommand()))
 //        {
@@ -87,7 +99,7 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
         return formatSingleResponse(USER_BALANCE_KEY, username, balance, config.getCurrencyMark());
     }
 
-    public ListenerResponse addPoints(String username, String in)
+    protected ListenerResponse addPoints(String username, String in)
     {
         Integer points;
         try
@@ -115,7 +127,7 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
         return Integer.parseInt(points);
     }
 
-    public ListenerResponse exchangePoints(String username, String in)
+    protected ListenerResponse exchangePoints(String username, String in)
     {
         Integer points;
         try
@@ -134,5 +146,35 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
         database.save(user);
 
         return formatSingleResponse(CASHOUT_TO_ELEMENTS_MESSAGE, username, points.toString());
+    }
+
+    protected ListenerResponse prestigeUser(String username, String in)
+    {
+        User user = userManagement.getUser(username);
+
+        Long prestigeValue = userManagement.getUserPrestigeValue(user);
+        if (user.getBalance() < prestigeValue)
+        {
+            final String MARK = config.getCurrencyMark();
+
+            String message = messages.format(PRESTIGE_NOT_ENOUGH_POINTS_KEY, prestigeValue, MARK, user.getBalance(), MARK);
+            return ListenerResponse.relaySingle().addMessage(message);
+        }
+
+        String params = in.substring(PRESTIGE_COMMAND.length());
+        if (!params.contains(YES_PARAM))
+        {
+            String message = messages.get(PRESTIGE_CONFIRM_KEY);
+            return ListenerResponse.relaySingle().addMessage(message);
+        }
+
+        boolean success = userManagement.prestigeUser(user);
+        if (success)
+        {
+            String message = messages.format(PRESTIGE_SUCCESS_KEY, user.getUsername(), user.getPrestigeLevel());
+            return ListenerResponse.relayAll().addMessage(message);
+        }
+
+        return nullResponse();
     }
 }

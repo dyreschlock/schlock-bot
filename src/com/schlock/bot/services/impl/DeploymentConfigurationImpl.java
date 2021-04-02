@@ -24,6 +24,7 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
     private static final String BOT_NAME = "bot.name";
 
     private static final String USER_DEFAULT_BALANCE = "user.default.balance";
+    private static final String USER_PRESTIGE_BASE_VALUE = "user.prestige.base";
     private static final String CURRENCY_MARK = "currency.mark";
 
     private static final String QUIZ_CORRECT_POINTS = "quiz.correct.points";
@@ -121,6 +122,12 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
     {
         String bal = getProperties().getProperty(USER_DEFAULT_BALANCE);
         return Long.parseLong(bal);
+    }
+
+    public Long getUserPrestigeBaseValue()
+    {
+        String val = getProperties().getProperty(USER_PRESTIGE_BASE_VALUE);
+        return Long.parseLong(val);
     }
 
     public String getCurrencyMark()
