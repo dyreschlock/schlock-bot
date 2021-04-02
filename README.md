@@ -13,8 +13,7 @@ The following are commands that should work in Twitch.
 **Points management** - Manage that points you current have in Schlock Bot.
 
 * **!balance** -- current point total in Schlock Bot
-* **!cashout [points]** -- takes your points in Schlock Bot and moves them to Stream Elements
-* **!givepoints schlock_bot [points]** -- takes your points in Stream Elements and moves them to Schlock Bot
+* **!prestige** -- when reaching a certain point threshold, you can prestige. Prestiging gives you a star on the leadboard, and ranking priority over other users. (First prestige goal is 500k. Second is 1mil. Third is 2mil, etc)
 
 
 **Shiny Information** - Get information on my shiny progress in Let's Go Eevee.
@@ -34,7 +33,7 @@ Betting information, details, and payouts are relayed to both Twitch and Discord
 * **!currentbets** -- view all of your current bets
 
 
-**Who's that Pokemon?** - Guess on a random pokemon for 20 points. The Bot will listen to all messages and when any text matches the current pokemon, points will be awarded.
+**Who's that Pokemon?** - Guess on a random pokemon for 20 points. The Bot will listen to all messages and when any text matches the current pokemon, points will be awarded. Streaks will increase point payout.
 
 * **!whodat** -- Starts the game with a random pokemon from all generations.
 * **!whodat [gen]** -- Starts the game with a random pokemon a particular generation.
