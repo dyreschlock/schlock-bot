@@ -66,7 +66,7 @@ class ShinyGetDAOImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        shinyGetDAO = database.get(ShinyGetDAO.class);
+        shinyGetDAO = database().get(ShinyGetDAO.class);
 
         createTestObjects();
     }
@@ -100,11 +100,11 @@ class ShinyGetDAOImplTest extends DatabaseTest
         get3.setTimeInMinutes(TIME3);
         get3.setNumOfRareChecks(null);
 
-        database.save(get1, get2, get3);
+        database().save(get1, get2, get3);
     }
 
     private void removeTestObjects()
     {
-        database.delete(get1, get2, get3);
+        database().delete(get1, get2, get3);
     }
 }

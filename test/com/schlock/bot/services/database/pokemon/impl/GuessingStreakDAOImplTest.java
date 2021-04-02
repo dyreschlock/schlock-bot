@@ -27,7 +27,7 @@ class GuessingStreakDAOImplTest extends DatabaseTest
 
     protected void before() throws Exception
     {
-        streakDao = database.get(GuessingStreakDAO.class);
+        streakDao = database().get(GuessingStreakDAO.class);
 
         createTestObjects();
     }
@@ -44,15 +44,15 @@ class GuessingStreakDAOImplTest extends DatabaseTest
         streak = new GuessingStreak();
         streak.setStreakNumber(1);
 
-        database.save(testUser);
+        database().save(testUser);
 
         streak.setUserId(testUser.getId());
 
-        database.save(streak);
+        database().save(streak);
     }
 
     private void removeTestObjects()
     {
-        database.delete(testUser, streak);
+        database().delete(testUser, streak);
     }
 }

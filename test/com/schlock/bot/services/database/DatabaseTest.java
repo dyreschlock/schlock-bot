@@ -9,15 +9,22 @@ import org.junit.jupiter.api.BeforeEach;
 
 public abstract class DatabaseTest extends AppTestCase
 {
-    protected DatabaseManager database;
+    protected static DatabaseManager DATABASE;
+
+    protected static DatabaseManager database()
+    {
+        if (DATABASE == null)
+        {
+            DeploymentConfiguration config = config();
+
+            DATABASE = new DatabaseManagerImpl(config);
+        }
+        return DATABASE;
+    }
 
     @BeforeEach
     public void abstractBefore() throws Exception
     {
-        DeploymentConfiguration config = config();
-
-        database = new DatabaseManagerImpl(config);
-
         before();
     }
 

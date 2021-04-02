@@ -73,7 +73,7 @@ class ShinyInfoServiceImplTest extends DatabaseTest
 
         shinyFormatter = new ShinyGetFormatterImpl(pokemonManagement, messages());
 
-        impl = new ShinyInfoServiceImpl(pokemonManagement, shinyFormatter, database, messages(), config());
+        impl = new ShinyInfoServiceImpl(pokemonManagement, shinyFormatter, database(), messages(), config());
 
         createTestObjects();
     }
@@ -94,11 +94,11 @@ class ShinyInfoServiceImplTest extends DatabaseTest
         get1.setTimeInMinutes(SHINY_MINUTES);
         get1.setNumOfRareChecks(SHINY_CHECKS);
 
-        database.save(get1);
+        database().save(get1);
     }
 
     private void removeTestObjects()
     {
-        database.delete(get1);
+        database().delete(get1);
     }
 }

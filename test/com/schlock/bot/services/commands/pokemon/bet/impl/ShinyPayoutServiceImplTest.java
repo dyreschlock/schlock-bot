@@ -82,9 +82,9 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         assertTrue(resp.isRelayAll());
         assertEquals(7, responses.size());
 
-        user1 = database.get(UserDAO.class).getByUsername(user1.getUsername());
-        user2 = database.get(UserDAO.class).getByUsername(user2.getUsername());
-        user3 = database.get(UserDAO.class).getByUsername(user3.getUsername());
+        user1 = database().get(UserDAO.class).getByUsername(user1.getUsername());
+        user2 = database().get(UserDAO.class).getByUsername(user2.getUsername());
+        user3 = database().get(UserDAO.class).getByUsername(user3.getUsername());
 
 
         Double winningPokemon = BET1_AMOUNT.doubleValue() * TEST_POKEMON_WIN_FACTOR;
@@ -105,7 +105,7 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         List<String> winnersTime = Arrays.asList(user1.getUsername());
         List<String> winnersBoth = Arrays.asList(user1.getUsername());
 
-        ShinyGet mostRecent = database.get(ShinyGetDAO.class).getMostRecent();
+        ShinyGet mostRecent = database().get(ShinyGetDAO.class).getMostRecent();
 
         String response1 = shinyFormatter.formatNewlyCaught(mostRecent);
 
@@ -127,15 +127,15 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        userManagement = new UserManagementImpl(database, config());
+        userManagement = new UserManagementImpl(database(), overriddenConfiguration());
 
         PokemonUtils pokemonUtils = new PokemonUtilsImpl(messages());
 
-        PokemonManagement pokemonManagement = new PokemonManagementImpl(pokemonUtils, config());
+        PokemonManagement pokemonManagement = new PokemonManagementImpl(pokemonUtils, overriddenConfiguration());
 
         shinyFormatter = new ShinyGetFormatterImpl(pokemonManagement, messages());
 
-        impl = new ShinyPayoutServiceImpl(pokemonManagement, shinyFormatter, database, messages(), config());
+        impl = new ShinyPayoutServiceImpl(pokemonManagement, shinyFormatter, database(), messages(), overriddenConfiguration());
 
 
         createTestObjects();
@@ -177,10 +177,10 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         bet3.setTimeMinutes(BET3_MINUTES);
         bet3.setBetAmount(BET3_AMOUNT);
 
-        database.save(user1, user2, user3, bet1, bet2, bet3);
+        database().save(user1, user2, user3, bet1, bet2, bet3);
     }
 
-    protected DeploymentConfiguration createDeploymentConfiguration()
+    protected DeploymentConfiguration overriddenConfiguration()
     {
         return new DeploymentConfigurationImpl()
         {
@@ -197,8 +197,8 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
 
     private void removeTestObjects()
     {
-        ShinyGet get1 = database.get(ShinyGetDAO.class).getMostRecent();
+        ShinyGet get1 = database().get(ShinyGetDAO.class).getMostRecent();
 
-        database.delete(user1, user2, user3, bet1, bet2, bet3, get1);
+        database().delete(user1, user2, user3, bet1, bet2, bet3, get1);
     }
 }

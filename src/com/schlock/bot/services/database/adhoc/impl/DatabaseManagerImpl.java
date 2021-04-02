@@ -40,7 +40,7 @@ public class DatabaseManagerImpl implements DatabaseManager
     }
 
     @Override
-    public void save(Persisted... obj)
+    public synchronized void save(Persisted... obj)
     {
         setup();
 
@@ -64,7 +64,7 @@ public class DatabaseManagerImpl implements DatabaseManager
     }
 
     @Override
-    public void delete(Persisted... obj)
+    public synchronized void delete(Persisted... obj)
     {
         setup();
 
@@ -85,7 +85,7 @@ public class DatabaseManagerImpl implements DatabaseManager
     }
 
     @Override
-    public void commit()
+    public synchronized void commit()
     {
         setup();
 

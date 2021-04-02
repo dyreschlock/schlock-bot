@@ -44,9 +44,9 @@ class UserPointsServiceImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        UserManagement userManagement = new UserManagementImpl(database, config());
+        UserManagement userManagement = new UserManagementImpl(database(), config());
 
-        impl = new UserPointsServiceImpl(userManagement, database, messages(), config());
+        impl = new UserPointsServiceImpl(userManagement, database(), messages(), config());
 
         createTestObjects();
     }
@@ -63,13 +63,13 @@ class UserPointsServiceImplTest extends DatabaseTest
         testUser1.setUsername(USERNAME1);
         testUser1.setBalance(USER1_BALANCE);
 
-        database.save(testUser1);
+        database().save(testUser1);
     }
 
     private void removeTestObjects()
     {
-        User user2 = database.get(UserDAO.class).getByUsername(USERNAME2);
+        User user2 = database().get(UserDAO.class).getByUsername(USERNAME2);
 
-        database.delete(testUser1, user2);
+        database().delete(testUser1, user2);
     }
 }

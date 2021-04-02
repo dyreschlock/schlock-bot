@@ -43,9 +43,9 @@ class AnimationServiceImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        UserManagement userManagement = new UserManagementImpl(database, config());
+        UserManagement userManagement = new UserManagementImpl(database(), config());
 
-        impl = new AnimationServiceImpl(userManagement, database, messages());
+        impl = new AnimationServiceImpl(userManagement, database(), messages());
 
         createTestObjects();
     }
@@ -55,7 +55,7 @@ class AnimationServiceImplTest extends DatabaseTest
         user = new User();
         user.setUsername(USERNAME1);
 
-        database.save(user);
+        database().save(user);
     }
 
     @Override
@@ -66,11 +66,11 @@ class AnimationServiceImplTest extends DatabaseTest
 
     private void removeTestObjects()
     {
-        List<Alert> alerts = database.get(AlertDAO.class).getByUser(user);
+        List<Alert> alerts = database().get(AlertDAO.class).getByUser(user);
         for(Alert alert : alerts)
         {
-            database.delete(alert);
+            database().delete(alert);
         }
-        database.delete(user);
+        database().delete(user);
     }
 }

@@ -50,7 +50,7 @@ class UserDAOImplTest extends DatabaseTest
 
     protected void before() throws Exception
     {
-        userDAO = database.get(UserDAO.class);
+        userDAO = database().get(UserDAO.class);
 
         createTestObjects();
     }
@@ -72,11 +72,11 @@ class UserDAOImplTest extends DatabaseTest
         testUser2.setBalance(Long.valueOf(1000));
         testUser2.setFollowDate(new Date(20000));
 
-        database.save(testUser1, testUser2);
+        database().save(testUser1, testUser2);
     }
 
     private void removeTestObjects()
     {
-        database.delete(testUser1, testUser2);
+        database().delete(testUser1, testUser2);
     }
 }

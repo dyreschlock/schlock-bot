@@ -36,7 +36,7 @@ class PokemonGoDexEntryDAOImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        entryDao = database.get(PokemonGoDexEntryDAO.class);
+        entryDao = database().get(PokemonGoDexEntryDAO.class);
 
         createTestObjects();
     }
@@ -70,11 +70,11 @@ class PokemonGoDexEntryDAOImplTest extends DatabaseTest
         entry3.setShinyGo(true);
         entry3.setShinyHome(true);
 
-        database.save(entry1, entry2, entry3);
+        database().save(entry1, entry2, entry3);
     }
 
     public void removeTestObjects()
     {
-        database.delete(entry1, entry2, entry3);
+        database().delete(entry1, entry2, entry3);
     }
 }

@@ -141,9 +141,9 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
             }
         };
 
-        userManagement = new UserManagementImpl(database, config());
+        userManagement = new UserManagementImpl(database(), config());
 
-        impl = new PokemonGuessingServiceImpl(pokemonManagement, userManagement, pokemonUtils, database, messages(), config());
+        impl = new PokemonGuessingServiceImpl(pokemonManagement, userManagement, pokemonUtils, database(), messages(), config());
 
 
         createTestObjects();
@@ -162,7 +162,7 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
         testUser1 = userManagement.createNewDefaultUser(USERNAME1);
         testUser1.setBalance(DEFAULT_BALANCE);
 
-        database.save(streak, testUser1);
+        database().save(streak, testUser1);
 
         testPokemon.setName(TEST_POKEMON_NAME);
         testPokemon.setId(TEST_POKEMON_ID);
@@ -173,7 +173,7 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
 
     private void removeTestObjects()
     {
-        User admin = database.get(UserDAO.class).getByUsername(config().getOwnerUsername());
-        database.delete(streak, admin, testUser1);
+        User admin = database().get(UserDAO.class).getByUsername(config().getOwnerUsername());
+        database().delete(streak, admin, testUser1);
     }
 }

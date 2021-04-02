@@ -67,7 +67,7 @@ class AlertDAOImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        alertDAO = database.get(AlertDAO.class);
+        alertDAO = database().get(AlertDAO.class);
 
         createTestObjects();
     }
@@ -83,7 +83,7 @@ class AlertDAOImplTest extends DatabaseTest
         user = new User();
         user.setUsername(USERNAME);
 
-        database.save(user);
+        database().save(user);
 
         twitchAlert = new TwitchAlert();
         twitchAlert.setUserId(user.getId());
@@ -97,11 +97,11 @@ class AlertDAOImplTest extends DatabaseTest
         animeAlert.setType(AlertType.MONSTER_FRISBEE);
 
 
-        database.save(twitchAlert, animeAlert);
+        database().save(twitchAlert, animeAlert);
     }
 
     public void removeTestObjects()
     {
-        database.delete(twitchAlert, animeAlert, user);
+        database().delete(twitchAlert, animeAlert, user);
     }
 }

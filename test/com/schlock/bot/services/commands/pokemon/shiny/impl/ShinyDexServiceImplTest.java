@@ -1,17 +1,16 @@
 package com.schlock.bot.services.commands.pokemon.shiny.impl;
 
 import com.schlock.bot.entities.pokemon.ShinyDexEntry;
-import com.schlock.bot.services.entities.pokemon.impl.PokemonManagementImpl;
-import com.schlock.bot.services.entities.pokemon.impl.PokemonUtilsImpl;
 import com.schlock.bot.services.commands.ListenerResponse;
+import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;
-import com.schlock.bot.services.database.DatabaseTest;
-import com.schlock.bot.services.database.pokemon.ShinyDexEntryDAO;
-import com.schlock.bot.services.database.pokemon.impl.ShinyDexEntryDAOImpl;
+import com.schlock.bot.services.entities.pokemon.impl.PokemonManagementImpl;
+import com.schlock.bot.services.entities.pokemon.impl.PokemonUtilsImpl;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class ShinyDexServiceImplTest extends DatabaseTest
 {
@@ -41,7 +40,7 @@ class ShinyDexServiceImplTest extends DatabaseTest
         PokemonUtils pokemonUtils = new PokemonUtilsImpl(messages());
         PokemonManagement pokemonManagement = new PokemonManagementImpl(pokemonUtils, config());
 
-        impl = new ShinyDexServiceImpl(pokemonManagement, database, messages());
+        impl = new ShinyDexServiceImpl(pokemonManagement, database(), messages());
 
         createTestObjects();
     }
@@ -60,11 +59,11 @@ class ShinyDexServiceImplTest extends DatabaseTest
         entry2 = new ShinyDexEntry();
         entry2.setPokemon("ivysaur");
 
-        database.save(entry1, entry2);
+        database().save(entry1, entry2);
     }
 
     private void removeTestObjects()
     {
-        database.delete(entry1, entry2);
+        database().delete(entry1, entry2);
     }
 }

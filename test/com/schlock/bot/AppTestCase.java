@@ -13,17 +13,17 @@ import java.util.Properties;
 
 public class AppTestCase
 {
-    private DeploymentConfiguration config;
+    private static DeploymentConfiguration CONFIG;
     private Messages messages;
 
-    protected DeploymentConfiguration config()
+    protected static DeploymentConfiguration config()
     {
-        if(config == null)
+        if(CONFIG == null)
         {
-            config = createDeploymentConfiguration();
+            CONFIG = createDeploymentConfiguration();
             try
             {
-                config.loadProperties();
+                CONFIG.loadProperties();
             }
             catch (IOException e)
             {
@@ -31,10 +31,10 @@ public class AppTestCase
                 throw new RuntimeException(e);
             }
         }
-        return config;
+        return CONFIG;
     }
 
-    protected DeploymentConfiguration createDeploymentConfiguration()
+    protected static DeploymentConfiguration createDeploymentConfiguration()
     {
         return DeploymentConfigurationImpl.createDeploymentConfiguration(DeploymentConfiguration.TEST);
     }
