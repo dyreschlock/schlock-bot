@@ -83,6 +83,26 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
         assertFalse(resp.isRelayAll());
         assertEquals(expected, response);
+
+
+        newBet = "!bet " + BET3_POKEMON + " " + BET3_MINUTES + " 0";
+
+        resp = impl.process(USERNAME1, newBet);
+        response = resp.getFirstMessage();
+        expected = messages().format(ShinyBetServiceImpl.BET_AMOUNT_NOT_ENOUGH, MARK);
+
+        assertFalse(resp.isRelayAll());
+        assertEquals(expected, response);
+
+
+        newBet = "!bet " + BET3_POKEMON + " " + "-1" + " " + BET2_AMOUNT;
+
+        resp = impl.process(USERNAME1, newBet);
+        response = resp.getFirstMessage();
+        expected = messages().format(ShinyBetServiceImpl.BET_TIME_NOT_ENOUGH);
+
+        assertFalse(resp.isRelayAll());
+        assertEquals(expected, response);
     }
 
     @Test

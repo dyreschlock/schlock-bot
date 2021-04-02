@@ -21,6 +21,10 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
     protected static final String INSUFFICIENT_FUNDS_KEY = "bet-insufficient-funds";
     protected static final String UPDATE_INSUFFICIENT_FUNDS_KEY = "bet-update-insufficient-funds";
     protected static final String BET_WRONG_FORMAT_KEY = "bet-wrong-format";
+
+    protected static final String BET_AMOUNT_NOT_ENOUGH = "bet-amount-must-be-positive";
+    protected static final String BET_TIME_NOT_ENOUGH = "bet-time-must-be-positive";
+
     protected static final String BET_UPDATE_SUCCESS_KEY = "bet-update-success";
     protected static final String BET_SUCCESS_KEY = "bet-success";
     protected static final String CURRENT_BET_KEY = "current-bet";
@@ -175,6 +179,17 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
         if (pokemon != null && time != null && betAmount != null)
         {
             String mark = config.getCurrencyMark();
+
+            if (time < 0)
+            {
+                return formatSingleResponse(BET_TIME_NOT_ENOUGH);
+            }
+
+            if (betAmount <= 0)
+            {
+                return formatSingleResponse(BET_AMOUNT_NOT_ENOUGH, mark);
+            }
+
             User user = userManagement.getUser(username);
 
             ShinyBet currentBet = database.get(ShinyBetDAO.class).getByUsernameAndPokemon(username, pokemon.getId());
