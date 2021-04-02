@@ -3,6 +3,7 @@ package com.schlock.bot.services.commands.pokemon.whodat.impl;
 import com.schlock.bot.entities.base.User;
 import com.schlock.bot.entities.pokemon.GuessingStreak;
 import com.schlock.bot.entities.pokemon.Pokemon;
+import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.base.UserDAO;
 import com.schlock.bot.services.entities.base.UserManagement;
@@ -11,6 +12,7 @@ import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonManagementImpl;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonUtilsImpl;
+import com.schlock.bot.services.impl.DeploymentConfigurationImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,6 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 class PokemonGuessingServiceImplTest extends DatabaseTest
 {
+    private final static Integer TEST_STREAK_DECAY_MIN = 15;
+    private final static Integer TEST_STREAK_DECAY_MAX = 25;
+
     private final static String USERNAME1 = "username2";
     private final static Long DEFAULT_BALANCE = Long.valueOf(10000);
 
@@ -118,9 +123,58 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
         assertEquals(expected, response);
     }
 
+    @Test
+    public void testStreakDecay()
+    {
+        final Integer DEFAULT_POINTS = 10;
+
+        Integer results = impl.incrementPointsWithStreak(DEFAULT_POINTS, 2);
+        Integer expected = 20;
+
+        assertEquals(expected, results);
+
+        results = impl.incrementPointsWithStreak(DEFAULT_POINTS, 15);
+        expected = 150;
+
+        assertEquals(expected, results);
+
+        results = impl.incrementPointsWithStreak(DEFAULT_POINTS, 16);
+        expected = 155;
+
+        assertEquals(expected, results);
+
+        results = impl.incrementPointsWithStreak(DEFAULT_POINTS, 17);
+        expected = 160;
+
+        assertEquals(expected, results);
+
+        results = impl.incrementPointsWithStreak(DEFAULT_POINTS, 25);
+        expected = 200;
+
+        assertEquals(expected, results);
+
+        results = impl.incrementPointsWithStreak(DEFAULT_POINTS, 26);
+        expected = 200;
+
+        assertEquals(expected, results);
+    }
+
     @Override
     protected void before() throws Exception
     {
+        DeploymentConfiguration config = new DeploymentConfigurationImpl()
+        {
+            public Integer getQuizStreakDecayMaxValue()
+            {
+                return TEST_STREAK_DECAY_MAX;
+            }
+
+            public Integer getQuizStreakDecayMinValue()
+            {
+                return TEST_STREAK_DECAY_MIN;
+            }
+        };
+
         pokemonUtils = new PokemonUtilsImpl(messages());
 
         PokemonManagement pokemonManagement = new PokemonManagementImpl(pokemonUtils, config())
@@ -143,7 +197,7 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
 
         userManagement = new UserManagementImpl(database(), config());
 
-        impl = new PokemonGuessingServiceImpl(pokemonManagement, userManagement, pokemonUtils, database(), messages(), config());
+        impl = new PokemonGuessingServiceImpl(pokemonManagement, userManagement, pokemonUtils, database(), messages(), config);
 
 
         createTestObjects();
@@ -174,6 +228,13 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
     private void removeTestObjects()
     {
         User admin = database().get(UserDAO.class).getByUsername(config().getOwnerUsername());
-        database().delete(streak, admin, testUser1);
+        if (admin != null)
+        {
+            database().delete(streak, admin, testUser1);
+        }
+        else
+        {
+            database().delete(streak, testUser1);
+        }
     }
 }

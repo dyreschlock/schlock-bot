@@ -28,6 +28,8 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
     private static final String CURRENCY_MARK = "currency.mark";
 
     private static final String QUIZ_CORRECT_POINTS = "quiz.correct.points";
+    private static final String QUIZ_STREAK_DECAY_MIN = "quiz.streak.decay.min";
+    private static final String QUIZ_STREAK_DECAY_MAX = "quiz.streak.decay.max";
 
     private static final String BETS_POKEMON_WIN_FACTOR = "bets.win.factor.pokemon";
     private static final String BETS_TIME_WIN_FACTOR = "bets.win.factor.time";
@@ -139,6 +141,18 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
     {
         String points = getProperties().getProperty(QUIZ_CORRECT_POINTS);
         return Integer.parseInt(points);
+    }
+
+    public Integer getQuizStreakDecayMinValue()
+    {
+        String value = getProperties().getProperty(QUIZ_STREAK_DECAY_MIN);
+        return Integer.parseInt(value);
+    }
+
+    public Integer getQuizStreakDecayMaxValue()
+    {
+        String value = getProperties().getProperty(QUIZ_STREAK_DECAY_MAX);
+        return Integer.parseInt(value);
     }
 
     public Double getBetsPokemonWinFactor()

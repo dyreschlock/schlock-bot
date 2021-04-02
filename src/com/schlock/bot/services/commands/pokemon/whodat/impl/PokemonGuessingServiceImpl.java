@@ -130,7 +130,7 @@ public class PokemonGuessingServiceImpl extends AbstractListenerService implemen
         {
             streak.incrementStreak();
 
-            points = points * streak.getStreakNumber();
+            points = incrementPointsWithStreak(points, streak.getStreakNumber());
 
             streakMsg = " " + messages.format(STREAK_BONUS, streak.getStreakNumber().toString());
         }
@@ -158,5 +158,29 @@ public class PokemonGuessingServiceImpl extends AbstractListenerService implemen
             streak = new GuessingStreak();
         }
         return streak;
+    }
+
+    protected Integer incrementPointsWithStreak(Integer points, Integer streak)
+    {
+        Integer decayMin = config.getQuizStreakDecayMinValue();
+        Integer decayMax = config.getQuizStreakDecayMaxValue();
+
+        Double pointsFactor = streak.doubleValue();
+
+        if (streak > decayMin && streak <= decayMax)
+        {
+            Double difference = streak.doubleValue() - decayMin.doubleValue();
+
+            pointsFactor = decayMin.doubleValue() + (difference / 2);
+        }
+        else if (streak > decayMax)
+        {
+            Double difference = decayMax.doubleValue() - decayMin.doubleValue();
+
+            pointsFactor = decayMin.doubleValue() + (difference / 2);
+        }
+
+        Double newPoints = points * pointsFactor;
+        return newPoints.intValue();
     }
 }

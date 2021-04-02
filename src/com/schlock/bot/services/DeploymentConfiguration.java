@@ -17,6 +17,10 @@ public interface DeploymentConfiguration
 
     Integer getQuizCorrectPoints();
 
+    Integer getQuizStreakDecayMinValue();
+
+    Integer getQuizStreakDecayMaxValue();
+
     Double getBetsPokemonWinFactor();
 
     Double getBetsTimeWinFactor();
