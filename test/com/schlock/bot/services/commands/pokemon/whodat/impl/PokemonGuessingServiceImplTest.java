@@ -121,6 +121,10 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
         expected += " " + messages().format(PokemonGuessingServiceImpl.STREAK_BONUS, 2);
 
         assertEquals(expected, response);
+
+        testUser1 = userManagement.getUser(USERNAME1);
+
+        assertEquals(2, testUser1.getHighScoreStreak());
     }
 
     @Test

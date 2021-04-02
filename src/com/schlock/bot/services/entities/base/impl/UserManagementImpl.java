@@ -42,6 +42,9 @@ public class UserManagementImpl implements UserManagement
         user.setPointsDoubler(1);
         user.setPrestige(0);
 
+        user.setHighScorePoints(config.getUserDefaultBalance());
+        user.setHighScoreStreak(0);
+
         return user;
     }
 

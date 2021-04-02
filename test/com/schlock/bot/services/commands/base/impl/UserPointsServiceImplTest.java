@@ -103,6 +103,7 @@ class UserPointsServiceImplTest extends DatabaseTest
         testUser1 = new User();
         testUser1.setUsername(USERNAME1);
         testUser1.setBalance(USER1_BALANCE);
+        testUser1.setHighScorePoints(USER1_BALANCE);
         testUser1.setPrestige(0);
 
         database().save(testUser1);
@@ -111,7 +112,6 @@ class UserPointsServiceImplTest extends DatabaseTest
     private void removeTestObjects()
     {
         User user2 = database().get(UserDAO.class).getByUsername(USERNAME2);
-
         if (user2 != null)
         {
             database().delete(testUser1, user2);

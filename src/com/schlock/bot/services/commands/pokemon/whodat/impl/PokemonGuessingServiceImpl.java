@@ -132,6 +132,8 @@ public class PokemonGuessingServiceImpl extends AbstractListenerService implemen
 
             points = incrementPointsWithStreak(points, streak.getStreakNumber());
 
+            user.incrementStreakHighScore(streak.getStreakNumber());
+
             streakMsg = " " + messages.format(STREAK_BONUS, streak.getStreakNumber().toString());
         }
         else

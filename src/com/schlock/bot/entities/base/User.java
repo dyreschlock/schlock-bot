@@ -30,6 +30,12 @@ public class User extends Persisted
     @Column(name = "doubler")
     private Integer pointsDoubler;
 
+    @Column(name = "highscore_points")
+    private Long highScorePoints;
+
+    @Column(name = "highscore_streak")
+    private Integer highScoreStreak;
+
     public User()
     {
     }
@@ -42,6 +48,32 @@ public class User extends Persisted
     public void incrementBalance(Integer points)
     {
         this.balance += points;
+
+        incrementBalanceHighScore(this.balance);
+    }
+
+    public void incrementBalanceHighScore(Long balance)
+    {
+        if (this.highScorePoints == null)
+        {
+            this.highScorePoints = balance;
+        }
+        else if (balance > this.highScorePoints)
+        {
+            this.highScorePoints = balance;
+        }
+    }
+
+    public void incrementStreakHighScore(Integer streak)
+    {
+        if (this.highScoreStreak == null)
+        {
+            this.highScoreStreak = streak;
+        }
+        else if (streak > this.highScoreStreak)
+        {
+            this.highScoreStreak = streak;
+        }
     }
 
     public boolean hasDoubler()
@@ -131,5 +163,25 @@ public class User extends Persisted
     public void setPointsDoubler(Integer pointsDoubler)
     {
         this.pointsDoubler = pointsDoubler;
+    }
+
+    public Long getHighScorePoints()
+    {
+        return highScorePoints;
+    }
+
+    public void setHighScorePoints(Long highScorePoints)
+    {
+        this.highScorePoints = highScorePoints;
+    }
+
+    public Integer getHighScoreStreak()
+    {
+        return highScoreStreak;
+    }
+
+    public void setHighScoreStreak(Integer highScoreStreak)
+    {
+        this.highScoreStreak = highScoreStreak;
     }
 }
