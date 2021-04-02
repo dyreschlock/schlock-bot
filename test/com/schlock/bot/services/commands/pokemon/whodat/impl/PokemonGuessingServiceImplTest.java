@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class PokemonGuessingServiceImplTest extends DatabaseTest
 {
     private final static String USERNAME1 = "username2";
-    private final static Integer DEFAULT_BALANCE = 10000;
+    private final static Long DEFAULT_BALANCE = Long.valueOf(10000);
 
     private static final String TEST_POKEMON_NAME = "Bulbasaur";
     private static final String TEST_POKEMON_ID = "bulbasaur";
@@ -73,8 +73,8 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
 
         User admin = userManagement.getUser(ADMIN);
 
-        Integer currentBalance = admin.getBalance();
-        Integer expectedBalance = config().getUserDefaultBalance() + config().getQuizCorrectPoints();
+        Long currentBalance = admin.getBalance();
+        Long expectedBalance = config().getUserDefaultBalance() + config().getQuizCorrectPoints();
 
         assertEquals(expectedBalance, currentBalance);
 

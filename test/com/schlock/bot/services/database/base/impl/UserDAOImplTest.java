@@ -64,12 +64,12 @@ class UserDAOImplTest extends DatabaseTest
     {
         testUser1 = new User();
         testUser1.setUsername(USERNAME1);
-        testUser1.setBalance(10000);
+        testUser1.setBalance(Long.valueOf(10000));
         testUser1.setFollowDate(new Date(10000));
 
         testUser2 = new User();
         testUser2.setUsername(USERNAME2);
-        testUser2.setBalance(1000);
+        testUser2.setBalance(Long.valueOf(1000));
         testUser2.setFollowDate(new Date(20000));
 
         database.save(testUser1, testUser2);

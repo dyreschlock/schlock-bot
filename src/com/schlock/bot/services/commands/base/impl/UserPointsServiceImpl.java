@@ -66,14 +66,14 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
         {
             return checkBalance(username);
         }
-        if (command.startsWith(getGivePointsCommand()))
-        {
-            return addPoints(username, in);
-        }
-        if (command.startsWith(CASHOUT_COMMAND))
-        {
-            return exchangePoints(username, in);
-        }
+//        if (command.startsWith(getGivePointsCommand()))
+//        {
+//            return addPoints(username, in);
+//        }
+//        if (command.startsWith(CASHOUT_COMMAND))
+//        {
+//            return exchangePoints(username, in);
+//        }
 
         return null;
     }

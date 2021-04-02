@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class UserPointsServiceImplTest extends DatabaseTest
 {
     private final static String USERNAME1 = "username1_points";
-    private final static Integer USER1_BALANCE = 5000;
+    private final static Long USER1_BALANCE = Long.valueOf(5000);
 
     private final static String USERNAME2 = "useranme2_points";
 

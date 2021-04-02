@@ -17,10 +17,13 @@ public class User extends Persisted
     private String username;
 
     @Column(name = "balance")
-    private Integer balance;
+    private Long balance;
 
     @Column(name = "follow_date")
     private Date followDate;
+
+    @Column(name = "prestige")
+    private Integer prestige;
 
     @Column(name = "doubler")
     private Integer pointsDoubler;
@@ -77,12 +80,12 @@ public class User extends Persisted
         this.username = username;
     }
 
-    public Integer getBalance()
+    public Long getBalance()
     {
         return balance;
     }
 
-    public void setBalance(Integer balance)
+    public void setBalance(Long balance)
     {
         this.balance = balance;
     }
@@ -95,6 +98,16 @@ public class User extends Persisted
     public void setFollowDate(Date followDate)
     {
         this.followDate = followDate;
+    }
+
+    public Integer getPrestige()
+    {
+        return prestige;
+    }
+
+    public void setPrestige(Integer prestige)
+    {
+        this.prestige = prestige;
     }
 
     public Integer getPointsDoubler()

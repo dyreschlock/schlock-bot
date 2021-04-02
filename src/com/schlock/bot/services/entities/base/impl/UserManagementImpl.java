@@ -40,6 +40,7 @@ public class UserManagementImpl implements UserManagement
         user.setBalance(config.getUserDefaultBalance());
         user.setFollowDate(new Date());
         user.setPointsDoubler(1);
+        user.setPrestige(0);
 
         return user;
     }

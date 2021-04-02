@@ -117,10 +117,10 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
         }
     }
 
-    public Integer getUserDefaultBalance()
+    public Long getUserDefaultBalance()
     {
         String bal = getProperties().getProperty(USER_DEFAULT_BALANCE);
-        return Integer.parseInt(bal);
+        return Long.parseLong(bal);
     }
 
     public String getCurrencyMark()

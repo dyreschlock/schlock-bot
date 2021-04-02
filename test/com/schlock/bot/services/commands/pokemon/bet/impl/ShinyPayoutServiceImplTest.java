@@ -31,7 +31,7 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
     private static final Double TEST_TIME_WIN_FACTOR = 3.0;
     private static final Double TEST_BOTH_WIN_FACTOR = 2.0;
 
-    private static final Integer BALANCE = 10000;
+    private static final Long BALANCE = Long.valueOf(10000);
 
     private static final String USERNAME1 = "username1";
     private static final String USERNAME2 = "username2";
@@ -93,9 +93,9 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
 
         Double user2winnings = BET2_AMOUNT.doubleValue() * TEST_POKEMON_WIN_FACTOR;
 
-        Integer user1balance = BALANCE + user1winnings.intValue();
-        Integer user2balance = BALANCE + user2winnings.intValue();
-        Integer user3balance = BALANCE;
+        Long user1balance = BALANCE + user1winnings.intValue();
+        Long user2balance = BALANCE + user2winnings.intValue();
+        Long user3balance = BALANCE;
 
         assertEquals(user1balance, user1.getBalance());
         assertEquals(user2balance, user2.getBalance());

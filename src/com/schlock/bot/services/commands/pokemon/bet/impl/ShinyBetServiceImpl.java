@@ -180,7 +180,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
             ShinyBet currentBet = database.get(ShinyBetDAO.class).getByUsernameAndPokemon(username, pokemon.getId());
             if(currentBet != null)
             {
-                Integer changedBalance = user.getBalance() + currentBet.getBetAmount();
+                Long changedBalance = user.getBalance() + currentBet.getBetAmount();
                 if (changedBalance < betAmount)
                 {
                     String balance = user.getBalance().toString();

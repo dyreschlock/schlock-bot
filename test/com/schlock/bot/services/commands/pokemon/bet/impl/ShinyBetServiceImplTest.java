@@ -27,14 +27,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class ShinyBetServiceImplTest extends DatabaseTest
 {
     private static final String USERNAME1 = "username1";
-    private static final Integer BALANCE = 10000;
+    private static final Long BALANCE = Long.valueOf(10000);
 
     private static final String BET1_POKEMON = "beedrill";
     private static final Integer BET1_MINUTES = 100;
     private static final Integer BET1_NEW_MINUTES = 50;
     private static final Integer BET1_AMOUNT = 100;
     private static final Integer BET1_NEW_AMOUNT = 200;
-    private static final Integer BET1_NEW2_AMOUNT = BALANCE + BET1_AMOUNT;
+    private static final Integer BET1_NEW2_AMOUNT = BALANCE.intValue() + BET1_AMOUNT;
     private static final Integer BET1_NEW3_AMOUNT = 200000;
 
     private static final String BET2_POKEMON = "magikarp";
@@ -70,7 +70,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         assertEquals(expected, response);
 
         user = database.get(UserDAO.class).getByUsername(user.getUsername());
-        Integer newBalance = BALANCE - BET2_AMOUNT;
+        Long newBalance = BALANCE - BET2_AMOUNT;
 
         assertEquals(newBalance, user.getBalance());
 
@@ -203,7 +203,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
 
         user = database.get(UserDAO.class).getByUsername(USERNAME1);
-        Integer newBalance = BALANCE + BET1_AMOUNT;
+        Long newBalance = BALANCE + BET1_AMOUNT;
 
         assertEquals(newBalance, user.getBalance());
 
@@ -233,7 +233,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
 
         user = database.get(UserDAO.class).getByUsername(USERNAME1);
-        Integer newBalance = BALANCE + BET1_AMOUNT;
+        Long newBalance = BALANCE + BET1_AMOUNT;
 
         assertEquals(newBalance, user.getBalance());
 

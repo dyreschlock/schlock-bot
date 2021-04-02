@@ -11,7 +11,7 @@ public interface DeploymentConfiguration
 
     void loadProperties() throws IOException;
 
-    Integer getUserDefaultBalance();
+    Long getUserDefaultBalance();
 
     Integer getQuizCorrectPoints();
 
