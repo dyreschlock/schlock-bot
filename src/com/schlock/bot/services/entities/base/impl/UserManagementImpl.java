@@ -69,8 +69,12 @@ public class UserManagementImpl implements UserManagement
         int prestige = user.getPrestige();
         prestige++;
 
+        int multiplier = user.getPointsDoubler();
+        multiplier++;
+
         user.setBalance(config.getUserDefaultBalance());
         user.setPrestige(prestige);
+        user.setPointsDoubler(multiplier);
 
         database.save(user);
 

@@ -23,13 +23,15 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
 
     protected static final String USER_BALANCE_KEY = "user-balance";
 
+    protected static final String USER_ADDED_MULTIPLIER_KEY = "user-added-multiplier";
+
     private static final String GIVE_POINTS_ERROR_KEY = "user-give-points-error";
     private static final String GIVE_POINTS_KEY = "user-give-points";
 
     protected static final String PRESTIGE_CONFIRM_KEY = "prestige-confirm";
     protected static final String PRESTIGE_SUCCESS_KEY = "prestige-success";
     protected static final String PRESTIGE_NOT_ENOUGH_POINTS_KEY = "prestige-not-enough-points";
-    protected static final String PRESTIGE_CANT_WITH_BETS = "prestige-cant-with-bets";
+    protected static final String PRESTIGE_CANT_WITH_BETS_KEY = "prestige-cant-with-bets";
 
     private static final String CASHOUT_WRONG_MESSAGE_KEY = "user-cashout-error";
     private static final String CASHOUT_TO_ELEMENTS_MESSAGE = "!givepoints %s %s";
@@ -167,7 +169,7 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
 
         if (isUserHasBets(user))
         {
-            String message = messages.get(PRESTIGE_CANT_WITH_BETS);
+            String message = messages.get(PRESTIGE_CANT_WITH_BETS_KEY);
             return ListenerResponse.relaySingle().addMessage(message);
         }
 
@@ -182,7 +184,9 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
         if (success)
         {
             String message = messages.format(PRESTIGE_SUCCESS_KEY, user.getUsername(), user.getPrestigeLevel());
-            return ListenerResponse.relayAll().addMessage(message);
+            String newMultiplier = messages.format(USER_ADDED_MULTIPLIER_KEY, user.getUsername(), user.getPointsDoubler());
+
+            return ListenerResponse.relayAll().addMessage(message).addMessage(newMultiplier);
         }
 
         return nullResponse();

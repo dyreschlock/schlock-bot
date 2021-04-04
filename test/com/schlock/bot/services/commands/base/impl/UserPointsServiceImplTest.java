@@ -2,6 +2,7 @@ package com.schlock.bot.services.commands.base.impl;
 
 import com.schlock.bot.entities.base.User;
 import com.schlock.bot.entities.pokemon.ShinyBet;
+import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.base.UserDAO;
 import com.schlock.bot.services.entities.base.UserManagement;
@@ -20,7 +21,7 @@ class UserPointsServiceImplTest extends DatabaseTest
     private static final String PRESTIGE_CONFIRM_KEY = UserPointsServiceImpl.PRESTIGE_CONFIRM_KEY;
     private static final String PRESTIGE_SUCCESS_KEY = UserPointsServiceImpl.PRESTIGE_SUCCESS_KEY;
     private static final String PRESTIGE_NOT_ENOUGH_POINTS_KEY = UserPointsServiceImpl.PRESTIGE_NOT_ENOUGH_POINTS_KEY;
-    private static final String PRESTIGE_CANT_WITH_BETS = UserPointsServiceImpl.PRESTIGE_CANT_WITH_BETS;
+    private static final String PRESTIGE_CANT_WITH_BETS = UserPointsServiceImpl.PRESTIGE_CANT_WITH_BETS_KEY;
 
 
     private final static String USERNAME1 = "username1_points";
@@ -75,18 +76,23 @@ class UserPointsServiceImplTest extends DatabaseTest
         assertEquals(expected, response);
 
         database().delete(bet);
-        
+
         response = impl.process(USERNAME1, PRESTIGE_COMMAND).getFirstMessage();
         expected = messages().get(PRESTIGE_CONFIRM_KEY);
 
         assertEquals(expected, response);
 
-        response = impl.process(USERNAME1, PRESTIGE_COMMAND + " yes").getFirstMessage();
+        ListenerResponse responses = impl.process(USERNAME1, PRESTIGE_COMMAND + " yes");
+
+        response = responses.getMessages().get(0);
 
         testUser1 = database().get(UserDAO.class).getByUsername(USERNAME1);
         expected = messages().format(PRESTIGE_SUCCESS_KEY, USERNAME1, testUser1.getPrestigeLevel());
 
         assertEquals(expected, response);
+
+        response = responses.getMessages().get(1);
+        expected = messages().format(UserPointsServiceImpl.USER_ADDED_MULTIPLIER_KEY, USERNAME1, testUser1.getPointsDoubler());
 
         assertEquals(1, testUser1.getPrestige());
         assertEquals(defaultBalance, testUser1.getBalance());
@@ -121,6 +127,7 @@ class UserPointsServiceImplTest extends DatabaseTest
         testUser1.setBalance(USER1_BALANCE);
         testUser1.setHighScorePoints(USER1_BALANCE);
         testUser1.setPrestige(0);
+        testUser1.setPointsDoubler(0);
 
         database().save(testUser1);
     }
