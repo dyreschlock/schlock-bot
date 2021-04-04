@@ -60,6 +60,8 @@ public class UserLeaderboardServiceImpl extends AbstractListenerService implemen
                                                 user.getBalance(),
                                                 config.getCurrencyMark());
 
+            message += user.getPrestigeLevel();
+
             response.addMessage(message);
         }
         return response;

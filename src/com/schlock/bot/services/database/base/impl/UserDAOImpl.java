@@ -56,7 +56,7 @@ public class UserDAOImpl extends AbstractBaseDAO<User> implements UserDAO
     public List<User> getOrderByPoints(int count)
     {
         String text = "from User u " +
-                        " order by u.balance desc ";
+                        " order by u.prestige desc, u.balance desc ";
 
         Session session = sessionFactory.openSession();
         session.beginTransaction();

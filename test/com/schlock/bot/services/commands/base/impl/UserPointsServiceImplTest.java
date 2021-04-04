@@ -87,7 +87,7 @@ class UserPointsServiceImplTest extends DatabaseTest
     {
         UserManagement userManagement = new UserManagementImpl(database(), config());
 
-        impl = new UserPointsServiceImpl(userManagement, database(), messages(), config());
+        impl = new UserPointsServiceImpl(userManagement, null, database(), messages(), config());
 
         createTestObjects();
     }
