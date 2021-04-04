@@ -6,8 +6,11 @@ import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.base.UserPointsService;
 import com.schlock.bot.services.database.adhoc.DatabaseManager;
+import com.schlock.bot.services.database.pokemon.ShinyBetDAO;
 import com.schlock.bot.services.entities.base.UserManagement;
 import org.apache.tapestry5.ioc.Messages;
+
+import java.util.List;
 
 public class UserPointsServiceImpl extends AbstractListenerService implements UserPointsService
 {
@@ -26,6 +29,7 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
     protected static final String PRESTIGE_CONFIRM_KEY = "prestige-confirm";
     protected static final String PRESTIGE_SUCCESS_KEY = "prestige-success";
     protected static final String PRESTIGE_NOT_ENOUGH_POINTS_KEY = "prestige-not-enough-points";
+    protected static final String PRESTIGE_CANT_WITH_BETS = "prestige-cant-with-bets";
 
     private static final String CASHOUT_WRONG_MESSAGE_KEY = "user-cashout-error";
     private static final String CASHOUT_TO_ELEMENTS_MESSAGE = "!givepoints %s %s";
@@ -161,6 +165,12 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
             return ListenerResponse.relaySingle().addMessage(message);
         }
 
+        if (isUserHasBets(user))
+        {
+            String message = messages.get(PRESTIGE_CANT_WITH_BETS);
+            return ListenerResponse.relaySingle().addMessage(message);
+        }
+
         String params = in.substring(PRESTIGE_COMMAND.length());
         if (!params.contains(YES_PARAM))
         {
@@ -176,5 +186,11 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
         }
 
         return nullResponse();
+    }
+
+    private boolean isUserHasBets(User user)
+    {
+        List list = database.get(ShinyBetDAO.class).getByUsername(user.getUsername());
+        return !list.isEmpty();
     }
 }

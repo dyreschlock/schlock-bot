@@ -1,6 +1,7 @@
 package com.schlock.bot.services.commands.base.impl;
 
 import com.schlock.bot.entities.base.User;
+import com.schlock.bot.entities.pokemon.ShinyBet;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.base.UserDAO;
 import com.schlock.bot.services.entities.base.UserManagement;
@@ -19,6 +20,7 @@ class UserPointsServiceImplTest extends DatabaseTest
     private static final String PRESTIGE_CONFIRM_KEY = UserPointsServiceImpl.PRESTIGE_CONFIRM_KEY;
     private static final String PRESTIGE_SUCCESS_KEY = UserPointsServiceImpl.PRESTIGE_SUCCESS_KEY;
     private static final String PRESTIGE_NOT_ENOUGH_POINTS_KEY = UserPointsServiceImpl.PRESTIGE_NOT_ENOUGH_POINTS_KEY;
+    private static final String PRESTIGE_CANT_WITH_BETS = UserPointsServiceImpl.PRESTIGE_CANT_WITH_BETS;
 
 
     private final static String USERNAME1 = "username1_points";
@@ -58,8 +60,22 @@ class UserPointsServiceImplTest extends DatabaseTest
         assertEquals(expected, response);
 
         testUser1.incrementBalance(prestigeBaseValue.intValue());
-        database().save(testUser1);
 
+        ShinyBet bet = new ShinyBet();
+        bet.setBetAmount(1000);
+        bet.setUser(testUser1);
+        bet.setPokemonId("bulbasaur");
+        bet.setTimeMinutes(60);
+
+        database().save(testUser1, bet);
+
+        response = impl.process(USERNAME1, PRESTIGE_COMMAND).getFirstMessage();
+        expected = messages().get(PRESTIGE_CANT_WITH_BETS);
+
+        assertEquals(expected, response);
+
+        database().delete(bet);
+        
         response = impl.process(USERNAME1, PRESTIGE_COMMAND).getFirstMessage();
         expected = messages().get(PRESTIGE_CONFIRM_KEY);
 
@@ -87,7 +103,7 @@ class UserPointsServiceImplTest extends DatabaseTest
     {
         UserManagement userManagement = new UserManagementImpl(database(), config());
 
-        impl = new UserPointsServiceImpl(userManagement, null, database(), messages(), config());
+        impl = new UserPointsServiceImpl(userManagement, database(), messages(), config());
 
         createTestObjects();
     }
