@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+>
+<head>
+    <meta charset="UTF-8" />
+    <title>Current Bets</title>
+    <style>
+
+        #currentbets
+        {
+            padding-top: 40px;
+            padding-left: 20px;
+        }
+
+        #currentbets span
+        {
+            font-family: impact;
+            font-style: italic;
+            font-size: 24pt;
+
+            color: #fff;
+
+            background: -webkit-linear-gradient(#f52789, #6d00c0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke: 0.75px #fff;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="currentbets">
+    <t:outputraw value="betsHTML" />
+</div>
+</body>
+</html>

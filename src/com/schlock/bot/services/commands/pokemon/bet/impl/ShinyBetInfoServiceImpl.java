@@ -15,7 +15,7 @@ public class ShinyBetInfoServiceImpl extends AbstractListenerService implements 
 {
     protected static final String NO_CURRENT_BETS_KEY = "no-current-bets";
 
-    protected static final String ALL_CURRENT_BETS = "!allcurrentbets";
+    public static final String ALL_CURRENT_BETS = "!allcurrentbets";
 
 
     private final ShinyBetFormatter shinyBetFormatter;

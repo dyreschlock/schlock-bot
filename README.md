@@ -78,3 +78,16 @@ The following commands should work in Discord when the bot is running, but only 
 * **!pokemon random** -- return a random pokemon
 * **!pokemon [range]** -- return a random pokemon from a range. (ie 1-23, bulbasaur-rayquaza, whatevs)
 
+## Hosted Pages for OBS Overlays
+
+The following are URLs to be used as overlays in OBS.  Accessed locally for the moment.
+
+**/twitchalerts** -- Currently, this page shows the most recent user in the database. It's meant to be used as "new follower" overlay
+
+**/base/leaderboard** -- Shows the current points total of the top 10 ranked users by prestige and points.
+
+**/pokemon/shinydex** -- Shows my progress on the Shiny Living Pokedex for Let's Go Eevee.
+
+**/pokemon/shinysparkles** -- Meant to be a celebration when a shiny appears on screen.
+
+**/pokemon/currentbets** -- Lists all bets that have been made, and yet resolved
