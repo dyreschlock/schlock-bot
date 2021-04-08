@@ -40,21 +40,21 @@ class UserManagementImplTest extends DatabaseTest
         user1.setPrestige(1);
 
         prestigeValue = userManagement.getUserPrestigeValue(user1);
-        expectedValue = expectedValue *2;
+        expectedValue = expectedValue *4;
 
         assertEquals(expectedValue, prestigeValue);
 
         user1.setPrestige(2);
 
         prestigeValue = userManagement.getUserPrestigeValue(user1);
-        expectedValue = expectedValue *2;
+        expectedValue = expectedValue *4;
 
         assertEquals(expectedValue, prestigeValue);
 
         user1.setPrestige(3);
 
         prestigeValue = userManagement.getUserPrestigeValue(user1);
-        expectedValue = expectedValue *2;
+        expectedValue = expectedValue *4;
 
         assertEquals(expectedValue, prestigeValue);
     }

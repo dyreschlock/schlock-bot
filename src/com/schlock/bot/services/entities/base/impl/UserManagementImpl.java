@@ -52,7 +52,7 @@ public class UserManagementImpl implements UserManagement
     {
         Long baseVal = config.getUserPrestigeBaseValue();
 
-        Double factor = Math.pow(2, user.getPrestige().doubleValue());
+        Double factor = Math.pow(4, user.getPrestige().doubleValue());
 
         Long value = baseVal * factor.longValue();
         return value;
