@@ -10,10 +10,10 @@ Hi there.  Recently I've been streaming on Twitch, so I decided to write my own 
 
 The following are commands that should work in Twitch.
 
-**Points management** - Manage that points you current have in Schlock Bot.
+**Points management** - Manage the points you currently have in Schlock Bot.
 
 * **!balance** -- current point total in Schlock Bot
-* **!prestige** -- when reaching a certain point threshold, you can prestige. Prestiging gives you a star on the leadboard, and ranking priority over other users. (First prestige goal is 500k. Second is 1mil. Third is 2mil, etc)
+* **!prestige** -- when reaching a certain point threshold, you can prestige. Prestiging gives you a star on the leadboard, and ranking priority over other users. (First prestige goal is 500k. Second is 2mil. Third is 4mil, etc)
 
 
 **Shiny Information** - Get information on my shiny progress in Let's Go Eevee.
