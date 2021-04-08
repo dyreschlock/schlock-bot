@@ -59,6 +59,7 @@ The following commands should work in Discord when the bot is running, but only 
 
 **Points Information** - Get information on Schlock Bot users
 
+* **!balance [twitch username]** -- Get your point balance.
 * **!leaderboard** -- Get the current top 10 ranked users by point balance.
 
 **Shiny Information** - Get information on my shiny progress in Let's Go Eevee.
