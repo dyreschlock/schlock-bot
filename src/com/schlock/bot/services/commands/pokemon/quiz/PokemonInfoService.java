@@ -1,4 +1,4 @@
-package com.schlock.bot.services.commands.pokemon.whodat;
+package com.schlock.bot.services.commands.pokemon.quiz;
 
 import com.schlock.bot.services.commands.ListenerService;
 

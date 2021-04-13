@@ -1,12 +1,12 @@
-package com.schlock.bot.services.commands.pokemon.whodat.impl;
+package com.schlock.bot.services.commands.pokemon.quiz.impl;
 
 import com.schlock.bot.entities.base.User;
 import com.schlock.bot.entities.pokemon.GuessingStreak;
 import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.services.DeploymentConfiguration;
-import com.schlock.bot.services.commands.AbstractListenerService;
+import com.schlock.bot.services.commands.AbstractChatGameListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
-import com.schlock.bot.services.commands.pokemon.whodat.PokemonGuessingService;
+import com.schlock.bot.services.commands.pokemon.quiz.WhosThatPokemonService;
 import com.schlock.bot.services.database.adhoc.DatabaseManager;
 import com.schlock.bot.services.database.pokemon.GuessingStreakDAO;
 import com.schlock.bot.services.entities.base.UserManagement;
@@ -14,7 +14,7 @@ import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;
 import org.apache.tapestry5.ioc.Messages;
 
-public class PokemonGuessingServiceImpl extends AbstractListenerService implements PokemonGuessingService
+public class WhosThatPokemonServiceImpl extends AbstractChatGameListenerService implements WhosThatPokemonService
 {
     private static final String START_COMMAND = "!whodat";
 
@@ -34,7 +34,7 @@ public class PokemonGuessingServiceImpl extends AbstractListenerService implemen
 
     protected Pokemon currentPokemon;
 
-    public PokemonGuessingServiceImpl(PokemonManagement pokemonManagement,
+    public WhosThatPokemonServiceImpl(PokemonManagement pokemonManagement,
                                       UserManagement userManagement,
                                       PokemonUtils pokemonUtils,
                                       DatabaseManager database,
@@ -52,9 +52,19 @@ public class PokemonGuessingServiceImpl extends AbstractListenerService implemen
         this.config = config;
     }
 
+    public String getGameId()
+    {
+        return START_COMMAND.substring(1).trim();
+    }
+
+    public boolean isStarted()
+    {
+        return currentPokemon != null;
+    }
+
     public boolean isAcceptRequest(String username, String message)
     {
-        return true;
+        return isOn();
     }
 
     public boolean isTerminateAfterRequest()

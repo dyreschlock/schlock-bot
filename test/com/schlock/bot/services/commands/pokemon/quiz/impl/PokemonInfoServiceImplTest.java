@@ -1,8 +1,8 @@
-package com.schlock.bot.services.commands.pokemon.whodat.impl;
+package com.schlock.bot.services.commands.pokemon.quiz.impl;
 
 import com.schlock.bot.AppTestCase;
 import com.schlock.bot.services.commands.ListenerService;
-import com.schlock.bot.services.commands.pokemon.whodat.PokemonInfoService;
+import com.schlock.bot.services.commands.pokemon.quiz.PokemonInfoService;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonManagementImpl;

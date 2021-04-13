@@ -1,9 +1,9 @@
-package com.schlock.bot.services.commands.pokemon.whodat.impl;
+package com.schlock.bot.services.commands.pokemon.quiz.impl;
 
 import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
-import com.schlock.bot.services.commands.pokemon.whodat.PokemonInfoService;
+import com.schlock.bot.services.commands.pokemon.quiz.PokemonInfoService;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;
 import org.apache.tapestry5.ioc.Messages;

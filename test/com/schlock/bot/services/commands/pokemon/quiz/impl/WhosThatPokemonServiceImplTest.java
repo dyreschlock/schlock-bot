@@ -1,4 +1,4 @@
-package com.schlock.bot.services.commands.pokemon.whodat.impl;
+package com.schlock.bot.services.commands.pokemon.quiz.impl;
 
 import com.schlock.bot.entities.base.User;
 import com.schlock.bot.entities.pokemon.GuessingStreak;
@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-class PokemonGuessingServiceImplTest extends DatabaseTest
+class WhosThatPokemonServiceImplTest extends DatabaseTest
 {
     private final static Integer TEST_STREAK_DECAY_MIN = 15;
     private final static Integer TEST_STREAK_DECAY_MAX = 25;
@@ -35,7 +35,7 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
     private UserManagement userManagement;
     private PokemonUtils pokemonUtils;
 
-    private PokemonGuessingServiceImpl impl;
+    private WhosThatPokemonServiceImpl impl;
 
     private GuessingStreak streak;
 
@@ -61,7 +61,7 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
 
         //try to start the game, again
         response = impl.process(ADMIN, "!whodat").getFirstMessage();
-        expected = messages().format(PokemonGuessingServiceImpl.GAME_ALREADY_STARTED_KEY, expected);
+        expected = messages().format(WhosThatPokemonServiceImpl.GAME_ALREADY_STARTED_KEY, expected);
 
         assertEquals(expected, response);
 
@@ -72,7 +72,7 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
 
         //send a message that contains the answer
         response = impl.process(ADMIN, TEST_POKEMON_ID).getFirstMessage();
-        expected = messages().format(PokemonGuessingServiceImpl.WINNER_KEY, ADMIN, TEST_POKEMON_NAME, POINTS, MARK);
+        expected = messages().format(WhosThatPokemonServiceImpl.WINNER_KEY, ADMIN, TEST_POKEMON_NAME, POINTS, MARK);
 
         assertEquals(expected, response);
 
@@ -97,7 +97,7 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
 
         //send response with answer from user
         response = impl.process(USERNAME1, " asdf " + TEST_POKEMON_ID + " asdf ").getFirstMessage();
-        expected = messages().format(PokemonGuessingServiceImpl.WINNER_KEY, USERNAME1, TEST_POKEMON_NAME, POINTS, MARK);
+        expected = messages().format(WhosThatPokemonServiceImpl.WINNER_KEY, USERNAME1, TEST_POKEMON_NAME, POINTS, MARK);
 
         assertEquals(expected, response);
 
@@ -117,8 +117,8 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
 
         //send response with answer for the same user
         response = impl.process(USERNAME1, " asdf " + TEST_POKEMON_ID + " asdf ").getFirstMessage();
-        expected = messages().format(PokemonGuessingServiceImpl.WINNER_KEY, USERNAME1, TEST_POKEMON_NAME, DOUBLE_POINTS, MARK);
-        expected += " " + messages().format(PokemonGuessingServiceImpl.STREAK_BONUS, 2);
+        expected = messages().format(WhosThatPokemonServiceImpl.WINNER_KEY, USERNAME1, TEST_POKEMON_NAME, DOUBLE_POINTS, MARK);
+        expected += " " + messages().format(WhosThatPokemonServiceImpl.STREAK_BONUS, 2);
 
         assertEquals(expected, response);
 
@@ -201,7 +201,7 @@ class PokemonGuessingServiceImplTest extends DatabaseTest
 
         userManagement = new UserManagementImpl(database(), config());
 
-        impl = new PokemonGuessingServiceImpl(pokemonManagement, userManagement, pokemonUtils, database(), messages(), config);
+        impl = new WhosThatPokemonServiceImpl(pokemonManagement, userManagement, pokemonUtils, database(), messages(), config);
 
 
         createTestObjects();

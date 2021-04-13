@@ -8,17 +8,15 @@ import com.schlock.bot.services.bot.twitch.TwitchEventBot;
 import com.schlock.bot.services.bot.twitch.impl.TwitchChatBotImpl;
 import com.schlock.bot.services.bot.twitch.impl.TwitchEventBotImpl;
 import com.schlock.bot.services.commands.ListenerService;
-import com.schlock.bot.services.commands.base.UserBalanceService;
-import com.schlock.bot.services.commands.base.UserLeaderboardService;
+import com.schlock.bot.services.commands.base.*;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetInfoService;
+import com.schlock.bot.services.commands.pokemon.quiz.GenCompletionQuizService;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyInfoService;
-import com.schlock.bot.services.commands.base.AnimationService;
-import com.schlock.bot.services.commands.base.UserPointsService;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetService;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyPayoutService;
-import com.schlock.bot.services.commands.pokemon.whodat.PokemonGuessingService;
-import com.schlock.bot.services.commands.pokemon.whodat.PokemonInfoService;
+import com.schlock.bot.services.commands.pokemon.quiz.WhosThatPokemonService;
+import com.schlock.bot.services.commands.pokemon.quiz.PokemonInfoService;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
 
@@ -34,10 +32,12 @@ public class BotModule
     }
 
     @EagerLoad
-    public static TwitchChatBot build(UserPointsService userPointsService,
+    public static TwitchChatBot build(GameControllerService gameController,
+                                      UserPointsService userPointsService,
                                       ShinyBetService shinyBetService,
                                       ShinyPayoutService shinyPayoutService,
-                                      PokemonGuessingService guessingService,
+                                      GenCompletionQuizService genCompletionQuizService,
+                                      WhosThatPokemonService guessingService,
                                       PokemonInfoService pokemonInfoService,
                                       ShinyInfoService shinyInfoService,
                                       ShinyDexService shinyDexService,
@@ -46,9 +46,11 @@ public class BotModule
                                       DeploymentConfiguration config)
     {
         Set<ListenerService> listeners =
-                                    Stream.of(userPointsService,
+                                    Stream.of(gameController,
+                                                userPointsService,
                                                 shinyBetService,
                                                 shinyPayoutService,
+                                                genCompletionQuizService,
                                                 guessingService,
                                                 pokemonInfoService,
                                                 shinyInfoService,
