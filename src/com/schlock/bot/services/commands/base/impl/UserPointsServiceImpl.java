@@ -108,7 +108,10 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
 
         String balance = user.getBalance().toString();
 
-        return formatSingleResponse(USER_BALANCE_KEY, username, balance, config.getCurrencyMark());
+        String message = messages.format(USER_BALANCE_KEY, username, balance, config.getCurrencyMark());
+        message += user.getPrestigeLevel();
+
+        return ListenerResponse.relaySingle().addMessage(message);
     }
 
     protected ListenerResponse addPoints(String username, String in)

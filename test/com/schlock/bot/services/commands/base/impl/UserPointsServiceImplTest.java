@@ -55,8 +55,13 @@ class UserPointsServiceImplTest extends DatabaseTest
 
         assertEquals(expected, response);
 
+        User user = database().get(UserDAO.class).getByUsername(USERNAME2);
+        user.setPrestige(1);
+        database().save(user);
+
         response = impl.process(USERNAME2, UserPointsServiceImpl.BALANCE_COMMAND_3).getFirstMessage();
         expected = messages().format(USER_BALANCE_KEY, USERNAME2, defaultBalance, getMark());
+        expected += user.getPrestigeLevel();
 
         assertEquals(expected, response);
     }
