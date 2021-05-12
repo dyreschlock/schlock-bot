@@ -13,7 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserPointsServiceImplTest extends DatabaseTest
 {
-    private static final String BALANCE_COMMAND = UserPointsServiceImpl.BALANCE_COMMAND;
+    private static final String BALANCE_COMMAND_1 = UserPointsServiceImpl.BALANCE_COMMAND_1;
+    private static final String BALANCE_COMMAND_2 = UserPointsServiceImpl.BALANCE_COMMAND_2;
+    private static final String BALANCE_COMMAND_3 = UserPointsServiceImpl.BALANCE_COMMAND_3;
     private static final String PRESTIGE_COMMAND = UserPointsServiceImpl.PRESTIGE_COMMAND;
 
     private static final String USER_BALANCE_KEY = UserPointsServiceImpl.USER_BALANCE_KEY;
@@ -36,14 +38,24 @@ class UserPointsServiceImplTest extends DatabaseTest
     @Test
     public void checkBalance()
     {
-        String response = impl.process(USERNAME1, BALANCE_COMMAND).getFirstMessage();
+        String response = impl.process(USERNAME1, BALANCE_COMMAND_1).getFirstMessage();
         String expected = messages().format(USER_BALANCE_KEY, USERNAME1, USER1_BALANCE.toString(), getMark());
 
         assertEquals(expected, response);
 
         String defaultBalance = config().getUserDefaultBalance().toString();
 
-        response = impl.process(USERNAME2, UserPointsServiceImpl.BALANCE_COMMAND).getFirstMessage();
+        response = impl.process(USERNAME2, UserPointsServiceImpl.BALANCE_COMMAND_1).getFirstMessage();
+        expected = messages().format(USER_BALANCE_KEY, USERNAME2, defaultBalance, getMark());
+
+        assertEquals(expected, response);
+
+        response = impl.process(USERNAME2, UserPointsServiceImpl.BALANCE_COMMAND_2).getFirstMessage();
+        expected = messages().format(USER_BALANCE_KEY, USERNAME2, defaultBalance, getMark());
+
+        assertEquals(expected, response);
+
+        response = impl.process(USERNAME2, UserPointsServiceImpl.BALANCE_COMMAND_3).getFirstMessage();
         expected = messages().format(USER_BALANCE_KEY, USERNAME2, defaultBalance, getMark());
 
         assertEquals(expected, response);

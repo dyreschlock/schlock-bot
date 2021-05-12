@@ -11,7 +11,9 @@ class UserBalanceServiceImplTest extends DatabaseTest
     private static final String USERNAME = "user_balance_test";
     private static final Long BALANCE = Long.valueOf(10000);
 
-    private static final String BALANCE_COMMAND = UserBalanceServiceImpl.BALANCE_COMMAND;
+    private static final String BALANCE_COMMAND_1 = UserBalanceServiceImpl.BALANCE_COMMAND_1;
+    private static final String BALANCE_COMMAND_2 = UserBalanceServiceImpl.BALANCE_COMMAND_2;
+    private static final String BALANCE_COMMAND_3 = UserBalanceServiceImpl.BALANCE_COMMAND_3;
 
     private static final String BALANCE_KEY = UserBalanceServiceImpl.BALANCE_KEY;
     private static final String BALANCE_WRONG_FORMAT_KEY = UserBalanceServiceImpl.BALANCE_WRONG_FORMAT_KEY;
@@ -27,7 +29,7 @@ class UserBalanceServiceImplTest extends DatabaseTest
     {
         final String MARK = config().getCurrencyMark();
 
-        String command = BALANCE_COMMAND;
+        String command = BALANCE_COMMAND_1;
 
         String response = impl.process(USERNAME, command).getFirstMessage();
         String expected = messages().format(BALANCE_WRONG_FORMAT_KEY);
@@ -37,7 +39,7 @@ class UserBalanceServiceImplTest extends DatabaseTest
 
         String fakeUsername = "asdf asdf";
 
-        command = BALANCE_COMMAND + " " + fakeUsername;
+        command = BALANCE_COMMAND_1 + " " + fakeUsername;
 
         response = impl.process(USERNAME, command).getFirstMessage();
         expected = messages().format(BALANCE_WRONG_FORMAT_KEY);
@@ -47,7 +49,7 @@ class UserBalanceServiceImplTest extends DatabaseTest
 
         fakeUsername = "asdfasdf";
 
-        command = BALANCE_COMMAND + " " + fakeUsername;
+        command = BALANCE_COMMAND_1 + " " + fakeUsername;
 
         response = impl.process(USERNAME, command).getFirstMessage();
         expected = messages().format(BALANCE_USER_UNKOWN_KEY, fakeUsername);
@@ -55,7 +57,25 @@ class UserBalanceServiceImplTest extends DatabaseTest
         assertEquals(expected, response);
 
 
-        command = BALANCE_COMMAND + " " + USERNAME;
+        command = BALANCE_COMMAND_1 + " " + USERNAME;
+
+        response = impl.process(USERNAME, command).getFirstMessage();
+        expected = messages().format(BALANCE_KEY, USERNAME, BALANCE, MARK);
+        expected += testUser.getPrestigeLevel();
+
+        assertEquals(expected, response);
+
+
+        command = BALANCE_COMMAND_2 + " " + USERNAME;
+
+        response = impl.process(USERNAME, command).getFirstMessage();
+        expected = messages().format(BALANCE_KEY, USERNAME, BALANCE, MARK);
+        expected += testUser.getPrestigeLevel();
+
+        assertEquals(expected, response);
+
+
+        command = BALANCE_COMMAND_3 + " " + USERNAME;
 
         response = impl.process(USERNAME, command).getFirstMessage();
         expected = messages().format(BALANCE_KEY, USERNAME, BALANCE, MARK);

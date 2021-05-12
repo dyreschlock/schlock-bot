@@ -14,7 +14,9 @@ import java.util.List;
 
 public class UserPointsServiceImpl extends AbstractListenerService implements UserPointsService
 {
-    protected static final String BALANCE_COMMAND = "!balance";
+    protected static final String BALANCE_COMMAND_1 = "!balance";
+    protected static final String BALANCE_COMMAND_2 = "!points";
+    protected static final String BALANCE_COMMAND_3 = "!score";
     protected static final String GIVEPOINTS_COMMAND = "!givepoints %s ";
     protected static final String CASHOUT_COMMAND = "!cashout ";
     protected static final String PRESTIGE_COMMAND = "!prestige";
@@ -62,7 +64,9 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
     public boolean isAcceptRequest(String username, String in)
     {
         return in != null &&
-                (in.toLowerCase().startsWith(BALANCE_COMMAND) ||
+                (in.toLowerCase().startsWith(BALANCE_COMMAND_1) ||
+                        in.toLowerCase().startsWith(BALANCE_COMMAND_2) ||
+                        in.toLowerCase().startsWith(BALANCE_COMMAND_3) ||
                         in.toLowerCase().startsWith(getGivePointsCommand()) ||
                         in.toLowerCase().startsWith(CASHOUT_COMMAND) ||
                         in.toLowerCase().startsWith(PRESTIGE_COMMAND));
@@ -76,7 +80,9 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
     protected ListenerResponse processRequest(String username, String in)
     {
         String command = in.toLowerCase();
-        if (command.startsWith(BALANCE_COMMAND))
+        if (command.startsWith(BALANCE_COMMAND_1) ||
+            command.startsWith(BALANCE_COMMAND_2) ||
+            command.startsWith(BALANCE_COMMAND_3))
         {
             return checkBalance(username);
         }

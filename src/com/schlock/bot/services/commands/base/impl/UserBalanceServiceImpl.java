@@ -15,7 +15,10 @@ public class UserBalanceServiceImpl extends AbstractListenerService implements U
     protected static final String BALANCE_WRONG_FORMAT_KEY = "user-balance-wrong-format";
     protected static final String BALANCE_USER_UNKNOWN_KEY = "user-balance-user-unknown";
 
-    protected static final String BALANCE_COMMAND = "!balance ";
+    protected static final String BALANCE_COMMAND_1 = "!balance ";
+    protected static final String BALANCE_COMMAND_2 = "!points ";
+    protected static final String BALANCE_COMMAND_3 = "!score ";
+
 
     private final DatabaseManager database;
     private final DeploymentConfiguration config;
@@ -33,7 +36,9 @@ public class UserBalanceServiceImpl extends AbstractListenerService implements U
     public boolean isAcceptRequest(String username, String message)
     {
         return message != null &&
-                message.toLowerCase().startsWith(BALANCE_COMMAND);
+                (message.toLowerCase().startsWith(BALANCE_COMMAND_1) ||
+                        message.toLowerCase().startsWith(BALANCE_COMMAND_2) ||
+                        message.toLowerCase().startsWith(BALANCE_COMMAND_3));
     }
 
     public boolean isTerminateAfterRequest()
@@ -43,7 +48,7 @@ public class UserBalanceServiceImpl extends AbstractListenerService implements U
 
     protected ListenerResponse processRequest(String username, String command)
     {
-        String params = command.toLowerCase().substring(BALANCE_COMMAND.length()).trim();
+        String params = trimCommandForParams(command);
         if (params.isEmpty() || params.contains(" "))
         {
             String message = messages.get(BALANCE_WRONG_FORMAT_KEY);
@@ -64,5 +69,22 @@ public class UserBalanceServiceImpl extends AbstractListenerService implements U
         message += user.getPrestigeLevel();
 
         return ListenerResponse.relaySingle().addMessage(message);
+    }
+
+    public String trimCommandForParams(String message)
+    {
+        if (message.toLowerCase().startsWith(BALANCE_COMMAND_1))
+        {
+            return message.toLowerCase().substring(BALANCE_COMMAND_1.length()).trim();
+        }
+        if (message.toLowerCase().startsWith(BALANCE_COMMAND_2))
+        {
+            return message.toLowerCase().substring(BALANCE_COMMAND_2.length()).trim();
+        }
+        if (message.toLowerCase().startsWith(BALANCE_COMMAND_3))
+        {
+            return message.toLowerCase().substring(BALANCE_COMMAND_3.length()).trim();
+        }
+        return "";
     }
 }
