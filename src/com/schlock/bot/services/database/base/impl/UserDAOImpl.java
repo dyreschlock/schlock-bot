@@ -7,6 +7,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import java.util.Collections;
 import java.util.List;
 
 public class UserDAOImpl extends AbstractBaseDAO<User> implements UserDAO
@@ -55,14 +56,29 @@ public class UserDAOImpl extends AbstractBaseDAO<User> implements UserDAO
 
     public List<User> getOrderByPoints(int count)
     {
-        String text = "from User u " +
-                        " order by u.prestige desc, u.balance desc ";
+        return getOrderByPoints(count, Collections.emptyList());
+    }
+
+    public List<User> getOrderByPoints(int count, List<String> ignoreUsers)
+    {
+        String text = "";
+
+        text += "from User u ";
+        if (!ignoreUsers.isEmpty())
+        {
+            text += " where username not in (:ignore) ";
+        }
+        text += " order by u.prestige desc, u.balance desc ";
 
         Session session = sessionFactory.openSession();
         session.beginTransaction();
 
         Query query = session.createQuery(text);
         query.setMaxResults(count);
+        if (!ignoreUsers.isEmpty())
+        {
+            query.setParameterList("ignore", ignoreUsers);
+        }
 
         List<User> users = query.list();
 

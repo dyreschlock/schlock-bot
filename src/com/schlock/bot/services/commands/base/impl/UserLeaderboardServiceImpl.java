@@ -9,6 +9,7 @@ import com.schlock.bot.services.database.adhoc.DatabaseManager;
 import com.schlock.bot.services.database.base.UserDAO;
 import org.apache.tapestry5.ioc.Messages;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class UserLeaderboardServiceImpl extends AbstractListenerService implements UserLeaderboardService
@@ -48,7 +49,9 @@ public class UserLeaderboardServiceImpl extends AbstractListenerService implemen
     {
         ListenerResponse response = ListenerResponse.relaySingle();
 
-        List<User> users = database.get(UserDAO.class).getOrderByPoints(RETURN_COUNT);
+        List<String> ignoreUsers = getIgnoreList();
+
+        List<User> users = database.get(UserDAO.class).getOrderByPoints(RETURN_COUNT, ignoreUsers);
         for(int i = 0; i < users.size(); i++)
         {
             int number = i+ 1;
@@ -65,5 +68,12 @@ public class UserLeaderboardServiceImpl extends AbstractListenerService implemen
             response.addMessage(message);
         }
         return response;
+    }
+
+    private List<String> getIgnoreList()
+    {
+        String owner = config.getOwnerUsername();
+
+        return Arrays.asList(owner);
     }
 }

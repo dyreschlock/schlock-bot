@@ -5,6 +5,7 @@ import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.base.UserDAO;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -47,6 +48,18 @@ class UserDAOImplTest extends DatabaseTest
         assertEquals(testUser1.getUsername(), users.get(0).getUsername());
         assertEquals(testUser2.getUsername(), users.get(1).getUsername());
     }
+
+    @Test
+    public void testOrderByPointsIgnore()
+    {
+        List<String> ignore = Arrays.asList(USERNAME1);
+
+        List<User> users = userDAO.getOrderByPoints(10, ignore);
+
+        assertEquals(1, users.size());
+        assertEquals(testUser2.getUsername(), users.get(0).getUsername());
+    }
+
 
     protected void before() throws Exception
     {

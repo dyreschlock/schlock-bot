@@ -12,4 +12,6 @@ public interface UserDAO extends BaseDAO<User>
     User getMostRecentUser();
 
     List<User> getOrderByPoints(int count);
+
+    List<User> getOrderByPoints(int count, List<String> ignoreUsers);
 }
