@@ -2,11 +2,13 @@ package com.schlock.bot.services.commands.pokemon.shiny.impl;
 
 import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.entities.pokemon.ShinyDexEntry;
+import com.schlock.bot.entities.pokemon.ShinyDexLegendsEntry;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import com.schlock.bot.services.database.adhoc.DatabaseManager;
 import com.schlock.bot.services.database.pokemon.ShinyDexEntryDAO;
+import com.schlock.bot.services.database.pokemon.ShinyDexLegendsEntryDAO;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import org.apache.tapestry5.ioc.Messages;
 
@@ -49,6 +51,13 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
             }
         }
         return pokemon;
+    }
+
+    public List<ShinyDexLegendsEntry> getShinyLegendsEntries()
+    {
+        List<ShinyDexLegendsEntry> entries = database.get(ShinyDexLegendsEntryDAO.class).getAll();
+
+        return entries;
     }
 
     public boolean isAcceptRequest(String username, String message)

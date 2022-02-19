@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Shiny Dex</title>
+    <style>
+
+            body
+            {
+                line-height: normal;
+            }
+
+            img
+            {
+                width: 57px;
+
+                filter: brightness(100%);
+                display: block;
+            }
+
+            div.dex
+            {
+                width: 1280px;
+                background-color: rgba(0, 0, 0, 0.65);
+
+                text-align: right;
+
+                padding-bottom: 10px;
+            }
+
+            table.dex
+            {
+                margin: auto;
+                padding-bottom: 10px;
+            }
+
+            table.dex td
+            {
+                min-width: 57px;
+            }
+
+            .header
+            {
+                font-family: impact;
+                font-style: italic;
+                font-size: 40pt;
+
+                text-transform: uppercase;
+
+                color: #fff;
+
+                padding-left: 10px;
+                padding-right: 20px;
+
+                background: -webkit-linear-gradient(#cfd, #047);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                -webkit-text-stroke: 2.5px #000;
+            }
+
+        </style>
+
+</head>
+<body>
+<div class="dex">
+    <div id="header" class="header">
+        ${shinyDexMessage}
+    </div>
+    <t:outputraw value="tableHTML" />
+</div>
+</body>
+</html>
