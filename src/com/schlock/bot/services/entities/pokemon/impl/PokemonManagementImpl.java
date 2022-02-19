@@ -11,9 +11,7 @@ import org.jsoup.nodes.Element;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class PokemonManagementImpl implements PokemonManagement
 {
@@ -198,6 +196,20 @@ public class PokemonManagementImpl implements PokemonManagement
         return null;
     }
 
+
+    public List<Pokemon> getAllPokemonInGen(String gen)
+    {
+        List<Pokemon> pokemon = new ArrayList<>();
+
+        int start = pokemonUtils.returnFirstPokemonNumberInGeneration(gen);
+        int end = pokemonUtils.returnLastPokemonNumberInGeneration(gen);
+
+        for(int i = start; i <= end; i++)
+        {
+            pokemon.add(pokemonByNumber.get(i));
+        }
+        return pokemon;
+    }
 
     private void initialize()
     {

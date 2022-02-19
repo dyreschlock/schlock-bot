@@ -2,6 +2,8 @@ package com.schlock.bot.services.entities.pokemon;
 
 import com.schlock.bot.entities.pokemon.Pokemon;
 
+import java.util.List;
+
 public interface PokemonManagement
 {
     Pokemon getPokemonFromText(String text);
@@ -15,4 +17,6 @@ public interface PokemonManagement
     boolean isRangeSearch(String params);
 
     Pokemon getRandomPokemonInRange(String rangeText);
+
+    List<Pokemon> getAllPokemonInGen(String gen);
 }

@@ -40,7 +40,11 @@ public abstract class AbstractListenerService implements ListenerService
 
     protected ListenerResponse nullResponse()
     {
-        String response = messages.get(NULL_RESPONSE_KEY);
-        return ListenerResponse.relaySingle().addMessage(response);
+        return formatSingleResponse(NULL_RESPONSE_KEY);
+    }
+
+    protected ListenerResponse notAdminReponse()
+    {
+        return formatSingleResponse(NOT_ADMIN_KEY);
     }
 }
