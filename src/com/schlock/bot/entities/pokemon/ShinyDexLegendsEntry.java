@@ -15,11 +15,25 @@ public class ShinyDexLegendsEntry extends Persisted
     @Column(name = "pokemon")
     private String pokemon;
 
+    @Column(name = "number")
+    private Integer number;
+
     @Column(name = "resets")
     private Integer resets;
 
     @Column(name = "method")
     private String method;
+
+    public String getNumberString()
+    {
+        String num = Integer.toString(number);
+        while (num.length() < 3)
+        {
+            num = "0" + num;
+        }
+        return num;
+    }
+
 
     public Long getId()
     {
@@ -39,6 +53,16 @@ public class ShinyDexLegendsEntry extends Persisted
     public void setPokemon(String pokemon)
     {
         this.pokemon = pokemon;
+    }
+
+    public Integer getNumber()
+    {
+        return number;
+    }
+
+    public void setNumber(Integer number)
+    {
+        this.number = number;
     }
 
     public Integer getResets()

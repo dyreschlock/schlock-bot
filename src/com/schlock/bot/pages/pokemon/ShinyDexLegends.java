@@ -35,9 +35,10 @@ public class ShinyDexLegends
         html += "<tr>";
         for(Integer i = 1; i < entries.size()+1; i++)
         {
-            String imageName = getImageFilename(i);
+            ShinyDexLegendsEntry entry = entries.get(i-1);
+            String imageName = entry.getNumberString() + ".png";
 
-            html += "<td><img src=\"../img/legends/" + imageName + "\"/></td>";
+            html += "<td><img src=\"../img/hisui/" + imageName + "\"/></td>";
             if (i % COLUMNS == 0)
             {
                 html += "</tr><tr>";
@@ -53,16 +54,4 @@ public class ShinyDexLegends
         html += "</tr>";
         return html + "</table>";
     }
-
-    private String getImageFilename(int index)
-    {
-        String indexString = Integer.toString(index);
-        while (indexString.length() < 3)
-        {
-            indexString = "0" + indexString;
-        }
-
-        return indexString + ".png";
-    }
-
 }
