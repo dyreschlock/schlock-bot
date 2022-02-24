@@ -8,6 +8,7 @@ import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyInfoService;
 import com.schlock.bot.services.database.adhoc.DatabaseManager;
 import com.schlock.bot.services.database.pokemon.ShinyGetDAO;
+import com.schlock.bot.services.database.pokemon.ShinyHisuiGetDAO;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.ShinyGetFormatter;
 import org.apache.tapestry5.ioc.Messages;
@@ -18,12 +19,15 @@ public class ShinyInfoServiceImpl extends AbstractListenerService implements Shi
 {
     protected static final String AVERAGE_TIME_KEY = "shiny-average-time";
     protected static final String AVERAGE_CHECKS_KEY = "shiny-average-checks";
+    protected static final String AVERAGE_RESETS_KEY = "hisui-average-resets";
 
     private static final String MOST_RECENT_COMMAND = "!recent";
     private static final String MOST_RECENT_COMMAND2 = "!last";
 
     public static final String AVERAGE_COMMAND = "!shinyaverage";
     private static final String AVERAGE_CHECKS_COMMAND = "!shinychecks";
+
+    private static final String HISUI_RESETS_COMMAND = "!shinyresets";
 
     private final PokemonManagement pokemonManagement;
     private final ShinyGetFormatter shinyFormatter;
@@ -52,7 +56,8 @@ public class ShinyInfoServiceImpl extends AbstractListenerService implements Shi
                 (in.toLowerCase().startsWith(MOST_RECENT_COMMAND) ||
                         in.toLowerCase().startsWith(MOST_RECENT_COMMAND2) ||
                         in.toLowerCase().startsWith(AVERAGE_COMMAND) ||
-                        in.toLowerCase().startsWith(AVERAGE_CHECKS_COMMAND));
+                        in.toLowerCase().startsWith(AVERAGE_CHECKS_COMMAND) ||
+                        in.toLowerCase().startsWith(HISUI_RESETS_COMMAND));
     }
 
     public boolean isTerminateAfterRequest()
@@ -83,6 +88,14 @@ public class ShinyInfoServiceImpl extends AbstractListenerService implements Shi
             Double averageChecks = database.get(ShinyGetDAO.class).getCurrentAverageNumberOfRareChecks();
 
             return formatSingleResponse(AVERAGE_CHECKS_KEY, new DecimalFormat("#0.00").format(averageChecks));
+        }
+
+        if (commandText.startsWith(HISUI_RESETS_COMMAND))
+        {
+            Double averageResets = database.get(ShinyHisuiGetDAO.class).getCurrentResetAverage();
+
+            return formatSingleResponse(AVERAGE_RESETS_KEY, new DecimalFormat("#0.00").format(averageResets));
+
         }
 
         return nullResponse();

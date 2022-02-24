@@ -16,7 +16,28 @@ public class ShinyHisuiGetDAOImpl extends AbstractBaseDAO<ShinyHisuiGet> impleme
 
     public Double getCurrentResetAverage()
     {
-        return null;
+        String totalOutbreakShiny = " select count(g) " +
+                                    " from ShinyHisuiGet g " +
+                                    " where g.resets != null ";
+
+        String totalOutbreakResets = " select sum(g.resets) " +
+                                        " from ShinyHisuiGet g " +
+                                        " where g.resets != null ";
+
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        Query query1 = session.createQuery(totalOutbreakShiny);
+        Long totalShiny = (Long) query1.list().get(0);
+
+        Query query2 = session.createQuery(totalOutbreakResets);
+        Long totalResets = (Long) query2.list().get(0);
+
+        session.getTransaction().commit();
+        session.close();
+
+        Double ave = totalResets.doubleValue() / totalShiny.doubleValue();
+        return ave;
     }
 
     public Integer getCurrentShinyNumber()
