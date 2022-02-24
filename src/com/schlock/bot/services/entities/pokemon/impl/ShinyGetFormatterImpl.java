@@ -2,6 +2,7 @@ package com.schlock.bot.services.entities.pokemon.impl;
 
 import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.entities.pokemon.ShinyGet;
+import com.schlock.bot.entities.pokemon.ShinyHisuiGet;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.ShinyGetFormatter;
 import org.apache.tapestry5.ioc.Messages;
@@ -10,6 +11,9 @@ public class ShinyGetFormatterImpl implements ShinyGetFormatter
 {
     private static final String SHINY_CAUGHT_KEY = "shiny-caught";
     private static final String MOST_RECENT_KEY = "most-recent-shiny";
+
+    private static final String HISUI_SHINY_WILD = "shiny-hisui-wild";
+    private static final String HISUI_SHINY_OUTBREAK = "shiny-hisui-outbreak";
 
     private PokemonManagement pokemonManagement;
 
@@ -44,5 +48,18 @@ public class ShinyGetFormatterImpl implements ShinyGetFormatter
         String shinyNumber = get.getShinyNumber().toString();
 
         return messages.format(MOST_RECENT_KEY, pokemonName, timeMinutes, shinyNumber);
+    }
+
+    public String formatNewlyCaughtHisui(ShinyHisuiGet get)
+    {
+        Pokemon pokemon = pokemonManagement.getPokemonFromText(get.getPokemonId());
+
+        String pokemonName = pokemon.getName();
+        if (get.isOutbreak())
+        {
+            Integer resets = get.getResets();
+            return messages.format(HISUI_SHINY_OUTBREAK, pokemonName, resets.toString());
+        }
+        return messages.format(HISUI_SHINY_WILD, pokemonName);
     }
 }

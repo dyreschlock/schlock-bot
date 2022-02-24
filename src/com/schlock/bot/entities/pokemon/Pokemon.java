@@ -20,6 +20,18 @@ public class Pokemon
     {
     }
 
+    public String getHisuiNumberString()
+    {
+        String num = Integer.toString(hisuiNumber);
+        while (num.length() < 3)
+        {
+            num = "0" + num;
+        }
+        return num;
+    }
+
+
+
     public void incrementBasestats(int i)
     {
         basestats = basestats +i;

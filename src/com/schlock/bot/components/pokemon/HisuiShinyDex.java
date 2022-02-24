@@ -1,7 +1,9 @@
 package com.schlock.bot.components.pokemon;
 
-import com.schlock.bot.entities.pokemon.ShinyDexLegendsEntry;
+import com.schlock.bot.entities.pokemon.Pokemon;
+import com.schlock.bot.entities.pokemon.ShinyHisuiGet;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
+import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -15,11 +17,15 @@ public class HisuiShinyDex
     private ShinyDexService dexEntryService;
 
     @Inject
+    private PokemonManagement pokemonManagement;
+
+
+    @Inject
     private Messages messages;
 
     public String getShinyDexMessage()
     {
-        List<ShinyDexLegendsEntry> entries = dexEntryService.getShinyLegendsEntries();
+        List<ShinyHisuiGet> entries = dexEntryService.getShinyLegendsEntries();
         Integer dexCount = entries.size();
 
         String message = messages.format("shiny-dex", dexCount.toString());
@@ -30,13 +36,15 @@ public class HisuiShinyDex
     {
         String html = "<table class=\"dex\"";
 
-        List<ShinyDexLegendsEntry> entries = dexEntryService.getShinyLegendsEntries();
+        List<ShinyHisuiGet> entries = dexEntryService.getShinyLegendsEntries();
 
         html += "<tr>";
         for(Integer i = 1; i < entries.size()+1; i++)
         {
-            ShinyDexLegendsEntry entry = entries.get(i-1);
-            String imageName = entry.getNumberString() + ".png";
+            ShinyHisuiGet entry = entries.get(i-1);
+
+            Pokemon pokemon = pokemonManagement.getPokemonFromText(entry.getPokemonId());
+            String imageName = pokemon.getHisuiNumberString() + ".png";
 
             html += "<td><img class=\"pshow\" src=\"/img/hisui/" + imageName + "\"/></td>";
             if (i % COLUMNS == 0)

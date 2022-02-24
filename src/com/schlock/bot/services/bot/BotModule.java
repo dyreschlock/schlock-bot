@@ -10,6 +10,7 @@ import com.schlock.bot.services.bot.twitch.impl.TwitchEventBotImpl;
 import com.schlock.bot.services.commands.ListenerService;
 import com.schlock.bot.services.commands.base.*;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetInfoService;
+import com.schlock.bot.services.commands.pokemon.bet.ShinyHisuiService;
 import com.schlock.bot.services.commands.pokemon.quiz.GenCompletionQuizService;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyInfoService;
@@ -39,6 +40,7 @@ public class BotModule
                                       GenCompletionQuizService genCompletionQuizService,
                                       WhosThatPokemonService guessingService,
                                       PokemonInfoService pokemonInfoService,
+                                      ShinyHisuiService shinyHisuiService,
                                       ShinyInfoService shinyInfoService,
                                       ShinyDexService shinyDexService,
                                       AnimationService animationService,
@@ -53,6 +55,7 @@ public class BotModule
                                                 genCompletionQuizService,
                                                 guessingService,
                                                 pokemonInfoService,
+                                                shinyHisuiService,
                                                 shinyInfoService,
                                                 shinyDexService,
                                                 animationService).collect(Collectors.toSet());
