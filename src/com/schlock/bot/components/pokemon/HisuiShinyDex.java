@@ -1,4 +1,4 @@
-package com.schlock.bot.pages.pokemon;
+package com.schlock.bot.components.pokemon;
 
 import com.schlock.bot.entities.pokemon.ShinyDexLegendsEntry;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
@@ -7,7 +7,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import java.util.List;
 
-public class ShinyDexLegends
+public class HisuiShinyDex
 {
     private static final Integer COLUMNS = 20;
 
@@ -38,7 +38,7 @@ public class ShinyDexLegends
             ShinyDexLegendsEntry entry = entries.get(i-1);
             String imageName = entry.getNumberString() + ".png";
 
-            html += "<td><img src=\"../img/hisui/" + imageName + "\"/></td>";
+            html += "<td><img class=\"pshow\" src=\"/img/hisui/" + imageName + "\"/></td>";
             if (i % COLUMNS == 0)
             {
                 html += "</tr><tr>";

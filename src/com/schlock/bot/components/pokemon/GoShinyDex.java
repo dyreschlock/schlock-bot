@@ -1,4 +1,4 @@
-package com.schlock.bot.pages.pokemon;
+package com.schlock.bot.components.pokemon;
 
 import com.schlock.bot.entities.pokemon.PokemonGoDexEntry;
 import com.schlock.bot.services.database.adhoc.DatabaseManager;

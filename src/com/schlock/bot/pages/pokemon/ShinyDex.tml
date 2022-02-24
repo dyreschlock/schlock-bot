@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry-library:pokemon"
     >
 <head>
     <meta charset="UTF-8"/>
@@ -26,14 +27,30 @@
                 display: block;
             }
 
+
+            img.have
+            {
+                display: block;
+            }
+
+            img.shiny_go, img.shiny_home
+            {
+                filter: brightness(100%);
+            }
+
+
             div.dex
             {
-                width: 1280px;
                 background-color: rgba(0, 0, 0, 0.65);
 
                 text-align: right;
 
                 padding-bottom: 10px;
+            }
+
+            div.twitchDisplay
+            {
+                width: 1280px;
             }
 
             table.dex
@@ -59,8 +76,19 @@
 
                 padding-left: 10px;
                 padding-right: 20px;
+            }
 
+            .headerYellow
+            {
                 background: -webkit-linear-gradient(#ff0, #fa0);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                -webkit-text-stroke: 2.5px #000;
+            }
+
+            .headerBlue
+            {
+                background: -webkit-linear-gradient(#cfd, #047);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 -webkit-text-stroke: 2.5px #000;
@@ -70,11 +98,16 @@
 
 </head>
 <body>
-<div class="dex">
-    <div id="header" class="header">
-        ${shinyDexMessage}
-    </div>
-    <t:outputraw value="tableHTML" />
-</div>
+
+    <t:if test="letsGoPage">
+        <p:letsgoshinydex />
+    </t:if>
+    <t:if test="goPage">
+        <p:goshinydex />
+    </t:if>
+    <t:if test="legendsPage">
+        <p:hisuishinydex />
+    </t:if>
+
 </body>
 </html>
