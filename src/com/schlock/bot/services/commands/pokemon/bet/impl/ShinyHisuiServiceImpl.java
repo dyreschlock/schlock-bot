@@ -89,11 +89,19 @@ public class ShinyHisuiServiceImpl extends AbstractListenerService implements Sh
             }
 
             ShinyGetType type = ShinyGetType.valueOf(p[0].toUpperCase());
-            Integer resets = Integer.parseInt(p[2]);
-
-            if (type == null || resets == null)
+            if (type == null)
             {
                 return null;
+            }
+
+            Integer resets = null;
+            if (ShinyGetType.OUTBREAK.equals(type))
+            {
+                resets = Integer.parseInt(p[2]);
+                if (resets == null)
+                {
+                    return null;
+                }
             }
 
             Integer shinyNumber = database.get(ShinyHisuiGetDAO.class).getCurrentShinyNumber();
