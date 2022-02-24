@@ -16,6 +16,7 @@ import java.util.*;
 public class PokemonManagementImpl implements PokemonManagement
 {
     private static final String LIST_OF_POKEMON_FILE = "pokemon.html";
+    private static final String LIST_OF_HISUIAN_POKEMON_FILE = "hisuian_pokedex.html";
 
     private static final String DIV_CONTENT_ID = "content";
 
@@ -25,6 +26,8 @@ public class PokemonManagementImpl implements PokemonManagement
 
     private Map<Integer, Pokemon> pokemonByNumber;
     private Map<String, Pokemon> pokemonByName;
+
+    private Map<Integer, Pokemon> hisuianByNumber;
 
 
     public PokemonManagementImpl(PokemonUtils pokemonUtils,
@@ -218,7 +221,94 @@ public class PokemonManagementImpl implements PokemonManagement
             pokemonByName = new HashMap<>();
             pokemonByNumber = new HashMap<>();
 
+            hisuianByNumber = new HashMap<>();
+
             loadPokemon();
+            loadHisuianPokemon();
+        }
+    }
+
+    private void loadHisuianPokemon()
+    {
+        String fileLocation = config.getDataDirectory() + LIST_OF_HISUIAN_POKEMON_FILE;
+
+        Document htmlFile = null;
+        try
+        {
+            htmlFile = Jsoup.parse(new File(fileLocation), "ISO-8859-1");
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+            System.out.println(fileLocation);
+        }
+
+        /*
+        <div id="content">
+            <main> (child no. 2)
+                <table> (child no. 5)
+                </table>
+            </main>
+        </div>
+         */
+
+        Element contentElement = htmlFile.getElementById(DIV_CONTENT_ID);
+        Element tbody = contentElement.child(1).child(4).child(0);
+
+        Element trElement;
+        for(int i = 1; i < 225; i++)
+        {
+            trElement = tbody.child(i);
+
+            /*
+            <tr>
+                <td> #001 </td>
+                <td> table - image </td>
+                <td><a> Rowlet </a></td>
+                <td>
+                    <a href=" ... pokedex-swsh/grass.shtml"></a>
+                    <a href=" ... pokedex-swsh/flying.shtml"></a>
+                </td>
+            </tr>
+             */
+
+
+            Element name_ahref = trElement.child(2).child(0);
+
+            String name_href = name_ahref.attr("href");
+            String id = name_href.split("/pokedex-swsh/")[1].toLowerCase();
+            id = id.split("/")[0];
+
+            Pokemon pokemon = pokemonByName.get(id);
+
+            if (pokemon == null)
+            {
+                String temp = "";
+            }
+
+            String numberText = trElement.child(0).textNodes().get(0).text();
+            Integer hisuiNumber = Integer.parseInt(cleanNumberText(numberText));
+            pokemon.setHisuiNumber(hisuiNumber);
+
+            Element type1_ahref = trElement.child(3).child(0);
+            String type1_href = type1_ahref.attr("href");
+            String type1 = type1_href.split("pokedex-swsh/")[1].toLowerCase();
+            type1 = type1.split(".shtml")[0];
+            pokemon.setHisuiType1(StringUtils.capitalize(type1));
+
+            try
+            {
+                Element type2_ahref = trElement.child(3).child(1);
+                String type2_href = type2_ahref.attr("href");
+                String type2 = type2_href.split("pokedex-swsh/")[1].toLowerCase();
+                type2 = type2.split(".shtml")[0];
+                pokemon.setHisuiType2(StringUtils.capitalize(type2));
+            }
+            catch (IndexOutOfBoundsException e)
+            {
+            }
+
+            hisuianByNumber.put(hisuiNumber, pokemon);
         }
     }
 
@@ -258,7 +348,7 @@ public class PokemonManagementImpl implements PokemonManagement
         Element tbody = contentElement.child(1).child(14).child(0);
 
         Element trElement;
-        for (int i = 2; i < 900; i++)
+        for (int i = 2; i < 907; i++)
         {
             trElement = tbody.child(i);
 

@@ -11,6 +11,11 @@ public class Pokemon
 
     private Integer basestats = 0;
 
+    private Integer hisuiNumber;
+
+    private String hisuiType1;
+    private String hisuiType2;
+
     public Pokemon()
     {
     }
@@ -79,5 +84,35 @@ public class Pokemon
     public void setBasestats(Integer basestats)
     {
         this.basestats = basestats;
+    }
+
+    public Integer getHisuiNumber()
+    {
+        return hisuiNumber;
+    }
+
+    public void setHisuiNumber(Integer hisuiNumber)
+    {
+        this.hisuiNumber = hisuiNumber;
+    }
+
+    public String getHisuiType1()
+    {
+        return hisuiType1;
+    }
+
+    public void setHisuiType1(String hisuiType1)
+    {
+        this.hisuiType1 = hisuiType1;
+    }
+
+    public String getHisuiType2()
+    {
+        return hisuiType2;
+    }
+
+    public void setHisuiType2(String hisuiType2)
+    {
+        this.hisuiType2 = hisuiType2;
     }
 }
