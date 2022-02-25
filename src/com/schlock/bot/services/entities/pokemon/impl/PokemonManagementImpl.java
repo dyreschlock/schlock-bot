@@ -18,6 +18,8 @@ public class PokemonManagementImpl implements PokemonManagement
     private static final String LIST_OF_POKEMON_FILE = "pokemon.html";
     private static final String LIST_OF_HISUIAN_POKEMON_FILE = "hisuian_pokedex.html";
 
+    private static final String HISUI_PARAM = PokemonUtilsImpl.HISUI;
+
     private static final String DIV_CONTENT_ID = "content";
 
     private final PokemonUtils pokemonUtils;
@@ -41,6 +43,12 @@ public class PokemonManagementImpl implements PokemonManagement
     {
         String command = cleanText(c);
         return pokemonUtils.isGenerationId(command);
+    }
+
+    public boolean isHisuiSearch(String c)
+    {
+        String command = cleanText(c);
+        return HISUI_PARAM.equalsIgnoreCase(command);
     }
 
     public boolean isRangeSearch(String c)
@@ -186,6 +194,15 @@ public class PokemonManagementImpl implements PokemonManagement
         return pokemonByNumber.get(random);
     }
 
+    public Pokemon getRandomPokemonInHisui()
+    {
+        initialize();
+
+        int total = hisuianByNumber.size();
+        int random = new Random().nextInt(total);
+
+        return hisuianByNumber.get(random);
+    }
 
     private Integer getNumber(String in)
     {

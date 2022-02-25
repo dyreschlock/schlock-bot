@@ -14,6 +14,10 @@ public interface PokemonManagement
 
     Pokemon getRandomPokemonInGen(String gen);
 
+    boolean isHisuiSearch(String params);
+
+    Pokemon getRandomPokemonInHisui();
+
     boolean isRangeSearch(String params);
 
     Pokemon getRandomPokemonInRange(String rangeText);

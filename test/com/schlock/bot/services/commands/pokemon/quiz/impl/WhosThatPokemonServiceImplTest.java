@@ -55,7 +55,7 @@ class WhosThatPokemonServiceImplTest extends DatabaseTest
 
         //start the game
         String response = impl.process(ADMIN, "!whodat").getFirstMessage();
-        String expected = pokemonUtils.formatHint1(testPokemon);
+        String expected = pokemonUtils.formatHint1(testPokemon, false);
 
         assertEquals(expected, response);
 
@@ -91,7 +91,7 @@ class WhosThatPokemonServiceImplTest extends DatabaseTest
 
         //start a new game
         response = impl.process(ADMIN, "!whodat").getFirstMessage();
-        expected = pokemonUtils.formatHint1(testPokemon);
+        expected = pokemonUtils.formatHint1(testPokemon, false);
 
         assertEquals(expected, response);
 
@@ -111,7 +111,7 @@ class WhosThatPokemonServiceImplTest extends DatabaseTest
 
         //start another new game
         response = impl.process(ADMIN, "!whodat").getFirstMessage();
-        expected = pokemonUtils.formatHint1(testPokemon);
+        expected = pokemonUtils.formatHint1(testPokemon, false);
 
         assertEquals(expected, response);
 

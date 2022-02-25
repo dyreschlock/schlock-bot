@@ -18,5 +18,7 @@ public interface PokemonUtils
 
     public Integer returnLastPokemonNumberInGeneration(String input);
 
-    public String formatHint1(Pokemon pokemon);
+
+
+    public String formatHint1(Pokemon pokemon, boolean isHisuiGuess);
 }

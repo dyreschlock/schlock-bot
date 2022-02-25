@@ -32,6 +32,7 @@ public class WhosThatPokemonServiceImpl extends AbstractChatGameListenerService 
 
     private final DeploymentConfiguration config;
 
+    protected boolean isHisuiGuess = false;
     protected Pokemon currentPokemon;
 
     public WhosThatPokemonServiceImpl(PokemonManagement pokemonManagement,
@@ -79,7 +80,7 @@ public class WhosThatPokemonServiceImpl extends AbstractChatGameListenerService 
         {
             if (currentPokemon != null)
             {
-                String hint = pokemonUtils.formatHint1(currentPokemon);
+                String hint = pokemonUtils.formatHint1(currentPokemon, isHisuiGuess);
 
                 return formatSingleResponse(GAME_ALREADY_STARTED_KEY, hint);
             }
@@ -104,9 +105,15 @@ public class WhosThatPokemonServiceImpl extends AbstractChatGameListenerService 
 
     private ListenerResponse startGame(String params)
     {
+        this.isHisuiGuess = false;
         if (pokemonManagement.isGenSearch(params))
         {
             currentPokemon = pokemonManagement.getRandomPokemonInGen(params);
+        }
+        else if (pokemonManagement.isHisuiSearch(params))
+        {
+            this.isHisuiGuess = true;
+            currentPokemon = pokemonManagement.getRandomPokemonInHisui();
         }
         else if (pokemonManagement.isRangeSearch(params))
         {
@@ -116,7 +123,7 @@ public class WhosThatPokemonServiceImpl extends AbstractChatGameListenerService 
         {
             currentPokemon = pokemonManagement.getRandomPokemon();
         }
-        String response = pokemonUtils.formatHint1(currentPokemon);
+        String response = pokemonUtils.formatHint1(currentPokemon, isHisuiGuess);
         return ListenerResponse.relaySingle().addMessage(response);
     }
 

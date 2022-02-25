@@ -82,7 +82,9 @@ public class PokemonUtilsImpl implements PokemonUtils
 
     private static final String GEN8 = "gen8";
     private static final Integer GEN8_START = 810;
-    private static final Integer GEN8_END = 898;
+    private static final Integer GEN8_END = 905;
+
+    public static final String HISUI = "hisui";
 
     private static final List<Object[]> GENERATIONS = Arrays.asList(
             new Object[]{GEN1, GEN1_START, GEN1_END},
@@ -170,7 +172,7 @@ public class PokemonUtilsImpl implements PokemonUtils
         return null;
     }
 
-    public String formatHint1(Pokemon pokemon)
+    public String formatHint1(Pokemon pokemon, boolean isHisuiGuess)
     {
         String id = pokemon.getId();
 
@@ -178,7 +180,15 @@ public class PokemonUtilsImpl implements PokemonUtils
         Integer length = id.length();
         String type1 = pokemon.getType1();
 
-        String gen = returnGenerationId(pokemon);
+        String gen = "";
+        if (isHisuiGuess)
+        {
+            gen = HISUI;
+        }
+        else
+        {
+            gen = returnGenerationId(pokemon);
+        }
 
         return messages.format(POKEMON_HINT_1_KEY, firstLetter, length.toString(), type1, gen);
     }
