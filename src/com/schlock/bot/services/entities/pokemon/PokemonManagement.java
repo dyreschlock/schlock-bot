@@ -19,4 +19,6 @@ public interface PokemonManagement
     Pokemon getRandomPokemonInRange(String rangeText);
 
     List<Pokemon> getAllPokemonInGen(String gen);
+
+    List<Pokemon> getAllPokemonInNumberOrder();
 }

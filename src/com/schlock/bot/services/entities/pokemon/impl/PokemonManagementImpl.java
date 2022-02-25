@@ -214,6 +214,24 @@ public class PokemonManagementImpl implements PokemonManagement
         return pokemon;
     }
 
+    public List<Pokemon> getAllPokemonInNumberOrder()
+    {
+        List<Pokemon> pokemon = new ArrayList<>();
+
+        pokemon.addAll(pokemonByName.values());
+
+        Collections.sort(pokemon, new Comparator<Pokemon>()
+        {
+            @Override
+            public int compare(Pokemon o1, Pokemon o2)
+            {
+                return o2.getNumber() - o1.getNumber();
+            }
+        });
+
+        return pokemon;
+    }
+
     private void initialize()
     {
         if (pokemonByName == null || pokemonByNumber == null)

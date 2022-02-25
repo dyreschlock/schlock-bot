@@ -1,9 +1,9 @@
 package com.schlock.bot.components.pokemon;
 
 import com.schlock.bot.entities.pokemon.PokemonGoDexEntry;
-import com.schlock.bot.services.database.adhoc.DatabaseManager;
-import com.schlock.bot.services.database.pokemon.PokemonGoDexEntryDAO;
+import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.tapestry5.ioc.Messages;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -16,13 +16,39 @@ public class GoShinyDex
     private static final Integer COLUMNS = 30;
 
     @Inject
-    private DatabaseManager database;
+    private ShinyDexService shinyDexService;
+
+    @Inject
+    private Messages messages;
+
+    public String getShinyDexMessage()
+    {
+        int have = 0;
+        int shiny = 0;
+
+        List<PokemonGoDexEntry> entries = shinyDexService.getPokemonGoEntries();
+
+        for(PokemonGoDexEntry entry : entries)
+        {
+            if (entry.isHave())
+            {
+                have++;
+            }
+            if (entry.isShinyGo() || entry.isShinyHome())
+            {
+                shiny++;
+            }
+        }
+
+        String message = messages.format("shiny-dex", have, shiny);
+        return message;
+    }
 
     public String getTableHTML()
     {
         String html = "<table class=\"dex\">";
 
-        List<PokemonGoDexEntry> entries = database.get(PokemonGoDexEntryDAO.class).getInPokemonOrder();
+        List<PokemonGoDexEntry> entries = shinyDexService.getPokemonGoEntries();
 
         html += "<tr>";
 

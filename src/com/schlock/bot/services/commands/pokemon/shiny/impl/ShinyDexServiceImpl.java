@@ -1,12 +1,14 @@
 package com.schlock.bot.services.commands.pokemon.shiny.impl;
 
 import com.schlock.bot.entities.pokemon.Pokemon;
+import com.schlock.bot.entities.pokemon.PokemonGoDexEntry;
 import com.schlock.bot.entities.pokemon.ShinyDexEntry;
 import com.schlock.bot.entities.pokemon.ShinyHisuiGet;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import com.schlock.bot.services.database.adhoc.DatabaseManager;
+import com.schlock.bot.services.database.pokemon.PokemonGoDexEntryDAO;
 import com.schlock.bot.services.database.pokemon.ShinyDexEntryDAO;
 import com.schlock.bot.services.database.pokemon.ShinyHisuiGetDAO;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
@@ -59,6 +61,13 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
 
         return entries;
     }
+
+    public List<PokemonGoDexEntry> getPokemonGoEntries()
+    {
+        List<PokemonGoDexEntry> entries = database.get(PokemonGoDexEntryDAO.class).getAll();
+        return entries;
+    }
+
 
     public boolean isAcceptRequest(String username, String message)
     {

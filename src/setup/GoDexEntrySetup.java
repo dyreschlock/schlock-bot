@@ -27,12 +27,10 @@ public class GoDexEntrySetup
         {
             setupDatabase();
 
-            for(int i = 0; i < 720; i++)
+            for(int i = 899; i < 905; i++)
             {
                 createEntryAndSave(i + 1);
             }
-            createEntryAndSave(808);
-            createEntryAndSave(809);
         }
         finally
         {

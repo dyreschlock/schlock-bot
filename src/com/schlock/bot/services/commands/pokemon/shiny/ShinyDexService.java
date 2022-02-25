@@ -1,6 +1,7 @@
 package com.schlock.bot.services.commands.pokemon.shiny;
 
 import com.schlock.bot.entities.pokemon.Pokemon;
+import com.schlock.bot.entities.pokemon.PokemonGoDexEntry;
 import com.schlock.bot.entities.pokemon.ShinyHisuiGet;
 import com.schlock.bot.services.commands.ListenerService;
 
@@ -11,4 +12,6 @@ public interface ShinyDexService extends ListenerService
     List<Pokemon> getShinyDexEntries();
 
     List<ShinyHisuiGet> getShinyLegendsEntries();
+
+    List<PokemonGoDexEntry> getPokemonGoEntries();
 }
