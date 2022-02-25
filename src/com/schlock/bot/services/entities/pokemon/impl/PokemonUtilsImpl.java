@@ -58,10 +58,10 @@ public class PokemonUtilsImpl implements PokemonUtils
 
     private static final String GEN2 = "gen2";
     private static final Integer GEN2_START = 152;
-    private static final Integer GEN2_END = 250;
+    private static final Integer GEN2_END = 251;
 
     private static final String GEN3 = "gen3";
-    private static final Integer GEN3_START = 251;
+    private static final Integer GEN3_START = 252;
     private static final Integer GEN3_END = 386;
 
     private static final String GEN4 = "gen4";
