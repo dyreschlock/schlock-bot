@@ -1,5 +1,6 @@
 package com.schlock.bot.services.database.pokemon.impl;
 
+import com.schlock.bot.entities.pokemon.ShinyGetType;
 import com.schlock.bot.entities.pokemon.ShinyHisuiGet;
 import com.schlock.bot.services.database.AbstractBaseDAO;
 import com.schlock.bot.services.database.pokemon.ShinyHisuiGetDAO;
@@ -18,19 +19,23 @@ public class ShinyHisuiGetDAOImpl extends AbstractBaseDAO<ShinyHisuiGet> impleme
     {
         String totalOutbreakShiny = " select count(g) " +
                                     " from ShinyHisuiGet g " +
-                                    " where g.resets != null ";
+                                    " where g.resets != null " +
+                                    " and g.method = :method ";
 
         String totalOutbreakResets = " select sum(g.resets) " +
                                         " from ShinyHisuiGet g " +
-                                        " where g.resets != null ";
+                                        " where g.resets != null " +
+                                        " and g.method = :method ";
 
         Session session = sessionFactory.openSession();
         session.beginTransaction();
 
         Query query1 = session.createQuery(totalOutbreakShiny);
+        query1.setParameter("method", ShinyGetType.OUTBREAK);
         Long totalShiny = (Long) query1.list().get(0);
 
         Query query2 = session.createQuery(totalOutbreakResets);
+        query2.setParameter("method", ShinyGetType.OUTBREAK);
         Long totalResets = (Long) query2.list().get(0);
 
         session.getTransaction().commit();

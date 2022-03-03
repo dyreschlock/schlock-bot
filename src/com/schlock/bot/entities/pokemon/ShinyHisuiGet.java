@@ -40,6 +40,10 @@ public class ShinyHisuiGet extends Persisted
         return ShinyGetType.OUTBREAK.equals(this.method);
     }
 
+    public boolean isMassiveOutbreak()
+    {
+        return ShinyGetType.MASSIVE.equals(this.method);
+    }
 
     public Long getId()
     {

@@ -14,6 +14,7 @@ public class ShinyGetFormatterImpl implements ShinyGetFormatter
 
     private static final String HISUI_SHINY_WILD = "shiny-hisui-wild";
     private static final String HISUI_SHINY_OUTBREAK = "shiny-hisui-outbreak";
+    private static final String HISUI_SHINY_MASSIVE = "shiny-hisui-massive";
 
     private PokemonManagement pokemonManagement;
 
@@ -59,6 +60,10 @@ public class ShinyGetFormatterImpl implements ShinyGetFormatter
         {
             Integer resets = get.getResets();
             return messages.format(HISUI_SHINY_OUTBREAK, pokemonName, resets.toString());
+        }
+        if (get.isMassiveOutbreak())
+        {
+            return messages.format(HISUI_SHINY_MASSIVE, pokemonName);
         }
         return messages.format(HISUI_SHINY_WILD, pokemonName);
     }

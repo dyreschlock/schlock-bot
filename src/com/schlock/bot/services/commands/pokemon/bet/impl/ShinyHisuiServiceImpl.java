@@ -95,10 +95,11 @@ public class ShinyHisuiServiceImpl extends AbstractListenerService implements Sh
             }
 
             Integer resets = null;
-            if (ShinyGetType.OUTBREAK.equals(type))
+            if (p.length > 2)
             {
                 resets = Integer.parseInt(p[2]);
-                if (resets == null)
+
+                if(ShinyGetType.OUTBREAK.equals(type) && resets == null)
                 {
                     return null;
                 }
