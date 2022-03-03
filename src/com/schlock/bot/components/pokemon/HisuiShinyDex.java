@@ -1,16 +1,19 @@
 package com.schlock.bot.components.pokemon;
 
 import com.schlock.bot.entities.pokemon.Pokemon;
-import com.schlock.bot.entities.pokemon.ShinyHisuiGet;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
+import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class HisuiShinyDex
 {
+    private static final Boolean DEX_ORDER_DEFAULT = true;
     private static final Integer COLUMNS = 20;
 
     @Inject
@@ -23,10 +26,14 @@ public class HisuiShinyDex
     @Inject
     private Messages messages;
 
+    @Property
+    private Boolean dexOrder;
+
+
     public String getShinyDexMessage()
     {
-        List<ShinyHisuiGet> entries = dexEntryService.getShinyLegendsEntries();
-        Integer dexCount = entries.size();
+        List<Pokemon> pokemon = dexEntryService.getShinyLegendsEntries();
+        Integer dexCount = pokemon.size();
 
         String message = messages.format("shiny-dex", dexCount.toString());
         return message;
@@ -34,17 +41,47 @@ public class HisuiShinyDex
 
     public String getTableHTML()
     {
+        if (dexOrder == null)
+        {
+            dexOrder = DEX_ORDER_DEFAULT;
+        }
+
+        if (dexOrder)
+        {
+            return getTableHTMLDexOrder();
+        }
+        return getTableHTMLShinyOrder();
+    }
+
+    public String getTableHTMLShinyOrder()
+    {
+        List<Pokemon> pokemon = dexEntryService.getShinyLegendsEntries();
+        return getTableHTMLInListOrder(pokemon);
+    }
+
+    public String getTableHTMLDexOrder()
+    {
+        List<Pokemon> pokemon = dexEntryService.getShinyLegendsEntries();
+        Collections.sort(pokemon, new Comparator<Pokemon>()
+        {
+            @Override
+            public int compare(Pokemon o1, Pokemon o2)
+            {
+                return o1.getHisuiNumber() - o2.getHisuiNumber();
+            }
+        });
+        return getTableHTMLInListOrder(pokemon);
+    }
+
+    private String getTableHTMLInListOrder(List<Pokemon> pokemon)
+    {
         String html = "<table class=\"dex\"";
 
-        List<ShinyHisuiGet> entries = dexEntryService.getShinyLegendsEntries();
-
         html += "<tr>";
-        for(Integer i = 1; i < entries.size()+1; i++)
+        for(Integer i = 1; i < pokemon.size()+1; i++)
         {
-            ShinyHisuiGet entry = entries.get(i-1);
-
-            Pokemon pokemon = pokemonManagement.getPokemonFromText(entry.getPokemonId());
-            String imageName = pokemon.getHisuiNumberString() + ".png";
+            Pokemon p = pokemon.get(i-1);
+            String imageName = p.getHisuiNumberString() + ".png";
 
             html += "<td><img class=\"pshow\" src=\"/img/hisui/" + imageName + "\"/></td>";
             if (i % COLUMNS == 0)
@@ -53,7 +90,7 @@ public class HisuiShinyDex
             }
         }
 
-        int remainingTD = COLUMNS - (entries.size() % COLUMNS);
+        int remainingTD = COLUMNS - (pokemon.size() % COLUMNS);
         for(int i = 0; i < remainingTD; i++)
         {
             html += "<td></td>";
@@ -61,5 +98,65 @@ public class HisuiShinyDex
 
         html += "</tr>";
         return html + "</table>";
+    }
+
+    public String getTableHTMLStaticDexOrder()
+    {
+        String html = "<table class=\"dex\"";
+
+        List<Pokemon> pokemon = dexEntryService.getShinyLegendsEntries();
+
+        final Integer MAX = 225;
+
+        html += "<tr>";
+        for(Integer i = 1; i < MAX; i++)
+        {
+            String numberString = getNumberString(i);
+
+            String imgClass = "";
+
+            boolean showPokemon = containsPokemon(i, pokemon);
+            if (showPokemon)
+            {
+                imgClass = "show";
+            }
+
+            html += "<td><img class=\"p"+imgClass +"\" src=\"/img/hisui/" + numberString + ".png\"/></td>";
+            if (i % COLUMNS == 0)
+            {
+                html += "</tr><tr>";
+            }
+        }
+
+        int remainingTD = COLUMNS - (pokemon.size() % COLUMNS);
+        for(int i = 0; i < remainingTD; i++)
+        {
+            html += "<td></td>";
+        }
+
+        html += "</tr>";
+        return html + "</table>";
+    }
+
+    public String getNumberString(Integer i)
+    {
+        String number = i.toString();
+        while (number.length() < 3)
+        {
+            number = "0" + number;
+        }
+        return number;
+    }
+
+    public boolean containsPokemon(Integer number, List<Pokemon> pokemon)
+    {
+        for(Pokemon p : pokemon)
+        {
+            if (p.getHisuiNumber().equals(number))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

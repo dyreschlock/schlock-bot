@@ -55,11 +55,20 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
         return pokemon;
     }
 
-    public List<ShinyHisuiGet> getShinyLegendsEntries()
+    public List<Pokemon> getShinyLegendsEntries()
     {
         List<ShinyHisuiGet> entries = database.get(ShinyHisuiGetDAO.class).getAll();
 
-        return entries;
+        List<Pokemon> pokemon = new ArrayList<>();
+        for (ShinyHisuiGet entry : entries)
+        {
+            Pokemon p = pokemonManagement.getPokemonFromText(entry.getPokemonId());
+            if (p != null)
+            {
+                pokemon.add(p);
+            }
+        }
+        return pokemon;
     }
 
     public List<PokemonGoDexEntry> getPokemonGoEntries()
