@@ -19,7 +19,7 @@ public class GoDexEntrySetup
     protected SessionFactory sessionFactory;
     protected Session session;
 
-    private PokemonManagement pokemonManagement;
+    protected PokemonManagement pokemonManagement;
 
     public void run()
     {
@@ -52,7 +52,7 @@ public class GoDexEntrySetup
         session.save(entry);
     }
 
-    private void setupDatabase()
+    protected void setupDatabase()
     {
         DeploymentConfiguration config = DeploymentConfigurationImpl.createDeploymentConfiguration(DeploymentConfiguration.LOCAL);
 
@@ -86,7 +86,7 @@ public class GoDexEntrySetup
 
     }
 
-    private void teardownDatabase()
+    protected void teardownDatabase()
     {
         session.getTransaction().commit();
         session.close();

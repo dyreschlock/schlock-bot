@@ -25,6 +25,16 @@ public class ShinyDexEntryHisui extends Persisted
     {
     }
 
+    public String getNumberString()
+    {
+        String num = Integer.toString(pokemonNumber);
+        while (num.length() < 3)
+        {
+            num = "0" + num;
+        }
+        return num;
+    }
+
     public Long getId()
     {
         return id;
@@ -55,7 +65,7 @@ public class ShinyDexEntryHisui extends Persisted
         this.pokemonId = pokemonId;
     }
 
-    public Boolean isHaveSHiny()
+    public Boolean isHaveShiny()
     {
         return haveShiny;
     }

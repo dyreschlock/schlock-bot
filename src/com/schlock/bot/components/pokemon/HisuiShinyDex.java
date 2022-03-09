@@ -1,6 +1,7 @@
 package com.schlock.bot.components.pokemon;
 
 import com.schlock.bot.entities.pokemon.Pokemon;
+import com.schlock.bot.entities.pokemon.ShinyDexEntryHisui;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import org.apache.tapestry5.annotations.Property;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class HisuiShinyDex
 {
-    private static final Boolean DEX_ORDER_DEFAULT = true;
+    private static final Boolean DEX_FORMAT_DEFAULT = false;
     private static final Integer COLUMNS = 20;
 
     @Inject
@@ -43,20 +44,14 @@ public class HisuiShinyDex
     {
         if (dexOrder == null)
         {
-            dexOrder = DEX_ORDER_DEFAULT;
+            dexOrder = DEX_FORMAT_DEFAULT;
         }
 
         if (dexOrder)
         {
-            return getTableHTMLDexOrder();
+            return getTableHTMLDexFormat();
         }
-        return getTableHTMLShinyOrder();
-    }
-
-    public String getTableHTMLShinyOrder()
-    {
-        List<Pokemon> pokemon = dexEntryService.getShinyDexHisuiGets();
-        return getTableHTMLInListOrder(pokemon);
+        return getTableHTMLDexOrder();
     }
 
     public String getTableHTMLDexOrder()
@@ -100,35 +95,33 @@ public class HisuiShinyDex
         return html + "</table>";
     }
 
-    public String getTableHTMLStaticDexOrder()
+    public String getTableHTMLDexFormat()
     {
         String html = "<table class=\"dex\"";
 
-        List<Pokemon> pokemon = dexEntryService.getShinyDexHisuiGets();
+        List<ShinyDexEntryHisui> entries = dexEntryService.getShinyDexHisuiEntries();
 
         final Integer MAX = 225;
 
         html += "<tr>";
-        for(Integer i = 1; i < MAX; i++)
+        for(ShinyDexEntryHisui entry : entries)
         {
-            String numberString = getNumberString(i);
-
+            String numberString = entry.getNumberString();
             String imgClass = "";
 
-            boolean showPokemon = containsPokemon(i, pokemon);
-            if (showPokemon)
+            if (entry.isHaveShiny())
             {
                 imgClass = "show";
             }
 
             html += "<td><img class=\"p"+imgClass +"\" src=\"/img/hisui/" + numberString + ".png\"/></td>";
-            if (i % COLUMNS == 0)
+            if (entry.getPokemonNumber() % COLUMNS == 0)
             {
                 html += "</tr><tr>";
             }
         }
 
-        int remainingTD = COLUMNS - (pokemon.size() % COLUMNS);
+        int remainingTD = COLUMNS - (entries.size() % COLUMNS);
         for(int i = 0; i < remainingTD; i++)
         {
             html += "<td></td>";

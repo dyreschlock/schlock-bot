@@ -219,6 +219,8 @@ public class PokemonManagementImpl implements PokemonManagement
 
     public List<Pokemon> getAllPokemonInGen(String gen)
     {
+        initialize();
+
         List<Pokemon> pokemon = new ArrayList<>();
 
         int start = pokemonUtils.returnFirstPokemonNumberInGeneration(gen);
@@ -231,18 +233,20 @@ public class PokemonManagementImpl implements PokemonManagement
         return pokemon;
     }
 
-    public List<Pokemon> getAllPokemonInNumberOrder()
+    public List<Pokemon> getHisuiPokemonInNumberOrder()
     {
+        initialize();
+
         List<Pokemon> pokemon = new ArrayList<>();
 
-        pokemon.addAll(pokemonByName.values());
+        pokemon.addAll(hisuianByNumber.values());
 
         Collections.sort(pokemon, new Comparator<Pokemon>()
         {
             @Override
             public int compare(Pokemon o1, Pokemon o2)
             {
-                return o2.getNumber() - o1.getNumber();
+                return o1.getHisuiNumber() - o2.getHisuiNumber();
             }
         });
 
@@ -251,7 +255,7 @@ public class PokemonManagementImpl implements PokemonManagement
 
     private void initialize()
     {
-        if (pokemonByName == null || pokemonByNumber == null)
+        if (pokemonByName == null || pokemonByNumber == null || hisuianByNumber == null)
         {
             pokemonByName = new HashMap<>();
             pokemonByNumber = new HashMap<>();
