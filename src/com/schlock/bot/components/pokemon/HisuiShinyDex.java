@@ -32,7 +32,7 @@ public class HisuiShinyDex
 
     public String getShinyDexMessage()
     {
-        List<Pokemon> pokemon = dexEntryService.getShinyLegendsEntries();
+        List<Pokemon> pokemon = dexEntryService.getShinyDexHisuiGets();
         Integer dexCount = pokemon.size();
 
         String message = messages.format("shiny-dex", dexCount.toString());
@@ -55,13 +55,13 @@ public class HisuiShinyDex
 
     public String getTableHTMLShinyOrder()
     {
-        List<Pokemon> pokemon = dexEntryService.getShinyLegendsEntries();
+        List<Pokemon> pokemon = dexEntryService.getShinyDexHisuiGets();
         return getTableHTMLInListOrder(pokemon);
     }
 
     public String getTableHTMLDexOrder()
     {
-        List<Pokemon> pokemon = dexEntryService.getShinyLegendsEntries();
+        List<Pokemon> pokemon = dexEntryService.getShinyDexHisuiGets();
         Collections.sort(pokemon, new Comparator<Pokemon>()
         {
             @Override
@@ -104,7 +104,7 @@ public class HisuiShinyDex
     {
         String html = "<table class=\"dex\"";
 
-        List<Pokemon> pokemon = dexEntryService.getShinyLegendsEntries();
+        List<Pokemon> pokemon = dexEntryService.getShinyDexHisuiGets();
 
         final Integer MAX = 225;
 

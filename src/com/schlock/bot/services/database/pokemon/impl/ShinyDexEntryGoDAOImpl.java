@@ -1,31 +1,31 @@
 package com.schlock.bot.services.database.pokemon.impl;
 
-import com.schlock.bot.entities.pokemon.PokemonGoDexEntry;
+import com.schlock.bot.entities.pokemon.ShinyDexEntryGo;
 import com.schlock.bot.services.database.AbstractBaseDAO;
-import com.schlock.bot.services.database.pokemon.PokemonGoDexEntryDAO;
+import com.schlock.bot.services.database.pokemon.ShinyDexEntryGoDAO;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
 
-public class PokemonGoDexEntryDAOImpl extends AbstractBaseDAO<PokemonGoDexEntry> implements PokemonGoDexEntryDAO
+public class ShinyDexEntryGoDAOImpl extends AbstractBaseDAO<ShinyDexEntryGo> implements ShinyDexEntryGoDAO
 {
-    public PokemonGoDexEntryDAOImpl(SessionFactory sessionFactory)
+    public ShinyDexEntryGoDAOImpl(SessionFactory sessionFactory)
     {
-        super(PokemonGoDexEntry.class, sessionFactory);
+        super(ShinyDexEntryGo.class, sessionFactory);
     }
 
-    public List<PokemonGoDexEntry> getInPokemonOrder()
+    public List<ShinyDexEntryGo> getInPokemonOrder()
     {
-        String text = " from PokemonGoDexEntry e " +
+        String text = " from ShinyDexEntryGo e " +
                         "order by e.pokemonNumber asc ";
 
         Session session = sessionFactory.openSession();
         session.beginTransaction();
 
         Query query = session.createQuery(text);
-        List<PokemonGoDexEntry> entries = query.list();
+        List<ShinyDexEntryGo> entries = query.list();
 
         session.getTransaction().commit();
         session.close();

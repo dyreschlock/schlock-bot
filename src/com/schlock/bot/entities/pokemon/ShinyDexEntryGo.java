@@ -5,8 +5,8 @@ import com.schlock.bot.entities.Persisted;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "go_shiny_dex")
-public class PokemonGoDexEntry extends Persisted
+@Table(name = "dex_entry_go")
+public class ShinyDexEntryGo extends Persisted
 {
     @Id
     @GeneratedValue
@@ -30,7 +30,7 @@ public class PokemonGoDexEntry extends Persisted
     @Column(name = "google_id")
     private String googlePhotoId;
 
-    public PokemonGoDexEntry()
+    public ShinyDexEntryGo()
     {
     }
 

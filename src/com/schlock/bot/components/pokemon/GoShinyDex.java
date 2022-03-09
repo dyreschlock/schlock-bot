@@ -1,6 +1,6 @@
 package com.schlock.bot.components.pokemon;
 
-import com.schlock.bot.entities.pokemon.PokemonGoDexEntry;
+import com.schlock.bot.entities.pokemon.ShinyDexEntryGo;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.tapestry5.ioc.Messages;
@@ -26,9 +26,9 @@ public class GoShinyDex
         int have = 0;
         int shiny = 0;
 
-        List<PokemonGoDexEntry> entries = shinyDexService.getPokemonGoEntries();
+        List<ShinyDexEntryGo> entries = shinyDexService.getPokemonGoEntries();
 
-        for(PokemonGoDexEntry entry : entries)
+        for(ShinyDexEntryGo entry : entries)
         {
             if (entry.isHave())
             {
@@ -48,13 +48,13 @@ public class GoShinyDex
     {
         String html = "<table class=\"dex\">";
 
-        List<PokemonGoDexEntry> entries = shinyDexService.getPokemonGoEntries();
+        List<ShinyDexEntryGo> entries = shinyDexService.getPokemonGoEntries();
 
         html += "<tr>";
 
         for(int i = 0; i < entries.size();i++)
         {
-            PokemonGoDexEntry entry = entries.get(i);
+            ShinyDexEntryGo entry = entries.get(i);
 
             String imgClass = "";
             if (entry.isHave())

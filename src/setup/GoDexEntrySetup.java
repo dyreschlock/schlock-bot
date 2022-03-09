@@ -1,7 +1,7 @@
 package setup;
 
 import com.schlock.bot.entities.pokemon.Pokemon;
-import com.schlock.bot.entities.pokemon.PokemonGoDexEntry;
+import com.schlock.bot.entities.pokemon.ShinyDexEntryGo;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.database.DatabaseModule;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
@@ -42,7 +42,7 @@ public class GoDexEntrySetup
     {
         Pokemon poke = pokemonManagement.getPokemonFromText(number.toString());
 
-        PokemonGoDexEntry entry = new PokemonGoDexEntry();
+        ShinyDexEntryGo entry = new ShinyDexEntryGo();
         entry.setPokemonNumber(poke.getNumber());
         entry.setPokemonName(poke.getId());
         entry.setHave(true);
