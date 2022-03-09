@@ -8,4 +8,6 @@ import java.util.List;
 public interface ShinyDexEntryHisuiDAO extends BaseDAO<ShinyDexEntryHisui>
 {
     List<ShinyDexEntryHisui> getInPokemonOrder();
+
+    ShinyDexEntryHisui getEntryByPokemonId(String pokemonId);
 }

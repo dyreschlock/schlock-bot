@@ -32,4 +32,23 @@ public class ShinyDexEntryHisuiDAOImpl extends AbstractBaseDAO<ShinyDexEntryHisu
 
         return entries;
     }
+
+    public ShinyDexEntryHisui getEntryByPokemonId(String pokemonId)
+    {
+        String text = " from ShinyDexEntryHisui e " +
+                        " where e.pokemonId = :pokemonId ";
+
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        Query query = session.createQuery(text);
+        query.setParameter("pokemonId", pokemonId);
+
+        ShinyDexEntryHisui entry = singleResult(query);
+
+        session.getTransaction().commit();
+        session.close();
+
+        return entry;
+    }
 }

@@ -1,6 +1,7 @@
 package com.schlock.bot.services.commands.pokemon.bet.impl;
 
 import com.schlock.bot.entities.pokemon.Pokemon;
+import com.schlock.bot.entities.pokemon.ShinyDexEntryHisui;
 import com.schlock.bot.entities.pokemon.ShinyGetType;
 import com.schlock.bot.entities.pokemon.ShinyHisuiGet;
 import com.schlock.bot.services.DeploymentConfiguration;
@@ -8,6 +9,7 @@ import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyHisuiService;
 import com.schlock.bot.services.database.adhoc.DatabaseManager;
+import com.schlock.bot.services.database.pokemon.ShinyDexEntryHisuiDAO;
 import com.schlock.bot.services.database.pokemon.ShinyHisuiGetDAO;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.ShinyGetFormatter;
@@ -66,6 +68,8 @@ public class ShinyHisuiServiceImpl extends AbstractListenerService implements Sh
                 return formatSingleResponse(BAD_FORMAT_MESSAGE_KEY);
             }
 
+            registerDexEntry(get);
+
             database.save(get);
 
             ListenerResponse response = ListenerResponse.relayAll();
@@ -119,5 +123,17 @@ public class ShinyHisuiServiceImpl extends AbstractListenerService implements Sh
         {
         }
         return null;
+    }
+
+    protected void registerDexEntry(ShinyHisuiGet get)
+    {
+        String pokemonId = get.getPokemonId();
+
+        ShinyDexEntryHisui entry = database.get(ShinyDexEntryHisuiDAO.class).getEntryByPokemonId(pokemonId);
+        if (entry != null && !entry.isHaveShiny())
+        {
+            entry.setHaveShiny(true);
+            database.save(entry);
+        }
     }
 }

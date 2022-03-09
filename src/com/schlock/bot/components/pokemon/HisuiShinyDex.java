@@ -31,23 +31,44 @@ public class HisuiShinyDex
     private Boolean dexOrder;
 
 
-    public String getShinyDexMessage()
-    {
-        List<Pokemon> pokemon = dexEntryService.getShinyDexHisuiGets();
-        Integer dexCount = pokemon.size();
-
-        String message = messages.format("shiny-dex", dexCount.toString());
-        return message;
-    }
-
-    public String getTableHTML()
+    public boolean isListInDexFormat()
     {
         if (dexOrder == null)
         {
             dexOrder = DEX_FORMAT_DEFAULT;
         }
+        return dexOrder;
+    }
 
-        if (dexOrder)
+    public String getShinyDexMessage()
+    {
+        if (isListInDexFormat())
+        {
+            Integer dexCount = 0;
+
+            List<ShinyDexEntryHisui> entries = dexEntryService.getShinyDexHisuiEntries();
+            for(ShinyDexEntryHisui entry : entries)
+            {
+                if (entry.isHaveShiny())
+                {
+                    dexCount++;
+                }
+            }
+
+            String message = messages.format("shiny-dex", dexCount.toString());
+            return message;
+        }
+
+        List<Pokemon> pokemon = dexEntryService.getShinyDexHisuiGets();
+        Integer dexCount = pokemon.size();
+
+        String message = messages.format("shiny-count", dexCount.toString());
+        return message;
+    }
+
+    public String getTableHTML()
+    {
+        if (isListInDexFormat())
         {
             return getTableHTMLDexFormat();
         }
