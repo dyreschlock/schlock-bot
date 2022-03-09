@@ -4,7 +4,7 @@ import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.entities.pokemon.ShinyDexEntryHisui;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
-import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -14,6 +14,9 @@ import java.util.List;
 
 public class HisuiShinyDex
 {
+    private static final String DEX_FORMAT_FLAG = "dex";
+    private static final String DEX_ORDER_FLAG = "order";
+
     private static final Boolean DEX_FORMAT_DEFAULT = false;
     private static final Integer COLUMNS = 20;
 
@@ -27,17 +30,33 @@ public class HisuiShinyDex
     @Inject
     private Messages messages;
 
-    @Property
-    private Boolean dexOrder;
+    @Persist
+    private Boolean dexFormat;
 
 
     public boolean isListInDexFormat()
     {
-        if (dexOrder == null)
+        if (dexFormat == null)
         {
-            dexOrder = DEX_FORMAT_DEFAULT;
+            dexFormat = DEX_FORMAT_DEFAULT;
         }
-        return dexOrder;
+        return dexFormat;
+    }
+
+    public void setListInDexFormat(String parameter)
+    {
+        if (DEX_FORMAT_FLAG.equalsIgnoreCase(parameter))
+        {
+            this.dexFormat = true;
+        }
+        else if (DEX_ORDER_FLAG.equalsIgnoreCase(parameter))
+        {
+            this.dexFormat = false;
+        }
+        else
+        {
+            this.dexFormat = DEX_FORMAT_DEFAULT;
+        }
     }
 
     public String getShinyDexMessage()

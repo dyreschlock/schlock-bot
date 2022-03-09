@@ -106,7 +106,7 @@
         <p:goshinydex />
     </t:if>
     <t:if test="legendsPage">
-        <p:hisuishinydex />
+        <p:hisuishinydex t:id="hisuiShinyComponent" />
     </t:if>
 
 </body>

@@ -1,11 +1,16 @@
 package com.schlock.bot.pages.pokemon;
 
+import com.schlock.bot.components.pokemon.HisuiShinyDex;
+import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 
 public class ShinyDex
 {
     private static final String PARAM_GO = "go";
     private static final String PARAM_LEGENDS = "hisui";
+
+    @InjectComponent
+    private HisuiShinyDex hisuiShinyComponent;
 
     @Persist
     private String pageParam;
@@ -18,6 +23,18 @@ public class ShinyDex
     Object onActivate(String parameter)
     {
         this.pageParam = parameter;
+
+        return true;
+    }
+
+    Object onActivate(String p1, String p2)
+    {
+        onActivate(p1);
+
+        if (isLegendsPage())
+        {
+            hisuiShinyComponent.setListInDexFormat(p2);
+        }
 
         return true;
     }
