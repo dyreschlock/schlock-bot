@@ -85,6 +85,11 @@ public class HisuiShinyDex
         return message;
     }
 
+    public String getRemainingCounts()
+    {
+        return "test";
+    }
+
     public String getTableHTML()
     {
         if (isListInDexFormat())

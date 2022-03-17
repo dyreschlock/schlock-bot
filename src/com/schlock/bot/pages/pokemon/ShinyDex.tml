@@ -64,7 +64,7 @@
                 min-width: 57px;
             }
 
-            .header
+            .header, .footer
             {
                 font-family: impact;
                 font-style: italic;
@@ -78,7 +78,12 @@
                 padding-right: 20px;
             }
 
-            .headerYellow
+            .footer
+            {
+                text-align: left;
+            }
+
+            .yellowGradient
             {
                 background: -webkit-linear-gradient(#ff0, #fa0);
                 -webkit-background-clip: text;
@@ -86,7 +91,7 @@
                 -webkit-text-stroke: 2.5px #000;
             }
 
-            .headerBlue
+            .blueGradient
             {
                 background: -webkit-linear-gradient(#cfd, #047);
                 -webkit-background-clip: text;

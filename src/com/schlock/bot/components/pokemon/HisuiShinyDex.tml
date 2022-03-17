@@ -2,9 +2,12 @@
         xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
 >
     <div class="dex twitchDisplay">
-        <div id="header" class="header headerBlue">
+        <div id="header" class="header blueGradient">
             ${shinyDexMessage}
         </div>
         <t:outputraw value="tableHTML" />
+        <div id="footer" class="footer blueGradient">
+            ${remainingCounts}
+        </div>
     </div>
 </t:container>
