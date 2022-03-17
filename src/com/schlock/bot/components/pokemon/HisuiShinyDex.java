@@ -151,10 +151,14 @@ public class HisuiShinyDex
 
             if (entry.isHaveShiny())
             {
-                imgClass = "show";
+                imgClass = "pshow";
             }
+//            else if (entry.isInSomeOutbreak())
+//            {
+//                imgClass = "have";
+//            }
 
-            html += "<td><img class=\"p"+imgClass +"\" src=\"/img/hisui/" + numberString + ".png\"/></td>";
+            html += "<td><img class=\""+imgClass +"\" src=\"/img/hisui/" + numberString + ".png\"/></td>";
             if (entry.getPokemonNumber() % COLUMNS == 0)
             {
                 html += "</tr><tr>";
