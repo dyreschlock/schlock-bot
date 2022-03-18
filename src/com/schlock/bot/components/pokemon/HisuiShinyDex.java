@@ -87,7 +87,7 @@ public class HisuiShinyDex
 
     public String getRemainingCounts()
     {
-        return "test";
+        return dexEntryService.getHisuiRemainingCountsMessage();
     }
 
     public String getTableHTML()

@@ -6,8 +6,10 @@
             ${shinyDexMessage}
         </div>
         <t:outputraw value="tableHTML" />
-        <div id="footer" class="footer blueGradient">
-            ${remainingCounts}
-        </div>
+        <t:if test="listInDexFormat">
+            <div id="footer" class="footer blueGradient">
+                ${remainingCounts}
+            </div>
+        </t:if>
     </div>
 </t:container>

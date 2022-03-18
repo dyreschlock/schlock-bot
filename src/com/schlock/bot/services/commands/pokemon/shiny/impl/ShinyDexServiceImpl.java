@@ -105,4 +105,41 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
         }
         return nullResponse();
     }
+
+
+    private static final String FIELD_MSG = "hisui-remaining-field";
+    private static final String MIRE_MSG = "hisui-remaining-mire";
+    private static final String COAST_MSG = "hisui-remaining-coast";
+    private static final String HIGH_MSG = "hisui-remaining-high";
+    private static final String ICE_MSG = "hisui-remaining-ice";
+    private static final String RARE_MSG = "hisui-remaining-rare";
+
+    public String getHisuiRemainingCountsMessage()
+    {
+        Integer fieldCount = database.get(ShinyDexEntryHisuiDAO.class).getRemainingShinyCountInFieldlands();
+        String fieldMessage = messages.format(FIELD_MSG, fieldCount);
+
+        Integer mireCount = database.get(ShinyDexEntryHisuiDAO.class).getRemainingShinyCountInMirelands();
+        String mireMessage = messages.format(MIRE_MSG, mireCount);
+
+        Integer coastCount = database.get(ShinyDexEntryHisuiDAO.class).getRemainingShinyCountInCoastlands();
+        String coastMessage = messages.format(COAST_MSG, coastCount);
+
+        Integer highCount = database.get(ShinyDexEntryHisuiDAO.class).getRemainingShinyCountInHighlands();
+        String highMessage = messages.format(HIGH_MSG, highCount);
+
+        Integer iceCount = database.get(ShinyDexEntryHisuiDAO.class).getRemainingShinyCountInIcelands();
+        String iceMessage = messages.format(ICE_MSG, iceCount);
+
+        Integer rareCount = database.get(ShinyDexEntryHisuiDAO.class).getRemainingShinyCountNotInMassive();
+        String rareMessage = messages.format(RARE_MSG, rareCount);
+
+
+        return fieldMessage + " / " +
+                mireMessage + " / " +
+                coastMessage + " / " +
+                highMessage + " / " +
+                iceMessage + " / " +
+                rareMessage;
+    }
 }

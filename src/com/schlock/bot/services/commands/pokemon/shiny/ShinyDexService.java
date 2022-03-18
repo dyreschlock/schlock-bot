@@ -16,4 +16,6 @@ public interface ShinyDexService extends ListenerService
     List<Pokemon> getShinyDexHisuiGets();
 
     List<ShinyDexEntryGo> getPokemonGoEntries();
+
+    String getHisuiRemainingCountsMessage();
 }

@@ -10,4 +10,16 @@ public interface ShinyDexEntryHisuiDAO extends BaseDAO<ShinyDexEntryHisui>
     List<ShinyDexEntryHisui> getInPokemonOrder();
 
     ShinyDexEntryHisui getEntryByPokemonId(String pokemonId);
+
+    Integer getRemainingShinyCountInFieldlands();
+
+    Integer getRemainingShinyCountInMirelands();
+
+    Integer getRemainingShinyCountInCoastlands();
+
+    Integer getRemainingShinyCountInHighlands();
+
+    Integer getRemainingShinyCountInIcelands();
+
+    Integer getRemainingShinyCountNotInMassive();
 }

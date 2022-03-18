@@ -81,6 +81,7 @@
             .footer
             {
                 text-align: left;
+                font-size: 32pt;
             }
 
             .yellowGradient
