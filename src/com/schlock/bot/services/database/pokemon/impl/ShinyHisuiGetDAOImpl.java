@@ -61,4 +61,22 @@ public class ShinyHisuiGetDAOImpl extends AbstractBaseDAO<ShinyHisuiGet> impleme
         Integer next = count.intValue() + 1;
         return next;
     }
+
+    public Integer getCurrentAlphaNumber()
+    {
+        String text = " select count(g) from ShinyHisuiGet g " +
+                " where g.alphaNumber is not null ";
+
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        Query query = session.createQuery(text);
+        Long count = (Long) query.list().get(0);
+
+        session.getTransaction().commit();
+        session.close();
+
+        Integer next = count.intValue() + 1;
+        return next;
+    }
 }

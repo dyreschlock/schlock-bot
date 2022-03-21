@@ -21,6 +21,8 @@ public class ShinyHisuiServiceImpl extends AbstractListenerService implements Sh
 
     private static final String SHINY_GET_COMMAND = "!hisuiget ";
 
+    private static final String ALPHA_CHECK = "alpha";
+
     private final PokemonManagement pokemonManagement;
     private final ShinyGetFormatter shinyFormatter;
 
@@ -80,9 +82,21 @@ public class ShinyHisuiServiceImpl extends AbstractListenerService implements Sh
         return nullResponse();
     }
 
-    protected ShinyHisuiGet createGetFromParams(String params)
+    protected ShinyHisuiGet createGetFromParams(String paramString)
     {
-        //[type] [pokemon] [resets]
+        //[type] [pokemon] [resets] [alpha]
+        String params = paramString.toLowerCase();
+
+        boolean alpha = false;
+        if (params.contains(ALPHA_CHECK))
+        {
+            alpha = true;
+
+            String[] p = params.split(ALPHA_CHECK);
+
+            params = p[0];
+        }
+
         String[] p = params.split(" ");
         try
         {
@@ -110,12 +124,18 @@ public class ShinyHisuiServiceImpl extends AbstractListenerService implements Sh
             }
 
             Integer shinyNumber = database.get(ShinyHisuiGetDAO.class).getCurrentShinyNumber();
+            Integer alphaNumber = null;
+            if (alpha)
+            {
+                alphaNumber = database.get(ShinyHisuiGetDAO.class).getCurrentAlphaNumber();
+            }
 
             ShinyHisuiGet get = new ShinyHisuiGet();
             get.setMethod(type);
             get.setPokemonId(pokemon.getId());
             get.setResets(resets);
             get.setShinyNumber(shinyNumber);
+            get.setAlphaNumber(alphaNumber);
 
             return get;
         }

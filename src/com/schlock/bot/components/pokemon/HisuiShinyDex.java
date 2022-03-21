@@ -18,7 +18,7 @@ public class HisuiShinyDex
     private static final String DEX_ORDER_FLAG = "order";
 
     private static final Boolean DEX_FORMAT_DEFAULT = false;
-    private static final Integer COLUMNS = 20;
+    private static final Integer COLUMNS = 21;
 
     @Inject
     private ShinyDexService dexEntryService;

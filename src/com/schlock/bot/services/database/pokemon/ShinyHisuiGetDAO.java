@@ -8,4 +8,6 @@ public interface ShinyHisuiGetDAO extends BaseDAO<ShinyHisuiGet>
     Double getCurrentResetAverage();
 
     Integer getCurrentShinyNumber();
+
+    Integer getCurrentAlphaNumber();
 }

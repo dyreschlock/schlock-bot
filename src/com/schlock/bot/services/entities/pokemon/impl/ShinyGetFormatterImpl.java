@@ -16,6 +16,9 @@ public class ShinyGetFormatterImpl implements ShinyGetFormatter
     private static final String HISUI_SHINY_OUTBREAK = "shiny-hisui-outbreak";
     private static final String HISUI_SHINY_MASSIVE = "shiny-hisui-massive";
 
+    private static final String HISUI_SHINY_ALPHA = "shiny-hisui-alpha";
+    private static final String HISUI_SHINY_ALPHA_COUNT = "shiny-hisui-alpha-count";
+
     private PokemonManagement pokemonManagement;
 
     private Messages messages;
@@ -55,16 +58,33 @@ public class ShinyGetFormatterImpl implements ShinyGetFormatter
     {
         Pokemon pokemon = pokemonManagement.getPokemonFromText(get.getPokemonId());
 
+        String message = "";
+
         String pokemonName = pokemon.getName();
+        if (get.getAlphaNumber() != null)
+        {
+            pokemonName = messages.format(HISUI_SHINY_ALPHA, pokemonName);
+        }
+
         if (get.isOutbreak())
         {
             Integer resets = get.getResets();
-            return messages.format(HISUI_SHINY_OUTBREAK, pokemonName, resets.toString());
+            message = messages.format(HISUI_SHINY_OUTBREAK, pokemonName, resets.toString());
         }
-        if (get.isMassiveOutbreak())
+        else if (get.isMassiveOutbreak())
         {
-            return messages.format(HISUI_SHINY_MASSIVE, pokemonName);
+            message = messages.format(HISUI_SHINY_MASSIVE, pokemonName);
         }
-        return messages.format(HISUI_SHINY_WILD, pokemonName);
+        else
+        {
+            message = messages.format(HISUI_SHINY_WILD, pokemonName);
+        }
+
+        if (get.getAlphaNumber() != null)
+        {
+            String alphaCount = messages.format(HISUI_SHINY_ALPHA_COUNT, get.getAlphaNumber());
+            return message + " " + alphaCount;
+        }
+        return message;
     }
 }
