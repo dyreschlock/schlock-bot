@@ -21,6 +21,9 @@ public class ShinyDexEntryHisui extends Persisted
     @Column(name = "haveShiny")
     private Boolean haveShiny;
 
+    @Column(name = "haveAlpha")
+    private Boolean haveAlpha;
+
     @Column(name = "inMassiveFieldlands")
     private Boolean inMassiveFieldlands;
 
@@ -119,6 +122,16 @@ public class ShinyDexEntryHisui extends Persisted
     public void setHaveShiny(Boolean haveShiny)
     {
         this.haveShiny = haveShiny;
+    }
+
+    public Boolean isHaveAlpha()
+    {
+        return haveAlpha;
+    }
+
+    public void setHaveAlpha(Boolean haveAlpha)
+    {
+        this.haveAlpha = haveAlpha;
     }
 
     public Boolean getInMassiveFieldlands()

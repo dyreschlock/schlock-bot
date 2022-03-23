@@ -27,6 +27,25 @@
                 display: block;
             }
 
+            .img
+            {
+                position: relative;
+            }
+
+            .alpha
+            {
+                display: block;
+                width: 14px;
+                height: 14px;
+
+                position: absolute;
+                top: 22px;
+                left: 47px;
+                z-index: 2;
+
+                filter: brightness(100%)
+                        drop-shadow(1px 1px 1px black);
+            }
 
             img.have
             {

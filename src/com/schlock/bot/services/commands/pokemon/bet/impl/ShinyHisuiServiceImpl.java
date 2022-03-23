@@ -150,10 +150,19 @@ public class ShinyHisuiServiceImpl extends AbstractListenerService implements Sh
         String pokemonId = get.getPokemonId();
 
         ShinyDexEntryHisui entry = database.get(ShinyDexEntryHisuiDAO.class).getEntryByPokemonId(pokemonId);
-        if (entry != null && !entry.isHaveShiny())
+        if (entry != null)
         {
-            entry.setHaveShiny(true);
-            database.save(entry);
+            if (get.isAlpha())
+            {
+                entry.setHaveShiny(true);
+                entry.setHaveAlpha(true);
+                database.save(entry);
+            }
+            else if (!entry.isHaveShiny())
+            {
+                entry.setHaveShiny(true);
+                database.save(entry);
+            }
         }
     }
 }

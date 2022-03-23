@@ -2,6 +2,7 @@ package com.schlock.bot.components.pokemon;
 
 import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.entities.pokemon.ShinyDexEntryHisui;
+import com.schlock.bot.entities.pokemon.ShinyHisuiGet;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import org.apache.tapestry5.annotations.Persist;
@@ -78,8 +79,8 @@ public class HisuiShinyDex
             return message;
         }
 
-        List<Pokemon> pokemon = dexEntryService.getShinyDexHisuiGets();
-        Integer dexCount = pokemon.size();
+        List<ShinyHisuiGet> gets = dexEntryService.getShinyDexHisuiGets();
+        Integer dexCount = gets.size();
 
         String message = messages.format("shiny-count", dexCount.toString());
         return message;
@@ -101,36 +102,42 @@ public class HisuiShinyDex
 
     public String getTableHTMLDexOrder()
     {
-        List<Pokemon> pokemon = dexEntryService.getShinyDexHisuiGets();
-        Collections.sort(pokemon, new Comparator<Pokemon>()
+        List<ShinyHisuiGet> gets = dexEntryService.getShinyDexHisuiGets();
+        Collections.sort(gets, new Comparator<ShinyHisuiGet>()
         {
             @Override
-            public int compare(Pokemon o1, Pokemon o2)
+            public int compare(ShinyHisuiGet o1, ShinyHisuiGet o2)
             {
                 return o1.getHisuiNumber() - o2.getHisuiNumber();
             }
         });
-        return getTableHTMLInListOrder(pokemon);
-    }
 
-    private String getTableHTMLInListOrder(List<Pokemon> pokemon)
-    {
         String html = "<table class=\"dex\"";
 
         html += "<tr>";
-        for(Integer i = 1; i < pokemon.size()+1; i++)
+        for(Integer i = 1; i < gets.size()+1; i++)
         {
-            Pokemon p = pokemon.get(i-1);
-            String imageName = p.getHisuiNumberString() + ".png";
+            ShinyHisuiGet get = gets.get(i-1);
 
-            html += "<td><img class=\"pshow\" src=\"/img/hisui/" + imageName + "\"/></td>";
+            String imageName = get.getHisuiNumberString() + ".png";
+
+            html += "<td><div class=\"img\">";
+            html += "<img class=\"pshow\" src=\"/img/hisui/" + imageName + "\"/>";
+
+            if (get.isAlpha())
+            {
+                html += "<img class=\"alpha\" src=\"/img/alpha_mark.png\" />";
+            }
+
+            html += "</div></td>";
+
             if (i % COLUMNS == 0)
             {
                 html += "</tr><tr>";
             }
         }
 
-        int remainingTD = COLUMNS - (pokemon.size() % COLUMNS);
+        int remainingTD = COLUMNS - (gets.size() % COLUMNS);
         for(int i = 0; i < remainingTD; i++)
         {
             html += "<td></td>";
@@ -163,7 +170,16 @@ public class HisuiShinyDex
 //                imgClass = "have";
 //            }
 
-            html += "<td><img class=\""+imgClass +"\" src=\"/img/hisui/" + numberString + ".png\"/></td>";
+            html += "<td><div class=\"img\">";
+            html += "<img class=\""+imgClass +"\" src=\"/img/hisui/" + numberString + ".png\"/>";
+
+            if (entry.isHaveAlpha())
+            {
+                html += "<img class=\"alpha\" src=\"/img/alpha_mark.png\" />";
+            }
+
+            html += "</div></td>";
+
             if (entry.getPokemonNumber() % COLUMNS == 0)
             {
                 html += "</tr><tr>";

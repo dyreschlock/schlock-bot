@@ -32,6 +32,34 @@ public class ShinyHisuiGet extends Persisted
     @Enumerated(EnumType.STRING)
     private ShinyGetType method;
 
+    private Integer hisuiNumber;
+
+
+    public Integer getHisuiNumber()
+    {
+        return hisuiNumber;
+    }
+
+    public void setHisuiNumber(Integer hisuiNumber)
+    {
+        this.hisuiNumber = hisuiNumber;
+    }
+
+    public String getHisuiNumberString()
+    {
+        String num = Integer.toString(hisuiNumber);
+        while (num.length() < 3)
+        {
+            num = "0" + num;
+        }
+        return num;
+    }
+
+
+    public boolean isAlpha()
+    {
+        return alphaNumber != null;
+    }
 
     public boolean isWild()
     {
