@@ -33,7 +33,7 @@ public class ShinyDex
 
         if (isLegendsPage())
         {
-            hisuiShinyComponent.setListInDexFormat(p2);
+            hisuiShinyComponent.setDexFormat(p2);
         }
 
         return true;

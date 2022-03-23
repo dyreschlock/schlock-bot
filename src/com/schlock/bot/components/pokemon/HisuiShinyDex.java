@@ -17,8 +17,9 @@ public class HisuiShinyDex
 {
     private static final String DEX_FORMAT_FLAG = "dex";
     private static final String DEX_ORDER_FLAG = "order";
+    private static final String DEX_MISSING_FLAG = "missing";
 
-    private static final Boolean DEX_FORMAT_DEFAULT = false;
+    private static final String DEX_FORMAT_DEFAULT = DEX_ORDER_FLAG;
     private static final Integer COLUMNS = 21;
 
     @Inject
@@ -32,10 +33,10 @@ public class HisuiShinyDex
     private Messages messages;
 
     @Persist
-    private Boolean dexFormat;
+    private String dexFormat;
 
 
-    public boolean isListInDexFormat()
+    public String getDexFormat()
     {
         if (dexFormat == null)
         {
@@ -44,24 +45,29 @@ public class HisuiShinyDex
         return dexFormat;
     }
 
-    public void setListInDexFormat(String parameter)
+    public void setDexFormat(String dexFormat)
     {
-        if (DEX_FORMAT_FLAG.equalsIgnoreCase(parameter))
-        {
-            this.dexFormat = true;
-        }
-        else if (DEX_ORDER_FLAG.equalsIgnoreCase(parameter))
-        {
-            this.dexFormat = false;
-        }
-        else
-        {
-            this.dexFormat = DEX_FORMAT_DEFAULT;
-        }
+        this.dexFormat = dexFormat;
+    }
+
+    public boolean isListInDexFormat()
+    {
+        return DEX_FORMAT_FLAG.equalsIgnoreCase(getDexFormat());
+    }
+
+    public boolean isListInDexOrder()
+    {
+        return DEX_ORDER_FLAG.equalsIgnoreCase(getDexFormat());
+    }
+
+    public boolean isListInMissingOrder()
+    {
+        return DEX_MISSING_FLAG.equalsIgnoreCase(getDexFormat());
     }
 
     public String getShinyDexMessage()
     {
+        String message = "";
         if (isListInDexFormat())
         {
             Integer dexCount = 0;
@@ -75,14 +81,30 @@ public class HisuiShinyDex
                 }
             }
 
-            String message = messages.format("shiny-dex", dexCount.toString());
-            return message;
+            message = messages.format("shiny-dex", dexCount.toString());
         }
+        else if (isListInMissingOrder())
+        {
+            Integer missingCount = 0;
 
-        List<ShinyHisuiGet> gets = dexEntryService.getShinyDexHisuiGets();
-        Integer dexCount = gets.size();
+            List<ShinyDexEntryHisui> entries = dexEntryService.getShinyDexHisuiEntries();
+            for(ShinyDexEntryHisui entry : entries)
+            {
+                if (!entry.isHaveShiny())
+                {
+                    missingCount++;
+                }
+            }
 
-        String message = messages.format("shiny-count", dexCount.toString());
+            message = messages.format("shiny-missing", missingCount.toString());
+        }
+        else if (isListInDexOrder())
+        {
+            List<ShinyHisuiGet> gets = dexEntryService.getShinyDexHisuiGets();
+            Integer dexCount = gets.size();
+
+            message = messages.format("shiny-count", dexCount.toString());
+        }
         return message;
     }
 
@@ -97,7 +119,11 @@ public class HisuiShinyDex
         {
             return getTableHTMLDexFormat();
         }
-        return getTableHTMLDexOrder();
+        else if (isListInDexOrder())
+        {
+            return getTableHTMLDexOrder();
+        }
+        return getTableHTMLMissingOrder();
     }
 
     public String getTableHTMLDexOrder()
@@ -112,7 +138,7 @@ public class HisuiShinyDex
             }
         });
 
-        String html = "<table class=\"dex\"";
+        String html = "<table class=\"dex\">";
 
         html += "<tr>";
         for(Integer i = 1; i < gets.size()+1; i++)
@@ -149,13 +175,11 @@ public class HisuiShinyDex
 
     public String getTableHTMLDexFormat()
     {
-        String html = "<table class=\"dex\"";
-
-        List<ShinyDexEntryHisui> entries = dexEntryService.getShinyDexHisuiEntries();
-
-        final Integer MAX = 225;
+        String html = "<table class=\"dex\">";
 
         html += "<tr>";
+
+        List<ShinyDexEntryHisui> entries = dexEntryService.getShinyDexHisuiEntries();
         for(ShinyDexEntryHisui entry : entries)
         {
             String numberString = entry.getNumberString();
@@ -194,6 +218,41 @@ public class HisuiShinyDex
 
         html += "</tr>";
         return html + "</table>";
+    }
+
+    public String getTableHTMLMissingOrder()
+    {
+        String html = "<table class=\"dex\">";
+        html += "<tr>";
+
+        int index = 0;
+
+        List<ShinyDexEntryHisui> entries = dexEntryService.getShinyDexHisuiEntries();
+        for (ShinyDexEntryHisui entry : entries)
+        {
+            if (!entry.isHaveShiny())
+            {
+                String numberString = entry.getNumberString();
+
+                html += "<td><img class=\"pshow\" src=\"/img/hisui/" + numberString + ".png\" /></td>";
+
+                index++;
+
+                if (index % COLUMNS == 0)
+                {
+                    html += "</tr><tr>";
+                }
+            }
+        }
+
+        int remainingTD = COLUMNS - (index % COLUMNS);
+        for(int i = 0; i < remainingTD; i++)
+        {
+            html += "<td></td>";
+        }
+
+        html += "</tr></table>";
+        return html;
     }
 
     public String getNumberString(Integer i)
