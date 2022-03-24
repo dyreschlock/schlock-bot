@@ -27,24 +27,35 @@
                 display: block;
             }
 
-            .img
+            .mark_img
             {
                 position: relative;
             }
 
-            .alpha
+            .mark_img div img
             {
                 display: block;
                 width: 14px;
                 height: 14px;
 
+                filter: brightness(100%)
+                        drop-shadow(1px 1px 1px black);
+            }
+
+            .mark_img div.single
+            {
                 position: absolute;
                 top: 24px;
                 left: 47px;
                 z-index: 2;
+            }
 
-                filter: brightness(100%)
-                        drop-shadow(1px 1px 1px black);
+            .mark_img div.multiple
+            {
+                position: absolute;
+                top: 14px;
+                left: 47px;
+                z-index: 2;
             }
 
             img.have

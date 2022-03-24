@@ -246,7 +246,7 @@ public class HisuiShinyDex
 
     private String createImageHTML(String imageNumber, boolean show, boolean alpha, boolean rare)
     {
-        String html = "<div class=\"img\" >";
+        String html = "<div class=\"mark_img\" >";
 
         String imgClass = "";
         if(show)
@@ -260,17 +260,18 @@ public class HisuiShinyDex
         {
             if (alpha & rare)
             {
-
+                html += "<div class=\"multiple\">" +
+                        "<img src=\"/img/alpha_mark.png\" />" +
+                        "<img src=\"/img/shiny_mark.png\" />" +
+                        "</div>";
             }
-
-            if (alpha)
+            else if (alpha)
             {
-                html += "<img class=\"alpha\" src=\"/img/alpha_mark.png\" />";
+                html += "<div class=\"single\"><img src=\"/img/alpha_mark.png\" /></div>";
             }
-
-            if (rare)
+            else if (rare)
             {
-                html += "<img class=\"alpha\" src=\"/img/shiny_mark.png\" />";
+                html += "<div class=\"single\"><img src=\"/img/shiny_mark.png\" /></div>";
             }
         }
 
