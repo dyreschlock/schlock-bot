@@ -70,6 +70,15 @@ public class ShinyDexEntryHisui extends Persisted
         return num;
     }
 
+    public boolean isRare()
+    {
+        return !this.isMassiveIcelands &&
+                !this.inMassiveFieldlands &&
+                !this.isMassiveHighlands &&
+                !this.isMassiveCoastlands &&
+                !this.isMassiveMirelands;
+    }
+
     public boolean isInSomeOutbreak()
     {
         return this.inMassiveFieldlands ||

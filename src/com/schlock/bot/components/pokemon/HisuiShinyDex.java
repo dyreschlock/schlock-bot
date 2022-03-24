@@ -1,6 +1,5 @@
 package com.schlock.bot.components.pokemon;
 
-import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.entities.pokemon.ShinyDexEntryHisui;
 import com.schlock.bot.entities.pokemon.ShinyHisuiGet;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
@@ -145,17 +144,14 @@ public class HisuiShinyDex
         {
             ShinyHisuiGet get = gets.get(i-1);
 
-            String imageName = get.getHisuiNumberString() + ".png";
+            String numberString = get.getHisuiNumberString();
+            boolean show = true;
+            boolean alpha = get.isAlpha();
+            boolean rare = false;
 
-            html += "<td><div class=\"img\">";
-            html += "<img class=\"pshow\" src=\"/img/hisui/" + imageName + "\"/>";
-
-            if (get.isAlpha())
-            {
-                html += "<img class=\"alpha\" src=\"/img/alpha_mark.png\" />";
-            }
-
-            html += "</div></td>";
+            html += "<td>";
+            html += createImageHTML(numberString, show, alpha, rare);
+            html += "</td>";
 
             if (i % COLUMNS == 0)
             {
@@ -183,26 +179,13 @@ public class HisuiShinyDex
         for(ShinyDexEntryHisui entry : entries)
         {
             String numberString = entry.getNumberString();
-            String imgClass = "";
+            boolean show = entry.isHaveShiny();
+            boolean alpha = entry.isHaveAlpha();
+            boolean rare = entry.isRare();
 
-            if (entry.isHaveShiny())
-            {
-                imgClass = "pshow";
-            }
-//            else if (entry.isInSomeOutbreak())
-//            {
-//                imgClass = "have";
-//            }
-
-            html += "<td><div class=\"img\">";
-            html += "<img class=\""+imgClass +"\" src=\"/img/hisui/" + numberString + ".png\"/>";
-
-            if (entry.isHaveAlpha())
-            {
-                html += "<img class=\"alpha\" src=\"/img/alpha_mark.png\" />";
-            }
-
-            html += "</div></td>";
+            html += "<td>";
+            html += createImageHTML(numberString, show, alpha, rare);
+            html += "</td>";
 
             if (entry.getPokemonNumber() % COLUMNS == 0)
             {
@@ -234,7 +217,13 @@ public class HisuiShinyDex
             {
                 String numberString = entry.getNumberString();
 
-                html += "<td><img class=\"pshow\" src=\"/img/hisui/" + numberString + ".png\" /></td>";
+                boolean show = true;
+                boolean rare = entry.isRare();
+                boolean alpha = false;
+
+                html += "<td>";
+                html += createImageHTML(numberString, show, alpha, rare);
+                html += "</td>";
 
                 index++;
 
@@ -255,25 +244,38 @@ public class HisuiShinyDex
         return html;
     }
 
-    public String getNumberString(Integer i)
+    private String createImageHTML(String imageNumber, boolean show, boolean alpha, boolean rare)
     {
-        String number = i.toString();
-        while (number.length() < 3)
-        {
-            number = "0" + number;
-        }
-        return number;
-    }
+        String html = "<div class=\"img\" >";
 
-    public boolean containsPokemon(Integer number, List<Pokemon> pokemon)
-    {
-        for(Pokemon p : pokemon)
+        String imgClass = "";
+        if(show)
         {
-            if (p.getHisuiNumber().equals(number))
+            imgClass = "pshow";
+        }
+
+        html += "<img class=\"" + imgClass + "\" src=\"/img/hisui/" + imageNumber + ".png\" />";
+
+        if(show)
+        {
+            if (alpha & rare)
             {
-                return true;
+
+            }
+
+            if (alpha)
+            {
+                html += "<img class=\"alpha\" src=\"/img/alpha_mark.png\" />";
+            }
+
+            if (rare)
+            {
+                html += "<img class=\"alpha\" src=\"/img/shiny_mark.png\" />";
             }
         }
-        return false;
+
+        html += "</div>";
+
+        return html;
     }
-}
+ }
