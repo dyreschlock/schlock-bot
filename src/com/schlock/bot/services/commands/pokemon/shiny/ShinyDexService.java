@@ -10,6 +10,10 @@ import java.util.List;
 
 public interface ShinyDexService extends ListenerService
 {
+    int getOverallShinyCount();
+
+    boolean isHaveShiny(String pokemonNumberCode);
+
     List<Pokemon> getShinyDexEntries();
 
     List<ShinyDexEntryHisui> getShinyDexHisuiEntries();

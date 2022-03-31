@@ -13,7 +13,9 @@ import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import org.apache.tapestry5.ioc.Messages;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ShinyDexServiceImpl extends AbstractListenerService implements ShinyDexService
 {
@@ -25,6 +27,8 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
 
     private DatabaseManager database;
 
+    private Map<Integer, Pokemon> shinyChecklist;
+
     public ShinyDexServiceImpl(PokemonManagement pokemonManagement,
                                DatabaseManager database,
                                Messages messages)
@@ -34,6 +38,78 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
         this.pokemonManagement = pokemonManagement;
 
         this.database = database;
+    }
+
+    public int getOverallShinyCount()
+    {
+        initialize();
+
+        int count = 0;
+        for(Pokemon pokemon : shinyChecklist.values())
+        {
+            if (pokemon.isShiny())
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public boolean isHaveShiny(String pokemonNumberCode)
+    {
+        initialize();
+
+        Integer number = Integer.parseInt(pokemonNumberCode);
+
+        Pokemon poke = shinyChecklist.get(number);
+
+        return poke.isShiny();
+    }
+
+    private void initialize()
+    {
+        if (shinyChecklist == null)
+        {
+            shinyChecklist = new HashMap<>();
+
+            List<Pokemon> pokemon = pokemonManagement.getAllPokemonInNumberOrder();
+
+            for (Pokemon poke : pokemon)
+            {
+                shinyChecklist.put(poke.getNumber(), poke);
+            }
+
+            for (ShinyDexEntryGo entry : getPokemonGoEntries())
+            {
+                if (entry.isShinyGo() || entry.isShinyHome())
+                {
+                    Integer number = entry.getPokemonNumber();
+
+                    Pokemon poke = shinyChecklist.get(number);
+                    poke.setShiny(true);
+                }
+            }
+
+            for (Pokemon letsgoPoke : getShinyDexEntries())
+            {
+                Integer number = letsgoPoke.getNumber();
+
+                Pokemon poke = shinyChecklist.get(number);
+                poke.setShiny(true);
+            }
+
+            for (ShinyDexEntryHisui entry : getShinyDexHisuiEntries())
+            {
+                if (entry.isHaveShiny())
+                {
+                    Pokemon entryPoke = pokemonManagement.getPokemonFromText(entry.getPokemonId());
+                    Integer number = entryPoke.getNumber();
+
+                    Pokemon poke = shinyChecklist.get(number);
+                    poke.setShiny(true);
+                }
+            }
+        }
     }
 
     public List<Pokemon> getShinyDexEntries()

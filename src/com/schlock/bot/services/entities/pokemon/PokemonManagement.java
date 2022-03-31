@@ -24,5 +24,7 @@ public interface PokemonManagement
 
     List<Pokemon> getAllPokemonInGen(String gen);
 
+    List<Pokemon> getAllPokemonInNumberOrder();
+
     List<Pokemon> getHisuiPokemonInNumberOrder();
 }

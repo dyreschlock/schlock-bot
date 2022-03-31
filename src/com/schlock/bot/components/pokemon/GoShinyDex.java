@@ -74,9 +74,9 @@ public class GoShinyDex
             if (imgSrc.isBlank())
             {
                 String number = entry.getPokemonNumberText();
-                String filepath = "/Users/jimhendricks/GoogleDrive/Blog/stream/pokemon/" + number + ".png";
-
-                imgSrc = getDataUrl(filepath);
+//                String filepath = "/Users/jimhendricks/GoogleDrive/Blog/stream/pokemon/" + number + ".png";
+//                imgSrc = getDataUrl(filepath);
+                imgSrc = getImageUrl(number);
             }
 
             html += "<td class=\"mini\"><img class=\"" + imgClass + "\" src=\"" + imgSrc + "\" /></td>";
@@ -89,6 +89,11 @@ public class GoShinyDex
 
         html += "</tr>";
         return html + "</table>";
+    }
+
+    private String getImageUrl(String number)
+    {
+        return "/img/pokemon/" + number + ".png";
     }
 
     private String getDataUrl(String filepath)

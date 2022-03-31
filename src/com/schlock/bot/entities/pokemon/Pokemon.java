@@ -16,6 +16,11 @@ public class Pokemon
     private String hisuiType1;
     private String hisuiType2;
 
+    private boolean shiny = false;
+    private boolean shinyAlola = false;
+    private boolean shinyGalar = false;
+    private boolean shinyHisui = false;
+
     public Pokemon()
     {
     }
@@ -114,5 +119,45 @@ public class Pokemon
     public void setHisuiType2(String hisuiType2)
     {
         this.hisuiType2 = hisuiType2;
+    }
+
+    public boolean isShiny()
+    {
+        return shiny;
+    }
+
+    public void setShiny(boolean shiny)
+    {
+        this.shiny = shiny;
+    }
+
+    public boolean isShinyAlola()
+    {
+        return shinyAlola;
+    }
+
+    public void setShinyAlola(boolean shinyAlola)
+    {
+        this.shinyAlola = shinyAlola;
+    }
+
+    public boolean isShinyGalar()
+    {
+        return shinyGalar;
+    }
+
+    public void setShinyGalar(boolean shinyGalar)
+    {
+        this.shinyGalar = shinyGalar;
+    }
+
+    public boolean isShinyHisui()
+    {
+        return shinyHisui;
+    }
+
+    public void setShinyHisui(boolean shinyHisui)
+    {
+        this.shinyHisui = shinyHisui;
     }
 }

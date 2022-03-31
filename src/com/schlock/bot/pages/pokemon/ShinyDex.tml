@@ -96,12 +96,22 @@
 
             table.dex td.mini
             {
-                min-width: 43px;
+                min-width: 40px;
             }
 
             table.dex td.mini img
             {
                 width: 43px;
+            }
+
+            td.edge
+            {
+                padding-right: 20px;
+            }
+
+            td.bottom
+            {
+                padding-bottom: 20px;
             }
 
             .header, .footer
