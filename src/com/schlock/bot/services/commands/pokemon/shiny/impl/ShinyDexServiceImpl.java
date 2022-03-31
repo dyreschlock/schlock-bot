@@ -5,10 +5,7 @@ import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import com.schlock.bot.services.database.adhoc.DatabaseManager;
-import com.schlock.bot.services.database.pokemon.ShinyDexEntryDAO;
-import com.schlock.bot.services.database.pokemon.ShinyDexEntryGoDAO;
-import com.schlock.bot.services.database.pokemon.ShinyDexEntryHisuiDAO;
-import com.schlock.bot.services.database.pokemon.ShinyHisuiGetDAO;
+import com.schlock.bot.services.database.pokemon.*;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import org.apache.tapestry5.ioc.Messages;
 
@@ -109,7 +106,24 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
                     poke.setShiny(true);
                 }
             }
+
+            for (ShinyDexEntryMain entry : getShinyDexMainEntries())
+            {
+                if (entry.isNormal())
+                {
+                    Integer number = entry.getNumber();
+
+                    Pokemon poke = shinyChecklist.get(number);
+                    poke.setShiny(true);
+                }
+            }
         }
+    }
+
+    private List<ShinyDexEntryMain> getShinyDexMainEntries()
+    {
+        List<ShinyDexEntryMain> mainEntries = database.get(ShinyDexEntryMainDAO.class).getAll();
+        return mainEntries;
     }
 
     public List<Pokemon> getShinyDexEntries()
