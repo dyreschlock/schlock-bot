@@ -79,7 +79,7 @@ public class GoShinyDex
                 imgSrc = getDataUrl(filepath);
             }
 
-            html += "<td><img class=\"" + imgClass + "\" src=\"" + imgSrc + "\" /></td>";
+            html += "<td class=\"mini\"><img class=\"" + imgClass + "\" src=\"" + imgSrc + "\" /></td>";
 
             if ((i + 1) % COLUMNS == 0)
             {

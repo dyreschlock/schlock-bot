@@ -94,6 +94,16 @@
                 min-width: 57px;
             }
 
+            table.dex td.mini
+            {
+                min-width: 43px;
+            }
+
+            table.dex td.go img
+            {
+                width: 43px;
+            }
+
             .header, .footer
             {
                 font-family: impact;
