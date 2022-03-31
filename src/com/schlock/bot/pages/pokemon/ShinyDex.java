@@ -8,6 +8,7 @@ public class ShinyDex
 {
     private static final String PARAM_GO = "go";
     private static final String PARAM_LEGENDS = "hisui";
+    private static final String PARAM_LETSGO = "letsgo";
 
     @InjectComponent
     private HisuiShinyDex hisuiShinyComponent;
@@ -39,6 +40,13 @@ public class ShinyDex
         return true;
     }
 
+    public boolean isOverallPage()
+    {
+        return !isGoPage()
+                && !isLegendsPage()
+                && !isLetsGoPage();
+    }
+
     public boolean isGoPage()
     {
         return PARAM_GO.equalsIgnoreCase(pageParam);
@@ -51,6 +59,6 @@ public class ShinyDex
 
     public boolean isLetsGoPage()
     {
-        return !isGoPage() && !isLegendsPage();
+        return PARAM_LETSGO.equals(pageParam);
     }
 }

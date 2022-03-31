@@ -18,7 +18,7 @@ public class HisuiShinyDex
     private static final String DEX_ORDER_FLAG = "order";
     private static final String DEX_MISSING_FLAG = "missing";
 
-    private static final String DEX_FORMAT_DEFAULT = DEX_ORDER_FLAG;
+    private static final String DEX_FORMAT_DEFAULT = DEX_FORMAT_FLAG;
     private static final Integer COLUMNS = 21;
 
     @Inject

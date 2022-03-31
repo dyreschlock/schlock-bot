@@ -63,7 +63,7 @@
                 display: block;
             }
 
-            img.shiny_go, img.shiny_home
+            img.shiny, img.shiny_go, img.shiny_home
             {
                 filter: brightness(100%);
             }
@@ -99,7 +99,7 @@
                 min-width: 43px;
             }
 
-            table.dex td.go img
+            table.dex td.mini img
             {
                 width: 43px;
             }
@@ -144,6 +144,10 @@
 
 </head>
 <body>
+
+    <t:if test="overallPage">
+        <p:overallshinydex />
+    </t:if>
 
     <t:if test="letsGoPage">
         <p:letsgoshinydex />
