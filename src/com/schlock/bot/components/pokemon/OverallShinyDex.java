@@ -1,13 +1,10 @@
 package com.schlock.bot.components.pokemon;
 
+import com.schlock.bot.entities.pokemon.PokemonRegion;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.tapestry5.ioc.Messages;
 
 import javax.inject.Inject;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,7 +29,7 @@ public class OverallShinyDex
 
     private static final String[] ROW1_HISUI = {"h_157", "h_503", "h_724", null, null, null};
     private static final String[] ROW2_HISUI = {"h_058", "h_059", "h_100", "h_101", "h_211", "904"};
-    private static final String[] ROW3_HISUI = {"h_215", "903", "h_549", "h_550", "902", "902"};
+    private static final String[] ROW3_HISUI = {"h_215", "903", "h_549", "h_550", "902", null};
     private static final String[] ROW4_HISUI = {"h_570", "h_571", "h_628", "h_705", "h_706", "h_713"};
     private static final String[] ROW5_HISUI = {"899", "900", "901", null, null, null};
 
@@ -53,8 +50,31 @@ public class OverallShinyDex
     public String getShinyDexMessage()
     {
         int count = shinyDexService.getOverallShinyCount();
+        int total = shinyDexService.getOverallTotalCount();
 
-        String message = messages.format("shiny-dex", count);
+        String overall = messages.format("overall", count, total);
+
+        count = shinyDexService.getNormalShinyCount();
+        total = shinyDexService.getNormalTotalCount();
+
+        String normal = messages.format("normal", count, total);
+
+        count = shinyDexService.getRegionShinyCount(PokemonRegion.ALOLA);
+        total = shinyDexService.getRegionTotalCount(PokemonRegion.ALOLA);
+
+        String alola = messages.format("alola", count, total);
+
+        count = shinyDexService.getRegionShinyCount(PokemonRegion.GALAR);
+        total = shinyDexService.getRegionTotalCount(PokemonRegion.GALAR);
+
+        String galar = messages.format("galar", count, total);
+
+        count = shinyDexService.getRegionShinyCount(PokemonRegion.HISUI);
+        total = shinyDexService.getRegionTotalCount(PokemonRegion.HISUI);
+
+        String hisui = messages.format("hisui", count, total);
+
+        String message = messages.format("header-message", overall, normal, alola, galar, hisui);
         return message;
     }
 
@@ -95,11 +115,34 @@ public class OverallShinyDex
     {
         String html = "<tr>";
 
-        for (String[] boxRow : row)
+        for(int boxIndex = 0; boxIndex < row.size(); boxIndex++)
         {
-            for(int i = 0; i < boxRow.length; i++)
-            {
+            String[] box = row.get(boxIndex);
 
+            boolean bottom = boxIndex == row.size() -1;
+
+            for(int colIndex = 0; colIndex < box.length; colIndex++)
+            {
+                String pokeNumber = box[colIndex];
+                boolean edge = colIndex == box.length -1;
+
+                if (pokeNumber != null)
+                {
+                    boolean shiny = shinyDexService.isHaveShiny(pokeNumber);
+
+                    html += getCell(pokeNumber, shiny, edge, bottom);
+                }
+                else
+                {
+                    if (edge)
+                    {
+                        html += "<td class=\"mini edge\"></td>";
+                    }
+                    else
+                    {
+                        html += "<td class=\"mini\"></td>";
+                    }
+                }
             }
         }
 
@@ -136,11 +179,16 @@ public class OverallShinyDex
     private String getCell(Integer number, boolean shiny)
     {
         String numberText = getNumberText(number);
-//        String filepath = "/Users/jimhendricks/GoogleDrive/Blog/stream/pokemon/" + numberText + ".png";
-//
-//        String imgSrc = getDataUrl(filepath);
 
-        String imgSrc = getImageUrl(numberText);
+        boolean edge = (number % COLUMNS) == 0;
+        boolean bottom = isBottomRowOfBox(number);
+
+        return getCell(numberText, shiny, edge, bottom);
+    }
+
+    private String getCell(String numberCode, boolean shiny, boolean edge, boolean bottom)
+    {
+        String imgSrc = getImageUrl(numberCode);
 
         String imgClass = "have ";
         if (shiny)
@@ -149,13 +197,10 @@ public class OverallShinyDex
         }
 
         String tdClass = "mini ";
-
-        boolean edge = (number % COLUMNS) == 0;
         if (edge)
         {
             tdClass += "edge ";
         }
-        boolean bottom = isBottomRowOfBox(number);
         if (bottom)
         {
             tdClass += "bottom ";
@@ -188,30 +233,8 @@ public class OverallShinyDex
         return number;
     }
 
-
     private String getImageUrl(String number)
     {
         return "/img/pokemon/" + number + ".png";
-    }
-
-
-    private String getDataUrl(String filepath)
-    {
-        String url = "data:image/png;base64,";
-
-        try
-        {
-            Path image = Path.of(filepath);
-            byte[] body = new byte[0];
-            body = Files.readAllBytes(image);
-            String base64 = Base64.encodeBase64String(body);
-
-            return url + base64;
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return "";
     }
 }

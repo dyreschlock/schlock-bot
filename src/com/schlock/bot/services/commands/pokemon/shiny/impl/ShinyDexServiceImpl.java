@@ -40,19 +40,73 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
     {
         initialize();
 
+        int normal = getNormalShinyCount();
+        int alola = getRegionShinyCount(PokemonRegion.ALOLA);
+        int galar = getRegionShinyCount(PokemonRegion.GALAR);
+        int hisui = getRegionShinyCount(PokemonRegion.HISUI);
+
+        int total = normal + alola + galar + hisui;
+        return total;
+    }
+
+    public int getNormalShinyCount()
+    {
+        initialize();
+
         int count = 0;
         for (String key : shinyChecklist.keySet())
         {
-            if(PokemonRegion.isNormalNumberCode(key))
+            Pokemon poke = shinyChecklist.get(key);
+            if(PokemonRegion.isNormalNumberCode(key) && poke.isShiny())
             {
-                Pokemon poke = shinyChecklist.get(key);
-                if (poke.isShiny())
-                {
-                    count++;
-                }
+                count++;
             }
         }
         return count;
+    }
+
+    public int getRegionShinyCount(PokemonRegion region)
+    {
+        int count = 0;
+        for (Pokemon poke : pokemonManagement.getAllPokemonInRegion(region))
+        {
+            if (PokemonRegion.ALOLA.equals(region) && poke.isShinyAlola())
+            {
+                count++;
+            }
+            if (PokemonRegion.GALAR.equals(region) && poke.isShinyGalar())
+            {
+                count++;
+            }
+            if (PokemonRegion.HISUI.equals(region) && poke.isShinyHisui())
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getOverallTotalCount()
+    {
+        initialize();
+
+        int normal = getNormalTotalCount();
+        int alola = getRegionTotalCount(PokemonRegion.ALOLA);
+        int galar = getRegionTotalCount(PokemonRegion.GALAR);
+        int hisui = getRegionTotalCount(PokemonRegion.HISUI);
+
+        int total = normal + alola + galar + hisui;
+        return total;
+    }
+
+    public int getNormalTotalCount()
+    {
+        return pokemonManagement.getAllPokemonInNumberOrder().size();
+    }
+
+    public int getRegionTotalCount(PokemonRegion region)
+    {
+        return region.pokemonNumbers().size();
     }
 
     public boolean isHaveShiny(String pokemonNumberCode)
@@ -60,6 +114,18 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
         initialize();
 
         Pokemon poke = shinyChecklist.get(pokemonNumberCode);
+        if (PokemonRegion.isRegionalNumberCode(pokemonNumberCode, PokemonRegion.ALOLA))
+        {
+            return poke.isShinyAlola();
+        }
+        if (PokemonRegion.isRegionalNumberCode(pokemonNumberCode, PokemonRegion.GALAR))
+        {
+            return poke.isShinyGalar();
+        }
+        if (PokemonRegion.isRegionalNumberCode(pokemonNumberCode, PokemonRegion.HISUI))
+        {
+            return poke.isShinyHisui();
+        }
         return poke.isShiny();
     }
 

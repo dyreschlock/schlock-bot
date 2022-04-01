@@ -9,6 +9,16 @@ public interface ShinyDexService extends ListenerService
 {
     int getOverallShinyCount();
 
+    int getNormalShinyCount();
+
+    int getRegionShinyCount(PokemonRegion region);
+
+    int getOverallTotalCount();
+
+    int getNormalTotalCount();
+
+    int getRegionTotalCount(PokemonRegion region);
+
     boolean isHaveShiny(String pokemonNumberCode);
 
     List<ShinyDexEntryLetsGo> getShinyDexLetsGoEntries();
