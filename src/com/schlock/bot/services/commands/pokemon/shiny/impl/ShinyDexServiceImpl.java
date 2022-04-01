@@ -9,7 +9,6 @@ import com.schlock.bot.services.database.pokemon.*;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import org.apache.tapestry5.ioc.Messages;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,9 +81,9 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
 
     private void checkLetsGoShinies()
     {
-        for (Pokemon letsgoPoke : getShinyDexEntries())
+        for(ShinyDexEntryLetsGo entry : getShinyDexLetsGoEntries())
         {
-            String number = letsgoPoke.getNumberString();
+            String number = entry.getNumberCode();
 
             Pokemon poke = shinyChecklist.get(number);
             poke.setShiny(true);
@@ -142,20 +141,10 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
         return mainEntries;
     }
 
-    public List<Pokemon> getShinyDexEntries()
+    public List<ShinyDexEntryLetsGo> getShinyDexLetsGoEntries()
     {
-        List<ShinyDexEntry> entries = database.get(ShinyDexEntryDAO.class).getAll();
-
-        List<Pokemon> pokemon = new ArrayList<>();
-        for (ShinyDexEntry entry : entries)
-        {
-            Pokemon p = pokemonManagement.getPokemonFromText(entry.getPokemon());
-            if (p != null)
-            {
-                pokemon.add(p);
-            }
-        }
-        return pokemon;
+        List<ShinyDexEntryLetsGo> entries = database.get(ShinyDexEntryLetsGoDAO.class).getAll();
+        return entries;
     }
 
     public List<ShinyDexEntryHisui> getShinyDexHisuiEntries()
@@ -199,7 +188,7 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
         String commandText = in.toLowerCase().trim();
         if (commandText.startsWith(SHINY_DEX_COMMAND))
         {
-            List<ShinyDexEntry> entries = database.get(ShinyDexEntryDAO.class).getAll();
+            List<ShinyDexEntryLetsGo> entries = database.get(ShinyDexEntryLetsGoDAO.class).getAll();
 
             Integer count = entries.size();
 

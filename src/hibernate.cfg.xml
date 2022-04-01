@@ -30,9 +30,9 @@
         <mapping class="com.schlock.bot.entities.pokemon.ShinyGet" />
         <mapping class="com.schlock.bot.entities.pokemon.ShinyHisuiGet" />
 
-        <mapping class="com.schlock.bot.entities.pokemon.ShinyDexEntry" />
         <mapping class="com.schlock.bot.entities.pokemon.ShinyDexEntryGo" />
         <mapping class="com.schlock.bot.entities.pokemon.ShinyDexEntryHisui" />
+        <mapping class="com.schlock.bot.entities.pokemon.ShinyDexEntryLetsGo" />
         <mapping class="com.schlock.bot.entities.pokemon.ShinyDexEntryMain" />
 
         <mapping class="com.schlock.bot.entities.pokemon.GuessingStreak" />

@@ -1,9 +1,6 @@
 package com.schlock.bot.services.commands.pokemon.shiny;
 
-import com.schlock.bot.entities.pokemon.Pokemon;
-import com.schlock.bot.entities.pokemon.ShinyDexEntryGo;
-import com.schlock.bot.entities.pokemon.ShinyDexEntryHisui;
-import com.schlock.bot.entities.pokemon.ShinyHisuiGet;
+import com.schlock.bot.entities.pokemon.*;
 import com.schlock.bot.services.commands.ListenerService;
 
 import java.util.List;
@@ -14,7 +11,7 @@ public interface ShinyDexService extends ListenerService
 
     boolean isHaveShiny(String pokemonNumberCode);
 
-    List<Pokemon> getShinyDexEntries();
+    List<ShinyDexEntryLetsGo> getShinyDexLetsGoEntries();
 
     List<ShinyDexEntryHisui> getShinyDexHisuiEntries();
 

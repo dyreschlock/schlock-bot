@@ -142,9 +142,9 @@ public class DatabaseManagerImpl implements DatabaseManager
 
         daos.put(GuessingStreakDAO.class, new GuessingStreakDAOImpl(sessionFactory));
 
-        daos.put(ShinyDexEntryDAO.class, new ShinyDexEntryDAOImpl(sessionFactory));
         daos.put(ShinyDexEntryGoDAO.class, new ShinyDexEntryGoDAOImpl(sessionFactory));
         daos.put(ShinyDexEntryHisuiDAO.class, new ShinyDexEntryHisuiDAOImpl(sessionFactory));
+        daos.put(ShinyDexEntryLetsGoDAO.class, new ShinyDexEntryLetsGoDAOImpl(sessionFactory));
         daos.put(ShinyDexEntryMainDAO.class, new ShinyDexEntryMainDAOImpl(sessionFactory));
 
         daos.put(ShinyBetDAO.class, new ShinyBetDAOImpl(sessionFactory));

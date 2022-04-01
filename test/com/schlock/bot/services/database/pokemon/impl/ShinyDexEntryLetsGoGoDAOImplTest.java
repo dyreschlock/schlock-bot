@@ -9,7 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ShinyDexEntryGoDAOImplTest extends DatabaseTest
+class ShinyDexEntryLetsGoGoDAOImplTest extends DatabaseTest
 {
     private static final String NAME1 = "BULBASAUR";
     private static final String NAME2 = "IVYSAUR";

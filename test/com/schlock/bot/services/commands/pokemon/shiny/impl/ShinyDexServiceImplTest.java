@@ -1,6 +1,6 @@
 package com.schlock.bot.services.commands.pokemon.shiny.impl;
 
-import com.schlock.bot.entities.pokemon.ShinyDexEntry;
+import com.schlock.bot.entities.pokemon.ShinyDexEntryLetsGo;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
@@ -19,8 +19,8 @@ class ShinyDexServiceImplTest extends DatabaseTest
     private ShinyDexServiceImpl impl;
 
 
-    private ShinyDexEntry entry1;
-    private ShinyDexEntry entry2;
+    private ShinyDexEntryLetsGo entry1;
+    private ShinyDexEntryLetsGo entry2;
 
     @Test
     public void testShinyDex()
@@ -53,11 +53,13 @@ class ShinyDexServiceImplTest extends DatabaseTest
 
     private void createTestObjects()
     {
-        entry1 = new ShinyDexEntry();
-        entry1.setPokemon("bulbasaur");
+        entry1 = new ShinyDexEntryLetsGo();
+        entry1.setNumberCode("001");
+        entry1.setPokemonId("bulbasaur");
 
-        entry2 = new ShinyDexEntry();
-        entry2.setPokemon("ivysaur");
+        entry2 = new ShinyDexEntryLetsGo();
+        entry2.setNumberCode("002");
+        entry2.setPokemonId("ivysaur");
 
         database().save(entry1, entry2);
     }

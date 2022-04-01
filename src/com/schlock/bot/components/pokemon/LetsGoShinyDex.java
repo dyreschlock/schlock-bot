@@ -1,6 +1,6 @@
 package com.schlock.bot.components.pokemon;
 
-import com.schlock.bot.entities.pokemon.Pokemon;
+import com.schlock.bot.entities.pokemon.ShinyDexEntryLetsGo;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -21,7 +21,7 @@ public class LetsGoShinyDex
 
     public String getShinyDexMessage()
     {
-        List<Pokemon> entries = dexEntryService.getShinyDexEntries();
+        List<ShinyDexEntryLetsGo> entries = dexEntryService.getShinyDexLetsGoEntries();
         Integer dexCount = entries.size();
 
         String message = messages.format("shiny-dex", dexCount.toString());
@@ -32,32 +32,32 @@ public class LetsGoShinyDex
     {
         String html = "<table class=\"dex\">";
 
-        List<Pokemon> entries = dexEntryService.getShinyDexEntries();
+        List<ShinyDexEntryLetsGo> entries = dexEntryService.getShinyDexLetsGoEntries();
 
         final Integer MAX = 151;
 
         html += "<tr>";
         for (Integer i = 1; i < MAX + 1; i++)
         {
-            String number = i.toString();
-            if (number.length() == 1)
+            String numberCode = i.toString();
+            if (numberCode.length() == 1)
             {
-                number = "00" + number;
+                numberCode = "00" + numberCode;
             }
-            if (number.length() == 2)
+            if (numberCode.length() == 2)
             {
-                number = "0" + number;
+                numberCode = "0" + numberCode;
             }
 
             String imgClass = "";
 
-            boolean showPokemon = containsPokemon(i, entries);
+            boolean showPokemon = containsPokemon(numberCode, entries);
             if (showPokemon)
             {
                 imgClass = "show";
             }
 
-            html += "<td><img class=\"p" + imgClass + "\" src=\"/img/pokemon/" + number + ".png\"/></td>";
+            html += "<td><img class=\"p" + imgClass + "\" src=\"/img/pokemon/" + numberCode + ".png\"/></td>";
             if (i % COLUMNS == 0)
             {
                 html += "</tr><tr>";
@@ -74,11 +74,11 @@ public class LetsGoShinyDex
         return html + "</table>";
     }
 
-    private boolean containsPokemon(Integer number, List<Pokemon> pokemon)
+    private boolean containsPokemon(String numberCode, List<ShinyDexEntryLetsGo> entries)
     {
-        for (Pokemon p : pokemon)
+        for (ShinyDexEntryLetsGo entry : entries)
         {
-            if (p.getNumber().equals(number))
+            if(numberCode.equalsIgnoreCase(entry.getNumberCode()))
             {
                 return true;
             }

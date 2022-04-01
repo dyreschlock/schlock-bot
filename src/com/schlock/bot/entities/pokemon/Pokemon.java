@@ -25,6 +25,15 @@ public class Pokemon
     {
     }
 
+    public String getNumberString()
+    {
+        String num = Integer.toString(number);
+        while (num.length() < 3)
+        {
+            num = "0" + num;
+        }
+        return num;
+    }
     public void incrementBasestats(int i)
     {
         basestats = basestats +i;
