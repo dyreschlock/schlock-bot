@@ -1,14 +1,10 @@
 package com.schlock.bot.entities.pokemon;
 
-import com.schlock.bot.entities.Persisted;
-
-import javax.persistence.Entity;
-
 import javax.persistence.*;
 
 @Entity
 @Table(name = "dex_entry_main")
-public class ShinyDexEntryMain extends Persisted
+public class ShinyDexEntryMain extends AbstractShinyDexEntry
 {
     private static final String ALOLA_MARK = "a";
     private static final String GALAR_MARK = "g";
@@ -20,7 +16,7 @@ public class ShinyDexEntryMain extends Persisted
     @GeneratedValue
     private Long id;
 
-    @Column(name = "numberCode")
+    @Column(name = "numCode")
     private String numberCode;
 
     @Column(name = "name")

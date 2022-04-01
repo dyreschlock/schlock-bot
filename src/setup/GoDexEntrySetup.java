@@ -43,8 +43,8 @@ public class GoDexEntrySetup
         Pokemon poke = pokemonManagement.getPokemonFromText(number.toString());
 
         ShinyDexEntryGo entry = new ShinyDexEntryGo();
-        entry.setPokemonNumber(poke.getNumber());
-        entry.setPokemonName(poke.getId());
+        entry.setNumberCode(poke.getNumberString());
+        entry.setPokemonId(poke.getId());
         entry.setHave(true);
         entry.setShinyGo(false);
         entry.setShinyHome(false);

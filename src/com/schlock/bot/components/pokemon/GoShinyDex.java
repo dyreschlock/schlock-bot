@@ -73,7 +73,7 @@ public class GoShinyDex
             String imgSrc = entry.getGoogleImageLink();
             if (imgSrc.isBlank())
             {
-                String number = entry.getPokemonNumberText();
+                String number = entry.getNumberCode();
 //                String filepath = "/Users/jimhendricks/GoogleDrive/Blog/stream/pokemon/" + number + ".png";
 //                imgSrc = getDataUrl(filepath);
                 imgSrc = getImageUrl(number);

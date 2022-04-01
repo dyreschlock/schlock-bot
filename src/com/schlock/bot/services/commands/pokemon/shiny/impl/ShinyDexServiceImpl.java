@@ -24,7 +24,7 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
 
     private DatabaseManager database;
 
-    private Map<Integer, Pokemon> shinyChecklist;
+    private Map<String, Pokemon> shinyChecklist;
 
     public ShinyDexServiceImpl(PokemonManagement pokemonManagement,
                                DatabaseManager database,
@@ -56,10 +56,7 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
     {
         initialize();
 
-        Integer number = Integer.parseInt(pokemonNumberCode);
-
-        Pokemon poke = shinyChecklist.get(number);
-
+        Pokemon poke = shinyChecklist.get(pokemonNumberCode);
         return poke.isShiny();
     }
 
@@ -73,49 +70,68 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
 
             for (Pokemon poke : pokemon)
             {
-                shinyChecklist.put(poke.getNumber(), poke);
+                shinyChecklist.put(poke.getNumberString(), poke);
             }
 
-            for (ShinyDexEntryGo entry : getPokemonGoEntries())
-            {
-                if (entry.isShinyGo() || entry.isShinyHome())
-                {
-                    Integer number = entry.getPokemonNumber();
+            checkLetsGoShinies();
+            checkGoShinies();
+            checkHisuiShinies();
+            checkMainSeriesShinies();
+        }
+    }
 
-                    Pokemon poke = shinyChecklist.get(number);
-                    poke.setShiny(true);
-                }
-            }
+    private void checkLetsGoShinies()
+    {
+        for (Pokemon letsgoPoke : getShinyDexEntries())
+        {
+            String number = letsgoPoke.getNumberString();
 
-            for (Pokemon letsgoPoke : getShinyDexEntries())
+            Pokemon poke = shinyChecklist.get(number);
+            poke.setShiny(true);
+        }
+    }
+
+    private void checkGoShinies()
+    {
+        for (ShinyDexEntryGo entry : getPokemonGoEntries())
+        {
+            if (entry.isShinyGo() || entry.isShinyHome())
             {
-                Integer number = letsgoPoke.getNumber();
+                String number = entry.getNumberCode();
 
                 Pokemon poke = shinyChecklist.get(number);
                 poke.setShiny(true);
             }
+        }
+    }
 
-            for (ShinyDexEntryHisui entry : getShinyDexHisuiEntries())
+    private void checkHisuiShinies()
+    {
+        for (ShinyDexEntryHisui entry : getShinyDexHisuiEntries())
+        {
+            if (entry.isHaveShiny())
             {
-                if (entry.isHaveShiny())
-                {
-                    Pokemon entryPoke = pokemonManagement.getPokemonFromText(entry.getPokemonId());
-                    Integer number = entryPoke.getNumber();
+                String number = entry.getNumberCode();
 
-                    Pokemon poke = shinyChecklist.get(number);
+                Pokemon poke = shinyChecklist.get(number);
+                if(poke != null)
+                {
                     poke.setShiny(true);
                 }
             }
+        }
+    }
 
-            for (ShinyDexEntryMain entry : getShinyDexMainEntries())
+    private void checkMainSeriesShinies()
+    {
+        for (ShinyDexEntryMain entry : getShinyDexMainEntries())
+        {
+            if (entry.isNormal())
             {
-                if (entry.isNormal())
-                {
-                    Integer number = entry.getNumber();
+                String number = entry.getNumberCode();
 
-                    Pokemon poke = shinyChecklist.get(number);
-                    poke.setShiny(true);
-                }
+                Pokemon poke = shinyChecklist.get(number);
+                poke.setShiny(true);
             }
         }
     }

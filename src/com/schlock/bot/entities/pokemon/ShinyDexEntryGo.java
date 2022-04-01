@@ -1,22 +1,20 @@
 package com.schlock.bot.entities.pokemon;
 
-import com.schlock.bot.entities.Persisted;
-
 import javax.persistence.*;
 
 @Entity
 @Table(name = "dex_entry_go")
-public class ShinyDexEntryGo extends Persisted
+public class ShinyDexEntryGo extends AbstractShinyDexEntry
 {
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(name = "number")
-    private Integer pokemonNumber;
+    @Column(name = "numCode")
+    private String numberCode;
 
     @Column(name = "name")
-    private String pokemonName;
+    private String pokemonId;
 
     @Column(name = "have")
     private Boolean have;
@@ -44,20 +42,6 @@ public class ShinyDexEntryGo extends Persisted
         return link;
     }
 
-    public String getPokemonNumberText()
-    {
-        String number = getPokemonNumber().toString();
-        if (number.length() == 1)
-        {
-            number = "00" + number;
-        }
-        if (number.length() == 2)
-        {
-            number = "0" + number;
-        }
-        return number;
-    }
-
     public Long getId()
     {
         return id;
@@ -68,24 +52,24 @@ public class ShinyDexEntryGo extends Persisted
         this.id = id;
     }
 
-    public Integer getPokemonNumber()
+    public String getNumberCode()
     {
-        return pokemonNumber;
+        return numberCode;
     }
 
-    public void setPokemonNumber(Integer pokemonNumber)
+    public void setNumberCode(String numberCode)
     {
-        this.pokemonNumber = pokemonNumber;
+        this.numberCode = numberCode;
     }
 
-    public String getPokemonName()
+    public String getPokemonId()
     {
-        return pokemonName;
+        return pokemonId;
     }
 
-    public void setPokemonName(String pokemonName)
+    public void setPokemonId(String pokemonId)
     {
-        this.pokemonName = pokemonName;
+        this.pokemonId = pokemonId;
     }
 
     public Boolean isHave()

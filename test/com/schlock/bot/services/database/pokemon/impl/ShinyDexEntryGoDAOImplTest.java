@@ -28,9 +28,9 @@ class ShinyDexEntryGoDAOImplTest extends DatabaseTest
 
         assertEquals(3, entries.size());
 
-        assertEquals(NAME1, entries.get(0).getPokemonName());
-        assertEquals(NAME2, entries.get(1).getPokemonName());
-        assertEquals(NAME3, entries.get(2).getPokemonName());
+        assertEquals(NAME1, entries.get(0).getPokemonId());
+        assertEquals(NAME2, entries.get(1).getPokemonId());
+        assertEquals(NAME3, entries.get(2).getPokemonId());
     }
 
     @Override
@@ -50,22 +50,22 @@ class ShinyDexEntryGoDAOImplTest extends DatabaseTest
     public void createTestObjects()
     {
         entry1 = new ShinyDexEntryGo();
-        entry1.setPokemonNumber(1);
-        entry1.setPokemonName(NAME1);
+        entry1.setNumberCode("001");
+        entry1.setPokemonId(NAME1);
         entry1.setHave(true);
         entry1.setShinyGo(true);
         entry1.setShinyHome(true);
 
         entry2 = new ShinyDexEntryGo();
-        entry2.setPokemonNumber(2);
-        entry2.setPokemonName(NAME2);
+        entry2.setNumberCode("002");
+        entry2.setPokemonId(NAME2);
         entry2.setHave(true);
         entry2.setShinyGo(true);
         entry2.setShinyHome(true);
 
         entry3 = new ShinyDexEntryGo();
-        entry3.setPokemonNumber(3);
-        entry3.setPokemonName(NAME3);
+        entry3.setNumberCode("003");
+        entry3.setPokemonId(NAME3);
         entry3.setHave(true);
         entry3.setShinyGo(true);
         entry3.setShinyHome(true);

@@ -19,7 +19,7 @@ public class ShinyDexEntryGoDAOImpl extends AbstractBaseDAO<ShinyDexEntryGo> imp
     public List<ShinyDexEntryGo> getInPokemonOrder()
     {
         String text = " from ShinyDexEntryGo e " +
-                        "order by e.pokemonNumber asc ";
+                        "order by e.numberCode asc ";
 
         Session session = sessionFactory.openSession();
         session.beginTransaction();

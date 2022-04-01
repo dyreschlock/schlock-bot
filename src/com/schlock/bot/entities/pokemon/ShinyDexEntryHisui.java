@@ -1,12 +1,10 @@
 package com.schlock.bot.entities.pokemon;
 
-import com.schlock.bot.entities.Persisted;
-
 import javax.persistence.*;
 
 @Entity
 @Table(name = "dex_entry_hisui")
-public class ShinyDexEntryHisui extends Persisted
+public class ShinyDexEntryHisui extends AbstractShinyDexEntry
 {
     @Id
     @GeneratedValue
@@ -14,6 +12,9 @@ public class ShinyDexEntryHisui extends Persisted
 
     @Column(name = "number")
     private Integer pokemonNumber;
+
+    @Column(name = "numCode")
+    private String numberCode;
 
     @Column(name = "name")
     private String pokemonId;
@@ -111,6 +112,16 @@ public class ShinyDexEntryHisui extends Persisted
     public void setPokemonNumber(Integer pokemonNumber)
     {
         this.pokemonNumber = pokemonNumber;
+    }
+
+    public String getNumberCode()
+    {
+        return numberCode;
+    }
+
+    public void setNumberCode(String numberCode)
+    {
+        this.numberCode = numberCode;
     }
 
     public String getPokemonId()
