@@ -6,12 +6,6 @@ import javax.persistence.*;
 @Table(name = "dex_entry_main")
 public class ShinyDexEntryMain extends AbstractShinyDexEntry
 {
-    private static final String ALOLA_MARK = "a";
-    private static final String GALAR_MARK = "g";
-    private static final String HISUI_MARK = "h";
-
-    private static final String DELIM = "_";
-
     @Id
     @GeneratedValue
     private Long id;
@@ -27,48 +21,6 @@ public class ShinyDexEntryMain extends AbstractShinyDexEntry
 
     public ShinyDexEntryMain()
     {
-    }
-
-    public Integer getNumber()
-    {
-        String[] parts = numberCode.split(DELIM);
-
-        String number = parts[0];
-        if (parts.length == 2)
-        {
-            number = parts[1];
-        }
-        return Integer.parseInt(number);
-    }
-
-    public boolean isAlola()
-    {
-        return ALOLA_MARK.equals(getMark());
-    }
-
-    public boolean isGalar()
-    {
-        return GALAR_MARK.equals(getMark());
-    }
-
-    public boolean isHisui()
-    {
-        return HISUI_MARK.equals(getMark());
-    }
-
-    public boolean isNormal()
-    {
-        return getMark() == null;
-    }
-
-    private String getMark()
-    {
-        String[] parts = numberCode.split(DELIM);
-        if (parts.length == 1)
-        {
-            return null;
-        }
-        return parts[0];
     }
 
     public Long getId()

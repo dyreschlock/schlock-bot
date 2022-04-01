@@ -1,6 +1,7 @@
 package com.schlock.bot.services.entities.pokemon.impl;
 
 import com.schlock.bot.entities.pokemon.Pokemon;
+import com.schlock.bot.entities.pokemon.PokemonRegion;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;
@@ -269,6 +270,17 @@ public class PokemonManagementImpl implements PokemonManagement
             }
         });
 
+        return pokemon;
+    }
+
+    public List<Pokemon> getAllPokemonInRegion(PokemonRegion region)
+    {
+        List<Pokemon> pokemon = new ArrayList<>();
+        for (Integer number : region.pokemonNumbers())
+        {
+            Pokemon poke = pokemonByNumber.get(number);
+            pokemon.add(poke);
+        }
         return pokemon;
     }
 

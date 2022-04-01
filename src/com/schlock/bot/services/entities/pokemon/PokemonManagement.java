@@ -1,6 +1,7 @@
 package com.schlock.bot.services.entities.pokemon;
 
 import com.schlock.bot.entities.pokemon.Pokemon;
+import com.schlock.bot.entities.pokemon.PokemonRegion;
 
 import java.util.List;
 
@@ -27,4 +28,6 @@ public interface PokemonManagement
     List<Pokemon> getAllPokemonInNumberOrder();
 
     List<Pokemon> getHisuiPokemonInNumberOrder();
+
+    List<Pokemon> getAllPokemonInRegion(PokemonRegion region);
 }

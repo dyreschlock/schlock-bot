@@ -41,11 +41,15 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
         initialize();
 
         int count = 0;
-        for(Pokemon pokemon : shinyChecklist.values())
+        for (String key : shinyChecklist.keySet())
         {
-            if (pokemon.isShiny())
+            if(PokemonRegion.isNormalNumberCode(key))
             {
-                count++;
+                Pokemon poke = shinyChecklist.get(key);
+                if (poke.isShiny())
+                {
+                    count++;
+                }
             }
         }
         return count;
@@ -66,11 +70,14 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
             shinyChecklist = new HashMap<>();
 
             List<Pokemon> pokemon = pokemonManagement.getAllPokemonInNumberOrder();
-
             for (Pokemon poke : pokemon)
             {
                 shinyChecklist.put(poke.getNumberString(), poke);
             }
+
+            addAllPokemonInRegion(PokemonRegion.ALOLA);
+            addAllPokemonInRegion(PokemonRegion.GALAR);
+            addAllPokemonInRegion(PokemonRegion.HISUI);
 
             checkLetsGoShinies();
             checkGoShinies();
@@ -79,14 +86,21 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
         }
     }
 
+    private void addAllPokemonInRegion(PokemonRegion region)
+    {
+        List<Pokemon> pokemon = pokemonManagement.getAllPokemonInRegion(region);
+        for (Pokemon poke : pokemon)
+        {
+            String numberCode = region.prefix() + poke.getNumberString();
+            shinyChecklist.put(numberCode, poke);
+        }
+    }
+
     private void checkLetsGoShinies()
     {
         for(ShinyDexEntryLetsGo entry : getShinyDexLetsGoEntries())
         {
-            String number = entry.getNumberCode();
-
-            Pokemon poke = shinyChecklist.get(number);
-            poke.setShiny(true);
+            updateShinyChecklist(entry);
         }
     }
 
@@ -96,10 +110,7 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
         {
             if (entry.isShinyGo() || entry.isShinyHome())
             {
-                String number = entry.getNumberCode();
-
-                Pokemon poke = shinyChecklist.get(number);
-                poke.setShiny(true);
+                updateShinyChecklist(entry);
             }
         }
     }
@@ -110,13 +121,7 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
         {
             if (entry.isHaveShiny())
             {
-                String number = entry.getNumberCode();
-
-                Pokemon poke = shinyChecklist.get(number);
-                if(poke != null)
-                {
-                    poke.setShiny(true);
-                }
+                updateShinyChecklist(entry);
             }
         }
     }
@@ -125,13 +130,30 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
     {
         for (ShinyDexEntryMain entry : getShinyDexMainEntries())
         {
-            if (entry.isNormal())
-            {
-                String number = entry.getNumberCode();
+            updateShinyChecklist(entry);
+        }
+    }
 
-                Pokemon poke = shinyChecklist.get(number);
-                poke.setShiny(true);
-            }
+    private void updateShinyChecklist(AbstractShinyDexEntry entry)
+    {
+        String number = entry.getNumberCode();
+        Pokemon poke = shinyChecklist.get(number);
+
+        if (PokemonRegion.isNormalNumberCode(number))
+        {
+            poke.setShiny(true);
+        }
+        else if (PokemonRegion.isRegionalNumberCode(number, PokemonRegion.ALOLA))
+        {
+            poke.setShinyAlola(true);
+        }
+        else if (PokemonRegion.isRegionalNumberCode(number, PokemonRegion.GALAR))
+        {
+            poke.setShinyGalar(true);
+        }
+        else if (PokemonRegion.isRegionalNumberCode(number, PokemonRegion.HISUI))
+        {
+            poke.setShinyHisui(true);
         }
     }
 

@@ -13,10 +13,6 @@ import java.util.List;
 
 public class OverallShinyDex
 {
-    private static final String ALOLA_MARK = "a";
-    private static final String GALAR_MARK = "g";
-    private static final String HISUI_MARK = "h";
-
     protected static final Integer COLUMNS = 6;
     protected static final Integer ROWS = 5;
 
