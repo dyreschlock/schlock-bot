@@ -40,7 +40,7 @@ class PokemonInfoServiceImplTest extends AppTestCase
         testData.add(new String[]{"!pokemon 150", "No. 150 Mewtwo"});
         testData.add(new String[]{"!pokemon 0000000001", "No. 1 Bulbasaur"});
         testData.add(new String[]{"!pokemon 0", "No. 1 Bulbasaur"});
-        testData.add(new String[]{"!pokemon 900", "No. 898 Calyrex"});
+        testData.add(new String[]{"!pokemon 898", "No. 898 Calyrex"});
 
         assertInputEqualsOutput(testData);
     }
@@ -84,10 +84,9 @@ class PokemonInfoServiceImplTest extends AppTestCase
         testData.add(new String[]{"!pokemon -1", "No. 1 Bulbasaur"});
         testData.add(new String[]{"!pokemon -0", "No. 1 Bulbasaur"});
 
-        testData.add(new String[]{"!pokemon 900-", "No. 898 Calyrex"});
-        testData.add(new String[]{"!pokemon 898-", "No. 898 Calyrex"});
-        testData.add(new String[]{"!pokemon 897-", "No. 898 Calyrex", "No. 897 Spectrier"});
-        testData.add(new String[]{"!pokemon 896-", "No. 898 Calyrex", "No. 897 Spectrier", "No. 896 Glastrier"});
+        testData.add(new String[]{"!pokemon 898-898", "No. 898 Calyrex"});
+        testData.add(new String[]{"!pokemon 897-898", "No. 898 Calyrex", "No. 897 Spectrier"});
+        testData.add(new String[]{"!pokemon 896-898", "No. 898 Calyrex", "No. 897 Spectrier", "No. 896 Glastrier"});
 
         for (String[] data : testData)
         {

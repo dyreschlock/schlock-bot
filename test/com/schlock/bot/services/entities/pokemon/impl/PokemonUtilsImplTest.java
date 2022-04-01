@@ -84,13 +84,13 @@ class PokemonUtilsImplTest extends AppTestCase
         String rangeB = pokemonUtils.returnGenerationRange("Gen1");
 
         assertEquals(range1, "1-151");
-        assertEquals(range2, "152-250");
-        assertEquals(range3, "251-386");
+        assertEquals(range2, "152-251");
+        assertEquals(range3, "252-386");
         assertEquals(range4, "387-493");
         assertEquals(range5, "494-649");
         assertEquals(range6, "650-721");
         assertEquals(range7, "722-809");
-        assertEquals(range8, "810-898");
+        assertEquals(range8, "810-905");
         assertNull(rangeX);
 
         assertEquals(rangeA, "1-151");
