@@ -25,6 +25,9 @@ public class ShinyGetHisui extends Persisted
     @Column(name = "alphaNumber")
     private Integer alphaNumber;
 
+    @Column(name = "checks")
+    private Integer outbreakChecks;
+
     @Column(name = "resets")
     private Integer resets;
 
@@ -114,6 +117,16 @@ public class ShinyGetHisui extends Persisted
     public void setAlphaNumber(Integer alphaNumber)
     {
         this.alphaNumber = alphaNumber;
+    }
+
+    public Integer getOutbreakChecks()
+    {
+        return outbreakChecks;
+    }
+
+    public void setOutbreakChecks(Integer outbreakChecks)
+    {
+        this.outbreakChecks = outbreakChecks;
     }
 
     public Integer getResets()

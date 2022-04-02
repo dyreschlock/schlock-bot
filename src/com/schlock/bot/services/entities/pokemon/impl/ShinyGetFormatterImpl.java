@@ -66,18 +66,18 @@ public class ShinyGetFormatterImpl implements ShinyGetFormatter
             pokemonName = messages.format(HISUI_SHINY_ALPHA, pokemonName);
         }
 
+        Integer checks = get.getOutbreakChecks();
         if (get.isOutbreak())
         {
-            Integer resets = get.getResets();
-            message = messages.format(HISUI_SHINY_OUTBREAK, pokemonName, resets.toString());
+            message = messages.format(HISUI_SHINY_OUTBREAK, pokemonName, checks.toString());
         }
         else if (get.isMassiveOutbreak())
         {
-            message = messages.format(HISUI_SHINY_MASSIVE, pokemonName);
+            message = messages.format(HISUI_SHINY_MASSIVE, pokemonName, checks.toString());
         }
         else
         {
-            message = messages.format(HISUI_SHINY_WILD, pokemonName);
+            message = messages.format(HISUI_SHINY_WILD, pokemonName, checks.toString());
         }
 
         if (get.getAlphaNumber() != null)

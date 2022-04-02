@@ -20,7 +20,8 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 {
     protected static final String INSUFFICIENT_FUNDS_KEY = "bet-insufficient-funds";
     protected static final String UPDATE_INSUFFICIENT_FUNDS_KEY = "bet-update-insufficient-funds";
-    protected static final String BET_WRONG_FORMAT_KEY = "bet-wrong-format";
+    protected static final String BET_LETSGO_WRONG_FORMAT_KEY = "bet-letsgo-wrong-format";
+    protected static final String BET_HISUI_WRONG_FORMAT_KEY = "bet-hisui-wrong-format";
 
     protected static final String BET_AMOUNT_NOT_ENOUGH = "bet-amount-must-be-positive";
     protected static final String BET_TIME_NOT_ENOUGH = "bet-time-must-be-positive";
@@ -36,7 +37,9 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
     protected static final String BET_CANCEL_WRONG_FORMAT_KEY = "bet-cancel-wrong-format";
     protected static final String BET_CANCEL_NO_BET_KEY = "bet-cancel-no-bet";
 
-    protected static final String BETS_NOW_OPEN_KEY = "bets-now-open";
+    protected static final String BETS_NOW_OPEN_LETSGO_KEY = "bets-now-open-letsgo";
+    protected static final String BETS_NOW_OPEN_HISUI_KEY = "bets-now-open-hisui";
+    protected static final String BETS_NOW_OPEN_ERROR_KEY = "bets-now-open-error";
     protected static final String BETS_NOW_CLOSED_KEY = "bets-now-closed";
     protected static final String BETS_ARE_CLOSED_KEY = "bets-are-closed";
 
@@ -47,8 +50,11 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
     private static final String CANCEL_BET = "!cancelbet ";
     private static final String CANCEL_ALL_BETS = "!cancelallbets";
 
-    private static final String OPEN_BETTING = "!openbets";
+    private static final String OPEN_BETTING = "!openbets ";
     private static final String CLOSE_BETTING = "!closebets";
+
+    private static final String LETS_GO = "letsgo";
+    private static final String HISUI = "hisui";
 
     private final PokemonManagement pokemonManagement;
     private final UserManagement userManagement;
@@ -60,7 +66,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
     private final DeploymentConfiguration config;
 
 
-    private boolean bettingCurrentOpen = false;
+    private BettingType currentBettingType = null;
 
     public ShinyBetServiceImpl(PokemonManagement pokemonManagement,
                                UserManagement userManagement,
@@ -121,9 +127,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
             {
                 return formatSingleResponse(NOT_ADMIN_KEY);
             }
-            openBetting();
-
-            return formatAllResponse(BETS_NOW_OPEN_KEY);
+            return openBetting(command);
         }
         if (command.startsWith(CLOSE_BETTING))
         {
@@ -135,7 +139,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
             return formatAllResponse(BETS_NOW_CLOSED_KEY);
         }
 
-        if (!bettingCurrentOpen)
+        if (!isBettingCurrentlyOpen())
         {
             return formatSingleResponse(BETS_ARE_CLOSED_KEY);
         }
@@ -172,6 +176,26 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
     {
         String params = in.substring(BET_COMMAND.length());
 
+        if (currentBettingType.isLetsGo())
+        {
+            return placeBetLetsGo(username, params);
+        }
+        if (currentBettingType.isHisui())
+        {
+            return placeBetHisui(username, params);
+        }
+        return nullResponse();
+    }
+
+    private ListenerResponse placeBetHisui(String username, String params)
+    {
+
+
+        return formatSingleResponse(BET_HISUI_WRONG_FORMAT_KEY);
+    }
+
+    private ListenerResponse placeBetLetsGo(String username, String params)
+    {
         Pokemon pokemon = getPokemonFromParams(params);
         Integer time = getTimeFromParams(params);
         Integer betAmount = getBetAmountFromParams(params);
@@ -236,7 +260,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
                 return formatAllResponse(BET_SUCCESS_KEY, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
             }
         }
-        return formatSingleResponse(BET_WRONG_FORMAT_KEY);
+        return formatSingleResponse(BET_LETSGO_WRONG_FORMAT_KEY);
     }
 
     private Pokemon getPokemonFromParams(String params)
@@ -372,13 +396,65 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
         return formatAllResponse(ALL_BETS_CANCELED_KEY, username);
     }
 
-    protected void openBetting()
+    protected ListenerResponse openBetting(String command)
     {
-        bettingCurrentOpen = true;
+        String[] p = command.trim().split(" ");
+
+        BettingType type = BettingType.getType(p[1]);
+
+        if (type != null)
+        {
+            this.currentBettingType = type;
+
+            return formatAllResponse(type.openMessageKey);
+        }
+        return formatSingleResponse(BETS_NOW_OPEN_ERROR_KEY);
     }
 
     protected void closeBetting()
     {
-        bettingCurrentOpen = false;
+        currentBettingType = null;
+    }
+
+    private boolean isBettingCurrentlyOpen()
+    {
+        return currentBettingType != null;
+    }
+
+    private enum BettingType
+    {
+        LETS_GO(ShinyBetServiceImpl.LETS_GO, BETS_NOW_OPEN_LETSGO_KEY),
+        HISUI(ShinyBetServiceImpl.HISUI, BETS_NOW_OPEN_HISUI_KEY);
+
+        private final String key;
+        private final String openMessageKey;
+
+        private BettingType(String key, String openMessageKey)
+        {
+            this.key = key;
+            this.openMessageKey = openMessageKey;
+        }
+
+        public boolean isLetsGo()
+        {
+            return LETS_GO == this;
+        }
+
+        public boolean isHisui()
+        {
+            return HISUI == this;
+        }
+
+        public static BettingType getType(String key)
+        {
+            for (BettingType type : values())
+            {
+                if (type.key.equals(key))
+                {
+                    return type;
+                }
+            }
+            return null;
+        }
     }
 }

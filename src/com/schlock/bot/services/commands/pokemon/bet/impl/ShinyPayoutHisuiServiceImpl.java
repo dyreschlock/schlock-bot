@@ -17,7 +17,7 @@ import org.apache.tapestry5.ioc.Messages;
 
 public class ShinyPayoutHisuiServiceImpl extends AbstractListenerService implements ShinyPayoutHisuiService
 {
-    protected static final String BAD_FORMAT_MESSAGE_KEY = "hisui-wrong-format";
+    protected static final String BAD_FORMAT_MESSAGE_KEY = "get-hisui-wrong-format";
 
     private static final String SHINY_GET_COMMAND = "!hisuiget ";
 
@@ -77,6 +77,9 @@ public class ShinyPayoutHisuiServiceImpl extends AbstractListenerService impleme
             ListenerResponse response = ListenerResponse.relayAll();
             response.addMessage(shinyFormatter.formatNewlyCaughtHisui(get));
 
+
+
+
             return response;
         }
         return nullResponse();
@@ -84,7 +87,7 @@ public class ShinyPayoutHisuiServiceImpl extends AbstractListenerService impleme
 
     protected ShinyGetHisui createGetFromParams(String paramString)
     {
-        //[type] [pokemon] [resets] [alpha]
+        //[type] [pokemon] [checks] ([alpha])
         String params = paramString.toLowerCase();
 
         boolean alpha = false;
@@ -112,15 +115,10 @@ public class ShinyPayoutHisuiServiceImpl extends AbstractListenerService impleme
                 return null;
             }
 
-            Integer resets = null;
-            if (p.length > 2)
+            Integer checks = Integer.parseInt(p[2]);
+            if (checks == null)
             {
-                resets = Integer.parseInt(p[2]);
-
-                if(ShinyGetType.OUTBREAK.equals(type) && resets == null)
-                {
-                    return null;
-                }
+                return null;
             }
 
             Integer shinyNumber = database.get(ShinyGetHisuiDAO.class).getCurrentShinyNumber();
@@ -133,7 +131,7 @@ public class ShinyPayoutHisuiServiceImpl extends AbstractListenerService impleme
             ShinyGetHisui get = new ShinyGetHisui();
             get.setMethod(type);
             get.setPokemonId(pokemon.getId());
-            get.setResets(resets);
+            get.setOutbreakChecks(checks);
             get.setShinyNumber(shinyNumber);
             get.setAlphaNumber(alphaNumber);
 

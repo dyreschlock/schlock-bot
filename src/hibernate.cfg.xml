@@ -27,6 +27,7 @@
         <mapping class="com.schlock.bot.entities.base.User" />
 
         <mapping class="com.schlock.bot.entities.pokemon.ShinyBetLetsGo" />
+        <mapping class="com.schlock.bot.entities.pokemon.ShinyBetHisui" />
 
         <mapping class="com.schlock.bot.entities.pokemon.ShinyGetHisui" />
         <mapping class="com.schlock.bot.entities.pokemon.ShinyGetLetsGo" />

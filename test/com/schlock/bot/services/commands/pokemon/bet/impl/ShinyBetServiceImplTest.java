@@ -26,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ShinyBetServiceImplTest extends DatabaseTest
 {
+    private static final String OPEN_BETS_LETSGO = "!openbets letsgo";
+
     private static final String USERNAME1 = "username1";
     private static final Long BALANCE = Long.valueOf(10000);
 
@@ -54,8 +56,10 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
 
     @Test
-    public void testNewBet()
+    public void testNewBetLetsGo()
     {
+        impl.openBetting(OPEN_BETS_LETSGO);
+
         final String MARK = config().getCurrencyMark();
         Pokemon pokemon2 = pokemonManagement.getPokemonFromText(BET2_POKEMON);
 
@@ -108,6 +112,8 @@ class ShinyBetServiceImplTest extends DatabaseTest
     @Test
     public void testUpdateBet()
     {
+        impl.openBetting(OPEN_BETS_LETSGO);
+
         final String MARK = config().getCurrencyMark();
         Pokemon pokemon1 = pokemonManagement.getPokemonFromText(BET1_POKEMON);
 
@@ -157,6 +163,8 @@ class ShinyBetServiceImplTest extends DatabaseTest
     @Test
     public void testCurrentBets()
     {
+        impl.openBetting(OPEN_BETS_LETSGO);
+
         final String MARK = config().getCurrencyMark();
         Pokemon pokemon1 = pokemonManagement.getPokemonFromText(BET1_POKEMON);
         Pokemon pokemon2 = pokemonManagement.getPokemonFromText(BET2_POKEMON);
@@ -204,6 +212,8 @@ class ShinyBetServiceImplTest extends DatabaseTest
     @Test
     public void testCancelAllBets()
     {
+        impl.openBetting(OPEN_BETS_LETSGO);
+
         List bets = database().get(ShinyBetLetsGoDAO.class).getByUsername(user.getUsername());
 
         assertEquals(1, bets.size());
@@ -239,6 +249,8 @@ class ShinyBetServiceImplTest extends DatabaseTest
     @Test
     public void testCancelBet()
     {
+        impl.openBetting(OPEN_BETS_LETSGO);
+
         final String CANCEL_BET1 = "!cancelbet " + BET1_POKEMON;
         final String CANCEL_BET2 = "!cancelbet " + BET2_POKEMON;
 
@@ -271,7 +283,8 @@ class ShinyBetServiceImplTest extends DatabaseTest
     @Test
     public void testOpenAndCloseBetting()
     {
-        final String OPEN_BETS = "!openbets";
+        impl.openBetting(OPEN_BETS_LETSGO);
+
         final String CLOSE_BETS = "!closebets";
 
         final String ADMIN = config().getOwnerUsername();
@@ -306,16 +319,16 @@ class ShinyBetServiceImplTest extends DatabaseTest
         assertFalse(resp.isRelayAll());
         assertEquals(expected, response);
 
-        resp = impl.process(USERNAME1, OPEN_BETS);
+        resp = impl.process(USERNAME1, OPEN_BETS_LETSGO);
         response = resp.getFirstMessage();
         expected = messages().get(ListenerService.NOT_ADMIN_KEY);
 
         assertFalse(resp.isRelayAll());
         assertEquals(expected, response);
 
-        resp = impl.process(ADMIN, OPEN_BETS);
+        resp = impl.process(ADMIN, OPEN_BETS_LETSGO);
         response = resp.getFirstMessage();
-        expected = messages().get(ShinyBetServiceImpl.BETS_NOW_OPEN_KEY);
+        expected = messages().get(ShinyBetServiceImpl.BETS_NOW_OPEN_LETSGO_KEY);
 
         assertTrue(resp.isRelayAll());
         assertEquals(expected, response);
@@ -340,7 +353,6 @@ class ShinyBetServiceImplTest extends DatabaseTest
         ShinyBetFormatter betFormatter = new ShinyBetFormatterImpl(pokemonManagement, messages(), config());
 
         impl = new ShinyBetServiceImpl(pokemonManagement, userManagement, betFormatter, database(), messages(), config());
-        impl.openBetting();
 
         createTestObjects();
     }

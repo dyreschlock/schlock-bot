@@ -31,7 +31,7 @@ public class ShinyPayoutLetsGoServiceImpl extends AbstractListenerService implem
     protected static final String BIGGEST_WINNER_KEY = "payout-biggest-winner";
     protected static final String USER_UPDATE_KEY = "payout-user-update";
 
-    protected static final String BAD_FORMAT_MESSAGE_KEY = "get-wrong-format";
+    protected static final String BAD_FORMAT_MESSAGE_KEY = "get-letsgo-wrong-format";
 
     protected static final String DOUBLER_BONUS = "doubler-bonus";
 

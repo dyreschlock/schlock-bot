@@ -10,7 +10,7 @@ import com.schlock.bot.services.entities.pokemon.impl.PokemonManagementImpl;
 import com.schlock.bot.services.entities.pokemon.impl.PokemonUtilsImpl;
 import com.schlock.bot.services.entities.pokemon.impl.ShinyGetFormatterImpl;
 
-public class ShinyHisuiServiceImplTest extends DatabaseTest
+public class ShinyPayoutHisuiServiceImplTest extends DatabaseTest
 {
     private UserManagement userManagement;
     private ShinyGetFormatter shinyFormatter;
