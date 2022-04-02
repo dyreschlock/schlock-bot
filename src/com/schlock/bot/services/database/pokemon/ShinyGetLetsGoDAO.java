@@ -1,9 +1,9 @@
 package com.schlock.bot.services.database.pokemon;
 
-import com.schlock.bot.entities.pokemon.ShinyGet;
+import com.schlock.bot.entities.pokemon.ShinyGetLetsGo;
 import com.schlock.bot.services.database.BaseDAO;
 
-public interface ShinyGetDAO extends BaseDAO<ShinyGet>
+public interface ShinyGetLetsGoDAO extends BaseDAO<ShinyGetLetsGo>
 {
     Double getCurrentAverageTimeToShiny();
 
@@ -11,5 +11,5 @@ public interface ShinyGetDAO extends BaseDAO<ShinyGet>
 
     Integer getCurrentShinyNumber();
 
-    ShinyGet getMostRecent();
+    ShinyGetLetsGo getMostRecent();
 }

@@ -5,8 +5,8 @@ import com.schlock.bot.entities.Persisted;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "shiny_get")
-public class ShinyGet extends Persisted
+@Table(name = "shiny_get_letsgo")
+public class ShinyGetLetsGo extends Persisted
 {
     @Id
     @GeneratedValue
@@ -28,7 +28,7 @@ public class ShinyGet extends Persisted
     @Column(name = "numOfRareChecks")
     private Integer numOfRareChecks;
 
-    public ShinyGet()
+    public ShinyGetLetsGo()
     {
     }
 

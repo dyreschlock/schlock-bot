@@ -1,7 +1,7 @@
 package com.schlock.bot.services.commands.pokemon.shiny.impl;
 
 import com.schlock.bot.entities.TimeUtils;
-import com.schlock.bot.entities.pokemon.ShinyGet;
+import com.schlock.bot.entities.pokemon.ShinyGetLetsGo;
 import com.schlock.bot.entities.pokemon.ShinyGetType;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
@@ -28,7 +28,7 @@ class ShinyInfoServiceImplTest extends DatabaseTest
 
     private ShinyInfoServiceImpl impl;
 
-    private ShinyGet get1;
+    private ShinyGetLetsGo get1;
 
 
     @Test
@@ -87,7 +87,7 @@ class ShinyInfoServiceImplTest extends DatabaseTest
 
     private void createTestObjects()
     {
-        get1 = new ShinyGet();
+        get1 = new ShinyGetLetsGo();
         get1.setType(ShinyGetType.CATCH);
         get1.setShinyNumber(1);
         get1.setPokemonId("bulbasaur");

@@ -21,7 +21,7 @@ public class ShinyBet extends Persisted
     @ManyToOne
     @JoinColumn(name = "shiny",
                     foreignKey = @ForeignKey(name = "SHINY_GET_ID_FK"))
-    private ShinyGet shiny;
+    private ShinyGetLetsGo shiny;
 
     @Column(name = "pokemonId")
     private String pokemonId;
@@ -57,12 +57,12 @@ public class ShinyBet extends Persisted
         this.user = user;
     }
 
-    public ShinyGet getShiny()
+    public ShinyGetLetsGo getShiny()
     {
         return shiny;
     }
 
-    public void setShiny(ShinyGet shiny)
+    public void setShiny(ShinyGetLetsGo shiny)
     {
         this.shiny = shiny;
     }

@@ -3,7 +3,7 @@ package com.schlock.bot.services.commands.pokemon.bet.impl;
 import com.schlock.bot.entities.base.User;
 import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.entities.pokemon.ShinyBet;
-import com.schlock.bot.entities.pokemon.ShinyGet;
+import com.schlock.bot.entities.pokemon.ShinyGetLetsGo;
 import com.schlock.bot.entities.pokemon.ShinyGetType;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.AbstractListenerService;
@@ -11,7 +11,7 @@ import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyPayoutService;
 import com.schlock.bot.services.database.adhoc.DatabaseManager;
 import com.schlock.bot.services.database.pokemon.ShinyBetDAO;
-import com.schlock.bot.services.database.pokemon.ShinyGetDAO;
+import com.schlock.bot.services.database.pokemon.ShinyGetLetsGoDAO;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.ShinyGetFormatter;
 import org.apache.commons.lang3.StringUtils;
@@ -86,7 +86,7 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
         {
             String params = in.substring(SHINY_GET_COMMAND.length()).trim();
 
-            ShinyGet get = createShinyGetFromParams(params);;
+            ShinyGetLetsGo get = createShinyGetFromParams(params);;
             if(get == null)
             {
                 return formatSingleResponse(BAD_FORMAT_MESSAGE_KEY);
@@ -95,7 +95,7 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
             database.save(get);
 
             ListenerResponse response = ListenerResponse.relayAll();
-            response.addMessage(shinyFormatter.formatNewlyCaught(get));
+            response.addMessage(shinyFormatter.formatNewlyCaughtLetsGo(get));
 
             List<ShinyBet> bets = database.get(ShinyBetDAO.class).getAllCurrent();
             if (bets.size() == 0)
@@ -224,7 +224,7 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
         return closestTimeRange.equals(range);
     }
 
-    protected ShinyGet createShinyGetFromParams(String params)
+    protected ShinyGetLetsGo createShinyGetFromParams(String params)
     {
         //[type] [pokemon] [time] [checks]
         String[] p = params.split(" ");
@@ -251,9 +251,9 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
                 return null;
             }
 
-            Integer shinyNumber = database.get(ShinyGetDAO.class).getCurrentShinyNumber();
+            Integer shinyNumber = database.get(ShinyGetLetsGoDAO.class).getCurrentShinyNumber();
 
-            ShinyGet get = new ShinyGet();
+            ShinyGetLetsGo get = new ShinyGetLetsGo();
             get.setType(type);
             get.setPokemonId(pokemon.getId());
             get.setTimeInMinutes(time);

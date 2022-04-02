@@ -1,29 +1,29 @@
 package com.schlock.bot.services.database.pokemon.impl;
 
 import com.schlock.bot.entities.pokemon.ShinyGetType;
-import com.schlock.bot.entities.pokemon.ShinyHisuiGet;
+import com.schlock.bot.entities.pokemon.ShinyGetHisui;
 import com.schlock.bot.services.database.AbstractBaseDAO;
-import com.schlock.bot.services.database.pokemon.ShinyHisuiGetDAO;
+import com.schlock.bot.services.database.pokemon.ShinyGetHisuiDAO;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-public class ShinyHisuiGetDAOImpl extends AbstractBaseDAO<ShinyHisuiGet> implements ShinyHisuiGetDAO
+public class ShinyGetHisuiDAOImpl extends AbstractBaseDAO<ShinyGetHisui> implements ShinyGetHisuiDAO
 {
-    public ShinyHisuiGetDAOImpl(SessionFactory sessionFactory)
+    public ShinyGetHisuiDAOImpl(SessionFactory sessionFactory)
     {
-        super(ShinyHisuiGet.class, sessionFactory);
+        super(ShinyGetHisui.class, sessionFactory);
     }
 
     public Double getCurrentResetAverage()
     {
         String totalOutbreakShiny = " select count(g) " +
-                                    " from ShinyHisuiGet g " +
+                                    " from ShinyGetHisui g " +
                                     " where g.resets != null " +
                                     " and g.method = :method ";
 
         String totalOutbreakResets = " select sum(g.resets) " +
-                                        " from ShinyHisuiGet g " +
+                                        " from ShinyGetHisui g " +
                                         " where g.resets != null " +
                                         " and g.method = :method ";
 
@@ -47,7 +47,7 @@ public class ShinyHisuiGetDAOImpl extends AbstractBaseDAO<ShinyHisuiGet> impleme
 
     public Integer getCurrentShinyNumber()
     {
-        String text = " select count(g) from ShinyHisuiGet g ";
+        String text = " select count(g) from ShinyGetHisui g ";
 
         Session session = sessionFactory.openSession();
         session.beginTransaction();

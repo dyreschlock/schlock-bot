@@ -5,8 +5,8 @@ import com.schlock.bot.entities.Persisted;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "shiny_hisui_get")
-public class ShinyHisuiGet extends Persisted
+@Table(name = "shiny_get_hisui")
+public class ShinyGetHisui extends Persisted
 {
     public static final String WILD = "wild";
     public static final String OUTBREAK = "outbreak";

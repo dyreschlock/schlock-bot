@@ -3,14 +3,14 @@ package com.schlock.bot.services.commands.pokemon.bet.impl;
 import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.entities.pokemon.ShinyDexEntryHisui;
 import com.schlock.bot.entities.pokemon.ShinyGetType;
-import com.schlock.bot.entities.pokemon.ShinyHisuiGet;
+import com.schlock.bot.entities.pokemon.ShinyGetHisui;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyHisuiService;
 import com.schlock.bot.services.database.adhoc.DatabaseManager;
 import com.schlock.bot.services.database.pokemon.ShinyDexEntryHisuiDAO;
-import com.schlock.bot.services.database.pokemon.ShinyHisuiGetDAO;
+import com.schlock.bot.services.database.pokemon.ShinyGetHisuiDAO;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.ShinyGetFormatter;
 import org.apache.tapestry5.ioc.Messages;
@@ -64,7 +64,7 @@ public class ShinyHisuiServiceImpl extends AbstractListenerService implements Sh
         {
             String params = in.substring(SHINY_GET_COMMAND.length()).trim();
 
-            ShinyHisuiGet get = createGetFromParams(params);
+            ShinyGetHisui get = createGetFromParams(params);
             if (get == null)
             {
                 return formatSingleResponse(BAD_FORMAT_MESSAGE_KEY);
@@ -82,7 +82,7 @@ public class ShinyHisuiServiceImpl extends AbstractListenerService implements Sh
         return nullResponse();
     }
 
-    protected ShinyHisuiGet createGetFromParams(String paramString)
+    protected ShinyGetHisui createGetFromParams(String paramString)
     {
         //[type] [pokemon] [resets] [alpha]
         String params = paramString.toLowerCase();
@@ -123,14 +123,14 @@ public class ShinyHisuiServiceImpl extends AbstractListenerService implements Sh
                 }
             }
 
-            Integer shinyNumber = database.get(ShinyHisuiGetDAO.class).getCurrentShinyNumber();
+            Integer shinyNumber = database.get(ShinyGetHisuiDAO.class).getCurrentShinyNumber();
             Integer alphaNumber = null;
             if (alpha)
             {
-                alphaNumber = database.get(ShinyHisuiGetDAO.class).getCurrentAlphaNumber();
+                alphaNumber = database.get(ShinyGetHisuiDAO.class).getCurrentAlphaNumber();
             }
 
-            ShinyHisuiGet get = new ShinyHisuiGet();
+            ShinyGetHisui get = new ShinyGetHisui();
             get.setMethod(type);
             get.setPokemonId(pokemon.getId());
             get.setResets(resets);
@@ -145,7 +145,7 @@ public class ShinyHisuiServiceImpl extends AbstractListenerService implements Sh
         return null;
     }
 
-    protected void registerDexEntry(ShinyHisuiGet get)
+    protected void registerDexEntry(ShinyGetHisui get)
     {
         String pokemonId = get.getPokemonId();
 

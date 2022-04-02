@@ -1,7 +1,7 @@
 package com.schlock.bot.components.pokemon;
 
 import com.schlock.bot.entities.pokemon.ShinyDexEntryHisui;
-import com.schlock.bot.entities.pokemon.ShinyHisuiGet;
+import com.schlock.bot.entities.pokemon.ShinyGetHisui;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import org.apache.tapestry5.annotations.Persist;
@@ -99,7 +99,7 @@ public class HisuiShinyDex
         }
         else if (isListInDexOrder())
         {
-            List<ShinyHisuiGet> gets = dexEntryService.getShinyDexHisuiGets();
+            List<ShinyGetHisui> gets = dexEntryService.getShinyDexHisuiGets();
             Integer dexCount = gets.size();
 
             message = messages.format("shiny-count", dexCount.toString());
@@ -127,11 +127,11 @@ public class HisuiShinyDex
 
     public String getTableHTMLDexOrder()
     {
-        List<ShinyHisuiGet> gets = dexEntryService.getShinyDexHisuiGets();
-        Collections.sort(gets, new Comparator<ShinyHisuiGet>()
+        List<ShinyGetHisui> gets = dexEntryService.getShinyDexHisuiGets();
+        Collections.sort(gets, new Comparator<ShinyGetHisui>()
         {
             @Override
-            public int compare(ShinyHisuiGet o1, ShinyHisuiGet o2)
+            public int compare(ShinyGetHisui o1, ShinyGetHisui o2)
             {
                 return o1.getHisuiNumber() - o2.getHisuiNumber();
             }
@@ -142,7 +142,7 @@ public class HisuiShinyDex
         html += "<tr>";
         for(Integer i = 1; i < gets.size()+1; i++)
         {
-            ShinyHisuiGet get = gets.get(i-1);
+            ShinyGetHisui get = gets.get(i-1);
 
             String numberString = get.getHisuiNumberString();
             boolean show = true;

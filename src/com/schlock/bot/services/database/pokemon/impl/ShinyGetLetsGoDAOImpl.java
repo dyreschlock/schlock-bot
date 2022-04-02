@@ -1,23 +1,23 @@
 package com.schlock.bot.services.database.pokemon.impl;
 
-import com.schlock.bot.entities.pokemon.ShinyGet;
-import com.schlock.bot.services.database.pokemon.ShinyGetDAO;
+import com.schlock.bot.entities.pokemon.ShinyGetLetsGo;
+import com.schlock.bot.services.database.pokemon.ShinyGetLetsGoDAO;
 import com.schlock.bot.services.database.AbstractBaseDAO;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-public class ShinyGetDAOImpl extends AbstractBaseDAO<ShinyGet> implements ShinyGetDAO
+public class ShinyGetLetsGoDAOImpl extends AbstractBaseDAO<ShinyGetLetsGo> implements ShinyGetLetsGoDAO
 {
-    public ShinyGetDAOImpl(SessionFactory sessionFactory)
+    public ShinyGetLetsGoDAOImpl(SessionFactory sessionFactory)
     {
-        super(ShinyGet.class, sessionFactory);
+        super(ShinyGetLetsGo.class, sessionFactory);
     }
 
     public Double getCurrentAverageTimeToShiny()
     {
-        String totalShinyText = " select count(g) from ShinyGet g ";
-        String totalTimeText = " select sum(g.timeInMinutes) from ShinyGet g ";
+        String totalShinyText = " select count(g) from ShinyGetLetsGo g ";
+        String totalTimeText = " select sum(g.timeInMinutes) from ShinyGetLetsGo g ";
 
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -38,12 +38,12 @@ public class ShinyGetDAOImpl extends AbstractBaseDAO<ShinyGet> implements ShinyG
     public Double getCurrentAverageNumberOfRareChecks()
     {
         String totalRareShinyText = " select count(g) " +
-                                        " from ShinyGet g " +
+                                        " from ShinyGetLetsGo g " +
                                         " where g.numOfRareChecks != null ";
 
 
         String totalRareChecksText = " select sum(g.numOfRareChecks)" +
-                                        " from ShinyGet g " +
+                                        " from ShinyGetLetsGo g " +
                                         " where g.numOfRareChecks != null ";
 
         Session session = sessionFactory.openSession();
@@ -64,7 +64,7 @@ public class ShinyGetDAOImpl extends AbstractBaseDAO<ShinyGet> implements ShinyG
 
     public Integer getCurrentShinyNumber()
     {
-        String text = " select count(g) from ShinyGet g ";
+        String text = " select count(g) from ShinyGetLetsGo g ";
 
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -79,9 +79,9 @@ public class ShinyGetDAOImpl extends AbstractBaseDAO<ShinyGet> implements ShinyG
         return next;
     }
 
-    public ShinyGet getMostRecent()
+    public ShinyGetLetsGo getMostRecent()
     {
-        String text = " from ShinyGet g " +
+        String text = " from ShinyGetLetsGo g " +
                         " order by g.shinyNumber desc ";
 
         Session session = sessionFactory.openSession();
@@ -89,7 +89,7 @@ public class ShinyGetDAOImpl extends AbstractBaseDAO<ShinyGet> implements ShinyG
 
         Query query = session.createQuery(text);
 
-        ShinyGet shinyGet = singleResult(query);
+        ShinyGetLetsGo shinyGet = singleResult(query);
 
         session.getTransaction().commit();
         session.close();

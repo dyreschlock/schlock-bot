@@ -2,12 +2,12 @@ package com.schlock.bot.services.commands.pokemon.bet.impl;
 
 import com.schlock.bot.entities.base.User;
 import com.schlock.bot.entities.pokemon.ShinyBet;
-import com.schlock.bot.entities.pokemon.ShinyGet;
+import com.schlock.bot.entities.pokemon.ShinyGetLetsGo;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.base.UserDAO;
-import com.schlock.bot.services.database.pokemon.ShinyGetDAO;
+import com.schlock.bot.services.database.pokemon.ShinyGetLetsGoDAO;
 import com.schlock.bot.services.entities.base.UserManagement;
 import com.schlock.bot.services.entities.base.impl.UserManagementImpl;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
@@ -105,9 +105,9 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         List<String> winnersTime = Arrays.asList(user1.getUsername());
         List<String> winnersBoth = Arrays.asList(user1.getUsername());
 
-        ShinyGet mostRecent = database().get(ShinyGetDAO.class).getMostRecent();
+        ShinyGetLetsGo mostRecent = database().get(ShinyGetLetsGoDAO.class).getMostRecent();
 
-        String response1 = shinyFormatter.formatNewlyCaught(mostRecent);
+        String response1 = shinyFormatter.formatNewlyCaughtLetsGo(mostRecent);
 
         String response2 = messages().format(ShinyPayoutServiceImpl.WINNERS_POKEMON_KEY, StringUtils.join(winnersPokemon, ", "));
         String response3 = messages().format(ShinyPayoutServiceImpl.WINNERS_TIME_KEY, StringUtils.join(winnersTime, ", "));
@@ -197,7 +197,7 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
 
     private void removeTestObjects()
     {
-        ShinyGet get1 = database().get(ShinyGetDAO.class).getMostRecent();
+        ShinyGetLetsGo get1 = database().get(ShinyGetLetsGoDAO.class).getMostRecent();
 
         database().delete(user1, user2, user3, bet1, bet2, bet3, get1);
     }

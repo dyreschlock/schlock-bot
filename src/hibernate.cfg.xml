@@ -24,11 +24,12 @@
         <property name="hibernate.hikari.idleTimeout">30000</property>
         <property name="hibernate.hikari.dataSourceClassName">com.mysql.jdbc.jdbc2.optional.MysqlDataSource</property>
 
-        <mapping class="com.schlock.bot.entities.pokemon.ShinyBet" />
         <mapping class="com.schlock.bot.entities.base.User" />
+        
+        <mapping class="com.schlock.bot.entities.pokemon.ShinyBet" />
 
-        <mapping class="com.schlock.bot.entities.pokemon.ShinyGet" />
-        <mapping class="com.schlock.bot.entities.pokemon.ShinyHisuiGet" />
+        <mapping class="com.schlock.bot.entities.pokemon.ShinyGetHisui" />
+        <mapping class="com.schlock.bot.entities.pokemon.ShinyGetLetsGo" />
 
         <mapping class="com.schlock.bot.entities.pokemon.ShinyDexEntryGo" />
         <mapping class="com.schlock.bot.entities.pokemon.ShinyDexEntryHisui" />

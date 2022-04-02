@@ -1,13 +1,13 @@
 package com.schlock.bot.services.entities.pokemon;
 
-import com.schlock.bot.entities.pokemon.ShinyGet;
-import com.schlock.bot.entities.pokemon.ShinyHisuiGet;
+import com.schlock.bot.entities.pokemon.ShinyGetLetsGo;
+import com.schlock.bot.entities.pokemon.ShinyGetHisui;
 
 public interface ShinyGetFormatter
 {
-    String formatNewlyCaught(ShinyGet get);
+    String formatNewlyCaughtLetsGo(ShinyGetLetsGo get);
 
-    String formatMostRecent(ShinyGet get);
+    String formatMostRecent(ShinyGetLetsGo get);
 
-    String formatNewlyCaughtHisui(ShinyHisuiGet get);
+    String formatNewlyCaughtHisui(ShinyGetHisui get);
 }

@@ -1,21 +1,21 @@
 package com.schlock.bot.services.database.pokemon.impl;
 
-import com.schlock.bot.entities.pokemon.ShinyGet;
+import com.schlock.bot.entities.pokemon.ShinyGetLetsGo;
 import com.schlock.bot.entities.pokemon.ShinyGetType;
 import com.schlock.bot.services.database.DatabaseTest;
-import com.schlock.bot.services.database.pokemon.ShinyGetDAO;
+import com.schlock.bot.services.database.pokemon.ShinyGetLetsGoDAO;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-class ShinyGetDAOImplTest extends DatabaseTest
+class ShinyGetLetsGoDAOImplTest extends DatabaseTest
 {
-    private ShinyGetDAO shinyGetDAO;
+    private ShinyGetLetsGoDAO shinyGetDAO;
 
-    private ShinyGet get1;
-    private ShinyGet get2;
-    private ShinyGet get3;
+    private ShinyGetLetsGo get1;
+    private ShinyGetLetsGo get2;
+    private ShinyGetLetsGo get3;
 
     private static final Integer TIME1 = 80;
     private static final Integer TIME2 = 60;
@@ -27,7 +27,7 @@ class ShinyGetDAOImplTest extends DatabaseTest
     @Test
     public void testGetMostRecent()
     {
-        ShinyGet get = shinyGetDAO.getMostRecent();
+        ShinyGetLetsGo get = shinyGetDAO.getMostRecent();
 
         assertEquals(get3, get);
     }
@@ -66,7 +66,7 @@ class ShinyGetDAOImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        shinyGetDAO = database().get(ShinyGetDAO.class);
+        shinyGetDAO = database().get(ShinyGetLetsGoDAO.class);
 
         createTestObjects();
     }
@@ -79,21 +79,21 @@ class ShinyGetDAOImplTest extends DatabaseTest
 
     private void createTestObjects()
     {
-        get1 = new ShinyGet();
+        get1 = new ShinyGetLetsGo();
         get1.setType(ShinyGetType.CATCH);
         get1.setShinyNumber(1);
         get1.setPokemonId("bulbasaur");
         get1.setTimeInMinutes(TIME1);
         get1.setNumOfRareChecks(CHECK1);
 
-        get2 = new ShinyGet();
+        get2 = new ShinyGetLetsGo();
         get2.setType(ShinyGetType.FAIL);
         get2.setShinyNumber(2);
         get2.setPokemonId("bulbasaur");
         get2.setTimeInMinutes(TIME2);
         get2.setNumOfRareChecks(CHECK2);
 
-        get3 = new ShinyGet();
+        get3 = new ShinyGetLetsGo();
         get3.setType(ShinyGetType.CATCH);
         get3.setShinyNumber(3);
         get3.setPokemonId("catapie");
