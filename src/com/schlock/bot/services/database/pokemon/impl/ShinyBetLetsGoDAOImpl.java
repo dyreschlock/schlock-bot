@@ -1,7 +1,7 @@
 package com.schlock.bot.services.database.pokemon.impl;
 
-import com.schlock.bot.entities.pokemon.ShinyBet;
-import com.schlock.bot.services.database.pokemon.ShinyBetDAO;
+import com.schlock.bot.entities.pokemon.ShinyBetLetsGo;
+import com.schlock.bot.services.database.pokemon.ShinyBetLetsGoDAO;
 import com.schlock.bot.services.database.AbstractBaseDAO;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -9,17 +9,17 @@ import org.hibernate.SessionFactory;
 
 import java.util.List;
 
-public class ShinyBetDAOImpl extends AbstractBaseDAO<ShinyBet> implements ShinyBetDAO
+public class ShinyBetLetsGoDAOImpl extends AbstractBaseDAO<ShinyBetLetsGo> implements ShinyBetLetsGoDAO
 {
-    public ShinyBetDAOImpl(SessionFactory sessionFactory)
+    public ShinyBetLetsGoDAOImpl(SessionFactory sessionFactory)
     {
-        super(ShinyBet.class, sessionFactory);
+        super(ShinyBetLetsGo.class, sessionFactory);
     }
 
-    public List<ShinyBet> getByUsername(String username)
+    public List<ShinyBetLetsGo> getByUsername(String username)
     {
         String text = " select b " +
-                        " from ShinyBet b " +
+                        " from ShinyBetLetsGo b " +
                         " join b.user u " +
                         " where u.username = :name " +
                         " and b.shiny is null ";
@@ -30,7 +30,7 @@ public class ShinyBetDAOImpl extends AbstractBaseDAO<ShinyBet> implements ShinyB
         Query query = session.createQuery(text);
         query.setParameter("name", username);
 
-        List<ShinyBet> bets = query.list();
+        List<ShinyBetLetsGo> bets = query.list();
 
         session.getTransaction().commit();
         session.close();
@@ -38,10 +38,10 @@ public class ShinyBetDAOImpl extends AbstractBaseDAO<ShinyBet> implements ShinyB
         return bets;
     }
 
-    public ShinyBet getByUsernameAndPokemon(String username, String pokemonId)
+    public ShinyBetLetsGo getByUsernameAndPokemon(String username, String pokemonId)
     {
         String text = " select b " +
-                        " from ShinyBet b " +
+                        " from ShinyBetLetsGo b " +
                         " join b.user u " +
                         " where u.username = :name " +
                         " and b.pokemonId = :pokemon " +
@@ -54,7 +54,7 @@ public class ShinyBetDAOImpl extends AbstractBaseDAO<ShinyBet> implements ShinyB
         query.setParameter("name", username);
         query.setParameter("pokemon", pokemonId);
 
-        ShinyBet bet = singleResult(query);
+        ShinyBetLetsGo bet = singleResult(query);
 
         session.getTransaction().commit();
         session.close();
@@ -62,9 +62,9 @@ public class ShinyBetDAOImpl extends AbstractBaseDAO<ShinyBet> implements ShinyB
         return bet;
     }
 
-    public List<ShinyBet> getAllCurrent()
+    public List<ShinyBetLetsGo> getAllCurrent()
     {
-        String text = " from ShinyBet b" +
+        String text = " from ShinyBetLetsGo b" +
                         " where b.shiny is null ";
 
         Session session = sessionFactory.openSession();
@@ -72,7 +72,7 @@ public class ShinyBetDAOImpl extends AbstractBaseDAO<ShinyBet> implements ShinyB
 
         Query query = session.createQuery(text);
 
-        List<ShinyBet> bets = query.list();
+        List<ShinyBetLetsGo> bets = query.list();
 
         session.getTransaction().commit();
         session.close();

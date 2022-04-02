@@ -1,11 +1,11 @@
 package com.schlock.bot.services.commands.pokemon.bet.impl;
 
-import com.schlock.bot.entities.pokemon.ShinyBet;
+import com.schlock.bot.entities.pokemon.ShinyBetLetsGo;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetInfoService;
 import com.schlock.bot.services.database.adhoc.DatabaseManager;
-import com.schlock.bot.services.database.pokemon.ShinyBetDAO;
+import com.schlock.bot.services.database.pokemon.ShinyBetLetsGoDAO;
 import com.schlock.bot.services.entities.pokemon.ShinyBetFormatter;
 import org.apache.tapestry5.ioc.Messages;
 
@@ -45,7 +45,7 @@ public class ShinyBetInfoServiceImpl extends AbstractListenerService implements 
 
     protected ListenerResponse processRequest(String username, String command)
     {
-        List<ShinyBet> currentBets = database.get(ShinyBetDAO.class).getAllCurrent();
+        List<ShinyBetLetsGo> currentBets = database.get(ShinyBetLetsGoDAO.class).getAllCurrent();
         if (currentBets.size() == 0)
         {
             return formatSingleResponse(NO_CURRENT_BETS_KEY);

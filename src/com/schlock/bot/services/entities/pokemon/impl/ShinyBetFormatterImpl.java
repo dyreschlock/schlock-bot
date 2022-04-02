@@ -1,7 +1,7 @@
 package com.schlock.bot.services.entities.pokemon.impl;
 
 import com.schlock.bot.entities.base.User;
-import com.schlock.bot.entities.pokemon.ShinyBet;
+import com.schlock.bot.entities.pokemon.ShinyBetLetsGo;
 import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.ListenerResponse;
@@ -28,9 +28,9 @@ public class ShinyBetFormatterImpl implements ShinyBetFormatter
         this.config = config;
     }
 
-    public ListenerResponse formatAllBets(ListenerResponse responses, List<ShinyBet> bets)
+    public ListenerResponse formatAllBets(ListenerResponse responses, List<ShinyBetLetsGo> bets)
     {
-        for(ShinyBet bet : bets)
+        for(ShinyBetLetsGo bet : bets)
         {
             Pokemon pokemon = pokemonManagement.getPokemonFromText(bet.getPokemonId());
             User user = bet.getUser();

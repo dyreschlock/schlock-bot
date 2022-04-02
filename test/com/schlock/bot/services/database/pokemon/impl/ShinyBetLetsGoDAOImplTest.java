@@ -1,16 +1,16 @@
 package com.schlock.bot.services.database.pokemon.impl;
 
 import com.schlock.bot.entities.base.User;
-import com.schlock.bot.entities.pokemon.ShinyBet;
+import com.schlock.bot.entities.pokemon.ShinyBetLetsGo;
 import com.schlock.bot.services.database.DatabaseTest;
-import com.schlock.bot.services.database.pokemon.ShinyBetDAO;
+import com.schlock.bot.services.database.pokemon.ShinyBetLetsGoDAO;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ShinyBetDAOImplTest extends DatabaseTest
+class ShinyBetLetsGoDAOImplTest extends DatabaseTest
 {
     private static final String USERNAME1 = "username1";
     private static final String USERNAME2 = "username2";
@@ -25,24 +25,24 @@ class ShinyBetDAOImplTest extends DatabaseTest
 
     private static final String OTHER_BET = "magikarp";
 
-    private ShinyBetDAO shinyBetDAO;
+    private ShinyBetLetsGoDAO shinyBetDAO;
 
     private User user1;
     private User user2;
 
-    private ShinyBet bet1;
-    private ShinyBet bet2;
-    private ShinyBet bet3;
+    private ShinyBetLetsGo bet1;
+    private ShinyBetLetsGo bet2;
+    private ShinyBetLetsGo bet3;
 
     @Test
     public void testGetAllByUsername()
     {
-        List<ShinyBet> bets1 = shinyBetDAO.getByUsername(user1.getUsername());
+        List<ShinyBetLetsGo> bets1 = shinyBetDAO.getByUsername(user1.getUsername());
 
         assertEquals(bets1.size(), 2);
 
 
-        List<ShinyBet> bets2 = shinyBetDAO.getByUsername(user2.getUsername());
+        List<ShinyBetLetsGo> bets2 = shinyBetDAO.getByUsername(user2.getUsername());
 
         assertEquals(bets2.size(), 1);
     }
@@ -50,7 +50,7 @@ class ShinyBetDAOImplTest extends DatabaseTest
     @Test
     public void testGetByUsernamePokemon()
     {
-        ShinyBet bet;
+        ShinyBetLetsGo bet;
 
         bet = shinyBetDAO.getByUsernameAndPokemon(user1.getUsername(), BET1_POKEMON);
         assertNotNull(bet);
@@ -78,7 +78,7 @@ class ShinyBetDAOImplTest extends DatabaseTest
     @Override
     protected void before() throws Exception
     {
-        shinyBetDAO = database().get(ShinyBetDAO.class);
+        shinyBetDAO = database().get(ShinyBetLetsGoDAO.class);
 
         createTestObjects();
     }
@@ -97,17 +97,17 @@ class ShinyBetDAOImplTest extends DatabaseTest
         user2 = new User();
         user2.setUsername(USERNAME2);
 
-        bet1 = new ShinyBet();
+        bet1 = new ShinyBetLetsGo();
         bet1.setUser(user1);
         bet1.setPokemonId(BET1_POKEMON);
         bet1.setBetAmount(BET1_AMOUNT);
 
-        bet2 = new ShinyBet();
+        bet2 = new ShinyBetLetsGo();
         bet2.setUser(user1);
         bet2.setPokemonId(BET2_POKEMON);
         bet2.setBetAmount(BET2_AMOUNT);
 
-        bet3 = new ShinyBet();
+        bet3 = new ShinyBetLetsGo();
         bet3.setUser(user2);
         bet3.setPokemonId(BET3_POKEMON);
         bet3.setBetAmount(BET3_AMOUNT);

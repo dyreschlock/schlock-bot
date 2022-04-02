@@ -10,12 +10,12 @@ import com.schlock.bot.services.bot.twitch.impl.TwitchEventBotImpl;
 import com.schlock.bot.services.commands.ListenerService;
 import com.schlock.bot.services.commands.base.*;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetInfoService;
-import com.schlock.bot.services.commands.pokemon.bet.ShinyHisuiService;
+import com.schlock.bot.services.commands.pokemon.bet.ShinyPayoutHisuiService;
 import com.schlock.bot.services.commands.pokemon.quiz.GenCompletionQuizService;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyInfoService;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetService;
-import com.schlock.bot.services.commands.pokemon.bet.ShinyPayoutService;
+import com.schlock.bot.services.commands.pokemon.bet.ShinyPayoutLetsGoService;
 import com.schlock.bot.services.commands.pokemon.quiz.WhosThatPokemonService;
 import com.schlock.bot.services.commands.pokemon.quiz.PokemonInfoService;
 import org.apache.tapestry5.ioc.ServiceBinder;
@@ -35,15 +35,19 @@ public class BotModule
     @EagerLoad
     public static TwitchChatBot build(GameControllerService gameController,
                                       UserPointsService userPointsService,
+
                                       ShinyBetService shinyBetService,
-                                      ShinyPayoutService shinyPayoutService,
+                                      ShinyPayoutLetsGoService shinyPayoutLetsGoService,
+                                      ShinyPayoutHisuiService shinyPayoutHisuiService,
+
                                       GenCompletionQuizService genCompletionQuizService,
                                       WhosThatPokemonService guessingService,
                                       PokemonInfoService pokemonInfoService,
-                                      ShinyHisuiService shinyHisuiService,
                                       ShinyInfoService shinyInfoService,
                                       ShinyDexService shinyDexService,
+
                                       AnimationService animationService,
+
                                       DiscordBot discordBot,
                                       DeploymentConfiguration config)
     {
@@ -51,11 +55,11 @@ public class BotModule
                                     Stream.of(gameController,
                                                 userPointsService,
                                                 shinyBetService,
-                                                shinyPayoutService,
+                                                shinyPayoutLetsGoService,
+                                                shinyPayoutHisuiService,
                                                 genCompletionQuizService,
                                                 guessingService,
                                                 pokemonInfoService,
-                                                shinyHisuiService,
                                                 shinyInfoService,
                                                 shinyDexService,
                                                 animationService).collect(Collectors.toSet());
@@ -121,11 +125,11 @@ public class BotModule
     {
         Set<ListenerService> listeners =
                                     Stream.of(leaderboardService,
-                                            userBalanceService,
-                                            pokemonInfoService,
-                                            shinyBetInfoService,
-                                            shinyInfoService,
-                                            shinyDexService).collect(Collectors.toSet());
+                                                userBalanceService,
+                                                pokemonInfoService,
+                                                shinyBetInfoService,
+                                                shinyInfoService,
+                                                shinyDexService).collect(Collectors.toSet());
 
         DiscordBot bot = new DiscordBotImpl(listeners, twitchBot, config);
 

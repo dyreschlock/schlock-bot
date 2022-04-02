@@ -1,7 +1,7 @@
 package com.schlock.bot.services.commands.base.impl;
 
 import com.schlock.bot.entities.base.User;
-import com.schlock.bot.entities.pokemon.ShinyBet;
+import com.schlock.bot.entities.pokemon.ShinyBetLetsGo;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.base.UserDAO;
@@ -79,7 +79,7 @@ class UserPointsServiceImplTest extends DatabaseTest
 
         testUser1.incrementBalance(prestigeBaseValue.intValue());
 
-        ShinyBet bet = new ShinyBet();
+        ShinyBetLetsGo bet = new ShinyBetLetsGo();
         bet.setBetAmount(1000);
         bet.setUser(testUser1);
         bet.setPokemonId("bulbasaur");

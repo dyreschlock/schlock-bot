@@ -5,12 +5,12 @@ import com.schlock.bot.services.commands.base.*;
 import com.schlock.bot.services.commands.base.impl.*;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetInfoService;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetService;
-import com.schlock.bot.services.commands.pokemon.bet.ShinyHisuiService;
-import com.schlock.bot.services.commands.pokemon.bet.ShinyPayoutService;
+import com.schlock.bot.services.commands.pokemon.bet.ShinyPayoutHisuiService;
+import com.schlock.bot.services.commands.pokemon.bet.ShinyPayoutLetsGoService;
 import com.schlock.bot.services.commands.pokemon.bet.impl.ShinyBetInfoServiceImpl;
 import com.schlock.bot.services.commands.pokemon.bet.impl.ShinyBetServiceImpl;
-import com.schlock.bot.services.commands.pokemon.bet.impl.ShinyHisuiServiceImpl;
-import com.schlock.bot.services.commands.pokemon.bet.impl.ShinyPayoutServiceImpl;
+import com.schlock.bot.services.commands.pokemon.bet.impl.ShinyPayoutHisuiServiceImpl;
+import com.schlock.bot.services.commands.pokemon.bet.impl.ShinyPayoutLetsGoServiceImpl;
 import com.schlock.bot.services.commands.pokemon.quiz.GenCompletionQuizService;
 import com.schlock.bot.services.commands.pokemon.quiz.PokemonInfoService;
 import com.schlock.bot.services.commands.pokemon.quiz.WhosThatPokemonService;
@@ -39,11 +39,10 @@ public class ListenerModule
         binder.bind(UserLeaderboardService.class, UserLeaderboardServiceImpl.class);
 
         //pokemon
-        binder.bind(ShinyBetService.class, ShinyBetServiceImpl.class);
         binder.bind(ShinyBetInfoService.class, ShinyBetInfoServiceImpl.class);
-        binder.bind(ShinyPayoutService.class, ShinyPayoutServiceImpl.class);
-
-        binder.bind(ShinyHisuiService.class, ShinyHisuiServiceImpl.class);
+        binder.bind(ShinyBetService.class, ShinyBetServiceImpl.class);
+        binder.bind(ShinyPayoutHisuiService.class, ShinyPayoutHisuiServiceImpl.class);
+        binder.bind(ShinyPayoutLetsGoService.class, ShinyPayoutLetsGoServiceImpl.class);
 
         binder.bind(ShinyDexService.class, ShinyDexServiceImpl.class);
         binder.bind(ShinyInfoService.class, ShinyInfoServiceImpl.class);

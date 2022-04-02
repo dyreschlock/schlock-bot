@@ -2,13 +2,13 @@ package com.schlock.bot.services.commands.pokemon.bet.impl;
 
 import com.schlock.bot.entities.base.User;
 import com.schlock.bot.entities.pokemon.Pokemon;
-import com.schlock.bot.entities.pokemon.ShinyBet;
+import com.schlock.bot.entities.pokemon.ShinyBetLetsGo;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetService;
 import com.schlock.bot.services.database.adhoc.DatabaseManager;
-import com.schlock.bot.services.database.pokemon.ShinyBetDAO;
+import com.schlock.bot.services.database.pokemon.ShinyBetLetsGoDAO;
 import com.schlock.bot.services.entities.base.UserManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.ShinyBetFormatter;
@@ -158,7 +158,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
     private ListenerResponse currentBets(String username)
     {
-        List<ShinyBet> bets = database.get(ShinyBetDAO.class).getByUsername(username);
+        List<ShinyBetLetsGo> bets = database.get(ShinyBetLetsGoDAO.class).getByUsername(username);
         if (bets.size() == 0)
         {
             return formatSingleResponse(NO_CURRENT_BETS_KEY, username);
@@ -192,7 +192,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
             User user = userManagement.getUser(username);
 
-            ShinyBet currentBet = database.get(ShinyBetDAO.class).getByUsernameAndPokemon(username, pokemon.getId());
+            ShinyBetLetsGo currentBet = database.get(ShinyBetLetsGoDAO.class).getByUsernameAndPokemon(username, pokemon.getId());
             if(currentBet != null)
             {
                 Long changedBalance = user.getBalance() + currentBet.getBetAmount();
@@ -223,7 +223,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
                     return formatSingleResponse(INSUFFICIENT_FUNDS_KEY, mark, balance, mark);
                 }
 
-                ShinyBet newBet = new ShinyBet();
+                ShinyBetLetsGo newBet = new ShinyBetLetsGo();
                 newBet.setUser(user);
                 newBet.setPokemonId(pokemon.getId());
                 newBet.setTimeMinutes(time);
@@ -331,7 +331,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
         Pokemon pokemon = pokemonManagement.getPokemonFromText(params);
         if (pokemon != null)
         {
-            ShinyBet bet = database.get(ShinyBetDAO.class).getByUsernameAndPokemon(username, pokemon.getId());
+            ShinyBetLetsGo bet = database.get(ShinyBetLetsGoDAO.class).getByUsernameAndPokemon(username, pokemon.getId());
             if (bet != null)
             {
                 Integer betAmount = bet.getBetAmount();
@@ -351,7 +351,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
     private ListenerResponse cancelAllBets(String username)
     {
-        List<ShinyBet> bets = database.get(ShinyBetDAO.class).getByUsername(username);
+        List<ShinyBetLetsGo> bets = database.get(ShinyBetLetsGoDAO.class).getByUsername(username);
 
         if(bets.size() == 0)
         {
@@ -360,7 +360,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
         User user = userManagement.getUser(username);
 
-        for (ShinyBet bet : bets)
+        for (ShinyBetLetsGo bet : bets)
         {
             Integer betAmount = bet.getBetAmount();
             user.incrementBalance(betAmount);

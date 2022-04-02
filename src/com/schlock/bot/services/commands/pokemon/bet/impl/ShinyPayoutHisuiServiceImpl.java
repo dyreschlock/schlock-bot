@@ -7,7 +7,7 @@ import com.schlock.bot.entities.pokemon.ShinyGetHisui;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
-import com.schlock.bot.services.commands.pokemon.bet.ShinyHisuiService;
+import com.schlock.bot.services.commands.pokemon.bet.ShinyPayoutHisuiService;
 import com.schlock.bot.services.database.adhoc.DatabaseManager;
 import com.schlock.bot.services.database.pokemon.ShinyDexEntryHisuiDAO;
 import com.schlock.bot.services.database.pokemon.ShinyGetHisuiDAO;
@@ -15,7 +15,7 @@ import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.ShinyGetFormatter;
 import org.apache.tapestry5.ioc.Messages;
 
-public class ShinyHisuiServiceImpl extends AbstractListenerService implements ShinyHisuiService
+public class ShinyPayoutHisuiServiceImpl extends AbstractListenerService implements ShinyPayoutHisuiService
 {
     protected static final String BAD_FORMAT_MESSAGE_KEY = "hisui-wrong-format";
 
@@ -29,11 +29,11 @@ public class ShinyHisuiServiceImpl extends AbstractListenerService implements Sh
     private final DatabaseManager database;
     private final DeploymentConfiguration config;
 
-    public ShinyHisuiServiceImpl(PokemonManagement pokemonManagement,
-                                 ShinyGetFormatter shinyFormatter,
-                                 DatabaseManager database,
-                                 Messages messages,
-                                 DeploymentConfiguration config)
+    public ShinyPayoutHisuiServiceImpl(PokemonManagement pokemonManagement,
+                                       ShinyGetFormatter shinyFormatter,
+                                       DatabaseManager database,
+                                       Messages messages,
+                                       DeploymentConfiguration config)
     {
         super(messages);
 

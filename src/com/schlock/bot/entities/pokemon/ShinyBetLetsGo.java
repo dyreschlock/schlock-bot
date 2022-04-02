@@ -6,8 +6,8 @@ import com.schlock.bot.entities.base.User;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "shiny_bet")
-public class ShinyBet extends Persisted
+@Table(name = "shiny_bet_letsgo")
+public class ShinyBetLetsGo extends Persisted
 {
     @Id
     @GeneratedValue
@@ -32,7 +32,7 @@ public class ShinyBet extends Persisted
     @Column(name = "betAmount")
     private Integer betAmount;
 
-    public ShinyBet()
+    public ShinyBetLetsGo()
     {
 
     }

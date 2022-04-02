@@ -15,7 +15,7 @@ public class ShinyHisuiServiceImplTest extends DatabaseTest
     private UserManagement userManagement;
     private ShinyGetFormatter shinyFormatter;
 
-    private ShinyHisuiServiceImpl impl;
+    private ShinyPayoutHisuiServiceImpl impl;
 
     @Override
     protected void before() throws Exception
@@ -28,7 +28,7 @@ public class ShinyHisuiServiceImplTest extends DatabaseTest
 
         shinyFormatter = new ShinyGetFormatterImpl(pokemonManagement, messages());
 
-        impl = new ShinyHisuiServiceImpl(pokemonManagement, shinyFormatter, database(), messages(), config());
+        impl = new ShinyPayoutHisuiServiceImpl(pokemonManagement, shinyFormatter, database(), messages(), config());
 
 
         createTestObjects();

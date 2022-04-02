@@ -1,7 +1,7 @@
 package com.schlock.bot.services.commands.pokemon.bet.impl;
 
 import com.schlock.bot.entities.base.User;
-import com.schlock.bot.entities.pokemon.ShinyBet;
+import com.schlock.bot.entities.pokemon.ShinyBetLetsGo;
 import com.schlock.bot.entities.pokemon.ShinyGetLetsGo;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.ListenerResponse;
@@ -25,7 +25,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ShinyPayoutServiceImplTest extends DatabaseTest
+class ShinyPayoutLetsGoServiceImplTest extends DatabaseTest
 {
     private static final Double TEST_POKEMON_WIN_FACTOR = 2.0;
     private static final Double TEST_TIME_WIN_FACTOR = 3.0;
@@ -52,15 +52,15 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
     private ShinyGetFormatter shinyFormatter;
     private UserManagement userManagement;
 
-    private ShinyPayoutServiceImpl impl;
+    private ShinyPayoutLetsGoServiceImpl impl;
 
     private User user1;
     private User user2;
     private User user3;
 
-    private ShinyBet bet1;
-    private ShinyBet bet2;
-    private ShinyBet bet3;
+    private ShinyBetLetsGo bet1;
+    private ShinyBetLetsGo bet2;
+    private ShinyBetLetsGo bet3;
 
 
     @Test
@@ -109,13 +109,13 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
 
         String response1 = shinyFormatter.formatNewlyCaughtLetsGo(mostRecent);
 
-        String response2 = messages().format(ShinyPayoutServiceImpl.WINNERS_POKEMON_KEY, StringUtils.join(winnersPokemon, ", "));
-        String response3 = messages().format(ShinyPayoutServiceImpl.WINNERS_TIME_KEY, StringUtils.join(winnersTime, ", "));
-        String response4 = messages().format(ShinyPayoutServiceImpl.WINNERS_BOTH_KEY, StringUtils.join(winnersBoth, ", "));
+        String response2 = messages().format(ShinyPayoutLetsGoServiceImpl.WINNERS_POKEMON_KEY, StringUtils.join(winnersPokemon, ", "));
+        String response3 = messages().format(ShinyPayoutLetsGoServiceImpl.WINNERS_TIME_KEY, StringUtils.join(winnersTime, ", "));
+        String response4 = messages().format(ShinyPayoutLetsGoServiceImpl.WINNERS_BOTH_KEY, StringUtils.join(winnersBoth, ", "));
 
-        String response5 = messages().format(ShinyPayoutServiceImpl.USER_UPDATE_KEY, USERNAME1, user1winnings.intValue(), MARK, user1balance, MARK);
-        String response6 = messages().format(ShinyPayoutServiceImpl.USER_UPDATE_KEY, USERNAME2, user2winnings.intValue(), MARK, user2balance, MARK);
-        String response7 = messages().format(ShinyPayoutServiceImpl.USER_UPDATE_KEY, USERNAME3, 0, MARK, BALANCE, MARK);
+        String response5 = messages().format(ShinyPayoutLetsGoServiceImpl.USER_UPDATE_KEY, USERNAME1, user1winnings.intValue(), MARK, user1balance, MARK);
+        String response6 = messages().format(ShinyPayoutLetsGoServiceImpl.USER_UPDATE_KEY, USERNAME2, user2winnings.intValue(), MARK, user2balance, MARK);
+        String response7 = messages().format(ShinyPayoutLetsGoServiceImpl.USER_UPDATE_KEY, USERNAME3, 0, MARK, BALANCE, MARK);
 
         List<String> expectedResponses = Arrays.asList(response1, response2, response3, response4, response5, response6, response7);
         for (String expectedResponse : expectedResponses)
@@ -135,7 +135,7 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
 
         shinyFormatter = new ShinyGetFormatterImpl(pokemonManagement, messages());
 
-        impl = new ShinyPayoutServiceImpl(pokemonManagement, shinyFormatter, database(), messages(), overriddenConfiguration());
+        impl = new ShinyPayoutLetsGoServiceImpl(pokemonManagement, shinyFormatter, database(), messages(), overriddenConfiguration());
 
 
         createTestObjects();
@@ -159,19 +159,19 @@ class ShinyPayoutServiceImplTest extends DatabaseTest
         user3.setBalance(BALANCE);
 
 
-        bet1 = new ShinyBet();
+        bet1 = new ShinyBetLetsGo();
         bet1.setUser(user1);
         bet1.setPokemonId(BET1_POKEMON);
         bet1.setTimeMinutes(BET1_MINUTES);
         bet1.setBetAmount(BET1_AMOUNT);
 
-        bet2 = new ShinyBet();
+        bet2 = new ShinyBetLetsGo();
         bet2.setUser(user2);
         bet2.setPokemonId(BET2_POKEMON);
         bet2.setTimeMinutes(BET2_MINUTES);
         bet2.setBetAmount(BET2_AMOUNT);
 
-        bet3 = new ShinyBet();
+        bet3 = new ShinyBetLetsGo();
         bet3.setUser(user3);
         bet3.setPokemonId(BET3_POKEMON);
         bet3.setTimeMinutes(BET3_MINUTES);

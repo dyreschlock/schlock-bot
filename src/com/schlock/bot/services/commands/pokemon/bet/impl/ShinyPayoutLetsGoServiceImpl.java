@@ -2,15 +2,15 @@ package com.schlock.bot.services.commands.pokemon.bet.impl;
 
 import com.schlock.bot.entities.base.User;
 import com.schlock.bot.entities.pokemon.Pokemon;
-import com.schlock.bot.entities.pokemon.ShinyBet;
+import com.schlock.bot.entities.pokemon.ShinyBetLetsGo;
 import com.schlock.bot.entities.pokemon.ShinyGetLetsGo;
 import com.schlock.bot.entities.pokemon.ShinyGetType;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
-import com.schlock.bot.services.commands.pokemon.bet.ShinyPayoutService;
+import com.schlock.bot.services.commands.pokemon.bet.ShinyPayoutLetsGoService;
 import com.schlock.bot.services.database.adhoc.DatabaseManager;
-import com.schlock.bot.services.database.pokemon.ShinyBetDAO;
+import com.schlock.bot.services.database.pokemon.ShinyBetLetsGoDAO;
 import com.schlock.bot.services.database.pokemon.ShinyGetLetsGoDAO;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.ShinyGetFormatter;
@@ -19,7 +19,7 @@ import org.apache.tapestry5.ioc.Messages;
 
 import java.util.*;
 
-public class ShinyPayoutServiceImpl extends AbstractListenerService implements ShinyPayoutService
+public class ShinyPayoutLetsGoServiceImpl extends AbstractListenerService implements ShinyPayoutLetsGoService
 {
     protected static final String NO_BETS_NO_WINNERS_KEY = "no-bets-no-winners";
 
@@ -45,11 +45,11 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
     private final DeploymentConfiguration config;
 
 
-    public ShinyPayoutServiceImpl(PokemonManagement pokemonManagement,
-                                  ShinyGetFormatter shinyFormatter,
-                                  DatabaseManager database,
-                                  Messages messages,
-                                  DeploymentConfiguration config)
+    public ShinyPayoutLetsGoServiceImpl(PokemonManagement pokemonManagement,
+                                        ShinyGetFormatter shinyFormatter,
+                                        DatabaseManager database,
+                                        Messages messages,
+                                        DeploymentConfiguration config)
     {
         super(messages);
 
@@ -97,7 +97,7 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
             ListenerResponse response = ListenerResponse.relayAll();
             response.addMessage(shinyFormatter.formatNewlyCaughtLetsGo(get));
 
-            List<ShinyBet> bets = database.get(ShinyBetDAO.class).getAllCurrent();
+            List<ShinyBetLetsGo> bets = database.get(ShinyBetLetsGoDAO.class).getAllCurrent();
             if (bets.size() == 0)
             {
                 return response.addMessage(messages.get(NO_BETS_NO_WINNERS_KEY));
@@ -109,7 +109,7 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
             Set<String> usersWinningBoth = new HashSet<>();
 
             Integer closestRange = calculateClosestRange(get.getTimeInMinutes(), bets);
-            for (ShinyBet bet : bets)
+            for (ShinyBetLetsGo bet : bets)
             {
                 bet.setShiny(get);
                 database.save(bet);
@@ -189,11 +189,11 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
         return nullResponse();
     }
 
-    protected Integer calculateClosestRange(final Integer ACTUAL, List<ShinyBet> bets)
+    protected Integer calculateClosestRange(final Integer ACTUAL, List<ShinyBetLetsGo> bets)
     {
         int closestRange = 10000;
 
-        for (ShinyBet bet : bets)
+        for (ShinyBetLetsGo bet : bets)
         {
             int range = ACTUAL - bet.getTimeMinutes();
             if (range < 0)
@@ -209,12 +209,12 @@ public class ShinyPayoutServiceImpl extends AbstractListenerService implements S
         return closestRange;
     }
 
-    private boolean isWinningPokemon(ShinyBet bet, String pokemonId)
+    private boolean isWinningPokemon(ShinyBetLetsGo bet, String pokemonId)
     {
         return pokemonId.equalsIgnoreCase(bet.getPokemonId());
     }
 
-    private boolean isWinningTime(ShinyBet bet, final Integer ACTUAL, Integer closestTimeRange)
+    private boolean isWinningTime(ShinyBetLetsGo bet, final Integer ACTUAL, Integer closestTimeRange)
     {
         int range = ACTUAL - bet.getTimeMinutes();
         if (range < 0)

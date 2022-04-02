@@ -6,7 +6,7 @@ import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.base.UserPointsService;
 import com.schlock.bot.services.database.adhoc.DatabaseManager;
-import com.schlock.bot.services.database.pokemon.ShinyBetDAO;
+import com.schlock.bot.services.database.pokemon.ShinyBetLetsGoDAO;
 import com.schlock.bot.services.entities.base.UserManagement;
 import org.apache.tapestry5.ioc.Messages;
 
@@ -203,7 +203,7 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
 
     private boolean isUserHasBets(User user)
     {
-        List list = database.get(ShinyBetDAO.class).getByUsername(user.getUsername());
+        List list = database.get(ShinyBetLetsGoDAO.class).getByUsername(user.getUsername());
         return !list.isEmpty();
     }
 }
