@@ -133,7 +133,7 @@ public class WhosThatPokemonServiceImpl extends AbstractChatGameListenerService 
         String doublerMsg = "";
         String streakMsg = "";
 
-        Integer points = config.getQuizCorrectPoints();
+        Long points = config.getQuizCorrectPoints().longValue();
         User user = userManagement.getUser(username);
 
         if (user.hasDoubler())
@@ -179,7 +179,7 @@ public class WhosThatPokemonServiceImpl extends AbstractChatGameListenerService 
         return streak;
     }
 
-    protected Integer incrementPointsWithStreak(Integer points, Integer streak)
+    protected Long incrementPointsWithStreak(Long points, Integer streak)
     {
         Integer decayMin = config.getQuizStreakDecayMinValue();
         Integer decayMax = config.getQuizStreakDecayMaxValue();
@@ -188,18 +188,16 @@ public class WhosThatPokemonServiceImpl extends AbstractChatGameListenerService 
 
         if (streak > decayMin && streak <= decayMax)
         {
-            Double difference = streak.doubleValue() - decayMin.doubleValue();
-
+            Double difference = streak.doubleValue() - decayMin;
             pointsFactor = decayMin.doubleValue() + (difference / 2);
         }
         else if (streak > decayMax)
         {
-            Double difference = decayMax.doubleValue() - decayMin.doubleValue();
-
+            Double difference = decayMax.doubleValue() - decayMin;
             pointsFactor = decayMin.doubleValue() + (difference / 2);
         }
 
         Double newPoints = points * pointsFactor;
-        return newPoints.intValue();
+        return newPoints.longValue();
     }
 }

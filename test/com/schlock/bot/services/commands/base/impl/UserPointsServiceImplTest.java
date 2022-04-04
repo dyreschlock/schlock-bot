@@ -77,7 +77,7 @@ class UserPointsServiceImplTest extends DatabaseTest
 
         assertEquals(expected, response);
 
-        testUser1.incrementBalance(prestigeBaseValue.intValue());
+        testUser1.incrementBalance(prestigeBaseValue);
 
         ShinyBetLetsGo bet = new ShinyBetLetsGo();
         bet.setBetAmount(1000);

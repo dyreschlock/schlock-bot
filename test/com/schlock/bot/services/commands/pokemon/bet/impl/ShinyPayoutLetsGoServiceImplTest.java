@@ -189,9 +189,9 @@ class ShinyPayoutLetsGoServiceImplTest extends DatabaseTest
                 return DeploymentConfigurationImpl.TEST;
             }
 
-            public Double getBetsPokemonWinFactor() { return TEST_POKEMON_WIN_FACTOR; }
-            public Double getBetsTimeWinFactor() { return TEST_TIME_WIN_FACTOR; }
-            public Double getBetsBothWinFactor() { return TEST_BOTH_WIN_FACTOR; }
+            public Double getBetsLetsGoPokemonWinFactor() { return TEST_POKEMON_WIN_FACTOR; }
+            public Double getBetsLetsGoTimeWinFactor() { return TEST_TIME_WIN_FACTOR; }
+            public Double getBetsLetsGoBothWinFactor() { return TEST_BOTH_WIN_FACTOR; }
         };
     }
 

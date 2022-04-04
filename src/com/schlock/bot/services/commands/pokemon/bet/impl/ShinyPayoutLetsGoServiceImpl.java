@@ -21,7 +21,7 @@ import java.util.*;
 
 public class ShinyPayoutLetsGoServiceImpl extends AbstractListenerService implements ShinyPayoutLetsGoService
 {
-    protected static final String NO_BETS_NO_WINNERS_KEY = "no-bets-no-winners";
+    protected static final String NO_BETS_NO_WINNERS_KEY = "no-winners-no-bets";
 
     protected static final String WINNERS_POKEMON_KEY = "payout-pokemon-winners";
     protected static final String WINNERS_POKEMON_NONE_KEY = "payout-pokemon-winners-none";
@@ -103,7 +103,7 @@ public class ShinyPayoutLetsGoServiceImpl extends AbstractListenerService implem
                 return response.addMessage(messages.get(NO_BETS_NO_WINNERS_KEY));
             }
 
-            Map<User, Integer> totalWinnings = new HashMap<>();
+            Map<User, Long> totalWinnings = new HashMap<>();
             Set<String> usersWinningPokemon = new HashSet<>();
             Set<String> usersWinningTime = new HashSet<>();
             Set<String> usersWinningBoth = new HashSet<>();
@@ -117,34 +117,36 @@ public class ShinyPayoutLetsGoServiceImpl extends AbstractListenerService implem
                 boolean winningPokemon = isWinningPokemon(bet, get.getPokemonId());
                 boolean winningTime = isWinningTime(bet, get.getTimeInMinutes(), closestRange);
 
-                Double winnings = 0.0;
+                Long winnings = 0l;
                 if (winningPokemon)
                 {
-                    winnings += bet.getBetAmount() * config.getBetsPokemonWinFactor();
+                    Double wins = bet.getBetAmount() * config.getBetsLetsGoPokemonWinFactor();
+                    winnings += wins.longValue();
 
                     usersWinningPokemon.add(bet.getUser().getUsername());
                 }
                 if (winningTime)
                 {
-                    winnings += bet.getBetAmount() * config.getBetsTimeWinFactor();
+                    Double wins = bet.getBetAmount() * config.getBetsLetsGoTimeWinFactor();
+                    winnings += wins.longValue();
 
                     usersWinningTime.add(bet.getUser().getUsername());
                 }
                 if (winningPokemon && winningTime)
                 {
-                    winnings = winnings * config.getBetsBothWinFactor();
+                    winnings = winnings * config.getBetsLetsGoBothWinFactor().longValue();
 
                     usersWinningBoth.add(bet.getUser().getUsername());
                 }
 
-                Integer total = totalWinnings.get(bet.getUser());
+                Long total = totalWinnings.get(bet.getUser());
                 if (total == null)
                 {
-                    totalWinnings.put(bet.getUser(), winnings.intValue());
+                    totalWinnings.put(bet.getUser(), winnings);
                 }
                 else
                 {
-                    totalWinnings.put(bet.getUser(), total + winnings.intValue());
+                    totalWinnings.put(bet.getUser(), total + winnings);
                 }
             }
 
@@ -169,7 +171,7 @@ public class ShinyPayoutLetsGoServiceImpl extends AbstractListenerService implem
             for (User user : totalWinnings.keySet())
             {
                 String doublerMsg = "";
-                Integer winnings = totalWinnings.get(user);
+                Long winnings = totalWinnings.get(user);
 
                 if (user.hasDoubler())
                 {
@@ -183,7 +185,6 @@ public class ShinyPayoutLetsGoServiceImpl extends AbstractListenerService implem
 
                 database.save(user);
             }
-
             return response;
         }
         return nullResponse();

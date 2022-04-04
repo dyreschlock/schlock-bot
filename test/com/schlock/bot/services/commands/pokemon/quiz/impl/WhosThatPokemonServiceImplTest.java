@@ -130,35 +130,35 @@ class WhosThatPokemonServiceImplTest extends DatabaseTest
     @Test
     public void testStreakDecay()
     {
-        final Integer DEFAULT_POINTS = 10;
+        final Long DEFAULT_POINTS = 10l;
 
-        Integer results = impl.incrementPointsWithStreak(DEFAULT_POINTS, 2);
-        Integer expected = 20;
+        Long results = impl.incrementPointsWithStreak(DEFAULT_POINTS, 2);
+        Long expected = 20l;
 
         assertEquals(expected, results);
 
         results = impl.incrementPointsWithStreak(DEFAULT_POINTS, 15);
-        expected = 150;
+        expected = 150l;
 
         assertEquals(expected, results);
 
         results = impl.incrementPointsWithStreak(DEFAULT_POINTS, 16);
-        expected = 155;
+        expected = 155l;
 
         assertEquals(expected, results);
 
         results = impl.incrementPointsWithStreak(DEFAULT_POINTS, 17);
-        expected = 160;
+        expected = 160l;
 
         assertEquals(expected, results);
 
         results = impl.incrementPointsWithStreak(DEFAULT_POINTS, 25);
-        expected = 200;
+        expected = 200l;
 
         assertEquals(expected, results);
 
         results = impl.incrementPointsWithStreak(DEFAULT_POINTS, 26);
-        expected = 200;
+        expected = 200l;
 
         assertEquals(expected, results);
     }

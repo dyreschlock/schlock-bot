@@ -45,7 +45,7 @@ public class User extends Persisted
         this.username = username;
     }
 
-    public void incrementBalance(Integer points)
+    public void incrementBalance(Long points)
     {
         this.balance += points;
 
@@ -81,15 +81,15 @@ public class User extends Persisted
         return this.pointsDoubler > 1;
     }
 
-    public Integer modifyPointsWithDoubler(Integer points)
+    public Long modifyPointsWithDoubler(Long points)
     {
         //this is probably too much
 
-        Integer newPoints = points * pointsDoubler;
-        return newPoints.intValue();
+        Long newPoints = points * pointsDoubler;
+        return newPoints;
     }
 
-    public void decrementBalance(Integer points)
+    public void decrementBalance(Long points)
     {
         balance = balance - points;
     }

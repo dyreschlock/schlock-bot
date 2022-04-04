@@ -21,11 +21,17 @@ public interface DeploymentConfiguration
 
     Integer getQuizStreakDecayMaxValue();
 
-    Double getBetsPokemonWinFactor();
+    Double getBetsLetsGoPokemonWinFactor();
 
-    Double getBetsTimeWinFactor();
+    Double getBetsLetsGoTimeWinFactor();
 
-    Double getBetsBothWinFactor();
+    Double getBetsLetsGoBothWinFactor();
+
+    Double getBetsHisuiPokemonWinFactor();
+
+    Double getBetsHisuiOutbreakWinFactor();
+
+    Double getBetsHisuiOutbreakPotWinFactor();
 
     String getCurrencyMark();
 

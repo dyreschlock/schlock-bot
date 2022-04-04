@@ -116,7 +116,7 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
 
     protected ListenerResponse addPoints(String username, String in)
     {
-        Integer points;
+        Long points;
         try
         {
             points = removePointsFromCommand(getGivePointsCommand(), in);
@@ -134,17 +134,17 @@ public class UserPointsServiceImpl extends AbstractListenerService implements Us
         return formatSingleResponse(GIVE_POINTS_KEY, points.toString(), config.getCurrencyMark(), username, user.getBalance().toString());
     }
 
-    private Integer removePointsFromCommand(String command, String input) throws NumberFormatException
+    private Long removePointsFromCommand(String command, String input) throws NumberFormatException
     {
         String points = input.substring(command.length());
         points = points.trim();
 
-        return Integer.parseInt(points);
+        return Long.parseLong(points);
     }
 
     protected ListenerResponse exchangePoints(String username, String in)
     {
-        Integer points;
+        Long points;
         try
         {
             points = removePointsFromCommand(CASHOUT_COMMAND, in);

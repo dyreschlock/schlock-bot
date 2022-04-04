@@ -251,8 +251,8 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
                     return formatSingleResponse(UPDATE_INSUFFICIENT_FUNDS_KEY, MARK, balance, MARK, currentBetAmount, MARK);
                 }
 
-                user.incrementBalance(currentBet.getBetAmount());
-                user.decrementBalance(betAmount);
+                user.incrementBalance(currentBet.getBetAmount().longValue());
+                user.decrementBalance(betAmount.longValue());
 
                 currentBet.setBetAmount(betAmount);
                 currentBet.setNumberOfChecks(numberOutbreaks);
@@ -283,7 +283,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
                 newBet.setNumberOfChecks(numberOutbreaks);
                 newBet.setPokemon(pokemon);
 
-                user.decrementBalance(betAmount);
+                user.decrementBalance(betAmount.longValue());
 
                 database.save(newBet, user);
 
@@ -385,8 +385,8 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
                     return formatSingleResponse(UPDATE_INSUFFICIENT_FUNDS_KEY, mark, balance, mark, currentBetAmount, mark);
                 }
 
-                user.incrementBalance(currentBet.getBetAmount());
-                user.decrementBalance(betAmount);
+                user.incrementBalance(currentBet.getBetAmount().longValue());
+                user.decrementBalance(betAmount.longValue());
 
                 currentBet.setBetAmount(betAmount);
                 currentBet.setTimeMinutes(time);
@@ -410,7 +410,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
                 newBet.setTimeMinutes(time);
                 newBet.setBetAmount(betAmount);
 
-                user.decrementBalance(betAmount);
+                user.decrementBalance(betAmount.longValue());
 
                 database.save(newBet, user);
 
@@ -517,7 +517,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
                 Integer betAmount = bet.getBetAmount();
 
                 User user = userManagement.getUser(username);
-                user.incrementBalance(betAmount);
+                user.incrementBalance(betAmount.longValue());
 
                 database.delete(bet);
                 database.save(user);
@@ -538,7 +538,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
                     Integer betAmount = bet.getBetAmount();
 
                     User user = userManagement.getUser(username);
-                    user.incrementBalance(betAmount);
+                    user.incrementBalance(betAmount.longValue());
 
                     database.delete(bet);
                     database.save(user);
@@ -568,7 +568,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
             for (ShinyBetLetsGo bet : bets)
             {
                 Integer betAmount = bet.getBetAmount();
-                user.incrementBalance(betAmount);
+                user.incrementBalance(betAmount.longValue());
 
                 database.delete(bet);
             }

@@ -31,9 +31,13 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
     private static final String QUIZ_STREAK_DECAY_MIN = "quiz.streak.decay.min";
     private static final String QUIZ_STREAK_DECAY_MAX = "quiz.streak.decay.max";
 
-    private static final String BETS_POKEMON_WIN_FACTOR = "bets.win.factor.pokemon";
-    private static final String BETS_TIME_WIN_FACTOR = "bets.win.factor.time";
-    private static final String BETS_BOTH_WIN_FACTOR = "bets.win.factor.both";
+    private static final String BETS_LETSGO_POKEMON_WIN_FACTOR = "bets.letsgo.win.factor.pokemon";
+    private static final String BETS_LETSGO_TIME_WIN_FACTOR = "bets.letsgo.win.factor.time";
+    private static final String BETS_LETSGO_BOTH_WIN_FACTOR = "bets.letsgo.win.factor.both";
+
+    private static final String BETS_HISUI_POKEMON_WIN_FACTOR = "bets.hisui.win.factor.pokemon";
+    private static final String BETS_HISUI_OUTBREAK_WIN_FACTOR = "bets.hisui.win.factor.outbreaks";
+    private static final String BETS_HISUI_OUTBREAK_POT_WIN_FACTOR = "bets.hisui.win.factor.outbreaks.pot";
 
     private static final String ONWER_USERNAME = "owner.username";
 
@@ -155,25 +159,40 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
         return Integer.parseInt(value);
     }
 
-    public Double getBetsPokemonWinFactor()
+    public Double getBetsLetsGoPokemonWinFactor()
     {
-        return getFloat(BETS_POKEMON_WIN_FACTOR);
+        return getFloat(BETS_LETSGO_POKEMON_WIN_FACTOR);
     }
 
-    public Double getBetsTimeWinFactor()
+    public Double getBetsLetsGoTimeWinFactor()
     {
-        return getFloat(BETS_TIME_WIN_FACTOR);
+        return getFloat(BETS_LETSGO_TIME_WIN_FACTOR);
     }
 
-    public Double getBetsBothWinFactor()
+    public Double getBetsLetsGoBothWinFactor()
     {
-        return getFloat(BETS_BOTH_WIN_FACTOR);
+        return getFloat(BETS_LETSGO_BOTH_WIN_FACTOR);
     }
 
     private Double getFloat(final String PROPERTY)
     {
         String dbl = getProperties().getProperty(PROPERTY);
         return Double.parseDouble(dbl);
+    }
+
+    public Double getBetsHisuiPokemonWinFactor()
+    {
+        return getFloat(BETS_HISUI_POKEMON_WIN_FACTOR);
+    }
+
+    public Double getBetsHisuiOutbreakWinFactor()
+    {
+        return getFloat(BETS_HISUI_OUTBREAK_WIN_FACTOR);
+    }
+
+    public Double getBetsHisuiOutbreakPotWinFactor()
+    {
+        return getFloat(BETS_HISUI_OUTBREAK_POT_WIN_FACTOR);
     }
 
     public String getDataDirectory()
