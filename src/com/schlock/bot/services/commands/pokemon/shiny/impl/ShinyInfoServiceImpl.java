@@ -27,7 +27,7 @@ public class ShinyInfoServiceImpl extends AbstractListenerService implements Shi
     public static final String AVERAGE_COMMAND = "!shinyaverage";
     private static final String AVERAGE_CHECKS_COMMAND = "!shinychecks";
 
-    private static final String HISUI_RESETS_COMMAND = "!shinyresets";
+    private static final String HISUI_RESETS_COMMAND = "!averagechecks";
 
     private final PokemonManagement pokemonManagement;
     private final ShinyGetFormatter shinyFormatter;

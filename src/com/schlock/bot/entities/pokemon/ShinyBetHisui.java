@@ -1,12 +1,13 @@
 package com.schlock.bot.entities.pokemon;
 
+import com.schlock.bot.entities.Persisted;
 import com.schlock.bot.entities.base.User;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "shiny_bet_hisui")
-public class ShinyBetHisui
+public class ShinyBetHisui extends Persisted
 {
     @Id
     @GeneratedValue
@@ -33,6 +34,18 @@ public class ShinyBetHisui
 
     public ShinyBetHisui()
     {
+    }
+
+    public void setPokemon(Pokemon pokemon)
+    {
+        if (pokemon == null)
+        {
+            this.pokemonId = null;
+        }
+        else
+        {
+            this.pokemonId = pokemon.getId();
+        }
     }
 
     public Long getId()

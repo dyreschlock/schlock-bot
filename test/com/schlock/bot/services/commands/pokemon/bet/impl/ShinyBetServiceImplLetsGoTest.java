@@ -24,7 +24,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class ShinyBetServiceImplTest extends DatabaseTest
+class ShinyBetServiceImplLetsGoTest extends DatabaseTest
 {
     private static final String OPEN_BETS_LETSGO = "!openbets letsgo";
 
@@ -68,7 +68,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
         ListenerResponse resp = impl.process(USERNAME1, newBet);
         String response = resp.getFirstMessage();
-        String expected = messages().format(ShinyBetServiceImpl.BET_SUCCESS_KEY, USERNAME1, pokemon2.getName(), BET2_MINUTES.toString(), BET2_AMOUNT.toString(), MARK);
+        String expected = messages().format(ShinyBetServiceImpl.BET_LETSGO_SUCCESS_KEY, USERNAME1, pokemon2.getName(), BET2_MINUTES.toString(), BET2_AMOUNT.toString(), MARK);
 
         assertTrue(resp.isRelayAll());
         assertEquals(expected, response);
@@ -93,7 +93,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
         resp = impl.process(USERNAME1, newBet);
         response = resp.getFirstMessage();
-        expected = messages().format(ShinyBetServiceImpl.BET_AMOUNT_NOT_ENOUGH, MARK);
+        expected = messages().format(ShinyBetServiceImpl.BET_AMOUNT_NEGATIVE, MARK);
 
         assertFalse(resp.isRelayAll());
         assertEquals(expected, response);
@@ -125,7 +125,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
         ListenerResponse resp = impl.process(USERNAME1, newBet);
         String response = resp.getFirstMessage();
-        String expected = messages().format(ShinyBetServiceImpl.BET_UPDATE_SUCCESS_KEY, USERNAME1, pokemon1.getName(), BET1_NEW_MINUTES, BET1_NEW_AMOUNT, MARK);
+        String expected = messages().format(ShinyBetServiceImpl.BET_LETSGO_UPDATE_SUCCESS_KEY, USERNAME1, pokemon1.getName(), BET1_NEW_MINUTES, BET1_NEW_AMOUNT, MARK);
 
         assertTrue(resp.isRelayAll());
         assertEquals(expected, response);
@@ -138,7 +138,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
         resp = impl.process(USERNAME1, newBet);
         response = resp.getFirstMessage();
-        expected = messages().format(ShinyBetServiceImpl.BET_UPDATE_SUCCESS_KEY, USERNAME1, pokemon1.getName(), BET1_NEW_MINUTES, BET1_NEW2_AMOUNT, MARK);
+        expected = messages().format(ShinyBetServiceImpl.BET_LETSGO_UPDATE_SUCCESS_KEY, USERNAME1, pokemon1.getName(), BET1_NEW_MINUTES, BET1_NEW2_AMOUNT, MARK);
 
         assertTrue(resp.isRelayAll());
         assertEquals(expected, response);
@@ -178,7 +178,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
 
         String response = responses.get(0);
-        String expected1 = messages().format(ShinyBetServiceImpl.CURRENT_BET_KEY,
+        String expected1 = messages().format(ShinyBetFormatterImpl.CURRENT_BET_LETSGO_KEY,
                                                                 USERNAME1,
                                                                 pokemon1.getName(),
                                                                 BET1_MINUTES,
@@ -198,7 +198,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
         assertFalse(resp.isRelayAll());
         assertEquals(2, responses.size());
 
-        String expected2 = messages().format(ShinyBetServiceImpl.CURRENT_BET_KEY,
+        String expected2 = messages().format(ShinyBetFormatterImpl.CURRENT_BET_LETSGO_KEY,
                                                                 USERNAME1,
                                                                 pokemon2.getName(),
                                                                 BET2_MINUTES,
@@ -258,7 +258,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
         ListenerResponse resp = impl.process(USERNAME1, CANCEL_BET1);
         String response = resp.getFirstMessage();
-        String expected = messages().format(ShinyBetServiceImpl.BET_CANCELED_KEY, pokemon1.getName(), USERNAME1);
+        String expected = messages().format(ShinyBetServiceImpl.BET_LETSGO_CANCELED_KEY, pokemon1.getName(), USERNAME1);
 
         assertTrue(resp.isRelayAll());
         assertEquals(expected, response);
@@ -274,7 +274,7 @@ class ShinyBetServiceImplTest extends DatabaseTest
 
         resp = impl.process(USERNAME1, CANCEL_BET2);
         response = resp.getFirstMessage();
-        expected = messages().format(ShinyBetServiceImpl.BET_CANCEL_NO_BET_KEY, USERNAME1, pokemon2.getName());
+        expected = messages().format(ShinyBetServiceImpl.BET_CANCEL_LETSGO_NO_BET_KEY, USERNAME1, pokemon2.getName());
 
         assertFalse(resp.isRelayAll());
         assertEquals(expected, response);

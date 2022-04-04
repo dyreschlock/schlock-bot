@@ -52,6 +52,6 @@ public class ShinyBetInfoServiceImpl extends AbstractListenerService implements 
         }
 
         ListenerResponse response = ListenerResponse.relaySingle();
-        return shinyBetFormatter.formatAllBets(response, currentBets);
+        return shinyBetFormatter.formatAllBetsLetsGo(response, currentBets);
     }
 }

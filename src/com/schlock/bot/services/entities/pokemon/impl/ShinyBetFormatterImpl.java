@@ -1,6 +1,7 @@
 package com.schlock.bot.services.entities.pokemon.impl;
 
 import com.schlock.bot.entities.base.User;
+import com.schlock.bot.entities.pokemon.ShinyBetHisui;
 import com.schlock.bot.entities.pokemon.ShinyBetLetsGo;
 import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.services.DeploymentConfiguration;
@@ -13,7 +14,9 @@ import java.util.List;
 
 public class ShinyBetFormatterImpl implements ShinyBetFormatter
 {
-    protected static final String CURRENT_BET_KEY = "current-bet";
+    public static final String CURRENT_BET_LETSGO_KEY = "current-bet-letsgo";
+    public static final String CURRENT_BET_HISUI_KEY = "current-bet-hisui";
+    public static final String BET_HISUI_POKEMON_KEY = "bet-hisui-pokemon";
 
     private final PokemonManagement pokemonManagement;
     private final Messages messages;
@@ -28,19 +31,43 @@ public class ShinyBetFormatterImpl implements ShinyBetFormatter
         this.config = config;
     }
 
-    public ListenerResponse formatAllBets(ListenerResponse responses, List<ShinyBetLetsGo> bets)
+    public ListenerResponse formatAllBetsLetsGo(ListenerResponse responses, List<ShinyBetLetsGo> bets)
     {
         for(ShinyBetLetsGo bet : bets)
         {
             Pokemon pokemon = pokemonManagement.getPokemonFromText(bet.getPokemonId());
             User user = bet.getUser();
 
-            String response = messages.format(CURRENT_BET_KEY,
+            String response = messages.format(CURRENT_BET_LETSGO_KEY,
                     user.getUsername(),
                     pokemon.getName(),
                     bet.getTimeMinutes().toString(),
                     bet.getBetAmount().toString(),
                     config.getCurrencyMark());
+
+            responses.addMessage(response);
+        }
+        return responses;
+    }
+
+    public ListenerResponse formatAllBetsHisui(ListenerResponse responses, List<ShinyBetHisui> bets)
+    {
+        for(ShinyBetHisui bet : bets)
+        {
+            User user = bet.getUser();
+
+            String response = messages.format(CURRENT_BET_HISUI_KEY,
+                    user.getUsername(),
+                    bet.getBetAmount(),
+                    config.getCurrencyMark(),
+                    bet.getNumberOfChecks());
+
+            if (bet.getPokemonId() != null)
+            {
+                Pokemon pokemon = pokemonManagement.getPokemonFromText(bet.getPokemonId());
+
+                response += " " + messages.format(BET_HISUI_POKEMON_KEY, pokemon.getName());
+            }
 
             responses.addMessage(response);
         }

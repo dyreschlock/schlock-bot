@@ -153,8 +153,8 @@ class PokemonInfoServiceImplTest extends AppTestCase
     {
         List<Object[]> testData = new ArrayList<>();
         testData.add(new Object[]{"!pokemon gen1", 1, 151});
-        testData.add(new Object[]{"!pokemon gen2", 152, 250});
-        testData.add(new Object[]{"!pokemon gen3", 251, 386});
+        testData.add(new Object[]{"!pokemon gen2", 152, 251});
+        testData.add(new Object[]{"!pokemon gen3", 252, 386});
         testData.add(new Object[]{"!pokemon gen4", 387, 493});
         testData.add(new Object[]{"!pokemon gen5", 494, 649});
         testData.add(new Object[]{"!pokemon gen6", 650, 721});
@@ -180,7 +180,7 @@ class PokemonInfoServiceImplTest extends AppTestCase
     {
         List<Object[]> testData = new ArrayList<>();
         testData.add(new Object[]{"!pokemon gen1-", 1, 898});
-        testData.add(new Object[]{"!pokemon -gen2", 1, 250});
+        testData.add(new Object[]{"!pokemon -gen2", 1, 251});
         testData.add(new Object[]{"!pokemon gen2-gen3", 152, 386});
         testData.add(new Object[]{"!pokemon -gen1", 1, 151});
         testData.add(new Object[]{"!pokemon gen8-", 810, 898});

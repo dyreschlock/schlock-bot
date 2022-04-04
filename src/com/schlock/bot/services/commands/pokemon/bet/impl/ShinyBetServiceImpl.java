@@ -2,18 +2,21 @@ package com.schlock.bot.services.commands.pokemon.bet.impl;
 
 import com.schlock.bot.entities.base.User;
 import com.schlock.bot.entities.pokemon.Pokemon;
+import com.schlock.bot.entities.pokemon.ShinyBetHisui;
 import com.schlock.bot.entities.pokemon.ShinyBetLetsGo;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetService;
 import com.schlock.bot.services.database.adhoc.DatabaseManager;
+import com.schlock.bot.services.database.pokemon.ShinyBetHisuiDAO;
 import com.schlock.bot.services.database.pokemon.ShinyBetLetsGoDAO;
 import com.schlock.bot.services.entities.base.UserManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.ShinyBetFormatter;
 import org.apache.tapestry5.ioc.Messages;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ShinyBetServiceImpl extends AbstractListenerService implements ShinyBetService
@@ -23,19 +26,26 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
     protected static final String BET_LETSGO_WRONG_FORMAT_KEY = "bet-letsgo-wrong-format";
     protected static final String BET_HISUI_WRONG_FORMAT_KEY = "bet-hisui-wrong-format";
 
-    protected static final String BET_AMOUNT_NOT_ENOUGH = "bet-amount-must-be-positive";
+    protected static final String BET_AMOUNT_NEGATIVE = "bet-amount-must-be-positive";
+    protected static final String BET_AMOUNT_NOT_ENOUGH = "bet-amount-not-enough";
     protected static final String BET_TIME_NOT_ENOUGH = "bet-time-must-be-positive";
+    protected static final String BET_OUTBREAKS_NOT_ENOUGH = "bet-outbreaks-must-be-positive";
+    protected static final String BET_POKEMON_ERROR = "bet-pokemon-bad";
 
-    protected static final String BET_UPDATE_SUCCESS_KEY = "bet-update-success";
-    protected static final String BET_SUCCESS_KEY = "bet-success";
-    protected static final String CURRENT_BET_KEY = "current-bet";
+    protected static final String BET_LETSGO_UPDATE_SUCCESS_KEY = "bet-letsgo-update-success";
+    protected static final String BET_LETSGO_SUCCESS_KEY = "bet-letsgo-success";
+    protected static final String BET_HISUI_UPDATE_SUCCESS_KEY = "bet-hisui-update-success";
+    protected static final String BET_HISUI_SUCCESS_KEY = "bet-hisui-success";
+    protected static final String BET_HISUI_POKEMON_KEY = "bet-hisui-pokemon";
     protected static final String NO_CURRENT_BETS_KEY = "user-no-current-bets";
 
-    protected static final String BET_CANCELED_KEY = "bet-canceled";
+    protected static final String BET_LETSGO_CANCELED_KEY = "bet-letsgo-canceled";
+    protected static final String BET_HISUI_CANCELED_KEY = "bet-hisui-canceled";
     protected static final String ALL_BETS_CANCELED_KEY = "all-bets-canceled";
 
     protected static final String BET_CANCEL_WRONG_FORMAT_KEY = "bet-cancel-wrong-format";
-    protected static final String BET_CANCEL_NO_BET_KEY = "bet-cancel-no-bet";
+    protected static final String BET_CANCEL_LETSGO_NO_BET_KEY = "bet-cancel-letsgo-no-bet";
+    protected static final String BET_CANCEL_HISUI_NO_BET_KEY = "bet-cancel-hisui-no-bet";
 
     protected static final String BETS_NOW_OPEN_LETSGO_KEY = "bets-now-open-letsgo";
     protected static final String BETS_NOW_OPEN_HISUI_KEY = "bets-now-open-hisui";
@@ -47,7 +57,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
     private static final String SHOW_CURRENT_BETS = "!currentbets";
 
-    private static final String CANCEL_BET = "!cancelbet ";
+    private static final String CANCEL_BET = "!cancelbet";
     private static final String CANCEL_ALL_BETS = "!cancelallbets";
 
     private static final String OPEN_BETTING = "!openbets ";
@@ -55,6 +65,8 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
     private static final String LETS_GO = "letsgo";
     private static final String HISUI = "hisui";
+
+    private static final Integer HISUI_BET_THRESHOLD = 100;
 
     private final PokemonManagement pokemonManagement;
     private final UserManagement userManagement;
@@ -162,14 +174,23 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
     private ListenerResponse currentBets(String username)
     {
-        List<ShinyBetLetsGo> bets = database.get(ShinyBetLetsGoDAO.class).getByUsername(username);
-        if (bets.size() == 0)
+        List<ShinyBetLetsGo> letsGoBets = database.get(ShinyBetLetsGoDAO.class).getByUsername(username);
+        ShinyBetHisui hisuiBet = database.get(ShinyBetHisuiDAO.class).getByUsername(username);
+
+        if (letsGoBets.size() == 0 && hisuiBet == null)
         {
             return formatSingleResponse(NO_CURRENT_BETS_KEY, username);
         }
 
         ListenerResponse responses = ListenerResponse.relaySingle();
-        return shinyBetFormatter.formatAllBets(responses, bets);
+
+        responses = shinyBetFormatter.formatAllBetsLetsGo(responses, letsGoBets);
+        if (hisuiBet != null)
+        {
+            responses = shinyBetFormatter.formatAllBetsHisui(responses, Arrays.asList(hisuiBet));
+        }
+
+        return responses;
     }
 
     private ListenerResponse placeBet(String username, String in)
@@ -189,16 +210,152 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
     private ListenerResponse placeBetHisui(String username, String params)
     {
+        Integer betAmount = getBetAmountFromHisuiParams(params);
+        Integer numberOutbreaks = getNumOutbreakFromHisuiParams(params);
 
+        if (betAmount != null && numberOutbreaks != null)
+        {
+            final String MARK = config.getCurrencyMark();
 
+            if (numberOutbreaks <= 0)
+            {
+                return formatSingleResponse(BET_OUTBREAKS_NOT_ENOUGH);
+            }
+            if (betAmount <= HISUI_BET_THRESHOLD)
+            {
+                String threshold = HISUI_BET_THRESHOLD + MARK;
+                return formatSingleResponse(BET_AMOUNT_NOT_ENOUGH, threshold);
+            }
+
+            Pokemon pokemon = null;
+            if (hasPokemonParamInHisu(params))
+            {
+                pokemon = getPokemonFromHisuiParams(params);
+                if (pokemon == null)
+                {
+                    return formatSingleResponse(BET_POKEMON_ERROR);
+                }
+            }
+
+            User user = userManagement.getUser(username);
+
+            ShinyBetHisui currentBet = database.get(ShinyBetHisuiDAO.class).getByUsername(user.getUsername());
+            if(currentBet != null)
+            {
+                Long changedBalance = user.getBalance() + currentBet.getBetAmount();
+                if (changedBalance < betAmount)
+                {
+                    String balance = user.getBalance().toString();
+                    String currentBetAmount = currentBet.getBetAmount().toString();
+
+                    return formatSingleResponse(UPDATE_INSUFFICIENT_FUNDS_KEY, MARK, balance, MARK, currentBetAmount, MARK);
+                }
+
+                user.incrementBalance(currentBet.getBetAmount());
+                user.decrementBalance(betAmount);
+
+                currentBet.setBetAmount(betAmount);
+                currentBet.setNumberOfChecks(numberOutbreaks);
+                currentBet.setPokemon(pokemon);
+
+                database.save(currentBet, user);
+
+                String response = messages.format(BET_HISUI_UPDATE_SUCCESS_KEY, username, betAmount, MARK, numberOutbreaks);
+                if (pokemon != null)
+                {
+                    response += " " + messages.format(BET_HISUI_POKEMON_KEY, pokemon.getName());
+                }
+
+                return ListenerResponse.relayAll().addMessage(response);
+            }
+            else
+            {
+                if (user.getBalance() < betAmount)
+                {
+                    String balance = user.getBalance().toString();
+
+                    return formatSingleResponse(INSUFFICIENT_FUNDS_KEY, MARK, balance, MARK);
+                }
+
+                ShinyBetHisui newBet = new ShinyBetHisui();
+                newBet.setUser(user);
+                newBet.setBetAmount(betAmount);
+                newBet.setNumberOfChecks(numberOutbreaks);
+                newBet.setPokemon(pokemon);
+
+                user.decrementBalance(betAmount);
+
+                database.save(newBet, user);
+
+                String response = messages.format(BET_HISUI_SUCCESS_KEY, username, betAmount, MARK, numberOutbreaks);
+                if (pokemon != null)
+                {
+                    response += " " + messages.format(BET_HISUI_POKEMON_KEY, pokemon.getName());
+                }
+
+                return ListenerResponse.relayAll().addMessage(response);
+            }
+        }
         return formatSingleResponse(BET_HISUI_WRONG_FORMAT_KEY);
+    }
+
+    private boolean hasPokemonParamInHisu(String params)
+    {
+        //[bet amount] [outbreaks] ([pokmon])
+        String[] p = params.split(" ");
+        return p.length >= 3;
+    }
+
+    private Pokemon getPokemonFromHisuiParams(String params)
+    {
+        //[bet amount] [outbreaks] ([pokemon])
+        try
+        {
+            String[] p = params.split(" ");
+            String poke = p[2];
+            return pokemonManagement.getPokemonFromText(poke);
+        }
+        catch (Exception e)
+        {
+        }
+        return null;
+    }
+
+    public Integer getBetAmountFromHisuiParams(String params)
+    {
+        //[bet amount] [outbreaks] ([pokemon])
+        try
+        {
+            String[] p = params.split(" ");
+            String amount = p[0];
+            return Integer.parseInt(amount);
+        }
+        catch(Exception e)
+        {
+        }
+        return null;
+    }
+
+    public Integer getNumOutbreakFromHisuiParams(String params)
+    {
+        //[bet amount] [outbreaks] ([pokemon])
+        try
+        {
+            String[] p = params.split(" ");
+            String outbreaks = p[1];
+            return Integer.parseInt(outbreaks);
+        }
+        catch(Exception e)
+        {
+        }
+        return null;
     }
 
     private ListenerResponse placeBetLetsGo(String username, String params)
     {
-        Pokemon pokemon = getPokemonFromParams(params);
-        Integer time = getTimeFromParams(params);
-        Integer betAmount = getBetAmountFromParams(params);
+        Pokemon pokemon = getPokemonFromLetsGoParams(params);
+        Integer time = getTimeFromLetsGoParams(params);
+        Integer betAmount = getBetAmountFromLetsGoParams(params);
 
         if (pokemon != null && time != null && betAmount != null)
         {
@@ -211,7 +368,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
             if (betAmount <= 0)
             {
-                return formatSingleResponse(BET_AMOUNT_NOT_ENOUGH, mark);
+                return formatSingleResponse(BET_AMOUNT_NEGATIVE, mark);
             }
 
             User user = userManagement.getUser(username);
@@ -236,7 +393,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
                 database.save(currentBet, user);
 
-                return formatAllResponse(BET_UPDATE_SUCCESS_KEY, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
+                return formatAllResponse(BET_LETSGO_UPDATE_SUCCESS_KEY, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
             }
             else
             {
@@ -257,13 +414,13 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
                 database.save(newBet, user);
 
-                return formatAllResponse(BET_SUCCESS_KEY, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
+                return formatAllResponse(BET_LETSGO_SUCCESS_KEY, username, pokemon.getName(), time.toString(), betAmount.toString(), mark);
             }
         }
         return formatSingleResponse(BET_LETSGO_WRONG_FORMAT_KEY);
     }
 
-    private Pokemon getPokemonFromParams(String params)
+    private Pokemon getPokemonFromLetsGoParams(String params)
     {
         String[] p = params.trim().split(" ");
 
@@ -291,7 +448,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
     }
 
 
-    private Integer getTimeFromParams(String params)
+    private Integer getTimeFromLetsGoParams(String params)
     {
         String timeMinutes = getSecondToLastCellWithValue(params.split(" "));
         try
@@ -322,7 +479,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
         return null;
     }
 
-    private Integer getBetAmountFromParams(String params)
+    private Integer getBetAmountFromLetsGoParams(String params)
     {
         String betAmount = getLastCellWithValue(params.split(" "));
         try
@@ -352,10 +509,9 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
     {
         String params = in.substring(CANCEL_BET.length());
 
-        Pokemon pokemon = pokemonManagement.getPokemonFromText(params);
-        if (pokemon != null)
+        if (currentBettingType != null && currentBettingType.isHisui())
         {
-            ShinyBetLetsGo bet = database.get(ShinyBetLetsGoDAO.class).getByUsernameAndPokemon(username, pokemon.getId());
+            ShinyBetHisui bet = database.get(ShinyBetHisuiDAO.class).getByUsername(username);
             if (bet != null)
             {
                 Integer betAmount = bet.getBetAmount();
@@ -366,34 +522,61 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
                 database.delete(bet);
                 database.save(user);
 
-                return formatAllResponse(BET_CANCELED_KEY, pokemon.getName(), username);
+                return formatAllResponse(BET_HISUI_CANCELED_KEY, username);
             }
-            return formatSingleResponse(BET_CANCEL_NO_BET_KEY, username, pokemon.getName());
+            return formatSingleResponse(BET_CANCEL_HISUI_NO_BET_KEY, username);
         }
-        return formatSingleResponse(BET_CANCEL_WRONG_FORMAT_KEY);
+
+        if (currentBettingType != null && currentBettingType.isLetsGo())
+        {
+            Pokemon pokemon = pokemonManagement.getPokemonFromText(params);
+            if (pokemon != null)
+            {
+                ShinyBetLetsGo bet = database.get(ShinyBetLetsGoDAO.class).getByUsernameAndPokemon(username, pokemon.getId());
+                if (bet != null)
+                {
+                    Integer betAmount = bet.getBetAmount();
+
+                    User user = userManagement.getUser(username);
+                    user.incrementBalance(betAmount);
+
+                    database.delete(bet);
+                    database.save(user);
+
+                    return formatAllResponse(BET_LETSGO_CANCELED_KEY, pokemon.getName(), username);
+                }
+                return formatSingleResponse(BET_CANCEL_LETSGO_NO_BET_KEY, username, pokemon.getName());
+            }
+            return formatSingleResponse(BET_CANCEL_WRONG_FORMAT_KEY);
+        }
+        return formatSingleResponse(BETS_ARE_CLOSED_KEY);
     }
 
     private ListenerResponse cancelAllBets(String username)
     {
-        List<ShinyBetLetsGo> bets = database.get(ShinyBetLetsGoDAO.class).getByUsername(username);
-
-        if(bets.size() == 0)
+        if (currentBettingType != null && currentBettingType.isLetsGo())
         {
-            return formatSingleResponse(NO_CURRENT_BETS_KEY, username);
+            List<ShinyBetLetsGo> bets = database.get(ShinyBetLetsGoDAO.class).getByUsername(username);
+
+            if(bets.size() == 0)
+            {
+                return formatSingleResponse(NO_CURRENT_BETS_KEY, username);
+            }
+
+            User user = userManagement.getUser(username);
+
+            for (ShinyBetLetsGo bet : bets)
+            {
+                Integer betAmount = bet.getBetAmount();
+                user.incrementBalance(betAmount);
+
+                database.delete(bet);
+            }
+            database.save(user);
+
+            return formatAllResponse(ALL_BETS_CANCELED_KEY, username);
         }
-
-        User user = userManagement.getUser(username);
-
-        for (ShinyBetLetsGo bet : bets)
-        {
-            Integer betAmount = bet.getBetAmount();
-            user.incrementBalance(betAmount);
-
-            database.delete(bet);
-        }
-        database.save(user);
-
-        return formatAllResponse(ALL_BETS_CANCELED_KEY, username);
+        return formatSingleResponse(BETS_ARE_CLOSED_KEY);
     }
 
     protected ListenerResponse openBetting(String command)
