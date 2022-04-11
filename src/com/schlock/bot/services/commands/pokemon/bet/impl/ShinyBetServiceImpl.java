@@ -53,7 +53,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
     protected static final String BETS_NOW_CLOSED_KEY = "bets-now-closed";
     protected static final String BETS_ARE_CLOSED_KEY = "bets-are-closed";
 
-    private static final String BET_COMMAND = "!bet ";
+    private static final String BET_COMMAND = "!bet";
 
     private static final String SHOW_CURRENT_BETS = "!currentbets";
 
@@ -195,7 +195,7 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
     private ListenerResponse placeBet(String username, String in)
     {
-        String params = in.substring(BET_COMMAND.length());
+        String params = in.substring(BET_COMMAND.length()).trim();
 
         if (currentBettingType.isLetsGo())
         {
@@ -422,16 +422,23 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
     private Pokemon getPokemonFromLetsGoParams(String params)
     {
-        String[] p = params.trim().split(" ");
-
-        String pokemonName = p[0];
-        String next = p[1];
-        if (!isNumber(next))
+        try
         {
-            pokemonName += next;
+            String[] p = params.trim().split(" ");
+
+            String pokemonName = p[0];
+            String next = p[1];
+            if (!isNumber(next))
+            {
+                pokemonName += next;
+            }
+            Pokemon pokemon = pokemonManagement.getPokemonFromText(pokemonName);
+            return pokemon;
         }
-        Pokemon pokemon = pokemonManagement.getPokemonFromText(pokemonName);
-        return pokemon;
+        catch(Exception e)
+        {
+        }
+        return null;
     }
 
     private boolean isNumber(String number)
@@ -450,12 +457,12 @@ public class ShinyBetServiceImpl extends AbstractListenerService implements Shin
 
     private Integer getTimeFromLetsGoParams(String params)
     {
-        String timeMinutes = getSecondToLastCellWithValue(params.split(" "));
         try
         {
+            String timeMinutes = getSecondToLastCellWithValue(params.split(" "));
             return Integer.parseInt(timeMinutes);
         }
-        catch (NumberFormatException e)
+        catch (Exception e)
         {
         }
         return null;

@@ -56,6 +56,21 @@ class ShinyBetServiceImplLetsGoTest extends DatabaseTest
 
 
     @Test
+    public void testNoBet()
+    {
+        impl.openBetting(OPEN_BETS_LETSGO);
+
+        String newBet = "!bet";
+
+        ListenerResponse resp = impl.process(USERNAME1, newBet);
+        String response = resp.getFirstMessage();
+        String expected = messages().format(ShinyBetServiceImpl.BET_LETSGO_WRONG_FORMAT_KEY);
+
+        assertFalse(resp.isRelayAll());
+        assertEquals(expected, response);
+    }
+
+    @Test
     public void testNewBetLetsGo()
     {
         impl.openBetting(OPEN_BETS_LETSGO);

@@ -49,6 +49,21 @@ public class ShinyBetServiceImplHisuiTest extends DatabaseTest
     private User user2;
 
     @Test
+    public void testNoBet()
+    {
+        impl.openBetting(OPEN_BETS_HISUI);
+
+        String newBet = "!bet";
+
+        ListenerResponse resp = impl.process(USERNAME2, newBet);
+        String response = resp.getFirstMessage();
+        String expected = messages().format(ShinyBetServiceImpl.BET_HISUI_WRONG_FORMAT_KEY);
+
+        assertFalse(resp.isRelayAll());
+        assertEquals(expected, response);
+    }
+
+    @Test
     public void testNewBetHisui()
     {
         impl.openBetting(OPEN_BETS_HISUI);
