@@ -10,4 +10,6 @@ public interface ShinyGetHisuiDAO extends BaseDAO<ShinyGetHisui>
     Integer getCurrentShinyNumber();
 
     Integer getCurrentAlphaNumber();
+
+    ShinyGetHisui getMostRecent();
 }

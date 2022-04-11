@@ -226,7 +226,7 @@ public class ShinyPayoutHisuiServiceImpl extends AbstractListenerService impleme
             params = p[0];
         }
 
-        String[] p = params.split(" ");
+        String[] p = params.trim().split(" ");
         try
         {
             Pokemon pokemon = pokemonManagement.getPokemonFromText(p[1]);

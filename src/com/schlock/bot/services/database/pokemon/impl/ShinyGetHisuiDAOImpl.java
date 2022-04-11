@@ -1,7 +1,7 @@
 package com.schlock.bot.services.database.pokemon.impl;
 
-import com.schlock.bot.entities.pokemon.ShinyGetType;
 import com.schlock.bot.entities.pokemon.ShinyGetHisui;
+import com.schlock.bot.entities.pokemon.ShinyGetType;
 import com.schlock.bot.services.database.AbstractBaseDAO;
 import com.schlock.bot.services.database.pokemon.ShinyGetHisuiDAO;
 import org.hibernate.Query;
@@ -64,7 +64,7 @@ public class ShinyGetHisuiDAOImpl extends AbstractBaseDAO<ShinyGetHisui> impleme
 
     public Integer getCurrentAlphaNumber()
     {
-        String text = " select count(g) from ShinyHisuiGet g " +
+        String text = " select count(g) from ShinyGetHisui g " +
                 " where g.alphaNumber is not null ";
 
         Session session = sessionFactory.openSession();
@@ -78,5 +78,23 @@ public class ShinyGetHisuiDAOImpl extends AbstractBaseDAO<ShinyGetHisui> impleme
 
         Integer next = count.intValue() + 1;
         return next;
+    }
+
+    public ShinyGetHisui getMostRecent()
+    {
+        String text = " from ShinyGetHisui g " +
+                        " order by g.shinyNumber desc ";
+
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        Query query = session.createQuery(text);
+
+        ShinyGetHisui shinyGet = singleResult(query);
+
+        session.getTransaction().commit();
+        session.close();
+
+        return shinyGet;
     }
 }
