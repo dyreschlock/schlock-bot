@@ -70,6 +70,9 @@ public class ShinyPayoutHisuiServiceImpl extends AbstractListenerService impleme
 
     protected ListenerResponse processRequest(String username, String in)
     {
+        final String ADMIN = config.getOwnerUsername();
+        if(!username.equals(ADMIN)) return ListenerResponse.relayNothing();
+
         if (in.toLowerCase().trim().startsWith(SHINY_GET_COMMAND))
         {
             String params = in.substring(SHINY_GET_COMMAND.length()).trim();
@@ -99,6 +102,8 @@ public class ShinyPayoutHisuiServiceImpl extends AbstractListenerService impleme
 
             Integer closestRange = calculateClosestRange(get.getOutbreakChecks(), bets);
 
+            Long potWinnings = getPotWinnings(bets);
+
             for (ShinyBetHisui bet : bets)
             {
                 bet.setShiny(get);
@@ -119,6 +124,7 @@ public class ShinyPayoutHisuiServiceImpl extends AbstractListenerService impleme
                 {
                     Double wins = bet.getBetAmount() * config.getBetsHisuiOutbreakWinFactor();
                     winnings += wins.longValue();
+                    winnings += potWinnings;
 
                     usersWinningOutbreak.add(bet.getUser().getUsername());
                 }
@@ -174,6 +180,18 @@ public class ShinyPayoutHisuiServiceImpl extends AbstractListenerService impleme
             return response;
         }
         return nullResponse();
+    }
+
+    protected Long getPotWinnings(List<ShinyBetHisui> bets)
+    {
+        Integer overallBetSum = 0;
+        for (ShinyBetHisui bet : bets)
+        {
+            overallBetSum += bet.getBetAmount();
+        }
+
+        Double potWinnings = overallBetSum * config.getBetsHisuiOutbreakPotWinFactor();
+        return potWinnings.longValue();
     }
 
     protected Integer calculateClosestRange(final Integer ACTUAL, List<ShinyBetHisui> bets)
