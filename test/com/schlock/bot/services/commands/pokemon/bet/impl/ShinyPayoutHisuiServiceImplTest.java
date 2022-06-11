@@ -2,11 +2,13 @@ package com.schlock.bot.services.commands.pokemon.bet.impl;
 
 import com.schlock.bot.entities.base.User;
 import com.schlock.bot.entities.pokemon.ShinyBetHisui;
+import com.schlock.bot.entities.pokemon.ShinyDexEntryHisui;
 import com.schlock.bot.entities.pokemon.ShinyGetHisui;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.database.DatabaseTest;
 import com.schlock.bot.services.database.base.UserDAO;
+import com.schlock.bot.services.database.pokemon.ShinyDexEntryHisuiDAO;
 import com.schlock.bot.services.database.pokemon.ShinyGetHisuiDAO;
 import com.schlock.bot.services.entities.base.UserManagement;
 import com.schlock.bot.services.entities.base.impl.UserManagementImpl;
@@ -56,19 +58,49 @@ public class ShinyPayoutHisuiServiceImplTest extends DatabaseTest
 
     private ShinyPayoutHisuiServiceImpl impl;
 
-    private User user1;
-    private User user2;
-    private User user3;
-    private User user4;
-
-    private ShinyBetHisui bet1;
-    private ShinyBetHisui bet2;
-    private ShinyBetHisui bet3;
-    private ShinyBetHisui bet4;
+    private User user1, user2, user3, user4;
+    private ShinyBetHisui bet1, bet2, bet3, bet4;
+    private ShinyDexEntryHisui dex1;
 
     @Test
-    public void testUseCase1()
+    public void testRegistration1()
     {
+        final String ADMIN = config().getOwnerUsername();
+
+        String getCommand = "!hisuiget MASSIVE turtwig";
+
+        ListenerResponse resp = impl.process(ADMIN, getCommand);
+
+
+    }
+
+    @Test
+    public void testPayoutUseCase1()
+    {
+        bet1 = new ShinyBetHisui();
+        bet1.setUser(user1);
+        bet1.setBetAmount(BET1_AMOUNT);
+        bet1.setNumberOfChecks(BET1_OUTBREAKS);
+
+        bet2 = new ShinyBetHisui();
+        bet2.setUser(user2);
+        bet2.setBetAmount(BET2_AMOUNT);
+        bet2.setNumberOfChecks(BET2_OUTBREAKS);
+
+        bet3 = new ShinyBetHisui();
+        bet3.setUser(user3);
+        bet3.setBetAmount(BET3_AMOUNT);
+        bet3.setNumberOfChecks(BET3_OUTBREAKS);
+        bet3.setPokemonId(BET3_POKEMON);
+
+        bet4 = new ShinyBetHisui();
+        bet4.setUser(user4);
+        bet4.setBetAmount(BET4_AMOUNT);
+        bet4.setNumberOfChecks(BET4_OUTBREAKS);
+
+        database().save(bet1, bet2, bet3, bet4);
+
+
         final String ADMIN = config().getOwnerUsername();
         final String MARK = config().getCurrencyMark();
         final String GET = "!hisuiget MASSIVE turtwig 25";
@@ -138,6 +170,10 @@ public class ShinyPayoutHisuiServiceImplTest extends DatabaseTest
         {
             assertTrue(responses.contains(expectedResponse), expectedResponse);
         }
+
+        dex1 = database().get(ShinyDexEntryHisuiDAO.class).getEntryByPokemonId(dex1.getPokemonId());
+
+        assertTrue(dex1.isHaveShiny());
     }
 
     @Override
@@ -177,29 +213,12 @@ public class ShinyPayoutHisuiServiceImplTest extends DatabaseTest
         user4 = userManagement.createNewDefaultUser(USERNAME4);
         user4.setBalance(BALANCE);
 
+        dex1 = new ShinyDexEntryHisui();
+        dex1.setNumberCode("387");
+        dex1.setPokemonNumber(130);
+        dex1.setPokemonId("turtwig");
 
-        bet1 = new ShinyBetHisui();
-        bet1.setUser(user1);
-        bet1.setBetAmount(BET1_AMOUNT);
-        bet1.setNumberOfChecks(BET1_OUTBREAKS);
-
-        bet2 = new ShinyBetHisui();
-        bet2.setUser(user2);
-        bet2.setBetAmount(BET2_AMOUNT);
-        bet2.setNumberOfChecks(BET2_OUTBREAKS);
-
-        bet3 = new ShinyBetHisui();
-        bet3.setUser(user3);
-        bet3.setBetAmount(BET3_AMOUNT);
-        bet3.setNumberOfChecks(BET3_OUTBREAKS);
-        bet3.setPokemonId(BET3_POKEMON);
-
-        bet4 = new ShinyBetHisui();
-        bet4.setUser(user4);
-        bet4.setBetAmount(BET4_AMOUNT);
-        bet4.setNumberOfChecks(BET4_OUTBREAKS);
-
-        database().save(user1, user2, user3, user4, bet1, bet2, bet3, bet4);
+        database().save(user1, user2, user3, user4, dex1);
     }
 
     protected DeploymentConfiguration overriddenConfiguration()
@@ -230,7 +249,20 @@ public class ShinyPayoutHisuiServiceImplTest extends DatabaseTest
 
     private void removeTestObjects()
     {
+        database().delete(user1, user2, user3, user4, dex1);
+
         ShinyGetHisui get = database().get(ShinyGetHisuiDAO.class).getMostRecent();
-        database().delete(user1, user2, user3, user4, bet1, bet2, bet3, bet4, get);
+        if (get != null)
+        {
+            database().delete(get);
+        }
+
+        for (ShinyBetHisui bet : Arrays.asList(bet1, bet2, bet3, bet4))
+        {
+            if (bet != null)
+            {
+                database().delete(bet);
+            }
+        }
     }
 }

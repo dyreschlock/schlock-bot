@@ -59,6 +59,20 @@ public class ShinyDexEntryHisui extends AbstractShinyDexEntry
 
     public ShinyDexEntryHisui()
     {
+        this.haveShiny = false;
+        this.haveAlpha = false;
+
+        this.inMassiveFieldlands = false;
+        this.isMassiveMirelands = false;
+        this.isMassiveCoastlands = false;
+        this.isMassiveHighlands = false;
+        this.isMassiveIcelands = false;
+
+        this.inOutbreakFieldlands = false;
+        this.isOutbreakMirelands = false;
+        this.isOutbreakCoastlands = false;
+        this.isOutbreakHighlands = false;
+        this.isOutbreakIcelands = false;
     }
 
     public String getNumberString()
