@@ -53,22 +53,28 @@ class ShinyDexEntryLetsGoGoDAOImplTest extends DatabaseTest
         entry1.setNumberCode("001");
         entry1.setPokemonId(NAME1);
         entry1.setHave(true);
-        entry1.setShinyGo(true);
-        entry1.setShinyHome(true);
+        entry1.setShinyGoFirst(true);
+        entry1.setShinyGoSecond(true);
+        entry1.setShinyHomeOwn(false);
+        entry1.setShinyHomeOther(false);
 
         entry2 = new ShinyDexEntryGo();
         entry2.setNumberCode("002");
         entry2.setPokemonId(NAME2);
         entry2.setHave(true);
-        entry2.setShinyGo(true);
-        entry2.setShinyHome(true);
+        entry2.setShinyGoFirst(true);
+        entry2.setShinyGoSecond(true);
+        entry2.setShinyHomeOwn(true);
+        entry2.setShinyHomeOther(true);
 
         entry3 = new ShinyDexEntryGo();
         entry3.setNumberCode("003");
         entry3.setPokemonId(NAME3);
         entry3.setHave(true);
-        entry3.setShinyGo(true);
-        entry3.setShinyHome(true);
+        entry3.setShinyGoFirst(true);
+        entry3.setShinyGoSecond(true);
+        entry3.setShinyHomeOwn(true);
+        entry3.setShinyHomeOther(true);
 
         database().save(entry1, entry2, entry3);
     }

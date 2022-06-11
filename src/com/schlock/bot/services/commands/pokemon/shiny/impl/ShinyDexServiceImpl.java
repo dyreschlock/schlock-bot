@@ -174,7 +174,7 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
     {
         for (ShinyDexEntryGo entry : getPokemonGoEntries())
         {
-            if (entry.isShinyGo() || entry.isShinyHome())
+            if (entry.isShinyAtAll())
             {
                 updateShinyChecklist(entry);
             }

@@ -41,21 +41,21 @@ public class GoShinyDex
                 {
                     have++;
                 }
-                if (entry.isShinyGo() || entry.isShinyHome())
+                if (entry.isShinyAtAll())
                 {
                     shiny++;
                 }
             }
             else if (PokemonRegion.isRegionalNumberCode(entry.getNumberCode(), PokemonRegion.ALOLA))
             {
-                if (entry.isShinyGo() || entry.isShinyHome())
+                if (entry.isShinyAtAll())
                 {
                     shinyAlola++;
                 }
             }
             else if (PokemonRegion.isRegionalNumberCode(entry.getNumberCode(), PokemonRegion.GALAR))
             {
-                if (entry.isShinyGo() || entry.isShinyHome())
+                if (entry.isShinyAtAll())
                 {
                     shinyGalar++;
                 }
@@ -123,11 +123,11 @@ public class GoShinyDex
         {
             imgClass += " have";
         }
-        if (entry.isShinyGo())
+        if (entry.isShinyGoFirst() || entry.isShinyGoSecond())
         {
             imgClass += " shiny_go";
         }
-        if (entry.isShinyHome())
+        if (entry.isShinyHomeOwn() || entry.isShinyHomeOther())
         {
             imgClass += " shiny_home";
         }

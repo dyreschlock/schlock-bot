@@ -19,11 +19,17 @@ public class ShinyDexEntryGo extends AbstractShinyDexEntry
     @Column(name = "have")
     private Boolean have;
 
-    @Column(name = "shiny_go")
-    private Boolean shinyGo;
+    @Column(name = "s_go_first")
+    private Boolean shinyGoFirst;
 
-    @Column(name = "shiny_home")
-    private Boolean shinyHome;
+    @Column(name = "s_go_second")
+    private Boolean shinyGoSecond;
+
+    @Column(name = "s_home_own")
+    private Boolean shinyHomeOwn;
+
+    @Column(name = "s_home_other")
+    private Boolean shinyHomeOther;
 
     @Column(name = "google_id")
     private String googlePhotoId;
@@ -40,6 +46,11 @@ public class ShinyDexEntryGo extends AbstractShinyDexEntry
             link = "https://drive.google.com/thumbnail?id=" + googlePhotoId;
         }
         return link;
+    }
+
+    public boolean isShinyAtAll()
+    {
+        return isShinyGoFirst() || isShinyGoSecond() || isShinyHomeOwn() || isShinyHomeOther();
     }
 
     public Long getId()
@@ -82,24 +93,44 @@ public class ShinyDexEntryGo extends AbstractShinyDexEntry
         this.have = have;
     }
 
-    public Boolean isShinyGo()
+    public Boolean isShinyGoFirst()
     {
-        return shinyGo;
+        return shinyGoFirst;
     }
 
-    public void setShinyGo(Boolean shinyGo)
+    public void setShinyGoFirst(Boolean shinyGoFirst)
     {
-        this.shinyGo = shinyGo;
+        this.shinyGoFirst = shinyGoFirst;
     }
 
-    public Boolean isShinyHome()
+    public Boolean isShinyGoSecond()
     {
-        return shinyHome;
+        return shinyGoSecond;
     }
 
-    public void setShinyHome(Boolean shinyHome)
+    public void setShinyGoSecond(Boolean shinyGoSecond)
     {
-        this.shinyHome = shinyHome;
+        this.shinyGoSecond = shinyGoSecond;
+    }
+
+    public Boolean isShinyHomeOwn()
+    {
+        return shinyHomeOwn;
+    }
+
+    public void setShinyHomeOwn(Boolean shinyHomeOwn)
+    {
+        this.shinyHomeOwn = shinyHomeOwn;
+    }
+
+    public Boolean isShinyHomeOther()
+    {
+        return shinyHomeOther;
+    }
+
+    public void setShinyHomeOther(Boolean shinyHomeOther)
+    {
+        this.shinyHomeOther = shinyHomeOther;
     }
 
     public String getGooglePhotoId()

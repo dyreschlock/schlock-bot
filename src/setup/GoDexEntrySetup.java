@@ -46,8 +46,10 @@ public class GoDexEntrySetup
         entry.setNumberCode(poke.getNumberString());
         entry.setPokemonId(poke.getId());
         entry.setHave(true);
-        entry.setShinyGo(false);
-        entry.setShinyHome(false);
+        entry.setShinyGoFirst(false);
+        entry.setShinyGoSecond(false);
+        entry.setShinyHomeOwn(false);
+        entry.setShinyHomeOther(false);
 
         session.save(entry);
     }
