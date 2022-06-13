@@ -19,12 +19,14 @@
 
                 filter: brightness(0%);
                 display: none;
+                opacity: 0.2;
             }
 
             .pshow
             {
                 filter: brightness(100%);
                 display: block;
+                opacity: 1.0;
             }
 
             .mark_img
@@ -61,6 +63,11 @@
             img.have
             {
                 display: block;
+            }
+
+            img.available
+            {
+                opacity: 1.0;
             }
 
             img.shiny, img.shiny_go, img.shiny_home

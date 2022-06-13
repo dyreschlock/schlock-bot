@@ -33,6 +33,10 @@ public class GoShinyDex
         int shinyAlola = 0;
         int shinyGalar = 0;
 
+        int shinyAvailable = 0;
+        int shinyAlolaAvailable = 0;
+        int shinyGalarAvailable = 0;
+
         for(ShinyDexEntryGo entry : entries)
         {
             if (PokemonRegion.isNormalNumberCode(entry.getNumberCode()))
@@ -45,12 +49,20 @@ public class GoShinyDex
                 {
                     shiny++;
                 }
+                if (entry.isShinyAvailable())
+                {
+                    shinyAvailable++;
+                }
             }
             else if (PokemonRegion.isRegionalNumberCode(entry.getNumberCode(), PokemonRegion.ALOLA))
             {
                 if (entry.isShinyAtAll())
                 {
                     shinyAlola++;
+                }
+                if (entry.isShinyAvailable())
+                {
+                    shinyAlolaAvailable++;
                 }
             }
             else if (PokemonRegion.isRegionalNumberCode(entry.getNumberCode(), PokemonRegion.GALAR))
@@ -59,10 +71,14 @@ public class GoShinyDex
                 {
                     shinyGalar++;
                 }
+                if (entry.isShinyAvailable())
+                {
+                    shinyGalarAvailable++;
+                }
             }
         }
 
-        String message = messages.format("shiny-dex", have, shiny, shinyAlola, shinyGalar);
+        String message = messages.format("shiny-dex", have, shiny, shinyAvailable, shinyAlola, shinyAlolaAvailable, shinyGalar, shinyGalarAvailable);
         return message;
     }
 
@@ -122,6 +138,10 @@ public class GoShinyDex
         if (entry.isHave())
         {
             imgClass += " have";
+        }
+        if (entry.isShinyAvailable())
+        {
+            imgClass += " available";
         }
         if (entry.isShinyGoFirst() || entry.isShinyGoSecond())
         {

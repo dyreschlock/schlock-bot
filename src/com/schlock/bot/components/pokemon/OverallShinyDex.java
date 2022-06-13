@@ -190,7 +190,7 @@ public class OverallShinyDex
     {
         String imgSrc = getImageUrl(numberCode);
 
-        String imgClass = "have ";
+        String imgClass = "have available ";
         if (shiny)
         {
             imgClass += "shiny ";

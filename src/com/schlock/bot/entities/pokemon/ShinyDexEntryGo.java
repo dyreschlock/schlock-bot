@@ -19,6 +19,9 @@ public class ShinyDexEntryGo extends AbstractShinyDexEntry
     @Column(name = "have")
     private Boolean have;
 
+    @Column(name = "s_available")
+    private Boolean shinyAvailable;
+
     @Column(name = "s_go_first")
     private Boolean shinyGoFirst;
 
@@ -91,6 +94,16 @@ public class ShinyDexEntryGo extends AbstractShinyDexEntry
     public void setHave(Boolean have)
     {
         this.have = have;
+    }
+
+    public Boolean isShinyAvailable()
+    {
+        return shinyAvailable;
+    }
+
+    public void setShinyAvailable(Boolean shinyAvailable)
+    {
+        this.shinyAvailable = shinyAvailable;
     }
 
     public Boolean isShinyGoFirst()
