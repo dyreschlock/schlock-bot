@@ -143,11 +143,12 @@ public class HisuiShinyDex
         for(Integer i = 1; i < gets.size()+1; i++)
         {
             ShinyGetHisui get = gets.get(i-1);
+            ShinyDexEntryHisui entry = dexEntryService.getShinyDexHisuiEntryByPokemonId(get.getPokemonId());
 
             String numberString = get.getHisuiNumberString();
             boolean show = true;
             boolean alpha = get.isAlpha();
-            boolean rare = false;
+            boolean rare = entry.isRare();
 
             html += "<td>";
             html += createImageHTML(numberString, show, alpha, rare);
@@ -261,17 +262,17 @@ public class HisuiShinyDex
             if (alpha & rare)
             {
                 html += "<div class=\"multiple\">" +
-                        "<img src=\"/img/alpha_mark.png\" />" +
-                        "<img src=\"/img/shiny_mark.png\" />" +
+                        "<img class=\"pshow\" src=\"/img/alpha_mark.png\" />" +
+                        "<img class=\"pshow\" src=\"/img/shiny_mark.png\" />" +
                         "</div>";
             }
             else if (alpha)
             {
-                html += "<div class=\"single\"><img src=\"/img/alpha_mark.png\" /></div>";
+                html += "<div class=\"single\"><img class=\"pshow\" src=\"/img/alpha_mark.png\" /></div>";
             }
             else if (rare)
             {
-                html += "<div class=\"single\"><img src=\"/img/shiny_mark.png\" /></div>";
+                html += "<div class=\"single\"><img class=\"pshow\" src=\"/img/shiny_mark.png\" /></div>";
             }
         }
 
