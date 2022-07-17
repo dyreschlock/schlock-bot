@@ -23,6 +23,10 @@ public interface PokemonManagement
 
     Pokemon getRandomPokemonInRange(String rangeText);
 
+    boolean isAlolanAvailable(Pokemon pokemon);
+
+    List<Integer> getAlolanPokemonNumbers();
+
     List<Pokemon> getAllPokemonInGen(String gen);
 
     List<Pokemon> getAllPokemonInNumberOrder();

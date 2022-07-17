@@ -21,6 +21,8 @@ public class PokemonManagementImpl implements PokemonManagement
 
     private static final String HISUI_PARAM = PokemonUtilsImpl.HISUI;
 
+    private static final List<Integer> ALOLAN_POKEMON_NUMBERS = Arrays.asList(19, 20, 26, 27, 28, 37, 38, 50, 51, 52, 53, 74, 75, 76, 88, 89, 103, 105);
+
     private static final String DIV_CONTENT_ID = "content";
 
     private final PokemonUtils pokemonUtils;
@@ -282,6 +284,18 @@ public class PokemonManagementImpl implements PokemonManagement
             pokemon.add(poke);
         }
         return pokemon;
+    }
+
+    public boolean isAlolanAvailable(Pokemon pokemon)
+    {
+        Integer number = pokemon.getNumber();
+
+        return ALOLAN_POKEMON_NUMBERS.contains(number);
+    }
+
+    public List<Integer> getAlolanPokemonNumbers()
+    {
+        return ALOLAN_POKEMON_NUMBERS;
     }
 
     private void initialize()

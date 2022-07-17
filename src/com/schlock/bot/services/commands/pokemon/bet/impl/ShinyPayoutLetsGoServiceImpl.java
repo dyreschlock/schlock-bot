@@ -239,17 +239,28 @@ public class ShinyPayoutLetsGoServiceImpl extends AbstractListenerService implem
             }
 
             ShinyGetType type = ShinyGetType.valueOf(p[0].toUpperCase());
-            Integer time = Integer.parseInt(p[2]);
+
+            Integer time = null;
+            if (!ShinyGetType.RESET.equals(type))
+            {
+                time = Integer.parseInt(p[2]);
+            }
 
             Integer checks = null;
-            if (p.length == 4)
+            if (p.length == 4 || ShinyGetType.RESET.equals(type))
             {
                 checks = Integer.parseInt(p[3]);
             }
 
-            if (type == null || pokemon == null || time == null)
+            if (type == null || pokemon == null)
             {
                 return null;
+            }
+
+            boolean alolan = false;
+            if (ShinyGetType.RESET.equals(type))
+            {
+                alolan = pokemonManagement.isAlolanAvailable(pokemon);
             }
 
             Integer shinyNumber = database.get(ShinyGetLetsGoDAO.class).getCurrentShinyNumber();
@@ -260,11 +271,13 @@ public class ShinyPayoutLetsGoServiceImpl extends AbstractListenerService implem
             get.setTimeInMinutes(time);
             get.setNumOfRareChecks(checks);
             get.setShinyNumber(shinyNumber);
+            get.setAlolan(alolan);
 
             return get;
         }
         catch(Exception e)
         {
+            e.printStackTrace();
         }
         return null;
     }

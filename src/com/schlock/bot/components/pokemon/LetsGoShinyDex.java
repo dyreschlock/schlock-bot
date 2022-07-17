@@ -2,6 +2,7 @@ package com.schlock.bot.components.pokemon;
 
 import com.schlock.bot.entities.pokemon.ShinyDexEntryLetsGo;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
+import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -12,6 +13,8 @@ public class LetsGoShinyDex
 {
     private static final Integer COLUMNS = 22;
 
+    @Inject
+    private PokemonManagement pokemonManagement;
 
     @Inject
     private ShinyDexService dexEntryService;
@@ -77,8 +80,8 @@ public class LetsGoShinyDex
 
         html += "</tr><tr>";
 
-        List<Integer> alolan = Arrays.asList(19, 20, 26, 27, 28, 37, 38, 50, 51, 52, 53, 74, 75, 76, 88, 89, 103, 105);
-        
+        List<Integer> alolan = pokemonManagement.getAlolanPokemonNumbers();
+
         remainingTD = COLUMNS - (alolan.size() % COLUMNS);
         for (int i = 0; i < remainingTD; i++)
         {

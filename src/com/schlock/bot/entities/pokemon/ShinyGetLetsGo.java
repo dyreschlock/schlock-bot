@@ -16,6 +16,9 @@ public class ShinyGetLetsGo extends Persisted
     @Enumerated(EnumType.STRING)
     private ShinyGetType type;
 
+    @Column(name = "alolan")
+    private Boolean alolan;
+
     @Column(name = "shinyNumber")
     private Integer shinyNumber;
 
@@ -54,6 +57,10 @@ public class ShinyGetLetsGo extends Persisted
     {
         this.type = type;
     }
+
+    public Boolean isAlolan() { return alolan; }
+
+    public void setAlolan(Boolean alolan) { this.alolan = alolan; }
 
     public Integer getShinyNumber()
     {

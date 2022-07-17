@@ -1,6 +1,7 @@
 package com.schlock.bot.services.database.pokemon.impl;
 
 import com.schlock.bot.entities.pokemon.ShinyGetLetsGo;
+import com.schlock.bot.entities.pokemon.ShinyGetType;
 import com.schlock.bot.services.database.pokemon.ShinyGetLetsGoDAO;
 import com.schlock.bot.services.database.AbstractBaseDAO;
 import org.hibernate.Query;
@@ -16,17 +17,26 @@ public class ShinyGetLetsGoDAOImpl extends AbstractBaseDAO<ShinyGetLetsGo> imple
 
     public Double getCurrentAverageTimeToShiny()
     {
-        String totalShinyText = " select count(g) from ShinyGetLetsGo g ";
-        String totalTimeText = " select sum(g.timeInMinutes) from ShinyGetLetsGo g ";
+        String totalTimeText = " select sum(g.timeInMinutes) " +
+                                " from ShinyGetLetsGo g " +
+                                " where g.type != :type ";
+
+        String totalShinyText = " select count(g) " +
+                                    " from ShinyGetLetsGo g " +
+                                    " where g.type != :type ";
+
 
         Session session = sessionFactory.openSession();
         session.beginTransaction();
 
         Query query1 = session.createQuery(totalShinyText);
-        Long totalShiny = (Long) query1.list().get(0);
+        query1.setParameter("type", ShinyGetType.RESET);
 
         Query query2 = session.createQuery(totalTimeText);
+        query2.setParameter("type", ShinyGetType.RESET);
+
         Long totalTime = (Long) query2.list().get(0);
+        Long totalShiny = (Long) query1.list().get(0);
 
         session.getTransaction().commit();
         session.close();
@@ -39,20 +49,25 @@ public class ShinyGetLetsGoDAOImpl extends AbstractBaseDAO<ShinyGetLetsGo> imple
     {
         String totalRareShinyText = " select count(g) " +
                                         " from ShinyGetLetsGo g " +
-                                        " where g.numOfRareChecks != null ";
+                                        " where g.numOfRareChecks != null " +
+                                        " and g.type != :type ";
 
 
         String totalRareChecksText = " select sum(g.numOfRareChecks)" +
                                         " from ShinyGetLetsGo g " +
-                                        " where g.numOfRareChecks != null ";
+                                        " where g.numOfRareChecks != null " +
+                                        " and g.type != :type ";
 
         Session session = sessionFactory.openSession();
         session.beginTransaction();
 
         Query query1 = session.createQuery(totalRareShinyText);
-        Long totalRareShiny = (Long) query1.list().get(0);
+        query1.setParameter("type", ShinyGetType.RESET);
 
         Query query2 = session.createQuery(totalRareChecksText);
+        query2.setParameter("type", ShinyGetType.RESET);
+
+        Long totalRareShiny = (Long) query1.list().get(0);
         Long totalRareChecks = (Long) query2.list().get(0);
 
         session.getTransaction().commit();

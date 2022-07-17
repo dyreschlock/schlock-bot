@@ -3,6 +3,7 @@ package com.schlock.bot.services.entities.pokemon.impl;
 import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.entities.pokemon.ShinyGetLetsGo;
 import com.schlock.bot.entities.pokemon.ShinyGetHisui;
+import com.schlock.bot.entities.pokemon.ShinyGetType;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.ShinyGetFormatter;
 import org.apache.tapestry5.ioc.Messages;
@@ -10,6 +11,7 @@ import org.apache.tapestry5.ioc.Messages;
 public class ShinyGetFormatterImpl implements ShinyGetFormatter
 {
     private static final String SHINY_CAUGHT_KEY = "shiny-caught";
+    private static final String SHINY_RESET_CAUGHT_KEY = "shiny-reset-caught";
     private static final String MOST_RECENT_KEY = "most-recent-shiny";
 
     private static final String HISUI_SHINY_WILD = "shiny-hisui-wild";
@@ -35,9 +37,20 @@ public class ShinyGetFormatterImpl implements ShinyGetFormatter
         Pokemon pokemon = pokemonManagement.getPokemonFromText(get.getPokemonId());
 
         String pokemonName = pokemon.getName();
-        String timeMinutes = get.getTimeInMinutes().toString();
+        if (get.isAlolan())
+        {
+            pokemonName = "Alolan " + pokemonName;
+        }
         String shinyNumber = get.getShinyNumber().toString();
 
+        if (ShinyGetType.RESET.equals(get.getType()))
+        {
+            String resets = get.getNumOfRareChecks().toString();
+
+            return messages.format(SHINY_RESET_CAUGHT_KEY, pokemonName, resets, shinyNumber);
+        }
+
+        String timeMinutes = get.getTimeInMinutes().toString();
         String verb = messages.get(get.getType().name().toLowerCase());
 
         return messages.format(SHINY_CAUGHT_KEY, pokemonName, verb, timeMinutes, shinyNumber);
