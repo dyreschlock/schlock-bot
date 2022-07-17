@@ -5,6 +5,7 @@ import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class LetsGoShinyDex
@@ -54,10 +55,14 @@ public class LetsGoShinyDex
             boolean showPokemon = containsPokemon(numberCode, entries);
             if (showPokemon)
             {
-                imgClass = "show";
+                imgClass = "pshow";
+            }
+            else
+            {
+                imgClass = "have";
             }
 
-            html += "<td><img class=\"p" + imgClass + "\" src=\"/img/pokemon/" + numberCode + ".png\"/></td>";
+            html += "<td><img class=\"" + imgClass + "\" src=\"/img/pokemon/" + numberCode + ".png\"/></td>";
             if (i % COLUMNS == 0)
             {
                 html += "</tr><tr>";
@@ -68,6 +73,41 @@ public class LetsGoShinyDex
         for (int i = 0; i < remainingTD; i++)
         {
             html += "<td></td>";
+        }
+
+        html += "</tr><tr>";
+
+        List<Integer> alolan = Arrays.asList(19, 20, 26, 27, 28, 37, 38, 50, 51, 52, 53, 74, 75, 76, 88, 89, 103, 105);
+        
+        remainingTD = COLUMNS - (alolan.size() % COLUMNS);
+        for (int i = 0; i < remainingTD; i++)
+        {
+            html += "<td></td>";
+        }
+
+        for(int i = 0; i < alolan.size(); i++)
+        {
+            Integer alola = alolan.get(i);
+
+            String numberCode = alola.toString();
+            if (numberCode.length() == 2)
+            {
+                numberCode = "0" + numberCode;
+            }
+            numberCode = "a_" + numberCode;
+
+            String imgClass = "have";
+            boolean showPokemon = containsPokemon(numberCode, entries);
+            if(showPokemon)
+            {
+                imgClass = "pshow";
+            }
+
+            html += "<td><img class=\"" + imgClass + "\" src=\"/img/pokemon/" + numberCode + ".png\"/></td>";
+            if (i+1 % COLUMNS == 0)
+            {
+                html += "</tr><tr>";
+            }
         }
 
         html += "</tr>";
