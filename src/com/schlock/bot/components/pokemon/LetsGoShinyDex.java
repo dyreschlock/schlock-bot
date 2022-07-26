@@ -72,10 +72,28 @@ public class LetsGoShinyDex
             }
         }
 
-        int remainingTD = COLUMNS - (MAX % COLUMNS);
+        int remainingTD = COLUMNS - (MAX % COLUMNS) -2;
         for (int i = 0; i < remainingTD; i++)
         {
             html += "<td></td>";
+        }
+
+        List<Integer> meltan = Arrays.asList(808, 809);
+        for (Integer m : meltan)
+        {
+            String numberCode = m.toString();
+            String imgClass = "";
+            boolean showPokemon = containsPokemon(numberCode, entries);
+            if (showPokemon)
+            {
+                imgClass = "pshow";
+            }
+            else
+            {
+                imgClass = "have";
+            }
+
+            html += "<td><img class=\"" + imgClass + "\" src=\"/img/pokemon/" + numberCode + ".png\"/></td>";
         }
 
         html += "</tr><tr>";
