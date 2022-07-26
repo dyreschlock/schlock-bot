@@ -13,9 +13,11 @@ import com.schlock.bot.services.commands.pokemon.bet.impl.ShinyPayoutHisuiServic
 import com.schlock.bot.services.commands.pokemon.bet.impl.ShinyPayoutLetsGoServiceImpl;
 import com.schlock.bot.services.commands.pokemon.quiz.GenCompletionQuizService;
 import com.schlock.bot.services.commands.pokemon.quiz.PokemonInfoService;
+import com.schlock.bot.services.commands.pokemon.quiz.RatePokemonService;
 import com.schlock.bot.services.commands.pokemon.quiz.WhosThatPokemonService;
 import com.schlock.bot.services.commands.pokemon.quiz.impl.GenCompletionQuizServiceImpl;
 import com.schlock.bot.services.commands.pokemon.quiz.impl.PokemonInfoServiceImpl;
+import com.schlock.bot.services.commands.pokemon.quiz.impl.RatePokemonServiceImpl;
 import com.schlock.bot.services.commands.pokemon.quiz.impl.WhosThatPokemonServiceImpl;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyInfoService;
@@ -50,22 +52,27 @@ public class ListenerModule
         binder.bind(PokemonInfoService.class, PokemonInfoServiceImpl.class);
         binder.bind(GenCompletionQuizService.class, GenCompletionQuizServiceImpl.class);
         binder.bind(WhosThatPokemonService.class, WhosThatPokemonServiceImpl.class);
+        binder.bind(RatePokemonService.class, RatePokemonServiceImpl.class);
     }
 
     @EagerLoad
     public static GameControllerService build(WhosThatPokemonService guessingService,
                                               GenCompletionQuizService genCompletionQuizService,
+                                              RatePokemonService rateService,
                                               Messages messages,
                                               DeploymentConfiguration config)
     {
         //Who's that Pokemon? is on by default.
         guessingService.turnOn();
 
+        //Rate Pokemon is on by default.
+        rateService.turnOn();
+
         Map<String, ChatGameListenerService> chatGames = new HashMap<>();
 
         chatGames.put(guessingService.getGameId(), guessingService);
         chatGames.put(genCompletionQuizService.getGameId(), genCompletionQuizService);
-
+        chatGames.put(rateService.getGameId(), rateService);
 
         GameControllerService gameController = new GameControllerServiceImpl(chatGames, messages, config);
 
