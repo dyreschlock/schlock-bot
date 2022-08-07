@@ -61,7 +61,8 @@ public class Commands extends ListenerAdapter
 
                         if (responses.isRelayAll())
                         {
-                            discordBot.relayMessage(response);
+                            String discordResponse = responses.formatForDiscord(response);
+                            discordBot.relayMessage(discordResponse);
                         }
                     }
                 }

@@ -7,7 +7,7 @@ public class ListenerResponse
 {
     private boolean relayAll;
 
-    private List<String> messages = new ArrayList<>();
+    private List<ListeningResponseMessage> messages = new ArrayList<>();
 
     private ListenerResponse(boolean relayAll)
     {
@@ -16,7 +16,16 @@ public class ListenerResponse
 
     public ListenerResponse addMessage(String message)
     {
-        messages.add(message);
+        return addMessage(message, false);
+    }
+
+    public ListenerResponse addMessage(String message, boolean bold)
+    {
+        ListeningResponseMessage m = new ListeningResponseMessage();
+        m.message = message;
+        m.bold = bold;
+
+        messages.add(m);
 
         return this;
     }
@@ -28,7 +37,13 @@ public class ListenerResponse
 
     public List<String> getMessages()
     {
-        return messages;
+        List<String> strings = new ArrayList<>();
+        for (ListeningResponseMessage mess : messages)
+        {
+            strings.add(mess.message);
+        }
+
+        return strings;
     }
 
     public String getFirstMessage()
@@ -37,7 +52,7 @@ public class ListenerResponse
         {
             return null;
         }
-        return messages.get(0);
+        return messages.get(0).message;
     }
 
     public static ListenerResponse relayAll()
@@ -53,5 +68,24 @@ public class ListenerResponse
     public static ListenerResponse relayNothing()
     {
         return new ListenerResponse(false);
+    }
+
+    public String formatForDiscord(String message)
+    {
+        for (ListeningResponseMessage mess : messages)
+        {
+            if (mess.message.equals(message) && mess.bold)
+            {
+                return "**" + message + "**";
+            }
+        }
+        return message;
+    }
+
+
+    private class ListeningResponseMessage
+    {
+        public String message;
+        public boolean bold;
     }
 }

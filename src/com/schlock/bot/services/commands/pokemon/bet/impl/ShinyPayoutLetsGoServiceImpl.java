@@ -95,7 +95,7 @@ public class ShinyPayoutLetsGoServiceImpl extends AbstractListenerService implem
             database.save(get);
 
             ListenerResponse response = ListenerResponse.relayAll();
-            response.addMessage(shinyFormatter.formatNewlyCaughtLetsGo(get));
+            response.addMessage(shinyFormatter.formatNewlyCaughtLetsGo(get), true);
 
             List<ShinyBetLetsGo> bets = database.get(ShinyBetLetsGoDAO.class).getAllCurrent();
             if (bets.size() == 0)

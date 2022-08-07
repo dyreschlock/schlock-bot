@@ -88,7 +88,7 @@ public class ShinyPayoutHisuiServiceImpl extends AbstractListenerService impleme
             database.save(get);
 
             ListenerResponse response = ListenerResponse.relayAll();
-            response.addMessage(shinyFormatter.formatNewlyCaughtHisui(get));
+            response.addMessage(shinyFormatter.formatNewlyCaughtHisui(get), true);
 
             List<ShinyBetHisui> bets = database.get(ShinyBetHisuiDAO.class).getAllCurrent();
             if (bets.size() == 0)
