@@ -9,15 +9,17 @@ public interface PokemonManagement
 {
     Pokemon getPokemonFromText(String text);
 
-    Pokemon getRandomPokemon();
-
     boolean isGenSearch(String params);
-
-    Pokemon getRandomPokemonInGen(String gen);
 
     boolean isHisuiSearch(String params);
 
+    Pokemon getRandomPokemon();
+
+    Pokemon getRandomPokemonInGen(String gen);
+
     Pokemon getRandomPokemonInHisui();
+
+    Pokemon getRandomPokemon(List<String> exceptions);
 
     boolean isRangeSearch(String params);
 

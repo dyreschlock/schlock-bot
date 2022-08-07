@@ -207,6 +207,34 @@ public class PokemonManagementImpl implements PokemonManagement
         return hisuianByNumber.get(random);
     }
 
+    public Pokemon getRandomPokemon(List<String> exceptions)
+    {
+        initialize();
+
+        List<Integer> dontInclude = new ArrayList<>();
+        for (String except : exceptions)
+        {
+            Integer number = Integer.parseInt(except);
+            dontInclude.add(number);
+        }
+
+        List<Integer> availableList = new ArrayList<>();
+        for (Integer number : pokemonByNumber.keySet())
+        {
+            if (!dontInclude.contains(number))
+            {
+                availableList.add(number);
+            }
+        }
+
+        int total = availableList.size();
+        int random = new Random().nextInt(total);
+
+        Integer number = availableList.get(random);
+
+        return pokemonByNumber.get(number);
+    }
+
     private Integer getNumber(String in)
     {
         try

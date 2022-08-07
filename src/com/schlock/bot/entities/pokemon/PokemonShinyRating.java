@@ -27,7 +27,12 @@ public class PokemonShinyRating extends Persisted
 
     }
 
-
+    public PokemonShinyRating(Pokemon pokemon, Double rating)
+    {
+        this.pokemonId = pokemon.getId();
+        this.numberCode = pokemon.getNumberString();
+        this.rating = rating;
+    }
 
     public Long getId()
     {

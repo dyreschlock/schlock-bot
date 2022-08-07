@@ -12,6 +12,7 @@ import com.schlock.bot.services.commands.base.*;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetInfoService;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyPayoutHisuiService;
 import com.schlock.bot.services.commands.pokemon.quiz.GenCompletionQuizService;
+import com.schlock.bot.services.commands.pokemon.quiz.RatePokemonService;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyDexService;
 import com.schlock.bot.services.commands.pokemon.shiny.ShinyInfoService;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetService;
@@ -42,6 +43,7 @@ public class BotModule
 
                                       GenCompletionQuizService genCompletionQuizService,
                                       WhosThatPokemonService guessingService,
+                                      RatePokemonService ratePokemonService,
                                       PokemonInfoService pokemonInfoService,
                                       ShinyInfoService shinyInfoService,
                                       ShinyDexService shinyDexService,
@@ -58,6 +60,7 @@ public class BotModule
                                                 shinyPayoutLetsGoService,
                                                 shinyPayoutHisuiService,
                                                 genCompletionQuizService,
+                                                ratePokemonService,
                                                 guessingService,
                                                 pokemonInfoService,
                                                 shinyInfoService,

@@ -48,6 +48,13 @@ Betting information, details, and payouts are relayed to both Twitch and Discord
 * **!whodat [gen1-gen2]** -- Start the game with a range of generations.
 
 
+**Shiny Rating 'Game'** - The bot will randomly choose a pokemon, and all users in the chat will give their vote from 1-4 what they think about the shiny. 1 = bad, 2 = not good, 3 = not bad, 4 = good. All votes will be averaged to give that shiny an overall rating.
+
+* **!rate** -- Starts the game, if it hasn't already been started.
+* **!rate [1, 2, 3, 4]** -- will record the rating for a user
+* **!rate close** - Will finish the rating (can only be done by owner)
+
+
 **Pokemon Information** - Return information from a pokemon, or a random pokemon
 
 * **!pokemon [number of name]** -- return details of a specific pokemon
