@@ -181,4 +181,9 @@ public class RatePokemonServiceImpl extends AbstractChatGameListenerService impl
         }
         return formatSingleResponse(RATE_ERROR_KEY);
     }
+
+    public Pokemon getCurrentPokemon()
+    {
+        return currentPokemon;
+    }
 }
