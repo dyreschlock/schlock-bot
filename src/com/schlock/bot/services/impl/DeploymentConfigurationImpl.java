@@ -21,6 +21,8 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
     private static final String CONFIG_PROPERTIES = "config.properties";
     private static final String DEPLOY_PROPERTIES = "deploy.properties";
 
+    private static final String HTML_DATA_DIRECTORY = "html.data.directory";
+
     private static final String BOT_NAME = "bot.name";
 
     private static final String USER_DEFAULT_BALANCE = "user.default.balance";
@@ -208,6 +210,11 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
     public String getBotName()
     {
         return getProperties().getProperty(BOT_NAME);
+    }
+
+    public String getHTMLDataDirectory()
+    {
+        return getProperties().getProperty(HTML_DATA_DIRECTORY);
     }
 
     public String getDiscordToken()

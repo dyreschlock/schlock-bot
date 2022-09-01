@@ -37,6 +37,8 @@ public interface DeploymentConfiguration
 
     String getDataDirectory();
 
+    String getHTMLDataDirectory();
+
     String getOwnerUsername();
 
     String getBotName();

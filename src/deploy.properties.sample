@@ -1,5 +1,7 @@
 owner.username=
 
+html.data.directory=
+
 discord.token=
 discord.relay.channel=
 

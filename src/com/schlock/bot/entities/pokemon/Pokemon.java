@@ -1,7 +1,23 @@
 package com.schlock.bot.entities.pokemon;
 
+import org.apache.tapestry5.json.JSONObject;
+
 public class Pokemon
 {
+    private static final String NUMBER = "number";
+    private static final String ID = "id";
+    private static final String NAME = "name";
+
+    private static final String TYPE1 = "type1";
+    private static final String TYPE2 = "type2";
+
+    private static final String BASE_STATS = "base_stats";
+
+    private static final String HISUI_NUMBER = "hisui_number";
+
+    private static final String HISUI_TYPE1 = "hisui_type1";
+    private static final String HISUI_TYPE2 = "hisui_type2";
+
     private Integer number;
     private String id;
     private String name;
@@ -34,9 +50,60 @@ public class Pokemon
         }
         return num;
     }
+
     public void incrementBasestats(int i)
     {
         basestats = basestats +i;
+    }
+
+    public JSONObject createJSON()
+    {
+        JSONObject object = new JSONObject();
+
+        object.put(NUMBER, number)
+                .put(NAME, name)
+                .put(ID, id)
+                .put(TYPE1, type1)
+                .put(TYPE2, type2)
+                .put(BASE_STATS, basestats)
+                .put(HISUI_NUMBER, hisuiNumber)
+                .put(HISUI_TYPE1, hisuiType1)
+                .put(HISUI_TYPE2, hisuiType2)
+        ;
+
+        return object;
+    }
+
+    public static Pokemon createFromJSON(JSONObject object)
+    {
+        Pokemon pokemon = new Pokemon();
+
+        pokemon.number = object.getInt(NUMBER);
+        pokemon.name = object.getString(NAME);
+        pokemon.id = object.getString(ID);
+        pokemon.basestats = object.getInt(BASE_STATS);
+
+        pokemon.type1 = object.getString(TYPE1);
+        if (object.containsKey(TYPE2))
+        {
+            pokemon.type2 = object.getString(TYPE2);
+        }
+
+        if (object.containsKey(HISUI_NUMBER))
+        {
+            pokemon.hisuiNumber = object.getInt(HISUI_NUMBER);
+
+        }
+        if (object.containsKey(HISUI_TYPE1))
+        {
+            pokemon.hisuiType1 = object.getString(HISUI_TYPE1);
+        }
+        if (object.containsKey(HISUI_TYPE2))
+        {
+            pokemon.hisuiType2 = object.getString(HISUI_TYPE2);
+        }
+
+        return pokemon;
     }
 
 
