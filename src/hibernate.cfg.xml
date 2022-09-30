@@ -45,5 +45,7 @@
         <mapping class="com.schlock.bot.entities.base.alert.TwitchAlert" />
         <mapping class="com.schlock.bot.entities.base.alert.AnimationAlert" />
 
+        <mapping class="com.schlock.pocket.entites.PocketGame" />
+
     </session-factory>
 </hibernate-configuration>

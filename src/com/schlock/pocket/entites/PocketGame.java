@@ -1,0 +1,129 @@
+package com.schlock.pocket.entites;
+
+import com.schlock.bot.entities.Persisted;
+
+import javax.persistence.*;
+import java.io.File;
+
+@Entity
+@Table(name = "pocket_game")
+public class PocketGame extends Persisted
+{
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(name = "gameName")
+    private String gameName;
+
+    @Column(name = "game_filename")
+    private String gameFilename;
+
+    @Column(name = "image_filename")
+    private String imageFilename;
+
+    @Column(name = "imageCopied")
+    private boolean imageCopied;
+
+    @Column(name = "genre")
+    private String genre;
+
+    @Column(name = "core")
+    @Enumerated(EnumType.STRING)
+    private PocketCore core;
+
+    public PocketGame()
+    {
+    }
+
+
+    public Long getId()
+    {
+        return this.id;
+    }
+
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
+
+    public String getGameName()
+    {
+        return gameName;
+    }
+
+    public void setGameName(String gameName)
+    {
+        this.gameName = gameName;
+    }
+
+    public String getGameFilename()
+    {
+        return gameFilename;
+    }
+
+    public void setGameFilename(String gameFilename)
+    {
+        this.gameFilename = gameFilename;
+    }
+
+    public String getImageFilename()
+    {
+        return imageFilename;
+    }
+
+    public void setImageFilename(String imageFilename)
+    {
+        this.imageFilename = imageFilename;
+    }
+
+    public boolean isImageCopied()
+    {
+        return imageCopied;
+    }
+
+    public void setImageCopied(boolean imageCopied)
+    {
+        this.imageCopied = imageCopied;
+    }
+
+    public String getGenre()
+    {
+        return genre;
+    }
+
+    public void setGenre(String genre)
+    {
+        this.genre = genre;
+    }
+
+    public PocketCore getCore()
+    {
+        return core;
+    }
+
+    public void setCore(PocketCore core)
+    {
+        this.core = core;
+    }
+
+
+    public static PocketGame createGame(File file, PocketCore core)
+    {
+        PocketGame game = new PocketGame();
+
+        final String EXT = core.getFileExtension();
+
+        int lengthMinusEXT = file.getName().length() - (EXT.length() + 1);
+
+        game.gameName = file.getName().substring(0, lengthMinusEXT);
+        game.gameFilename = file.getName();
+        game.imageFilename = game.gameName + ".png";
+        game.imageCopied = false;
+
+        game.genre = file.getParentFile().getName();
+        game.core = core;
+
+        return game;
+    }
+}
