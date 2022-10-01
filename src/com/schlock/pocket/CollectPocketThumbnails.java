@@ -46,23 +46,39 @@ public class CollectPocketThumbnails extends AbstractStandalongDatabaseApp
 
         String URL_LOCATION = URL + coreRepo + URL_BOXARTS + filename;
 
-        String OUTPUT_LOCATION = FILE_OUTPUT_LOCATION  + game.getCore().getCoreCode() + "/" + game.getImageFilename();
+        String OUTPUT_FOLDER = FILE_OUTPUT_LOCATION  + game.getCore().getCoreCode();
+        String OUTPUT_FILE = OUTPUT_FOLDER + "/" + game.getImageFilename();
 
-        final URL url = new URL(URL_LOCATION);
-        ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-        FileOutputStream fos = new FileOutputStream(OUTPUT_LOCATION);
-
-        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-
-        fos.close();
-        rbc.close();
-
-
-        File imageFile = new File(OUTPUT_LOCATION);
+        File imageFile = new File(OUTPUT_FILE);
         if (imageFile.exists())
         {
             game.setImageCopied(true);
             getSession().save(game);
+        }
+        else
+        {
+            File folder = new File(OUTPUT_FOLDER);
+            if (!folder.exists())
+            {
+                folder.mkdirs();
+            }
+
+            final URL url = new URL(URL_LOCATION);
+            ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+            FileOutputStream fos = new FileOutputStream(OUTPUT_FILE);
+
+            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+
+            fos.close();
+            rbc.close();
+
+
+            imageFile = new File(OUTPUT_FILE);
+            if (imageFile.exists())
+            {
+                game.setImageCopied(true);
+                getSession().save(game);
+            }
         }
     }
 

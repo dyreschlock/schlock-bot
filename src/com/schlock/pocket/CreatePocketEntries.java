@@ -32,7 +32,7 @@ public class CreatePocketEntries extends AbstractStandalongDatabaseApp
 
     private void processCore(PocketCore core)
     {
-        String romLocation = ASSET_LOCATION + core.getCoreCode() + "/" + COMMON;
+        String romLocation = getRomLocation(core);
 
         FileFilter filter = new FileFilter()
         {
@@ -40,8 +40,7 @@ public class CreatePocketEntries extends AbstractStandalongDatabaseApp
             public boolean accept(File file)
             {
                 boolean directory = file.isDirectory();
-                boolean notIgnore = !UNSORTED.toLowerCase().equals(file.getName()) &&
-                                        !ALL.toLowerCase().equals(file.getName());
+                boolean notIgnore = !file.getName().startsWith("_");
 
                 return directory && notIgnore;
             }
@@ -54,16 +53,32 @@ public class CreatePocketEntries extends AbstractStandalongDatabaseApp
         }
     }
 
+    private String getRomLocation(PocketCore core)
+    {
+        String coreCode = core.getCoreCode();
+        if (coreCode.contains("/"))
+        {
+            return ASSET_LOCATION + coreCode + "/";
+        }
+        return ASSET_LOCATION + coreCode + "/" + COMMON;
+    }
+
     private void processFolder(File folder, PocketCore core)
     {
         FileFilter filter = new FileFilter()
         {
             public boolean accept(File file)
             {
-                final String EXT = core.getFileExtension();
+                boolean acceptibleFile = false;
+                for(String EXT : core.getFileExtensions())
+                {
+                    if (file.getName().endsWith(EXT))
+                    {
+                        acceptibleFile = true;
+                    }
+                }
 
                 boolean notDirectory = !file.isDirectory();
-                boolean acceptibleFile = file.getName().endsWith(EXT);
                 boolean notDotFile = !file.getName().startsWith(".");
 
                 return notDirectory && acceptibleFile && notDotFile;

@@ -112,11 +112,7 @@ public class PocketGame extends Persisted
     {
         PocketGame game = new PocketGame();
 
-        final String EXT = core.getFileExtension();
-
-        int lengthMinusEXT = file.getName().length() - (EXT.length() + 1);
-
-        game.gameName = file.getName().substring(0, lengthMinusEXT);
+        game.gameName = getGameNameFromFile(file);
         game.gameFilename = file.getName();
         game.imageFilename = game.gameName + ".png";
         game.imageCopied = false;
@@ -125,5 +121,13 @@ public class PocketGame extends Persisted
         game.core = core;
 
         return game;
+    }
+
+    private static String getGameNameFromFile(File file)
+    {
+        String fullName = file.getName();
+
+        int EXTpoint = fullName.lastIndexOf(".");
+        return fullName.substring(0, EXTpoint);
     }
 }
