@@ -1,5 +1,6 @@
 package com.schlock.pocket;
 
+import com.schlock.pocket.entites.PocketCore;
 import com.schlock.pocket.entites.PocketGame;
 import com.schlock.pocket.services.database.PocketGameDAO;
 
@@ -41,10 +42,7 @@ public class CollectPocketThumbnails extends AbstractStandalongDatabaseApp
 
     private void processGame(PocketGame game) throws Exception
     {
-        String coreRepo = game.getCore().getRepoName();
-        String filename = URLEncoder.encode(game.getImageFilename(), StandardCharsets.UTF_8.toString()).replace("+", "%20");
-
-        String URL_LOCATION = URL + coreRepo + URL_BOXARTS + filename;
+        String URL_LOCATION = getUrlLocation(game);
 
         String OUTPUT_FOLDER = FILE_OUTPUT_LOCATION  + game.getCore().getCoreCode();
         String OUTPUT_FILE = OUTPUT_FOLDER + "/" + game.getImageFilename();
@@ -80,6 +78,26 @@ public class CollectPocketThumbnails extends AbstractStandalongDatabaseApp
                 getSession().save(game);
             }
         }
+    }
+
+    private String getUrlLocation(PocketGame game) throws Exception
+    {
+        String imageFilename = URLEncoder.encode(game.getImageFilename(), StandardCharsets.UTF_8.toString()).replace("+", "%20");
+
+        String coreRepo = game.getCore().getRepoName();
+
+        if (PocketCore.GAMEBOY_COLOR.equals(game.getCore()))
+        {
+            final String GB_EXTENSION = ".gb";
+
+            if (game.getGameFilename().endsWith(GB_EXTENSION))
+            {
+                coreRepo = PocketCore.GAMEBOY.getRepoName();
+            }
+        }
+
+        String URL_LOCATION = URL + coreRepo + URL_BOXARTS + imageFilename;
+        return URL_LOCATION;
     }
 
 

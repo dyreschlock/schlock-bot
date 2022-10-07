@@ -11,7 +11,7 @@ public enum PocketCore
     VIRTUAL_BOY("Nintendo_-_Virtual_Boy", "vb", "vb"),
 
     GAMEBOY_ADVANCE("Nintendo_-_Game_Boy_Advance", "gba", "gba"),
-    GAMEBOY_COLOR("Nintendo_-_Game_Boy_Color", "gbc", "gbc"),
+    GAMEBOY_COLOR("Nintendo_-_Game_Boy_Color", "gbc", "gbc", "gb"),
     GAMEBOY("Nintendo_-_Game_Boy", "gb", "gb"),
 
     NEO_GEO("SNK_-_Neo_Geo", "ng/Mazamars312.NeoGeo", "json"),
