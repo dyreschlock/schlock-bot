@@ -32,6 +32,12 @@ public class PocketGame extends Persisted
     @Enumerated(EnumType.STRING)
     private PocketCore core;
 
+    @Column(name = "fileHash")
+    private String fileHash;
+
+    @Column(name = "inLibrary")
+    private boolean inLibrary;
+
     public PocketGame()
     {
     }
@@ -107,6 +113,25 @@ public class PocketGame extends Persisted
         this.core = core;
     }
 
+    public String getFileHash()
+    {
+        return fileHash;
+    }
+
+    public void setFileHash(String fileHash)
+    {
+        this.fileHash = fileHash;
+    }
+
+    public boolean isInLibrary()
+    {
+        return inLibrary;
+    }
+
+    public void setInLibrary(boolean inLibrary)
+    {
+        this.inLibrary = inLibrary;
+    }
 
     public static PocketGame createGame(File file, PocketCore core)
     {
@@ -119,6 +144,8 @@ public class PocketGame extends Persisted
 
         game.genre = file.getParentFile().getName();
         game.core = core;
+
+        game.inLibrary = false;
 
         return game;
     }

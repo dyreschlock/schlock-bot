@@ -1,6 +1,5 @@
 package com.schlock.pocket.services.database;
 
-import com.schlock.pocket.entites.PocketCore;
 import com.schlock.pocket.entites.PocketGame;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -34,11 +33,12 @@ public class PocketGameDAO
         return games.get(0);
     }
 
-    public List<PocketGame> getByMissingImage()
+    public List<PocketGame> getByLibraryThumbnailNotYetCreated()
     {
         String text = " select g " +
                 " from PocketGame g " +
-                " where g.imageCopied is false ";
+                " where g.imageCopied is false " +
+                " or g.inLibrary is false ";
 
         Query query = session.createQuery(text);
 
