@@ -18,17 +18,16 @@ repositories {
 
 dependencies {
 
-    compile group: 'javax.websocket', name: 'javax.websocket-api', version: '1.1'
+    implementation group: 'javax.websocket', name: 'javax.websocket-api', version: '1.1'
 
-    compile group: 'org.glassfish.tyrus.bundles', name: 'tyrus-standalone-client', version: '1.17'
+    implementation group: 'org.glassfish.tyrus.bundles', name: 'tyrus-standalone-client', version: '1.17'
 
 
-    compile group: 'javax.annotation', name: 'javax.annotation-api', version: '1.2-b04'
+    implementation group: 'javax.annotation', name: 'javax.annotation-api', version: '1.2-b04'
 
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
 
     implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.1'
-    compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.1'
 
     implementation group: 'com.sun.istack', name: 'istack-commons-runtime', version: '4.0.0'
 
@@ -40,40 +39,38 @@ dependencies {
 
     //logging
     ext.slf4jVersion = '2.0.0-alpha0'
-    compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
-    runtime group: 'org.slf4j', name: 'slf4j-simple', version: slf4jVersion
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
 
     //css compiliation
-    compile group: 'com.asual.lesscss', name: 'lesscss-engine', version: '1.3.0'
-    compile group: 'com.asual.lesscss', name: 'lesscss-servlet', version: '1.3.0'
+    implementation group: 'com.asual.lesscss', name: 'lesscss-engine', version: '1.3.0'
+    implementation group: 'com.asual.lesscss', name: 'lesscss-servlet', version: '1.3.0'
 
 
-    compile group: 'org.jsoup', name: 'jsoup', version: '1.12.1'
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.12.1'
 
     //sql
-    runtime group: 'mysql', name: 'mysql-connector-java', version: '5.1.13'
-    compile 'com.zaxxer:HikariCP:4.0.1'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.13'
+    implementation 'com.zaxxer:HikariCP:4.0.1'
 
 
     ext.tapestryVersion = '5.6.2'
-    compile group: 'org.apache.tapestry', name: 'tapestry5-annotations', version: tapestryVersion
-    compile group: 'org.apache.tapestry', name: 'tapestry-core', version: tapestryVersion
-    compile group: 'org.apache.tapestry', name: 'tapestry-func', version: tapestryVersion
-    compile group: 'org.apache.tapestry', name: 'tapestry-hibernate', version: tapestryVersion
-    compile group: 'org.apache.tapestry', name: 'tapestry-hibernate-core', version: tapestryVersion
-    compile group: 'org.apache.tapestry', name: 'tapestry-ioc', version: tapestryVersion
-    compile group: 'org.apache.tapestry', name: 'tapestry-json', version: tapestryVersion
-    compile group: 'org.apache.tapestry', name: 'tapestry-upload', version: tapestryVersion
-    compile group: 'org.apache.tapestry', name: 'tapestry-test', version: tapestryVersion, transitive: false
+    implementation group: 'org.apache.tapestry', name: 'tapestry5-annotations', version: tapestryVersion
+    implementation group: 'org.apache.tapestry', name: 'tapestry-core', version: tapestryVersion
+    implementation group: 'org.apache.tapestry', name: 'tapestry-func', version: tapestryVersion
+    implementation group: 'org.apache.tapestry', name: 'tapestry-hibernate', version: tapestryVersion
+    implementation group: 'org.apache.tapestry', name: 'tapestry-hibernate-core', version: tapestryVersion
+    implementation group: 'org.apache.tapestry', name: 'tapestry-ioc', version: tapestryVersion
+    implementation group: 'org.apache.tapestry', name: 'tapestry-json', version: tapestryVersion
+    implementation group: 'org.apache.tapestry', name: 'tapestry-upload', version: tapestryVersion
+    implementation group: 'org.apache.tapestry', name: 'tapestry-test', version: tapestryVersion, transitive: false
 
     ext.jettyVersion = '10.0.0'
-    compile group: 'org.eclipse.jetty', name: 'jetty-webapp', version: jettyVersion
-    compile group: 'org.eclipse.jetty', name: 'jetty-server', version: jettyVersion
-    compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: jettyVersion
+    implementation group: 'org.eclipse.jetty', name: 'jetty-webapp', version: jettyVersion
+    implementation group: 'org.eclipse.jetty', name: 'jetty-server', version: jettyVersion
+    implementation group: 'org.eclipse.jetty', name: 'jetty-servlet', version: jettyVersion
 
     //testing
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')
-    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
 }
 
 tasks.idea {
