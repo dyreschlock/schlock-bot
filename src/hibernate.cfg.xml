@@ -1,6 +1,6 @@
 <!DOCTYPE hibernate-configuration PUBLIC
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
         <!--
@@ -9,10 +9,10 @@
         <property name="hibernate.connection.provider_class">com.zaxxer.hikari.hibernate.HikariConnectionProvider</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
 
-        <property name="hbm2ddl.auto">update</property>
         <!--
+        <property name="hbm2ddl.auto">update</property>
         -->
-        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.show_sql">false</property>
         <property name="hibernate.format_sql">true</property>
 
         <property name="hibernate.connection.CharSet">utf8</property>
@@ -44,8 +44,6 @@
         <mapping class="com.schlock.bot.entities.base.alert.Alert" />
         <mapping class="com.schlock.bot.entities.base.alert.TwitchAlert" />
         <mapping class="com.schlock.bot.entities.base.alert.AnimationAlert" />
-
-        <mapping class="com.schlock.pocket.entites.PocketGame" />
 
     </session-factory>
 </hibernate-configuration>
