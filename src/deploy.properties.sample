@@ -21,3 +21,5 @@ hibernate.connection.password.local=
 hibernate.connection.url.test=
 hibernate.connection.username.test=
 hibernate.connection.password.test=
+
+generation.output.directory=
