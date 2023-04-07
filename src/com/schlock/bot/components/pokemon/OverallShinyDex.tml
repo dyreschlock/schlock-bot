@@ -2,8 +2,11 @@
         xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
 >
     <div class="dex">
-        <div id="header" class="header yellowGradient">
-            ${shinyDexMessage}
+        <div id="header1" class="header yellowGradient">
+            ${overallDexCount}
+        </div>
+        <div id="header2" class="header headerSmall blueGradient">
+            ${regionalFormCounts}
         </div>
         <t:outputraw value="tableHTML" />
     </div>

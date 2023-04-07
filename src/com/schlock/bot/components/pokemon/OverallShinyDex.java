@@ -47,15 +47,20 @@ public class OverallShinyDex
     @Inject
     private Messages messages;
 
-    public String getShinyDexMessage()
+    public String getOverallDexCount()
     {
         int count = shinyDexService.getOverallShinyCount();
         int total = shinyDexService.getOverallTotalCount();
 
         String overall = messages.format("overall", count, total);
 
-        count = shinyDexService.getNormalShinyCount();
-        total = shinyDexService.getNormalTotalCount();
+        return overall;
+    }
+
+    public String getRegionalFormCounts()
+    {
+        int count = shinyDexService.getNormalShinyCount();
+        int total = shinyDexService.getNormalTotalCount();
 
         String normal = messages.format("normal", count, total);
 
@@ -74,7 +79,7 @@ public class OverallShinyDex
 
         String hisui = messages.format("hisui", count, total);
 
-        String message = messages.format("header-message", overall, normal, alola, galar, hisui);
+        String message = messages.format("regional-forms-message", normal, alola, galar, hisui);
         return message;
     }
 
