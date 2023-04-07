@@ -8,18 +8,33 @@
     <meta charset="UTF-8"/>
     <title>Shiny Pokemon</title>
 
+    <style>
+
+        div.links
+        {
+            margin: auto;
+            padding-top: 30px;
+
+            width: 400px;
+        }
+
+    </style>
+
 </head>
 <body>
 
-    <a href="/pokemon/shinydex">Shiny Pokemon list - All Games</a> <br/>
-    <br/>
-    <a href="/pokemon/shinydex/go">Pokemon Go - Shiny List</a> <br/>
-    <br/>
-    <a href="/pokemon/shinydex/letsgo">Pokemon Let's Go Eevee - Shiny List</a> <br/>
-    <br/>
-    <a href="/pokemon/shinydex/hisui/dex">Pokemon Legends Arceus - Shiny List</a> <br/>
-    <a href="/pokemon/shinydex/hisui/order">Pokemon Legends Arceus - Caught Shinies</a> <br/>
-    <a href="/pokemon/shinydex/hisui/missing">Pokemon Legends Arceus - Remaining Shiny Pokemon</a>
+    <div class="links">
+        <a href="/pokemon/shinydex">Shiny Pokemon list - All Games Combined</a> <br/>
+        <br/>
+        <a href="/pokemon/shinydex/go">Pokemon Go - Shiny List</a> <br/>
+        <br/>
+        <a href="/pokemon/shinydex/letsgo">Pokemon Let's Go Eevee - Shiny List</a> <br/>
+        <br/>
+        <a href="/pokemon/shinydex/hisui/dex">Pokemon Legends Arceus - Shiny List</a> <br/>
+        <a href="/pokemon/shinydex/hisui/order">Pokemon Legends Arceus - Caught Shinies</a> <br/>
+        <a href="/pokemon/shinydex/hisui/missing">Pokemon Legends Arceus - Remaining Shiny Pokemon</a>
+    </div>
+
 
 
 </body>
