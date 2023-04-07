@@ -108,7 +108,7 @@
 
             table.dex td.mini img
             {
-                width: 43px;
+                width: 40px;
             }
 
             td.edge
