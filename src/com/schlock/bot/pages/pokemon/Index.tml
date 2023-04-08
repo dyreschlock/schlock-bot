@@ -32,7 +32,9 @@
         <br/>
         <a href="/pokemon/shinydex/hisui/dex">Pokemon Legends Arceus - Shiny List</a> <br/>
         <a href="/pokemon/shinydex/hisui/order">Pokemon Legends Arceus - Caught Shinies</a> <br/>
-        <a href="/pokemon/shinydex/hisui/missing">Pokemon Legends Arceus - Remaining Shiny Pokemon</a>
+        <a href="/pokemon/shinydex/hisui/missing">Pokemon Legends Arceus - Remaining Shiny Pokemon</a> <br/>
+        <br />
+        ${generatedMessage}
     </div>
 
 
