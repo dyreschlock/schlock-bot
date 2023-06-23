@@ -188,7 +188,7 @@ public class ConvertHTMLtoJSON
         Element tbody = contentElement.child(1).child(14).child(0);
 
         Element trElement;
-        for (int i = 2; i < 907; i++)
+        for (int i = 2; i < 1012; i++)
         {
             trElement = tbody.child(i);
 

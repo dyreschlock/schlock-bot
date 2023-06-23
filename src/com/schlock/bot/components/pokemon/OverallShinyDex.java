@@ -13,9 +13,9 @@ public class OverallShinyDex
     protected static final Integer COLUMNS = 6;
     protected static final Integer ROWS = 5;
 
-    protected static final Integer MAX_POKEMON = 900;
+    protected static final Integer POKEMON_LIMIT = 1010;
 
-    private static final String[] REMAINING_ROW = {"901", "902", "903", "904", "905", null};
+    protected static final Integer MAX_POKEMON = 1080;
 
     private static final String[] ROW1_ALOLA = {"a_019", "a_020", "a_026", "a_027", "a_028", "a_037"};
     private static final String[] ROW2_ALOLA = {"a_038", "a_050", "a_051", "a_052", "a_053", "a_074"};
@@ -33,13 +33,15 @@ public class OverallShinyDex
     private static final String[] ROW4_HISUI = {"h_570", "h_571", "h_628", "h_705", "h_706", "h_713"};
     private static final String[] ROW5_HISUI = {"899", "900", "901", null, null, null};
 
+    private static final String[] ROW1_PALDEA = {"p_128", "p_194", null, null, null, null};
+
     private static final String[] ROW_BLANK = {null, null, null, null, null, null};
 
-    private static final List<String[]> ROW1_REMAINING = Arrays.asList(REMAINING_ROW, ROW1_ALOLA, ROW1_GALAR, ROW1_HISUI, ROW_BLANK, ROW_BLANK);
-    private static final List<String[]> ROW2_REMAINING = Arrays.asList(ROW_BLANK, ROW2_ALOLA, ROW2_GALAR, ROW2_HISUI, ROW_BLANK, ROW_BLANK);
-    private static final List<String[]> ROW3_REMAINING = Arrays.asList(ROW_BLANK, ROW3_ALOLA, ROW3_GALAR, ROW3_HISUI, ROW_BLANK, ROW_BLANK);
-    private static final List<String[]> ROW4_REMAINING = Arrays.asList(ROW_BLANK, ROW_BLANK, ROW4_GALAR, ROW4_HISUI, ROW_BLANK, ROW_BLANK);
-    private static final List<String[]> ROW5_REMAINING = Arrays.asList(ROW_BLANK, ROW_BLANK, ROW5_GALAR, ROW5_HISUI, ROW_BLANK, ROW_BLANK);
+    private static final List<String[]> ROW1_REMAINING = Arrays.asList(ROW1_ALOLA, ROW1_GALAR, ROW1_HISUI, ROW1_PALDEA, ROW_BLANK, ROW_BLANK);
+    private static final List<String[]> ROW2_REMAINING = Arrays.asList(ROW2_ALOLA, ROW2_GALAR, ROW2_HISUI, ROW_BLANK, ROW_BLANK, ROW_BLANK);
+    private static final List<String[]> ROW3_REMAINING = Arrays.asList(ROW3_ALOLA, ROW3_GALAR, ROW3_HISUI, ROW_BLANK, ROW_BLANK, ROW_BLANK);
+    private static final List<String[]> ROW4_REMAINING = Arrays.asList(ROW_BLANK, ROW4_GALAR, ROW4_HISUI, ROW_BLANK, ROW_BLANK, ROW_BLANK);
+    private static final List<String[]> ROW5_REMAINING = Arrays.asList(ROW_BLANK, ROW5_GALAR, ROW5_HISUI, ROW_BLANK, ROW_BLANK, ROW_BLANK);
 
     @Inject
     private ShinyDexService shinyDexService;
@@ -94,11 +96,25 @@ public class OverallShinyDex
             int cellNumber = i+1;
 
             int pokemonNumber = getPokemonNumber(cellNumber);
+            if (pokemonNumber > POKEMON_LIMIT)
+            {
+                boolean edge = (pokemonNumber % COLUMNS) == 0;
+                if (edge)
+                {
+                    html += "<td class=\"mini edge\"></td>";
+                }
+                else
+                {
+                    html += "<td class=\"mini\"></td>";
+                }
+            }
+            else
+            {
+                String pokeNumberText = getNumberText(pokemonNumber);
+                boolean shiny = shinyDexService.isHaveShiny(pokeNumberText);
 
-            String pokeNumberText = getNumberText(pokemonNumber);
-            boolean shiny = shinyDexService.isHaveShiny(pokeNumberText);
-
-            html += getCell(pokemonNumber, shiny);
+                html += getCell(pokemonNumber, shiny);
+            }
 
             if ((i + 1) % (COLUMNS * COLUMNS) == 0)
             {

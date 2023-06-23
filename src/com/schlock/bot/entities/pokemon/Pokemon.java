@@ -36,6 +36,7 @@ public class Pokemon
     private boolean shinyAlola = false;
     private boolean shinyGalar = false;
     private boolean shinyHisui = false;
+    private boolean shinyPaldea = false;
 
     public Pokemon()
     {
@@ -235,5 +236,15 @@ public class Pokemon
     public void setShinyHisui(boolean shinyHisui)
     {
         this.shinyHisui = shinyHisui;
+    }
+
+    public boolean isShinyPaldea()
+    {
+        return shinyPaldea;
+    }
+
+    public void setShinyPaldea(boolean shinyPaldea)
+    {
+        this.shinyPaldea = shinyPaldea;
     }
 }

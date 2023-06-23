@@ -126,6 +126,10 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
         {
             return poke.isShinyHisui();
         }
+        if (PokemonRegion.isRegionalNumberCode(pokemonNumberCode, PokemonRegion.PALDEA))
+        {
+            return poke.isShinyPaldea();
+        }
         return poke.isShiny();
     }
 
@@ -144,6 +148,7 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
             addAllPokemonInRegion(PokemonRegion.ALOLA);
             addAllPokemonInRegion(PokemonRegion.GALAR);
             addAllPokemonInRegion(PokemonRegion.HISUI);
+            addAllPokemonInRegion(PokemonRegion.PALDEA);
 
             checkLetsGoShinies();
             checkGoShinies();
@@ -220,6 +225,10 @@ public class ShinyDexServiceImpl extends AbstractListenerService implements Shin
         else if (PokemonRegion.isRegionalNumberCode(number, PokemonRegion.HISUI))
         {
             poke.setShinyHisui(true);
+        }
+        else if (PokemonRegion.isRegionalNumberCode(number, PokemonRegion.PALDEA))
+        {
+            poke.setShinyPaldea(true);
         }
     }
 
