@@ -183,8 +183,8 @@ class PokemonInfoServiceImplTest extends AppTestCase
         testData.add(new Object[]{"!pokemon -gen2", 1, 251});
         testData.add(new Object[]{"!pokemon gen2-gen3", 152, 386});
         testData.add(new Object[]{"!pokemon -gen1", 1, 151});
-        testData.add(new Object[]{"!pokemon gen8-", 810, 905});
-        testData.add(new Object[]{"!pokemon gen1-gen8", 1, 905});
+        testData.add(new Object[]{"!pokemon gen8-", 810, 1010});
+        testData.add(new Object[]{"!pokemon gen1-gen9", 1, 1010});
 
         for (Object[] d : testData)
         {
@@ -196,7 +196,7 @@ class PokemonInfoServiceImplTest extends AppTestCase
             Integer start = (Integer) d[1];
             Integer end = (Integer) d[2];
 
-            assertTrue(start <= pokemonId && pokemonId <= end);
+            assertTrue(start <= pokemonId && pokemonId <= end, "Test failed for: " + (String) d[0]);
         }
     }
 
@@ -206,7 +206,7 @@ class PokemonInfoServiceImplTest extends AppTestCase
         List<String> testData = new ArrayList<>();
         testData.add("!pokemon g1");
         testData.add("!pokemon generation1");
-        testData.add("!pokemon gen9");
+        testData.add("!pokemon gen10");
         testData.add("!pokemon genX");
 
         for (String d : testData)

@@ -84,6 +84,10 @@ public class PokemonUtilsImpl implements PokemonUtils
     private static final Integer GEN8_START = 810;
     private static final Integer GEN8_END = 905;
 
+    private static final String GEN9 = "gen9";
+    private static final Integer GEN9_START = 906;
+    private static final Integer GEN9_END = 1010;
+
     public static final String HISUI = "hisui";
 
     private static final List<Object[]> GENERATIONS = Arrays.asList(
@@ -94,7 +98,8 @@ public class PokemonUtilsImpl implements PokemonUtils
             new Object[]{GEN5, GEN5_START, GEN5_END},
             new Object[]{GEN6, GEN6_START, GEN6_END},
             new Object[]{GEN7, GEN7_START, GEN7_END},
-            new Object[]{GEN8, GEN8_START, GEN8_END}
+            new Object[]{GEN8, GEN8_START, GEN8_END},
+            new Object[]{GEN9, GEN9_START, GEN9_END}
     );
 
 

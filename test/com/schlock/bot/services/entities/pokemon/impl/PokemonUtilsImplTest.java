@@ -57,12 +57,12 @@ class PokemonUtilsImplTest extends AppTestCase
         assertTrue(pokemonUtils.isGenerationId("gen6"));
         assertTrue(pokemonUtils.isGenerationId("gen7"));
         assertTrue(pokemonUtils.isGenerationId("gen8"));
+        assertTrue(pokemonUtils.isGenerationId("gen9"));
 
         assertTrue(pokemonUtils.isGenerationId("GEN1"));
         assertTrue(pokemonUtils.isGenerationId("Gen1"));
 
         assertFalse(pokemonUtils.isGenerationId("gen"));
-        assertFalse(pokemonUtils.isGenerationId("gen9"));
         assertFalse(pokemonUtils.isGenerationId(""));
         assertFalse(pokemonUtils.isGenerationId("9"));
     }
@@ -78,6 +78,7 @@ class PokemonUtilsImplTest extends AppTestCase
         String range6 = pokemonUtils.returnGenerationRange("gen6");
         String range7 = pokemonUtils.returnGenerationRange("gen7");
         String range8 = pokemonUtils.returnGenerationRange("gen8");
+        String range9 = pokemonUtils.returnGenerationRange("gen9");
         String rangeX = pokemonUtils.returnGenerationRange("");
 
         String rangeA = pokemonUtils.returnGenerationRange("GEN1");
@@ -91,6 +92,7 @@ class PokemonUtilsImplTest extends AppTestCase
         assertEquals(range6, "650-721");
         assertEquals(range7, "722-809");
         assertEquals(range8, "810-905");
+        assertEquals(range9, "906-1010");
         assertNull(rangeX);
 
         assertEquals(rangeA, "1-151");
