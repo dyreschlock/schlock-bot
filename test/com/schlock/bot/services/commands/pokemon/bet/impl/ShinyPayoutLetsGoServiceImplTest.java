@@ -30,6 +30,7 @@ class ShinyPayoutLetsGoServiceImplTest extends DatabaseTest
     private static final Double TEST_POKEMON_WIN_FACTOR = 2.0;
     private static final Double TEST_TIME_WIN_FACTOR = 3.0;
     private static final Double TEST_BOTH_WIN_FACTOR = 2.0;
+    private static final Double TEST_EXACT_TIME_WIN_FACTOR = 2.0;
 
     private static final Long BALANCE = Long.valueOf(10000);
 
@@ -88,7 +89,7 @@ class ShinyPayoutLetsGoServiceImplTest extends DatabaseTest
 
 
         Double winningPokemon = BET1_AMOUNT.doubleValue() * TEST_POKEMON_WIN_FACTOR;
-        Double winningTime = BET1_AMOUNT.doubleValue() * TEST_TIME_WIN_FACTOR;
+        Double winningTime = BET1_AMOUNT.doubleValue() * TEST_TIME_WIN_FACTOR * TEST_EXACT_TIME_WIN_FACTOR;
         Double user1winnings = (winningPokemon + winningTime) * TEST_BOTH_WIN_FACTOR;
 
         Double user2winnings = BET2_AMOUNT.doubleValue() * TEST_POKEMON_WIN_FACTOR;
@@ -192,6 +193,7 @@ class ShinyPayoutLetsGoServiceImplTest extends DatabaseTest
             public Double getBetsLetsGoPokemonWinFactor() { return TEST_POKEMON_WIN_FACTOR; }
             public Double getBetsLetsGoTimeWinFactor() { return TEST_TIME_WIN_FACTOR; }
             public Double getBetsLetsGoBothWinFactor() { return TEST_BOTH_WIN_FACTOR; }
+            public Double getBetsLetsGoExactTimeWinFactor() { return TEST_EXACT_TIME_WIN_FACTOR; }
         };
     }
 

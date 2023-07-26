@@ -25,6 +25,8 @@ public interface DeploymentConfiguration
 
     Double getBetsLetsGoTimeWinFactor();
 
+    Double getBetsLetsGoExactTimeWinFactor();
+
     Double getBetsLetsGoBothWinFactor();
 
     Double getBetsHisuiPokemonWinFactor();

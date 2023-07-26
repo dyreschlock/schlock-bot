@@ -35,6 +35,8 @@ public class ShinyPayoutLetsGoServiceImpl extends AbstractListenerService implem
 
     protected static final String DOUBLER_BONUS = "doubler-bonus";
 
+
+
     private static final String SHINY_GET_COMMAND = "!shinyget ";
 
     private final PokemonManagement pokemonManagement;
@@ -128,6 +130,10 @@ public class ShinyPayoutLetsGoServiceImpl extends AbstractListenerService implem
                 if (winningTime)
                 {
                     Double wins = bet.getBetAmount() * config.getBetsLetsGoTimeWinFactor();
+                    if (closestRange == 0)
+                    {
+                        wins = wins * config.getBetsLetsGoExactTimeWinFactor();
+                    }
                     winnings += wins.longValue();
 
                     usersWinningTime.add(bet.getUser().getUsername());

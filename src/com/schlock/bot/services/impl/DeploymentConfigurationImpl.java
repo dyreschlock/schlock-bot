@@ -36,6 +36,7 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
     private static final String BETS_LETSGO_POKEMON_WIN_FACTOR = "bets.letsgo.win.factor.pokemon";
     private static final String BETS_LETSGO_TIME_WIN_FACTOR = "bets.letsgo.win.factor.time";
     private static final String BETS_LETSGO_BOTH_WIN_FACTOR = "bets.letsgo.win.factor.both";
+    private static final String BETS_LETSGO_EXACT_TIME_WIN_FACTOR = "bets.letsgo.win.factor.exact_time";
 
     private static final String BETS_HISUI_POKEMON_WIN_FACTOR = "bets.hisui.win.factor.pokemon";
     private static final String BETS_HISUI_OUTBREAK_WIN_FACTOR = "bets.hisui.win.factor.outbreaks";
@@ -169,6 +170,11 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
     public Double getBetsLetsGoTimeWinFactor()
     {
         return getFloat(BETS_LETSGO_TIME_WIN_FACTOR);
+    }
+
+    public Double getBetsLetsGoExactTimeWinFactor()
+    {
+        return getFloat(BETS_LETSGO_EXACT_TIME_WIN_FACTOR);
     }
 
     public Double getBetsLetsGoBothWinFactor()
