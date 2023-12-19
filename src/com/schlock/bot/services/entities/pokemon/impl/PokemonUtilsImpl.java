@@ -86,7 +86,7 @@ public class PokemonUtilsImpl implements PokemonUtils
 
     private static final String GEN9 = "gen9";
     private static final Integer GEN9_START = 906;
-    private static final Integer GEN9_END = 1010;
+    private static final Integer GEN9_END = 1025;
 
     public static final String HISUI = "hisui";
 

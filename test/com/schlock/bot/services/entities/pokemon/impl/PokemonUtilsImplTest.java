@@ -92,7 +92,7 @@ class PokemonUtilsImplTest extends AppTestCase
         assertEquals(range6, "650-721");
         assertEquals(range7, "722-809");
         assertEquals(range8, "810-905");
-        assertEquals(range9, "906-1010");
+        assertEquals(range9, "906-1025");
         assertNull(rangeX);
 
         assertEquals(rangeA, "1-151");

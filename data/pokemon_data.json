@@ -8145,5 +8145,123 @@
     "type1" : "Grass",
     "type2" : "Psychic",
     "base_stats" : 590
+  },
+  {
+    "number" : 1011,
+    "name" : "Dipplin",
+    "id" : "dipplin",
+    "type1" : "Grass",
+    "type2" : "Dragon",
+    "base_stats" : 0
+  },
+  {
+    "number" : 1012,
+    "name" : "Poltchageist",
+    "id" : "poltchageist",
+    "type1" : "Grass",
+    "type2" : "Ghost",
+    "base_stats" : 0
+  },
+  {
+    "number" : 1013,
+    "name" : "Sinistcha",
+    "id" : "sinistcha",
+    "type1" : "Grass",
+    "type2" : "Ghost",
+    "base_stats" : 590
+  },
+  {
+    "number" : 1014,
+    "name" : "Okidogi",
+    "id" : "okidogi",
+    "type1" : "Poison",
+    "type2" : "Fighting",
+    "base_stats" : 0
+  },
+  {
+    "number" : 1015,
+    "name" : "Munkidori",
+    "id" : "munkidori",
+    "type1" : "Poison",
+    "type2" : "Psychic",
+    "base_stats" : 0
+  },
+  {
+    "number" : 1016,
+    "name" : "Fezandipiti",
+    "id" : "fezandipiti",
+    "type1" : "Poison",
+    "type2" : "Fairy",
+    "base_stats" : 0
+  },
+  {
+    "number" : 1017,
+    "name" : "Ogerpon",
+    "id" : "ogerpon",
+    "type1" : "Grass",
+    "base_stats" : 0
+  },
+  {
+    "number" : 1018,
+    "name" : "Archaludon",
+    "id" : "archaludon",
+    "type1" : "Steel",
+    "type2" : "Dragon",
+    "base_stats" : 0
+  },
+  {
+    "number" : 1019,
+    "name" : "Hydrapple",
+    "id" : "hydrapple",
+    "type1" : "Grass",
+    "type2" : "Dragon",
+    "base_stats" : 0
+  },
+  {
+    "number" : 1020,
+    "name" : "Gouging Fire",
+    "id" : "gouginfire",
+    "type1" : "Fire",
+    "type2" : "Dragon",
+    "base_stats" : 0
+  },
+  {
+    "number" : 1021,
+    "name" : "Raging Bolt",
+    "id" : "ragingbolt",
+    "type1" : "Electric",
+    "type2" : "Dragon",
+    "base_stats" : 0
+  },
+  {
+    "number" : 1022,
+    "name" : "Iron Boulder",
+    "id" : "ironboulder",
+    "type1" : "Rock",
+    "type2" : "Psychic",
+    "base_stats" : 0
+  },
+  {
+    "number" : 1023,
+    "name" : "Iron Crown",
+    "id" : "ironcrown",
+    "type1" : "Steel",
+    "type2" : "Psychic",
+    "base_stats" : 0
+  },
+  {
+    "number" : 1024,
+    "name" : "Terapagos",
+    "id" : "terapagos",
+    "type1" : "Normal",
+    "base_stats" : 0
+  },
+  {
+    "number" : 1025,
+    "name" : "Pecharunt",
+    "id" : "pecharunt",
+    "type1" : "Poison",
+    "type2" : "Ghost",
+    "base_stats" : 0
   }
 ]

@@ -183,8 +183,8 @@ class PokemonInfoServiceImplTest extends AppTestCase
         testData.add(new Object[]{"!pokemon -gen2", 1, 251});
         testData.add(new Object[]{"!pokemon gen2-gen3", 152, 386});
         testData.add(new Object[]{"!pokemon -gen1", 1, 151});
-        testData.add(new Object[]{"!pokemon gen8-", 810, 1010});
-        testData.add(new Object[]{"!pokemon gen1-gen9", 1, 1010});
+        testData.add(new Object[]{"!pokemon gen8-", 810, 1025});
+        testData.add(new Object[]{"!pokemon gen1-gen9", 1, 1025});
 
         for (Object[] d : testData)
         {
