@@ -13,7 +13,7 @@ public class OverallShinyDex
     protected static final Integer COLUMNS = 6;
     protected static final Integer ROWS = 5;
 
-    protected static final Integer POKEMON_LIMIT = 1024;
+    protected static final Integer POKEMON_LIMIT = 1025;
 
     protected static final Integer MAX_POKEMON = 1080;
 
