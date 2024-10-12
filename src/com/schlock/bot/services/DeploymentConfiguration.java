@@ -35,6 +35,8 @@ public interface DeploymentConfiguration
 
     Double getBetsHisuiOutbreakPotWinFactor();
 
+    Integer getRandomGameCooldownMinutes();
+
     String getCurrencyMark();
 
     String getDataDirectory();
@@ -58,6 +60,8 @@ public interface DeploymentConfiguration
     String getTwitchChannel();
 
     HashMap<String, String> getListenerCommands();
+
+    String getMisterIp();
 
     String getHibernateProperty(String property);
 

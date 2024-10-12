@@ -36,6 +36,9 @@ public class User extends Persisted
     @Column(name = "highscore_streak")
     private Integer highScoreStreak;
 
+    @Column(name = "random_game_time")
+    private Date randomGameLastExecutionTime;
+
     public User()
     {
     }
@@ -183,5 +186,15 @@ public class User extends Persisted
     public void setHighScoreStreak(Integer highScoreStreak)
     {
         this.highScoreStreak = highScoreStreak;
+    }
+
+    public Date getRandomGameLastExecutionTime()
+    {
+        return randomGameLastExecutionTime;
+    }
+
+    public void setRandomGameLastExecutionTime(Date randomGameLastExecutionTime)
+    {
+        this.randomGameLastExecutionTime = randomGameLastExecutionTime;
     }
 }

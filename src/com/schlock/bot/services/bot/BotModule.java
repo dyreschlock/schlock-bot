@@ -9,6 +9,7 @@ import com.schlock.bot.services.bot.twitch.impl.TwitchChatBotImpl;
 import com.schlock.bot.services.bot.twitch.impl.TwitchEventBotImpl;
 import com.schlock.bot.services.commands.ListenerService;
 import com.schlock.bot.services.commands.base.*;
+import com.schlock.bot.services.commands.game.RandomGameService;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetInfoService;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyPayoutHisuiService;
 import com.schlock.bot.services.commands.pokemon.quiz.GenCompletionQuizService;
@@ -49,6 +50,8 @@ public class BotModule
                                       ShinyDexService shinyDexService,
 
                                       AnimationService animationService,
+
+                                      RandomGameService randomGameService,
 
                                       DiscordBot discordBot,
                                       DeploymentConfiguration config)
@@ -123,6 +126,9 @@ public class BotModule
                                    ShinyBetInfoService shinyBetInfoService,
                                    ShinyInfoService shinyInfoService,
                                    ShinyDexService shinyDexService,
+
+                                   RandomGameService randomGameService,
+
                                    TwitchChatBot twitchBot,
                                    DeploymentConfiguration config)
     {
@@ -132,7 +138,8 @@ public class BotModule
                                                 pokemonInfoService,
                                                 shinyBetInfoService,
                                                 shinyInfoService,
-                                                shinyDexService).collect(Collectors.toSet());
+                                                shinyDexService,
+                                                randomGameService).collect(Collectors.toSet());
 
         DiscordBot bot = new DiscordBotImpl(listeners, twitchBot, config);
 

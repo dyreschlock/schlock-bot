@@ -3,6 +3,8 @@ package com.schlock.bot.services.commands;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.base.*;
 import com.schlock.bot.services.commands.base.impl.*;
+import com.schlock.bot.services.commands.game.RandomGameService;
+import com.schlock.bot.services.commands.game.impl.RandomGameServiceImpl;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetInfoService;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyBetService;
 import com.schlock.bot.services.commands.pokemon.bet.ShinyPayoutHisuiService;
@@ -39,6 +41,9 @@ public class ListenerModule
         binder.bind(UserBalanceService.class, UserBalanceServiceImpl.class);
         binder.bind(AnimationService.class, AnimationServiceImpl.class);
         binder.bind(UserLeaderboardService.class, UserLeaderboardServiceImpl.class);
+
+        //game
+        binder.bind(RandomGameService.class, RandomGameServiceImpl.class);
 
         //pokemon
         binder.bind(ShinyBetInfoService.class, ShinyBetInfoServiceImpl.class);

@@ -10,6 +10,8 @@ twitch.oauth.irc-token=
 twitch.oauth.websocket-client-id=
 twitch.channel=
 
+misterfpga.ip=
+
 hibernate.connection.url.hosted=
 hibernate.connection.username.hosted=
 hibernate.connection.password.hosted=

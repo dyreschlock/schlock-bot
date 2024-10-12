@@ -42,6 +42,8 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
     private static final String BETS_HISUI_OUTBREAK_WIN_FACTOR = "bets.hisui.win.factor.outbreaks";
     private static final String BETS_HISUI_OUTBREAK_POT_WIN_FACTOR = "bets.hisui.win.factor.outbreaks.pot";
 
+    private static final String RANDOM_GAME_COOLDOWN_MINUTES = "randomgame.cooldown.minutes";
+
     private static final String ONWER_USERNAME = "owner.username";
 
     private static final String DISCORD_TOKEN = "discord.token";
@@ -53,6 +55,8 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
     private static final String TWITCH_CHANNEL = "twitch.channel";
 
     private static final String LISTEN_COMMAND_PREFIX = "listen.command.";
+
+    private static final String MISTER_IP = "misterfpga.ip";
 
     private static final String DATA_DIRECTORY = "data/";
 
@@ -203,6 +207,12 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
         return getFloat(BETS_HISUI_OUTBREAK_POT_WIN_FACTOR);
     }
 
+    public Integer getRandomGameCooldownMinutes()
+    {
+        String cooldown = getProperties().getProperty(RANDOM_GAME_COOLDOWN_MINUTES);
+        return Integer.parseInt(cooldown);
+    }
+
     public String getDataDirectory()
     {
         return DATA_DIRECTORY;
@@ -274,6 +284,11 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
             }
         }
         return commands;
+    }
+
+    public String getMisterIp()
+    {
+        return getProperties().getProperty(MISTER_IP);
     }
 
     public String getHibernateProperty(String property)
