@@ -3,6 +3,7 @@ package com.schlock.bot.services.entities.pokemon.impl;
 import com.schlock.bot.entities.pokemon.Pokemon;
 import com.schlock.bot.entities.pokemon.PokemonRegion;
 import com.schlock.bot.services.DeploymentConfiguration;
+import com.schlock.bot.services.entities.JSONEntityManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonManagement;
 import com.schlock.bot.services.entities.pokemon.PokemonUtils;
 import org.apache.tapestry5.json.JSONArray;
@@ -11,7 +12,7 @@ import org.apache.tapestry5.json.JSONObject;
 import java.io.*;
 import java.util.*;
 
-public class PokemonManagementImpl implements PokemonManagement
+public class PokemonManagementImpl extends JSONEntityManagement implements PokemonManagement
 {
     public static final String POKEMON_DATA_FILE = "pokemon_data.json";
 
@@ -365,27 +366,8 @@ public class PokemonManagementImpl implements PokemonManagement
 
     private JSONArray readJSONfromFile()
     {
-        String content = "";
-        try
-        {
-            String fileLocation = config.getDataDirectory() + POKEMON_DATA_FILE;
-
-            InputStream in = new FileInputStream(fileLocation);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-
-            String line = reader.readLine();
-            while (line != null)
-            {
-                content += line;
-
-                line = reader.readLine();
-            }
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        String filepath = config.getDataDirectory() + POKEMON_DATA_FILE;
+        String content = readFileContents(filepath);
         return new JSONArray(content);
     }
 }

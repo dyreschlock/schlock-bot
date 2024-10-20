@@ -1,13 +1,16 @@
 package com.schlock.bot.services.commands.game.impl;
 
 import com.schlock.bot.entities.base.User;
+import com.schlock.bot.entities.game.PocketGame;
 import com.schlock.bot.services.DeploymentConfiguration;
 import com.schlock.bot.services.commands.AbstractListenerService;
 import com.schlock.bot.services.commands.ListenerResponse;
 import com.schlock.bot.services.commands.game.RandomGameService;
 import com.schlock.bot.services.database.adhoc.DatabaseManager;
 import com.schlock.bot.services.entities.base.UserManagement;
-import org.apache.commons.lang.StringEscapeUtils;
+import com.schlock.bot.services.entities.game.RetroGameManagement;
+import com.schlock.bot.services.entities.game.impl.RetroGameManagementImpl;
+import org.apache.commons.lang.StringUtils;
 import org.apache.tapestry5.ioc.Messages;
 
 import java.net.HttpURLConnection;
@@ -17,43 +20,39 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class RandomGameServiceImpl extends AbstractListenerService implements RandomGameService
 {
     protected static final String GAME_COMMAND = "!game ";
 
     protected static final String SELECTION_RANDOM = "random";
-    protected static final String SELECTION_FIGHTER = "Fighter";
-    protected static final String SELECTION_SHOOTER = "Shooter";
-    protected static final String SELECTION_PUZZLE = "Puzzle";
-    protected static final String SELECTION_ARCADE = "arcade";
 
-    protected static final List<String> PARAMS = Stream.of(SELECTION_RANDOM,
-                                                            SELECTION_FIGHTER.toLowerCase(),
-                                                            SELECTION_SHOOTER.toLowerCase(),
-                                                            SELECTION_PUZZLE.toLowerCase(),
-                                                            SELECTION_ARCADE).collect(Collectors.toList());
+    protected static final String GAME_LAUNCH_TOKEN_PREFIX = "/media/fat/_@Favorites/_@All/";
+    protected static final String GENRE_LAUNCH_TOKEN_PREFIX = "**launch.random:/media/fat/";
 
     protected static final String COMMAND_NOT_RECOGNIZED_KEY = "command-not-recognized";
     protected static final String PLEASE_WAIT_KEY = "random-game-cooldown";
-    protected static final String SUCCESS_KEY = "launching-game-success";
+    protected static final String GENRE_SUCCESS_KEY = "launching-genre-success";
+    protected static final String GAME_SUCCESS_KEY = "launching-game-success";
     protected static final String FAILURE_KEY = "launching-game-failure";
+    protected static final String TOO_MANY_GAMES_FAILURE_KEY = "too-many-games-failure";
 
     private final DeploymentConfiguration config;
+
+    private final RetroGameManagement gameManagement;
     private final UserManagement userManagment;
 
     private final DatabaseManager database;
 
-    public RandomGameServiceImpl(UserManagement userManagemet,
+    public RandomGameServiceImpl(RetroGameManagement gameManagement,
+                                 UserManagement userManagemet,
                                  DeploymentConfiguration config,
                                  DatabaseManager database,
                                  Messages messages)
     {
         super(messages);
 
+        this.gameManagement = gameManagement;
         this.userManagment = userManagemet;
 
         this.config = config;
@@ -79,12 +78,6 @@ public class RandomGameServiceImpl extends AbstractListenerService implements Ra
         String command = in.toLowerCase();
         String param = command.substring(GAME_COMMAND.length()).trim();
 
-        if (!PARAMS.contains(param))
-        {
-            String message = messages.format(COMMAND_NOT_RECOGNIZED_KEY, param);
-            return ListenerResponse.relaySingle().addMessage(message);
-        }
-
         User user = userManagment.getUser(username);
 
         Date date = user.getRandomGameLastExecutionTime();
@@ -107,7 +100,22 @@ public class RandomGameServiceImpl extends AbstractListenerService implements Ra
             }
         }
 
-        boolean success = launchGame(param);
+
+        String launchToken = validateEntry(param);
+        if (launchToken == null)
+        {
+            String message = messages.format(COMMAND_NOT_RECOGNIZED_KEY, param);
+            return ListenerResponse.relaySingle().addMessage(message);
+        }
+
+        if (StringUtils.equalsIgnoreCase(TOO_MANY_GAMES_FAILURE_KEY, launchToken))
+        {
+            String message = messages.get(TOO_MANY_GAMES_FAILURE_KEY);
+            return ListenerResponse.relaySingle().addMessage(message);
+        }
+
+
+        boolean success = launch(launchToken);
         if (!success)
         {
             String message = messages.get(FAILURE_KEY);
@@ -117,13 +125,82 @@ public class RandomGameServiceImpl extends AbstractListenerService implements Ra
         user.setRandomGameLastExecutionTime(new Date());
         database.save(user);
 
-        String message = messages.format(SUCCESS_KEY, param);
+
+        if (StringUtils.equalsIgnoreCase(SELECTION_RANDOM, param))
+        {
+            String message = messages.format(GENRE_SUCCESS_KEY, SELECTION_RANDOM);
+            return ListenerResponse.relaySingle().addMessage(message);
+        }
+
+        String token = launchToken.substring(launchToken.lastIndexOf("/") + 1);
+
+        if(StringUtils.startsWith(launchToken, GENRE_LAUNCH_TOKEN_PREFIX))
+        {
+            String message = messages.format(GENRE_SUCCESS_KEY, token);
+            return ListenerResponse.relaySingle().addMessage(message);
+        }
+
+        token = token.substring(0, token.lastIndexOf(".mgl"));
+
+        String message = messages.format(GAME_SUCCESS_KEY, token);
         return ListenerResponse.relaySingle().addMessage(message);
     }
 
-    private boolean launchGame(String param)
+    private String validateEntry(String param)
     {
-        String urlCall = getMisterUrlCall(param);
+        if (StringUtils.equalsIgnoreCase(SELECTION_RANDOM, param))
+        {
+            PocketGame game = gameManagement.getRandom();
+            return getLaunchToken(game);
+        }
+
+        String genre = gameManagement.getGenre(param);
+        if (genre != null)
+        {
+            return getLaunchToken(genre);
+        }
+
+        List<PocketGame> games = gameManagement.getGames(param);
+        if (games.size() == 1)
+        {
+            return getLaunchToken(games.get(0));
+        }
+        if (games.size() > 1)
+        {
+            return TOO_MANY_GAMES_FAILURE_KEY;
+        }
+        return null;
+    }
+
+    public String getLaunchToken(PocketGame game)
+    {
+        String launchToken = GAME_LAUNCH_TOKEN_PREFIX + "_%s/%s (%s).mgl";
+
+        String genre = game.getGenre();
+        String title = game.getGameName();
+        String coreName = game.getCoreName();
+
+        return String.format(launchToken, genre, title, coreName);
+    }
+
+    public String getLaunchToken(String genre)
+    {
+        String launchToken = GENRE_LAUNCH_TOKEN_PREFIX;
+        if (StringUtils.equalsIgnoreCase(RetroGameManagementImpl.ARCADE, genre))
+        {
+            launchToken += "_Arcade";
+        }
+        else
+        {
+            launchToken += "_@Favorites/_@All/_" + genre;
+        }
+        return launchToken;
+    }
+
+
+    private boolean launch(String launchToken)
+    {
+        String urlCall = getMisterUrlCall(launchToken);
 
         try
         {
@@ -148,31 +225,12 @@ public class RandomGameServiceImpl extends AbstractListenerService implements Ra
         return true;
     }
 
-    private String getMisterUrlCall(String param)
+    private String getMisterUrlCall(String token)
     {
         final String API_CALL = "http://%s:7497/api/v1/launch/%s";
+
         String ip = config.getMisterIp();
-
-        if (SELECTION_RANDOM.equals(param))
-        {
-            int random = new Random().nextInt(PARAMS.size() - 2) +1;
-            return getMisterUrlCall(PARAMS.get(random));
-        }
-
-        String launchToken = "**launch.random:/media/fat/";
-        if (SELECTION_ARCADE.equals(param))
-        {
-            launchToken += "_Arcade";
-        }
-        else
-        {
-            String s1 = param.substring(0, 1).toUpperCase();
-            String category = s1 + param.substring(1);
-
-            launchToken += "_@Favorites/_TapTo/_" + category;
-        }
-
-        launchToken = URLEncoder.encode(launchToken, StandardCharsets.UTF_8);
+        String launchToken = URLEncoder.encode(token, StandardCharsets.UTF_8);
 
         return String.format(API_CALL, ip, launchToken);
     }

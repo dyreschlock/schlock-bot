@@ -72,7 +72,7 @@ public class ConvertHTMLtoJSON
 
     private void loadHisuianPokemon()
     {
-        String fileLocation = config.getHTMLDataDirectory() + LIST_OF_HISUIAN_POKEMON_FILE;
+        String fileLocation = config.getPokemonDataDirectory() + LIST_OF_HISUIAN_POKEMON_FILE;
 
         Document htmlFile = null;
         try
@@ -154,7 +154,7 @@ public class ConvertHTMLtoJSON
 
     private void loadPokemon()
     {
-        String fileLocation = config.getHTMLDataDirectory() + LIST_OF_POKEMON_FILE;
+        String fileLocation = config.getPokemonDataDirectory() + LIST_OF_POKEMON_FILE;
 
         Document htmlFile = null;
         try

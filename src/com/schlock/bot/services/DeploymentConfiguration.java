@@ -41,7 +41,9 @@ public interface DeploymentConfiguration
 
     String getDataDirectory();
 
-    String getHTMLDataDirectory();
+    String getPokemonDataDirectory();
+
+    String getRetroGameDataDirectory();
 
     String getOwnerUsername();
 

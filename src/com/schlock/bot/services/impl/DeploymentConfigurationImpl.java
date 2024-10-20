@@ -21,7 +21,7 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
     private static final String CONFIG_PROPERTIES = "config.properties";
     private static final String DEPLOY_PROPERTIES = "deploy.properties";
 
-    private static final String HTML_DATA_DIRECTORY = "html.data.directory";
+    private static final String JAVA_DATA_DIRECTORY = "java.data.directory";
 
     private static final String BOT_NAME = "bot.name";
 
@@ -228,9 +228,14 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
         return getProperties().getProperty(BOT_NAME);
     }
 
-    public String getHTMLDataDirectory()
+    public String getPokemonDataDirectory()
     {
-        return getProperties().getProperty(HTML_DATA_DIRECTORY);
+        return getProperties().getProperty(JAVA_DATA_DIRECTORY) + "pokemon-data/pokedex-data/";
+    }
+
+    public String getRetroGameDataDirectory()
+    {
+        return getProperties().getProperty(JAVA_DATA_DIRECTORY) + "pocket-utils/";
     }
 
     public String getDiscordToken()
