@@ -53,7 +53,10 @@ public class RetroGameManagementImpl extends JSONEntityManagement implements Ret
         List<PocketGame> results = new ArrayList<>();
         for(PocketGame game : cachedGames)
         {
-            if (StringUtils.startsWithIgnoreCase(game.getGameName(), title))
+            String gameformat = "%s (%s)";
+            String gamestring = String.format(gameformat, game.getGameName(), game.getCoreName());
+
+            if (StringUtils.startsWithIgnoreCase(gamestring, title))
             {
                 results.add(game);
             }
