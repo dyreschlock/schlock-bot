@@ -25,7 +25,7 @@ public class RandomGameServiceImpl extends AbstractListenerService implements Ra
 {
     protected static final String GAME_COMMAND = "!game ";
 
-    protected static final String SELECTION_RANDOM = "random";
+    protected static final String SELECTION_RANDOM = "Random";
 
     protected static final String GAME_LAUNCH_TOKEN_PREFIX = "/media/fat/_@Favorites/_@All/";
     protected static final String GENRE_LAUNCH_TOKEN_PREFIX = "**launch.random:/media/fat/";
@@ -132,7 +132,7 @@ public class RandomGameServiceImpl extends AbstractListenerService implements Ra
             return ListenerResponse.relaySingle().addMessage(message);
         }
 
-        String token = launchToken.substring(launchToken.lastIndexOf("/") + 1);
+        String token = launchToken.substring(launchToken.lastIndexOf("/") + 2);
 
         if(StringUtils.startsWith(launchToken, GENRE_LAUNCH_TOKEN_PREFIX))
         {
