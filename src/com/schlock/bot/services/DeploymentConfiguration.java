@@ -53,6 +53,8 @@ public interface DeploymentConfiguration
 
     String getDiscordRelayChannel();
 
+    String getDiscordWebhookBotName();
+
     String getTwitchBotName();
 
     String getTwitchOAuthIrcToken();

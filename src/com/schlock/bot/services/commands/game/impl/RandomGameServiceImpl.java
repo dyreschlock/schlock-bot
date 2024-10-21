@@ -209,6 +209,7 @@ public class RandomGameServiceImpl extends AbstractListenerService implements Ra
             HttpURLConnection connection = (HttpURLConnection) request.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+            connection.setConnectTimeout(5000);
 
             int code = connection.getResponseCode();
             if (code != 200)

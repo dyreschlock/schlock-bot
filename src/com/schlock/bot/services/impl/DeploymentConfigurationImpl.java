@@ -48,6 +48,7 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
 
     private static final String DISCORD_TOKEN = "discord.token";
     private static final String DISCORD_RELAY_CHANNEL = "discord.relay.channel";
+    private static final String DISCORD_WEBHOOK_BOT_NAME = "discord.webhook.bot.name";
 
     private static final String TWITCH_BOT_NAME = "twitch.bot.name";
     private static final String TWITCH_OAUTH_IRC_TOKEN = "twitch.oauth.irc-token";
@@ -246,6 +247,11 @@ public class DeploymentConfigurationImpl implements DeploymentConfiguration
     public String getDiscordRelayChannel()
     {
         return getProperties().getProperty(DISCORD_RELAY_CHANNEL);
+    }
+
+    public String getDiscordWebhookBotName()
+    {
+        return getProperties().getProperty(DISCORD_WEBHOOK_BOT_NAME);
     }
 
     public String getTwitchBotName()

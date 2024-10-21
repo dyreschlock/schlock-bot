@@ -73,7 +73,8 @@ public class DiscordBotImpl extends AbstractBot implements DiscordBot
             public void onMessageReceived(@NotNull MessageReceivedEvent event)
             {
                 if(!event.getChannel().getName().equalsIgnoreCase(BOT_CHANNEL)) return;
-                if(event.getAuthor().isBot()) return;
+                if(event.getAuthor().isBot()
+                        && !getConfig().getDiscordWebhookBotName().equals(event.getAuthor().getName())) return;
 
                 final String message = event.getMessage().getContentRaw();
                 final String username = event.getAuthor().getName();
