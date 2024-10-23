@@ -4,6 +4,8 @@ import org.apache.commons.lang.StringUtils;
 
 public class PocketGame
 {
+    private static final String ARCADE = "arcade";
+
     private String gameName;
     private String developer;
     private String publisher;
@@ -35,6 +37,12 @@ public class PocketGame
         }
         return genreId;
     }
+
+    public boolean isArcade()
+    {
+        return ARCADE.equalsIgnoreCase(platform);
+    }
+
 
     public String getGameName()
     {

@@ -175,6 +175,10 @@ public class RandomGameServiceImpl extends AbstractListenerService implements Ra
     public String getLaunchToken(PocketGame game)
     {
         String launchToken = GAME_LAUNCH_TOKEN_PREFIX + "_%s/%s (%s).mgl";
+        if (game.isArcade())
+        {
+            launchToken = GAME_LAUNCH_TOKEN_PREFIX + "_%s/%s (%s).mra";
+        }
 
         String genre = game.getGenre();
         String title = game.getGameName();
